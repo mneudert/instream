@@ -1,0 +1,7 @@
+language: elixir
+
+sudo: false
+env:  MIX_ENV=test
+
+after_success:
+  - mix coveralls.travis
