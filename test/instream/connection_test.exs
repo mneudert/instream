@@ -20,4 +20,8 @@ defmodule Instream.ConnectionTest do
 
     assert config == Conn.config
   end
+
+  test "child_spec" do
+    assert { Conn, _, _, _, _, _ } = Conn.child_spec
+  end
 end

@@ -16,6 +16,7 @@ defmodule Instream.Connection do
       config :my_application, MyConnection,
         hosts:    [ "primary.example.com", "secondary.example.com" ],
         password: "pass",
+        pool:     [ max_overflow: 10, size: 5 ],
         port:     8086,
         scheme:   "http",
         username: "root"
@@ -25,12 +26,29 @@ defmodule Instream.Connection do
 
   defmacro __using__(otp_app: otp_app) do
     quote do
+      alias Instream.Connection
+      alias Instream.Pool
+
       @behaviour unquote(__MODULE__)
       @otp_app   unquote(otp_app)
 
-      def config, do: Instream.Connection.Config.config(@otp_app, __MODULE__)
+      def __pool__, do: __MODULE__.Pool
+
+      def child_spec, do: Pool.Spec.spec(__MODULE__)
+      def config,     do: Connection.Config.config(@otp_app, __MODULE__)
     end
   end
+
+
+  @doc """
+  Returns the (internal) pool module.
+  """
+  defcallback __pool__ :: module
+
+  @doc """
+  Returns a supervisable pool child_spec.
+  """
+  defcallback child_spec :: Supervisor.Spec.spec
 
   @doc """
   Returns the connection configuration.
