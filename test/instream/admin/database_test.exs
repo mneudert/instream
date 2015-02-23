@@ -2,24 +2,20 @@ defmodule Instream.Admin.DatabaseTest do
   use ExUnit.Case, async: true
 
   alias Instream.Admin.Database
+  alias Instream.TestHelpers.Connection
 
   @database "test_database"
 
-  test "create database" do
-    query = Database.create(@database)
+  test "database lifecycle" do
+    creation = @database |> Database.create() |> Connection.execute()
+    listing  = Database.show() |> Connection.execute()
 
-    assert query.query == "CREATE DATABASE #{ @database }"
-  end
+    assert creation == %{results: [%{}]}
+    assert listing  == %{results: [%{rows: [%{columns: ["name"],values: [["test_database"]]}]}]}
 
-  test "drop database" do
-    query = Database.drop(@database)
+    deletion = @database |> Database.drop() |> Connection.execute()
 
-    assert query.query == "DROP DATABASE #{ @database }"
-  end
-
-  test "show databases" do
-    query = Database.show()
-
-    assert query.query == "SHOW DATABASES"
+    assert deletion == %{results: [%{}]}
+    assert listing  == %{results: [%{rows: [%{columns: ["name"],values: [["test_database"]]}]}]}
   end
 end

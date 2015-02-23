@@ -28,6 +28,7 @@ defmodule Instream.Connection do
     quote do
       alias Instream.Connection
       alias Instream.Pool
+      alias Instream.Query
 
       @behaviour unquote(__MODULE__)
       @otp_app   unquote(otp_app)
@@ -36,6 +37,13 @@ defmodule Instream.Connection do
 
       def child_spec, do: Pool.Spec.spec(__MODULE__)
       def config,     do: Connection.Config.config(@otp_app, __MODULE__)
+
+      def execute(%Query{} = query) do
+        :poolboy.transaction(
+          __pool__,
+          &GenServer.call(&1, { :execute, query })
+        )
+      end
     end
   end
 
@@ -54,4 +62,9 @@ defmodule Instream.Connection do
   Returns the connection configuration.
   """
   defcallback config :: Keyword.t
+
+  @doc """
+  Executes a query.
+  """
+  defcallback execute(query :: Instream.Query.t) :: any
 end

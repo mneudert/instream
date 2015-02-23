@@ -16,7 +16,9 @@ defmodule Instream.Mixfile do
       test_coverage: [ tool: ExCoveralls ]]
   end
 
-  def application, do: []
+  def application do
+    [ applications: [ :hackney ]]
+  end
 
   def deps(:docs) do
     deps(:prod) ++
