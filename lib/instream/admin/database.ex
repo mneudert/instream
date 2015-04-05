@@ -15,7 +15,7 @@ defmodule Instream.Admin.Database do
 
     %Query{
       query: "CREATE DATABASE #{ database }",
-      type:  :query
+      type:  :host
     }
   end
 
@@ -28,7 +28,7 @@ defmodule Instream.Admin.Database do
 
     %Query{
       query: "DROP DATABASE #{ database }",
-      type:  :query
+      type:  :host
     }
   end
 
@@ -39,7 +39,7 @@ defmodule Instream.Admin.Database do
   def show() do
     %Query{
       query: "SHOW DATABASES",
-      type:  :query
+      type:  :host
     }
   end
 end

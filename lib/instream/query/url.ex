@@ -21,19 +21,19 @@ defmodule Instream.Query.URL do
   def query(conn) do
     [
       conn[:scheme], "://",
-      credentials(conn[:username], conn[:password]),
-      host(conn[:hosts]), port(conn[:port]),
+      url_credentials(conn[:username], conn[:password]),
+      url_host(conn[:hosts]), url_port(conn[:port]),
       "/query"
     ]
     |> Enum.join("")
   end
 
 
-  defp credentials(nil,  nil),  do: ""
-  defp credentials(user, pass), do: "#{ user }:#{ pass }@"
+  defp url_credentials(nil,  nil),  do: ""
+  defp url_credentials(user, pass), do: "#{ user }:#{ pass }@"
 
-  defp host(hosts), do: hosts |> hd()
+  defp url_host(hosts), do: hosts |> hd()
 
-  defp port(nil),  do: ""
-  defp port(port), do: ":#{ port }"
+  defp url_port(nil),  do: ""
+  defp url_port(port), do: ":#{ port }"
 end

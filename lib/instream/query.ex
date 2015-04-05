@@ -8,7 +8,7 @@ defmodule Instream.Query do
     type:  nil
   ]
 
-  @type query_type :: :query | :write
+  @type query_type :: :host | :read | :write
 
   @type t :: %__MODULE__{
     query: String.t,
