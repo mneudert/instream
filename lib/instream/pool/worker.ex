@@ -25,16 +25,16 @@ defmodule Instream.Pool.Worker do
   # GenServer callbacks
 
   @doc false
-  def handle_call({ :execute, query }, _from, conn) do
-    { :reply, execute(query, conn), conn }
+  def handle_call({ :execute, query, opts }, _from, conn) do
+    { :reply, execute(query, opts, conn), conn }
   end
 
 
   # Utility methods
 
-  defp execute(%Query{ type: type } = query, conn) do
+  defp execute(%Query{ type: type } = query, opts, conn) do
     case type do
-      :query -> Query.Query.execute(query, conn)
+      :query -> Query.Query.execute(query, opts, conn)
     end
   end
 end

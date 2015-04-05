@@ -38,10 +38,10 @@ defmodule Instream.Connection do
       def child_spec, do: Pool.Spec.spec(__MODULE__)
       def config,     do: Connection.Config.config(@otp_app, __MODULE__)
 
-      def execute(%Query{} = query) do
+      def execute(%Query{} = query, opts \\ []) do
         :poolboy.transaction(
           __pool__,
-          &GenServer.call(&1, { :execute, query })
+          &GenServer.call(&1, { :execute, query, opts })
         )
       end
     end
@@ -66,5 +66,5 @@ defmodule Instream.Connection do
   @doc """
   Executes a query.
   """
-  defcallback execute(query :: Instream.Query.t) :: any
+  defcallback execute(query :: Instream.Query.t, opts :: Keyword.t) :: any
 end
