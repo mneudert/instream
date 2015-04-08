@@ -16,7 +16,7 @@ defmodule Instream.Admin.DatabaseTest do
     assert creation == %{results: [%{}]}
     assert %{results: [%{series: [%{columns: ["name"], values: listing_values}]}]} = listing
 
-    assert Enum.any?(hd(listing_values), fn(db) -> db == @database end)
+    assert Enum.any?(listing_values, fn ([ db ]) -> db == @database end)
 
     # delete test database
     deletion = @database |> Database.drop() |> Connection.execute()
@@ -25,6 +25,9 @@ defmodule Instream.Admin.DatabaseTest do
     assert deletion == %{results: [%{}]}
     assert %{results: [%{series: [ listing_rows ]}]} = listing
 
-    refute Map.has_key?(listing_rows, :values)
+    case listing_rows[:values] do
+      nil    -> assert true == true
+      values -> refute Enum.any?(values, fn ([ db ]) -> db == @database end)
+    end
   end
 end
