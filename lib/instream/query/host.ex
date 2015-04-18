@@ -3,13 +3,8 @@ defmodule Instream.Query.Host do
   Executes `:host` queries..
   """
 
-  alias Instream.Query
-  alias Instream.Query.URL
+  use Instream.Query
 
-  @doc """
-  Executes the query.
-  """
-  @spec execute(query :: Query.t, opts :: Keyword.t, conn :: Keyword.t) :: any
   def execute(%Query{ query: query }, opts, conn) do
     url =
          conn
@@ -20,12 +15,5 @@ defmodule Instream.Query.Host do
     { :ok, response }     = :hackney.body(client)
 
     response |> maybe_parse(opts)
-  end
-
-
-  defp maybe_parse(response, [ result_as: :raw ]), do: response
-
-  defp maybe_parse(response, _) do
-    response |> Poison.decode!(keys: :atoms)
   end
 end
