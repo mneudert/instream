@@ -20,15 +20,13 @@ defmodule Instream.Query.URL do
   Returns the proper URL for a `:query` request.
   """
   @spec query(conn :: Keyword.t) :: String.t
-  def query(conn) do
-    [
-      conn[:scheme], "://",
-      url_credentials(conn[:username], conn[:password]),
-      url_host(conn[:hosts]), url_port(conn[:port]),
-      "/query"
-    ]
-    |> Enum.join("")
-  end
+  def query(conn), do: conn |> url("query")
+
+  @doc """
+  Returns the proper URL for a `:write` request.
+  """
+  @spec write(conn :: Keyword.t) :: String.t
+  def write(conn), do: conn |> url("write")
 
 
   defp append_param(url, key, value) do
@@ -38,6 +36,16 @@ defmodule Instream.Query.URL do
     end
 
     "#{ url }#{ glue }#{ key }=#{ URI.encode value }"
+  end
+
+  defp url(conn, endpoint) do
+    [
+      conn[:scheme], "://",
+      url_credentials(conn[:username], conn[:password]),
+      url_host(conn[:hosts]), url_port(conn[:port]),
+      "/", endpoint
+    ]
+    |> Enum.join("")
   end
 
   defp url_credentials(nil,  nil),  do: ""
