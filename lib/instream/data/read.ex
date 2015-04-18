@@ -11,8 +11,8 @@ defmodule Instream.Data.Read do
   @spec query(query_str :: String.t) :: Query.t
   def query(query_str) do
     %Query{
-      query: query_str,
-      type:  :read
+      payload: query_str,
+      type:    :read
     }
   end
 end

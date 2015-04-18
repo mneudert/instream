@@ -6,15 +6,16 @@ defmodule Instream.Query do
   use Behaviour
 
   defstruct [
-    query: "",
-    type:  nil
+    payload: nil,
+    type:    nil
   ]
 
-  @type query_type :: :host | :read | :write
+  @type payload_type :: String.t
+  @type query_type   :: :host | :read | :write
 
   @type t :: %__MODULE__{
-    query: String.t,
-    type:  query_type
+    payload: payload_type,
+    type:    query_type
   }
 
 

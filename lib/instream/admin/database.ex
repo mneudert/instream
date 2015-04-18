@@ -14,8 +14,8 @@ defmodule Instream.Admin.Database do
     Validate.database! database
 
     %Query{
-      query: "CREATE DATABASE #{ database }",
-      type:  :host
+      payload: "CREATE DATABASE #{ database }",
+      type:    :host
     }
   end
 
@@ -27,8 +27,8 @@ defmodule Instream.Admin.Database do
     Validate.database! database
 
     %Query{
-      query: "DROP DATABASE #{ database }",
-      type:  :host
+      payload: "DROP DATABASE #{ database }",
+      type:    :host
     }
   end
 
@@ -38,8 +38,8 @@ defmodule Instream.Admin.Database do
   @spec show() :: Query.t
   def show() do
     %Query{
-      query: "SHOW DATABASES",
-      type:  :host
+      payload: "SHOW DATABASES",
+      type:    :host
     }
   end
 end

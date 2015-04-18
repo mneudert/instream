@@ -5,11 +5,11 @@ defmodule Instream.Query.Host do
 
   use Instream.Query
 
-  def execute(%Query{ query: query }, opts, conn) do
+  def execute(%Query{ payload: payload }, opts, conn) do
     url =
          conn
       |> URL.query()
-      |> URL.append_query(query)
+      |> URL.append_query(payload)
 
     { :ok, _, _, client } = :hackney.get(url)
     { :ok, response }     = :hackney.body(client)
