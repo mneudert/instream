@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.2.0-dev
+## v0.2.0 (2015-04-19)
 
 - Enhancements
   - Allows accessing raw query results (undecoded binaries) using `Instream.Connection.execute/2`
