@@ -11,7 +11,7 @@ defmodule Instream.Query.Write do
       |> URL.write()
       |> URL.append_database(opts[:database])
 
-    { :ok, x, y, client } = :hackney.post(url, [], payload)
+    { :ok, _, _, client } = :hackney.post(url, [], payload)
     { :ok, response }     = :hackney.body(client)
 
     response |> maybe_parse(opts)
