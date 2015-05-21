@@ -22,14 +22,14 @@ defmodule Instream.Mixfile do
 
   def deps(:docs) do
     deps(:prod) ++
-      [ { :earmark, "~> 0.1" },
-        { :ex_doc,  "~> 0.7" } ]
+      [ { :earmark, "~> 0.1", optional: true },
+        { :ex_doc,  "~> 0.7", optional: true } ]
   end
 
   def deps(:test) do
     deps(:prod) ++
-      [ { :dialyze,     "~> 0.1" },
-        { :excoveralls, "~> 0.3" } ]
+      [ { :dialyze,     "~> 0.1", optional: true },
+        { :excoveralls, "~> 0.3", optional: true } ]
   end
 
   def deps(_) do

@@ -1,5 +1,10 @@
 # Changelog
 
+#ä v0.3.0-dev
+
+- Enhancements
+  - Dependencies not used in production builds are marked as optional
+
 ## v0.2.0 (2015-04-19)
 
 - Enhancements
