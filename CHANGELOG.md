@@ -1,6 +1,6 @@
 # Changelog
 
-#ä v0.3.0-dev
+## v0.3.0-dev
 
 - Enhancements
   - Dependencies not used in production builds are marked as optional
