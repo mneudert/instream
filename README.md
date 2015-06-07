@@ -75,6 +75,20 @@ Managing Databases:
 |> MyApp.MyConnection.execute()
 ```
 
+Managing Retention Policies:
+
+```elixir
+# create "my_rp" retention policy
+Instream.Admin.RetentionPolicy.create(
+  "my_rp", "my_database", "DURATION 1h REPLICATION 3 DEFAULT"
+)
+|> MyApp.MyConnection.execute()
+
+# drop "my_rp" retention policy
+Instream.Admin.RetentionPolicy.drop("my_rp", "my_database")
+|> MyApp.MyConnection.execute()
+```
+
 ### Data Queries
 
 Writing data:

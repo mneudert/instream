@@ -3,6 +3,7 @@
 ## v0.3.0-dev
 
 - Enhancements
+  - Allows managing retention policies
   - Dependencies not used in production builds are marked as optional
 
 ## v0.2.0 (2015-04-19)
