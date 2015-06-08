@@ -1,6 +1,6 @@
 language: elixir
 
-env: INFLUXDB=0.9.0-rc30 MIX_ENV=test
+env: INFLUXDB=0.9.0-rc32 MIX_ENV=test
 
 before_install:
   - wget -q "http://s3.amazonaws.com/influxdb/influxdb_${INFLUXDB}_amd64.deb"

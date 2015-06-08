@@ -13,7 +13,7 @@ defmodule Instream.Data.WriteTest do
       database: @database,
       points: [
         %{
-          name:   @measurement,
+          measurement: @measurement,
           fields: %{ value: 0.66 }
         }
       ]

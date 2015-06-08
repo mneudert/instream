@@ -98,8 +98,8 @@ Writing data:
   database: "my_database",
   points: [
     %{
-      name:   "some_measurement",
-      fields: %{ value: 0.66 }
+      measurement: "some_measurement",
+      fields:      %{ value: 0.66 }
     }
   ]
 }
