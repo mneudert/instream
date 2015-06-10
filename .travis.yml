@@ -1,16 +1,10 @@
 language: elixir
 
-env: INFLUXDB=0.9.0-rc32 MIX_ENV=test
+env: INFLUXDB=0.9.0-rc33 MIX_ENV=test
 
 before_install:
   - wget -q "http://s3.amazonaws.com/influxdb/influxdb_${INFLUXDB}_amd64.deb"
   - sudo dpkg -i "influxdb_${INFLUXDB}_amd64.deb"
-
-  - sudo sh -c '/opt/influxdb/influxd config > /etc/opt/influxdb/influxdb.conf'
-  - sudo sed -i -r 's/dir = ".+\/data"/dir = "\/var\/opt\/influxdb\/data"/' /etc/opt/influxdb/influxdb.conf
-  - sudo sed -i -r 's/dir = ".+\/hh"/dir = "\/var\/opt\/influxdb\/hh"/' /etc/opt/influxdb/influxdb.conf
-  - sudo sed -i -r 's/dir = ".+\/meta"/dir = "\/var\/opt\/influxdb\/meta"/' /etc/opt/influxdb/influxdb.conf
-
   - sudo service influxdb start
 
 after_success:
