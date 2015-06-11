@@ -4,9 +4,10 @@ defmodule Instream.Admin.RetentionPolicyTest do
   alias Instream.Admin.RetentionPolicy
   alias Instream.TestHelpers.Connection
 
-  @database "test_database"
-  @rp_name  "rp_lifecycle"
-  @rp_policy "DURATION 1h REPLICATION 1"
+  @database   "test_database"
+  @rp_name    "rp_lifecycle"
+  @rp_policy  "DURATION 1h REPLICATION 1"
+  @rp_altered "DURATION 2h REPLICATION 1"
 
   test "retention policy lifecycle" do
     # create retention policy
@@ -17,9 +18,31 @@ defmodule Instream.Admin.RetentionPolicyTest do
     listing = RetentionPolicy.show(@database) |> Connection.execute()
 
     assert creation == %{results: [%{}]}
-    assert %{results: [%{series: [%{columns: ["name", "duration", "replicaN", "default"], values: listing_values}]}]} = listing
+    assert %{results: [%{series: [%{
+      columns: ["name", "duration", "replicaN", "default"],
+      values:  listing_values
+    }]}]} = listing
 
-    assert Enum.any?(listing_values, fn ([ name, _, _, _ ]) -> name == @rp_name end)
+    assert Enum.any?(listing_values, fn ([ name, duration, _, _ ]) ->
+      name == @rp_name && duration == "1h0m0s"
+    end)
+
+    # alter retention polcy
+    alteration =
+         RetentionPolicy.alter(@rp_name, @database, @rp_altered)
+      |> Connection.execute()
+
+    listing = RetentionPolicy.show(@database) |> Connection.execute()
+
+    assert alteration == %{results: [%{}]}
+    assert %{results: [%{series: [%{
+      columns: ["name", "duration", "replicaN", "default"],
+      values:  listing_values
+    }]}]} = listing
+
+    assert Enum.any?(listing_values, fn ([ name, duration, _, _ ]) ->
+      name == @rp_name && duration == "2h0m0s"
+    end)
 
     # delete retention policy
     deletion = RetentionPolicy.drop(@rp_name, @database) |> Connection.execute()
@@ -30,7 +53,8 @@ defmodule Instream.Admin.RetentionPolicyTest do
 
     case listing_rows[:values] do
       nil    -> assert true == true
-      values -> refute Enum.any?(values, fn ([ name, _, _, _ ]) -> name == @rp_name end)
+      values ->
+        refute Enum.any?(values, fn ([ name, _, _, _ ]) -> name == @rp_name end)
     end
   end
 end

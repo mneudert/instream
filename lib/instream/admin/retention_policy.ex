@@ -7,6 +7,21 @@ defmodule Instream.Admin.RetentionPolicy do
   alias Instream.Validate
 
   @doc """
+  Returns a query to alter a retention policy.
+  """
+  @spec alter(name     :: String.t,
+              database :: String.t,
+              policy   :: String.t) :: Query.t
+  def alter(name, database, policy) do
+    Validate.database! database
+
+    %Query{
+      payload: "ALTER RETENTION POLICY #{ name } ON #{ database } #{ policy }",
+      type:    :host
+    }
+  end
+
+  @doc """
   Returns a query to create a retention policy.
   """
   @spec create(name     :: String.t,
