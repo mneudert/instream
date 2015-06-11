@@ -7,5 +7,9 @@ before_install:
   - sudo dpkg -i "influxdb_${INFLUXDB}_amd64.deb"
   - sudo service influxdb start
 
+  - curl "http://localhost:8086/query?q=CREATE%20USER%20instream_test%20WITH%20PASSWORD%20%27instream_test%27%20WITH%20ALL%20PRIVILEGES"
+  - sudo sed 's/auth-enabled = false/auth-enabled = true/' /etc/opt/influxdb/influxdb.conf
+  - sudo service influxdb restart
+
 after_success:
   - mix coveralls.travis
