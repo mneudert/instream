@@ -17,13 +17,12 @@ defmodule Instream.Query.URLTest do
   end
 
   test "query url" do
-    url  = "http://root:root@localhost:8086/query"
+    url  = "http://localhost:8086/query?u=root&p=root"
     conn = [
-      hosts:    [ "localhost" ],
-      password: "root",
-      port:     8086,
-      scheme:   "http",
-      username: "root"
+      auth:   [ username: "root", password: "root" ],
+      hosts:  [ "localhost" ],
+      port:   8086,
+      scheme: "http",
     ]
 
     assert url == URL.query(conn)
@@ -32,21 +31,20 @@ defmodule Instream.Query.URLTest do
   test "query url without credentials" do
     url  = "http://localhost:8086/query"
     conn = [
-      hosts:    [ "localhost" ],
-      port:     8086,
-      scheme:   "http"
+      hosts:  [ "localhost" ],
+      port:   8086,
+      scheme: "http"
     ]
 
     assert url == URL.query(conn)
   end
 
   test "query url without port" do
-    url  = "http://root:root@localhost/query"
+    url  = "http://localhost/query?u=root&p=root"
     conn = [
-      hosts:    [ "localhost" ],
-      password: "root",
-      scheme:   "http",
-      username: "root"
+      auth:   [ username: "root", password: "root" ],
+      hosts:  [ "localhost" ],
+      scheme: "http"
     ]
 
     assert url == URL.query(conn)

@@ -44,6 +44,7 @@ They only need to be linked to an entry in your `config.exs`:
 
 ```elixir
 config :my_app, MyApp.MyConnection,
+  auth:   [ username: "root", password: "root" ],
   hosts:  [ "localhost" ],
   pool:   [ max_overflow: 0, size: 1 ],
   port:   8086,

@@ -6,6 +6,12 @@
   - Allows managing retention policies
   - Dependencies not used in production builds are marked as optional
 
+- Bug fixes
+  - Authentication is passed using query parameters by default
+
+- Backwards incompatible changes
+  - Auth configuration is now expected to be a `Keyword.t`
+
 ## v0.2.0 (2015-04-19)
 
 - Enhancements

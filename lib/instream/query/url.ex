@@ -4,6 +4,17 @@ defmodule Instream.Query.URL do
   """
 
   @doc """
+  Appends authentication credentials to an URL.
+  """
+  @spec append_auth(url :: String.t, auth :: Keyword.t) :: String.t
+  def append_auth(url, nil), do: url
+  def append_auth(url, auth) do
+    url
+    |> append_param("u", auth[:username])
+    |> append_param("p", auth[:password])
+  end
+
+  @doc """
   Appends a database to an URL.
   """
   @spec append_database(url :: String.t, database :: String.t) :: String.t
@@ -29,6 +40,7 @@ defmodule Instream.Query.URL do
   def write(conn), do: conn |> url("write")
 
 
+  defp append_param(url, _,   nil),  do: url
   defp append_param(url, key, value) do
     glue = case String.contains?(url, "?") do
       true  -> "&"
@@ -41,15 +53,12 @@ defmodule Instream.Query.URL do
   defp url(conn, endpoint) do
     [
       conn[:scheme], "://",
-      url_credentials(conn[:username], conn[:password]),
       url_host(conn[:hosts]), url_port(conn[:port]),
       "/", endpoint
     ]
     |> Enum.join("")
+    |> append_auth(conn[:auth])
   end
-
-  defp url_credentials(nil,  nil),  do: ""
-  defp url_credentials(user, pass), do: "#{ user }:#{ pass }@"
 
   defp url_host(hosts), do: hosts |> hd()
 
