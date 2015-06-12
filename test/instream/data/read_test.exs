@@ -1,4 +1,5 @@
 defmodule Instream.Data.ReadTest do
+  @moduledoc """
   use ExUnit.Case, async: true
 
   alias Instream.Data.Read
@@ -23,4 +24,5 @@ defmodule Instream.Data.ReadTest do
 
     assert result_in == result_out
   end
+  """
 end
