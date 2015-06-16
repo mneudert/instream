@@ -9,7 +9,7 @@ before_install:
 
   - sleep 5
   - curl "http://localhost:8086/query?q=CREATE%20USER%20instream_test%20WITH%20PASSWORD%20%27instream_test%27%20WITH%20ALL%20PRIVILEGES"
-  - sudo sed 's/auth-enabled = false/auth-enabled = true/' /etc/opt/influxdb/influxdb.conf
+  - sudo sed -i 's/auth-enabled = false/auth-enabled = true/' /etc/opt/influxdb/influxdb.conf
 
   - sleep 5
   - sudo service influxdb restart
