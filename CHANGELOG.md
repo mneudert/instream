@@ -11,6 +11,7 @@
 
 - Backwards incompatible changes
   - Auth configuration is now expected to be a `Keyword.t`
+  - Queries of type `:host` are now of type `:cluster`
 
 ## v0.2.0 (2015-04-19)
 

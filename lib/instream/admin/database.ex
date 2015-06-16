@@ -15,7 +15,7 @@ defmodule Instream.Admin.Database do
 
     %Query{
       payload: "CREATE DATABASE #{ database }",
-      type:    :host
+      type:    :cluster
     }
   end
 
@@ -28,7 +28,7 @@ defmodule Instream.Admin.Database do
 
     %Query{
       payload: "DROP DATABASE #{ database }",
-      type:    :host
+      type:    :cluster
     }
   end
 
@@ -39,7 +39,7 @@ defmodule Instream.Admin.Database do
   def show() do
     %Query{
       payload: "SHOW DATABASES",
-      type:    :host
+      type:    :cluster
     }
   end
 end

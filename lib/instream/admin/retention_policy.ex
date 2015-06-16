@@ -17,7 +17,7 @@ defmodule Instream.Admin.RetentionPolicy do
 
     %Query{
       payload: "ALTER RETENTION POLICY #{ name } ON #{ database } #{ policy }",
-      type:    :host
+      type:    :cluster
     }
   end
 
@@ -32,7 +32,7 @@ defmodule Instream.Admin.RetentionPolicy do
 
     %Query{
       payload: "CREATE RETENTION POLICY #{ name } ON #{ database } #{ policy }",
-      type:    :host
+      type:    :cluster
     }
   end
 
@@ -45,7 +45,7 @@ defmodule Instream.Admin.RetentionPolicy do
 
     %Query{
       payload: "DROP RETENTION POLICY #{ name } ON #{ database }",
-      type:    :host
+      type:    :cluster
     }
   end
 
@@ -58,7 +58,7 @@ defmodule Instream.Admin.RetentionPolicy do
 
     %Query{
       payload: "SHOW RETENTION POLICIES #{ database }",
-      type:    :host
+      type:    :cluster
     }
   end
 end

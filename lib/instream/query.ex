@@ -11,7 +11,7 @@ defmodule Instream.Query do
   ]
 
   @type payload_type :: String.t
-  @type query_type   :: :host | :read | :write
+  @type query_type   :: :cluster | :read | :write
 
   @type t :: %__MODULE__{
     payload: payload_type,

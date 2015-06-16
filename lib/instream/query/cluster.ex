@@ -1,6 +1,6 @@
-defmodule Instream.Query.Host do
+defmodule Instream.Query.Cluster do
   @moduledoc """
-  Executes `:host` queries..
+  Executes `:cluster` queries..
   """
 
   use Instream.Query
