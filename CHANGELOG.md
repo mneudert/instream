@@ -12,6 +12,7 @@
 - Backwards incompatible changes
   - Auth configuration is now expected to be a `Keyword.t`
   - Queries of type `:host` are now of type `:cluster`
+  - Remapped `Admin` namespace to `Cluster` to match query types
 
 ## v0.2.0 (2015-04-19)
 

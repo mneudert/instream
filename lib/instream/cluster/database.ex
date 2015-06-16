@@ -1,4 +1,4 @@
-defmodule Instream.Admin.Database do
+defmodule Instream.Cluster.Database do
   @moduledoc """
   Database administration helper.
   """

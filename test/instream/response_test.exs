@@ -1,7 +1,7 @@
 defmodule Instream.ResponseTest do
   use ExUnit.Case, async: true
 
-  alias Instream.Admin.Database
+  alias Instream.Cluster.Database
   alias Instream.TestHelpers.Connection
 
   test "parsed response" do

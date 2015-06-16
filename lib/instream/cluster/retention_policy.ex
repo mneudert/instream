@@ -1,4 +1,4 @@
-defmodule Instream.Admin.RetentionPolicy do
+defmodule Instream.Cluster.RetentionPolicy do
   @moduledoc """
   Retention policy administration helper.
   """

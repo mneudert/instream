@@ -1,7 +1,7 @@
 Code.require_file("helpers/connection.exs", __DIR__)
 
 
-alias Instream.Admin.Database
+alias Instream.Cluster.Database
 alias Instream.TestHelpers
 
 

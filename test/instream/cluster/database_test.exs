@@ -1,7 +1,7 @@
-defmodule Instream.Admin.DatabaseTest do
+defmodule Instream.Cluster.DatabaseTest do
   use ExUnit.Case, async: true
 
-  alias Instream.Admin.Database
+  alias Instream.Cluster.Database
   alias Instream.TestHelpers.Connection
 
   @database "test_database_lifecycle"
