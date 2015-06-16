@@ -49,4 +49,15 @@ defmodule Instream.Query.URLTest do
 
     assert url == URL.query(conn)
   end
+
+  test "query with partial credentials" do
+    url  = "http://localhost/query?u=root"
+    conn = [
+      auth:   [ username: "root" ],
+      hosts:  [ "localhost" ],
+      scheme: "http"
+    ]
+
+    assert url == URL.query(conn)
+  end
 end
