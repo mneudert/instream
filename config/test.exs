@@ -26,3 +26,10 @@ config :instream_test, Instream.TestHelpers.InvalidConnection,
   pool:   [ max_overflow: 0, size: 1 ],
   port:   8086,
   scheme: "http"
+
+config :instream_test, Instream.TestHelpers.NotFoundConnection,
+  auth:   [ username: "instream_not_found", password: "instream_not_found" ],
+  hosts:  [ "localhost" ],
+  pool:   [ max_overflow: 0, size: 1 ],
+  port:   8086,
+  scheme: "http"
