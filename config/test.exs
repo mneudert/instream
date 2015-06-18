@@ -19,3 +19,10 @@ config :instream_test, Instream.TestHelpers.GuestConnection,
   pool:   [ max_overflow: 0, size: 1 ],
   port:   8086,
   scheme: "http"
+
+config :instream_test, Instream.TestHelpers.InvalidConnection,
+  auth:   [ username: "instream_test", password: "instream_invalid" ],
+  hosts:  [ "localhost" ],
+  pool:   [ max_overflow: 0, size: 1 ],
+  port:   8086,
+  scheme: "http"
