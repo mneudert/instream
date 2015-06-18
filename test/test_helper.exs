@@ -1,3 +1,4 @@
+Code.require_file("helpers/anon_connection.exs", __DIR__)
 Code.require_file("helpers/connection.exs", __DIR__)
 Code.require_file("helpers/guest_connection.exs", __DIR__)
 
@@ -7,6 +8,7 @@ alias Instream.TestHelpers
 
 
 [
+  TestHelpers.AnonConnection.child_spec,
   TestHelpers.Connection.child_spec,
   TestHelpers.GuestConnection.child_spec
 ]

@@ -7,6 +7,12 @@ config :instream_test, Instream.TestHelpers.Connection,
   port:   8086,
   scheme: "http"
 
+config :instream_test, Instream.TestHelpers.AnonConnection,
+  hosts:  [ "localhost" ],
+  pool:   [ max_overflow: 0, size: 1 ],
+  port:   8086,
+  scheme: "http"
+
 config :instream_test, Instream.TestHelpers.GuestConnection,
   auth:   [ username: "instream_guest", password: "instream_guest" ],
   hosts:  [ "localhost" ],
