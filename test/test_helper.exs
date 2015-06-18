@@ -1,14 +1,16 @@
 Code.require_file("helpers/connection.exs", __DIR__)
+Code.require_file("helpers/guest_connection.exs", __DIR__)
 
 
 alias Instream.Cluster.Database
 alias Instream.TestHelpers
 
 
-Supervisor.start_link(
-  [ TestHelpers.Connection.child_spec ],
-  strategy: :one_for_one
-)
+[
+  TestHelpers.Connection.child_spec,
+  TestHelpers.GuestConnection.child_spec
+]
+|> Supervisor.start_link(strategy: :one_for_one)
 
 
 _ = "test_database" |> Database.drop()   |> TestHelpers.Connection.execute()

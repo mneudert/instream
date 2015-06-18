@@ -4,9 +4,11 @@ defmodule Instream.Data.WriteTest do
   alias Instream.Data.Read
   alias Instream.Data.Write
   alias Instream.TestHelpers.Connection
+  alias Instream.TestHelpers.GuestConnection
 
   @database    "test_database"
   @measurement "data_write"
+
 
   test "write data" do
     data = %{
@@ -34,5 +36,21 @@ defmodule Instream.Data.WriteTest do
     %{ results: [%{ series: [%{ values: value_rows }]}]} = result
 
     assert 0 < length(value_rows)
+  end
+
+  test "missing privileges" do
+    data = %{
+      database: @database,
+      points: [
+        %{
+          measurement: @measurement,
+          fields: %{ value: 0.66 }
+        }
+      ]
+    }
+
+    %{ error: error } = data |> Write.query() |> GuestConnection.execute()
+
+    assert String.contains?(error, "not authorized")
   end
 end
