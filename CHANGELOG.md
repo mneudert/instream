@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.3.0-dev
+## v0.3.0 (2015-06-19)
 
 - Enhancements
   - Allows managing retention policies
