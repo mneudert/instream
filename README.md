@@ -51,7 +51,6 @@ They only need to be linked to an entry in your `config.exs`:
 
 ```elixir
 config :my_app, MyApp.MyConnection,
-  auth:   [ username: "root", password: "root" ],
   hosts:  [ "localhost" ],
   pool:   [ max_overflow: 0, size: 1 ],
   port:   8086,
@@ -66,6 +65,21 @@ Supervisor.start_link(
   strategy: :one_for_one
 )
 ```
+
+#### Authentication
+
+To connect to an influxdb instance with http_auth enabled you have to
+configure your credentials:
+
+```elixir
+config :my_app, MyApp.MyConnection,
+  auth: [ method: :basic, username: "root", password: "root" ]
+```
+
+For `method` you can choose between header authentication (basic auth) using
+`:basic` or query parameters using `:query`. If nothing or an invalid value
+is given the connection will be made using `:basic` authentication..
+
 
 ### Administrative Queries
 

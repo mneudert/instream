@@ -21,10 +21,9 @@ defmodule Instream.Query do
 
   defmacro __using__(_opts) do
     quote do
-      @behaviour unquote(__MODULE__)
+      alias unquote(__MODULE__)
 
-      alias Instream.Query
-      alias Instream.Query.URL
+      @behaviour unquote(__MODULE__)
 
       defdelegate maybe_parse(response, opts), to: Instream.Response
     end

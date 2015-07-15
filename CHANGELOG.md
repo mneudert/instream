@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.4.0-dev
+
+- Enhancements
+  - Allows using header authentication (basic auth)
+
+- Backwards incompatible changes
+  - Authentication uses headers by default
+
 ## v0.3.0 (2015-06-19)
 
 - Enhancements

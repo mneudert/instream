@@ -9,9 +9,14 @@ defmodule Instream.Query.URL do
   @spec append_auth(url :: String.t, auth :: Keyword.t) :: String.t
   def append_auth(url, nil), do: url
   def append_auth(url, auth) do
-    url
-    |> append_param("u", auth[:username])
-    |> append_param("p", auth[:password])
+    case auth[:method] do
+      :query ->
+        url
+        |> append_param("u", auth[:username])
+        |> append_param("p", auth[:password])
+
+      _ -> url
+    end
   end
 
   @doc """

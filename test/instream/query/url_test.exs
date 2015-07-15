@@ -19,10 +19,32 @@ defmodule Instream.Query.URLTest do
   test "query url" do
     url  = "http://localhost:8086/query?u=root&p=root"
     conn = [
-      auth:   [ username: "root", password: "root" ],
+      auth:   [ method: :query, username: "root", password: "root" ],
       hosts:  [ "localhost" ],
       port:   8086,
       scheme: "http",
+    ]
+
+    assert url == URL.query(conn)
+  end
+
+  test "query url with basic authentication" do
+    url  = "http://localhost/query"
+    conn = [
+      auth:   [ method: :basic, username: "root", password: "root" ],
+      hosts:  [ "localhost" ],
+      scheme: "http"
+    ]
+
+    assert url == URL.query(conn)
+  end
+
+  test "query url with default authentication" do
+    url  = "http://localhost/query"
+    conn = [
+      auth:   [ username: "root", password: "root" ],
+      hosts:  [ "localhost" ],
+      scheme: "http"
     ]
 
     assert url == URL.query(conn)
@@ -42,7 +64,7 @@ defmodule Instream.Query.URLTest do
   test "query url without port" do
     url  = "http://localhost/query?u=root&p=root"
     conn = [
-      auth:   [ username: "root", password: "root" ],
+      auth:   [ method: :query, username: "root", password: "root" ],
       hosts:  [ "localhost" ],
       scheme: "http"
     ]
@@ -53,7 +75,7 @@ defmodule Instream.Query.URLTest do
   test "query with partial credentials" do
     url  = "http://localhost/query?u=root"
     conn = [
-      auth:   [ username: "root" ],
+      auth:   [ method: :query, username: "root" ],
       hosts:  [ "localhost" ],
       scheme: "http"
     ]

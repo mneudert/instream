@@ -3,6 +3,7 @@ Code.require_file("helpers/connection.exs", __DIR__)
 Code.require_file("helpers/guest_connection.exs", __DIR__)
 Code.require_file("helpers/invalid_connection.exs", __DIR__)
 Code.require_file("helpers/not_found_connection.exs", __DIR__)
+Code.require_file("helpers/query_auth_connection.exs", __DIR__)
 
 
 alias Instream.Cluster.Database
@@ -14,7 +15,8 @@ alias Instream.TestHelpers
   TestHelpers.Connection.child_spec,
   TestHelpers.GuestConnection.child_spec,
   TestHelpers.InvalidConnection.child_spec,
-  TestHelpers.NotFoundConnection.child_spec
+  TestHelpers.NotFoundConnection.child_spec,
+  TestHelpers.QueryAuthConnection.child_spec
 ]
 |> Supervisor.start_link(strategy: :one_for_one)
 

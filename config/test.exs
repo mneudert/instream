@@ -33,3 +33,10 @@ config :instream_test, Instream.TestHelpers.NotFoundConnection,
   pool:   [ max_overflow: 0, size: 1 ],
   port:   8086,
   scheme: "http"
+
+config :instream_test, Instream.TestHelpers.QueryAuthConnection,
+  auth:   [ method: :query, username: "instream_test", password: "instream_test" ],
+  hosts:  [ "localhost" ],
+  pool:   [ max_overflow: 0, size: 1 ],
+  port:   8086,
+  scheme: "http"
