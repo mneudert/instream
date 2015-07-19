@@ -121,6 +121,7 @@ Writing data:
   points: [
     %{
       measurement: "some_measurement",
+      tags:        %{ foo: "foo", bar: "bar" },
       fields:      %{ value: 0.66 }
     }
   ]

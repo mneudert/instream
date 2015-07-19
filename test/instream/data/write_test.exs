@@ -8,6 +8,7 @@ defmodule Instream.Data.WriteTest do
 
   @database    "test_database"
   @measurement "data_write"
+  @tags        %{ foo: "foo", bar: "bar" }
 
 
   test "write data" do
@@ -16,6 +17,7 @@ defmodule Instream.Data.WriteTest do
       points: [
         %{
           measurement: @measurement,
+          tags: @tags,
           fields: %{ value: 0.66 }
         }
       ]
@@ -33,8 +35,10 @@ defmodule Instream.Data.WriteTest do
     query  = "SELECT * FROM #{ @measurement }" |> Read.query()
     result = query |> Connection.execute(database: @database)
 
-    %{ results: [%{ series: [%{ values: value_rows }]}]} = result
+    %{ results: [%{ series: [%{ tags: values_tags,
+                                values: value_rows }]}]} = result
 
+    assert @tags == values_tags
     assert 0 < length(value_rows)
   end
 
