@@ -14,8 +14,8 @@ defmodule Instream.SeriesTest do
     series do
       measurement :cpu_load
 
-      tag :host
       tag :core
+      tag :host
 
       field :value
     end
@@ -31,6 +31,23 @@ defmodule Instream.SeriesTest do
   test "series metadata" do
     assert TestSeries.__meta__(:fields)      == [ :value ]
     assert TestSeries.__meta__(:measurement) == "cpu_load"
-    assert TestSeries.__meta__(:tags)        == [ :host, :core ]
+    assert TestSeries.__meta__(:tags)        == [ :core, :host ]
+  end
+
+  test "series struct" do
+    mod        = TestSeries
+    mod_fields = TestSeries.Fields
+    mod_tags   = TestSeries.Tags
+
+    struct = %TestSeries{}
+    fields = struct.fields |> Map.from_struct() |> Map.keys
+    tags   = struct.tags |> Map.from_struct() |> Map.keys
+
+    assert mod        == struct.__struct__
+    assert mod_fields == struct.fields.__struct__
+    assert mod_tags   == struct.tags.__struct__
+
+    assert fields == TestSeries.__meta__(:fields)
+    assert tags   == TestSeries.__meta__(:tags)
   end
 end

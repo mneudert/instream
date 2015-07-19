@@ -21,6 +21,17 @@ defmodule Instream.Series do
 
   The metadata of a series (i.e. the measurement) can
   be retrieved using the `__meta__/1` method.
+
+  ## Struct
+
+  Every series will be registered as a struct.
+  Following the above usage example you will get the following struct:
+
+      %MySeries{
+          measurement: "cpu_load",
+          fields:      %MySeries.Fields{ value: nil },
+          tags:        %MySeries.Tags{ host: nil, core: nil }
+      }
   """
 
   use Behaviour
@@ -69,6 +80,15 @@ defmodule Instream.Series do
       def __meta__(:fields),      do: @fields_r
       def __meta__(:measurement), do: @measurement
       def __meta__(:tags),        do: @tags_r
+
+      Module.eval_quoted __MODULE__, [
+        unquote(__MODULE__).__struct_fields__(@fields),
+        unquote(__MODULE__).__struct_tags__(@tags)
+      ]
+
+      Module.eval_quoted __MODULE__, [
+        unquote(__MODULE__).__struct__(__MODULE__, @measurement)
+      ]
     end
   end
 
@@ -106,5 +126,34 @@ defmodule Instream.Series do
   @doc false
   def __attribute__(mod, name, value) do
     Module.put_attribute(mod, name, value)
+  end
+
+  @doc false
+  def __struct__(series, measurement) do
+    quote do
+      defstruct [
+        measurement: unquote(measurement),
+        fields:      %unquote(series).Fields{},
+        tags:        %unquote(series).Tags{}
+      ]
+    end
+  end
+
+  @doc false
+  def __struct_fields__(fields) do
+    quote do
+      defmodule Fields do
+        defstruct unquote(Macro.escape(fields))
+      end
+    end
+  end
+
+  @doc false
+  def __struct_tags__(tags) do
+    quote do
+      defmodule Tags do
+        defstruct unquote(Macro.escape(tags))
+      end
+    end
   end
 end
