@@ -86,6 +86,8 @@ defmodule Instream.Series do
   Defines the measurement of the series.
   """
   defmacro measurement(name) do
+    name = to_string(name)
+
     quote do
       unquote(__MODULE__).__attribute__(__MODULE__, :measurement, unquote(name))
     end
