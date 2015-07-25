@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.4.0-dev
+## v0.4.0 (2015-07-25)
 
 - Enhancements
   - Allows using header authentication (basic auth)
