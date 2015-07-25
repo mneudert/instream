@@ -12,6 +12,7 @@ defmodule Instream.SeriesTest do
     use Instream.Series
 
     series do
+      database    :test_database
       measurement :cpu_load
 
       tag :host
@@ -23,12 +24,14 @@ defmodule Instream.SeriesTest do
 
 
   test "series metadata defaults" do
+    assert EmptySeries.__meta__(:database)    == nil
     assert EmptySeries.__meta__(:fields)      == []
     assert EmptySeries.__meta__(:measurement) == nil
     assert EmptySeries.__meta__(:tags)        == []
   end
 
   test "series metadata" do
+    assert TestSeries.__meta__(:database)    == "test_database"
     assert TestSeries.__meta__(:fields)      == [ :value ]
     assert TestSeries.__meta__(:measurement) == "cpu_load"
     assert TestSeries.__meta__(:tags)        == [ :core, :host ]

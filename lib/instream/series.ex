@@ -8,6 +8,7 @@ defmodule Instream.Series do
         use Instream.Series
 
         series do
+          database    :my_database
           measurement :cpu_load
 
           tag :host
@@ -28,6 +29,7 @@ defmodule Instream.Series do
   Following the above usage example you will get the following struct:
 
       %MySeries{
+          database:    "my_database",
           measurement: "cpu_load",
           fields:      %MySeries.Fields{ value: nil },
           tags:        %MySeries.Tags{ host: nil, core: nil }
@@ -49,6 +51,7 @@ defmodule Instream.Series do
 
   ## Available information
 
+  - `:database`    - the database where the series is stored
   - `:fields`      - the fields in the series
   - `:measurement` - the measurement of the series
   - `:tags`        - the available tags defining the series
@@ -61,6 +64,7 @@ defmodule Instream.Series do
   """
   defmacro series(do: block) do
     quote do
+      @database    nil
       @measurement nil
 
       Module.register_attribute(__MODULE__, :fields_raw, accumulate: true)
@@ -77,6 +81,7 @@ defmodule Instream.Series do
       @fields @fields_raw |> Enum.sort()
       @tags   @tags_raw   |> Enum.sort()
 
+      def __meta__(:database),    do: @database
       def __meta__(:fields),      do: @fields
       def __meta__(:measurement), do: @measurement
       def __meta__(:tags),        do: @tags
@@ -92,6 +97,17 @@ defmodule Instream.Series do
     end
   end
 
+
+  @doc """
+  Defines the database for the series.
+  """
+  defmacro database(name) do
+    name = to_string(name)
+
+    quote do
+      unquote(__MODULE__).__attribute__(__MODULE__, :database, unquote(name))
+    end
+  end
 
   @doc """
   Defines a field in the series.
