@@ -4,6 +4,8 @@
 
 - Enhancements
   - Allows using header authentication (basic auth)
+  - Allows using pre-defined series modules for write queries
+  - Provides a way to define series as a module (struct)
 
 - Backwards incompatible changes
   - Authentication uses headers by default

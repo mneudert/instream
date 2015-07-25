@@ -145,6 +145,40 @@ Reading data:
 ```
 
 
+## Series Defintions
+
+If you do not want to define the raw maps for writing data you can pre-define
+a seriesfor later usage:
+
+```elixir
+defmodule MySeries do
+  use Instream.Series
+
+  series do
+    database    :my_database
+    measurement :my_measurement
+
+    tag :bar
+    tag :foo
+
+    field :value
+  end
+end
+```
+
+You can then use this module to assemble a (single!) data point for writing:
+
+```elixir
+data = %MySeries{}
+data = %{ data | fields: %{ data.fields | value: 17 }}
+data = %{ data | tags:   %{ data.tags   | bar: "bar", foo: "foo" }}
+
+data
+|> Instream.Data.Write.query()
+|> MyApp.MyConnection.execute()
+```
+
+
 ## License
 
 [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0)
