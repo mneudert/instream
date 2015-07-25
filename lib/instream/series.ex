@@ -63,8 +63,8 @@ defmodule Instream.Series do
     quote do
       @measurement nil
 
-      Module.register_attribute(__MODULE__, :fields, accumulate: true)
-      Module.register_attribute(__MODULE__, :tags, accumulate: true)
+      Module.register_attribute(__MODULE__, :fields_raw, accumulate: true)
+      Module.register_attribute(__MODULE__, :tags_raw, accumulate: true)
 
       try do
         # scoped import
@@ -74,12 +74,12 @@ defmodule Instream.Series do
         :ok
       end
 
-      @fields_r @fields |> Enum.reverse()
-      @tags_r   @tags   |> Enum.reverse()
+      @fields @fields_raw |> Enum.sort()
+      @tags   @tags_raw   |> Enum.sort()
 
-      def __meta__(:fields),      do: @fields_r
+      def __meta__(:fields),      do: @fields
       def __meta__(:measurement), do: @measurement
-      def __meta__(:tags),        do: @tags_r
+      def __meta__(:tags),        do: @tags
 
       Module.eval_quoted __MODULE__, [
         unquote(__MODULE__).__struct_fields__(@fields),
@@ -98,7 +98,7 @@ defmodule Instream.Series do
   """
   defmacro field(name) do
     quote do
-      unquote(__MODULE__).__attribute__(__MODULE__, :fields, unquote(name))
+      unquote(__MODULE__).__attribute__(__MODULE__, :fields_raw, unquote(name))
     end
   end
 
@@ -118,7 +118,7 @@ defmodule Instream.Series do
   """
   defmacro tag(name) do
     quote do
-      unquote(__MODULE__).__attribute__(__MODULE__, :tags, unquote(name))
+      unquote(__MODULE__).__attribute__(__MODULE__, :tags_raw, unquote(name))
     end
   end
 

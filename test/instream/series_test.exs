@@ -14,8 +14,8 @@ defmodule Instream.SeriesTest do
     series do
       measurement :cpu_load
 
-      tag :core
       tag :host
+      tag :core
 
       field :value
     end
