@@ -1,20 +1,37 @@
 language: elixir
 
-sudo: required
-env:  INFLUXDB=0.9.0 MIX_ENV=test
+env:
+  global:
+    - VER_INFLUXDB=0.9.0
+    - MIX_ENV=test
 
 before_install:
-  - wget -q "http://s3.amazonaws.com/influxdb/influxdb_${INFLUXDB}_amd64.deb"
-  - sudo dpkg -i "influxdb_${INFLUXDB}_amd64.deb"
-  - sudo service influxdb start
+  - mkdir "${HOME}/go"
+  - export GOPATH="${HOME}/go"
+  - export PATH="${GOPATH}/bin:${PATH}"
+  - mkdir -p "${GOPATH}/src/github.com/influxdb"
+  - cd "${GOPATH}/src/github.com/influxdb"
+  - wget "https://github.com/influxdb/influxdb/archive/v${VER_INFLUXDB}.tar.gz" -O influxdb.tar.gz && tar -xf influxdb.tar.gz
+  - mv "influxdb-${VER_INFLUXDB}" influxdb
+  - cd "${GOPATH}/src/github.com/influxdb/influxdb"
+  - git init .
+  - go get ./...
+  - go build ./...
+  - go install ./...
+  - cd "${TRAVIS_BUILD_DIR}"
 
+before_script:
+  - influxd config > ./influxdb.conf
+  - nohup "${GOPATH}/bin/influxd" -pidfile ./influxdb.pid -config ./influxdb.conf >>./influxdb.stdout 2>>./influxdb.stderr &
   - sleep 5
+
   - curl "http://localhost:8086/query?q=CREATE%20USER%20instream_test%20WITH%20PASSWORD%20%27instream_test%27%20WITH%20ALL%20PRIVILEGES"
   - curl "http://localhost:8086/query?q=CREATE%20USER%20instream_guest%20WITH%20PASSWORD%20%27instream_guest%27"
-  - sudo sed -i 's/auth-enabled = false/auth-enabled = true/' /etc/opt/influxdb/influxdb.conf
+  - sudo sed -i 's/auth-enabled = false/auth-enabled = true/' ./influxdb.conf
 
+  - cat ./influxdb.pid | kill
+  - nohup "${GOPATH}/bin/influxd" -pidfile ./influxdb.pid -config ./influxdb.conf >>./influxdb.stdout 2>>./influxdb.stderr &
   - sleep 5
-  - sudo service influxdb restart
 
 after_success:
   - mix coveralls.travis
