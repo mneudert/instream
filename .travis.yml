@@ -27,7 +27,7 @@ before_script:
 
   - curl "http://localhost:8086/query?q=CREATE%20USER%20instream_test%20WITH%20PASSWORD%20%27instream_test%27%20WITH%20ALL%20PRIVILEGES"
   - curl "http://localhost:8086/query?q=CREATE%20USER%20instream_guest%20WITH%20PASSWORD%20%27instream_guest%27"
-  - sudo sed -i 's/auth-enabled = false/auth-enabled = true/' ./influxdb.conf
+  - sed -i 's/auth-enabled = false/auth-enabled = true/' ./influxdb.conf
 
   - kill `cat ./influxdb.pid`
   - nohup "${GOPATH}/bin/influxd" -pidfile ./influxdb.pid -config ./influxdb.conf >>./influxdb.stdout 2>>./influxdb.stderr &
