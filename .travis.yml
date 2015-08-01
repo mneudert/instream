@@ -35,3 +35,6 @@ before_script:
 
 after_success:
   - mix coveralls.travis
+
+after_script:
+  - kill `cat ./influxdb.pid`
