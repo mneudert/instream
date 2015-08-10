@@ -22,17 +22,17 @@ defmodule Instream.Data.WriteTest do
   end
 
 
-  @database    "test_database"
-  @measurement "data_write"
-  @tags        %{ foo: "foo", bar: "bar" }
+  @database "test_database"
+  @tags     %{ foo: "foo", bar: "bar" }
 
 
   test "write data" do
-    data = %{
+    measurement = "write_data"
+    data        = %{
       database: @database,
       points: [
         %{
-          measurement: @measurement,
+          measurement: measurement,
           tags: @tags,
           fields: %{ value: 0.66 }
         }
@@ -42,13 +42,13 @@ defmodule Instream.Data.WriteTest do
     query  = data |> Write.query()
     result = query |> Connection.execute()
 
-    assert nil == result
+    assert :ok == result
 
     # wait to ensure data was written
     :timer.sleep(100)
 
     # check data
-    query  = "SELECT * FROM #{ @measurement }" |> Read.query()
+    query  = "SELECT * FROM #{ measurement }" |> Read.query()
     result = query |> Connection.execute(database: @database)
 
     %{ results: [%{ series: [%{ tags: values_tags,
@@ -58,6 +58,39 @@ defmodule Instream.Data.WriteTest do
     assert 0 < length(value_rows)
   end
 
+  test "write data async" do
+    measurement = "write_data_async"
+    data        = %{
+      database: @database,
+      points: [
+        %{
+          measurement: measurement,
+          tags: @tags,
+          fields: %{ value: 0.99 }
+        }
+      ]
+    }
+
+    query  = data |> Write.query()
+    result = query |> Connection.execute([ async: true ])
+
+    assert :ok == result
+
+    # wait to ensure data was written
+    :timer.sleep(100)
+
+    # check data
+    query  = "SELECT * FROM #{ measurement }" |> Read.query()
+    result = query |> Connection.execute(database: @database)
+
+    %{ results: [%{ series: [%{ tags: values_tags,
+                                values: value_rows }]}]} = result
+
+    assert @tags == values_tags
+    assert 0 < length(value_rows)
+  end
+
+
   test "writing series struct" do
     data = %TestSeries{}
     data = %{ data | fields: %{ data.fields | value: 17 }}
@@ -66,7 +99,7 @@ defmodule Instream.Data.WriteTest do
     query  = data |> Write.query()
     result = query |> Connection.execute()
 
-    assert nil == result
+    assert :ok == result
 
     # wait to ensure data was written
     :timer.sleep(100)
@@ -88,7 +121,7 @@ defmodule Instream.Data.WriteTest do
       database: @database,
       points: [
         %{
-          measurement: @measurement,
+          measurement: "write_data_privileges",
           fields: %{ value: 0.66 }
         }
       ]

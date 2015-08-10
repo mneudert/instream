@@ -81,7 +81,13 @@ For `method` you can choose between header authentication (basic auth) using
 is given the connection will be made using `:basic` authentication..
 
 
-### Administrative Queries
+### Queries
+
+Every query can be executed asynchronously by passing `[async: true]` to
+`MyApp.MyConnection.execute()`. The result will then always be an immediate
+`:ok` without waiting for the query to be actually executed.
+
+#### Administrative Queries
 
 Managing Databases:
 
@@ -111,7 +117,7 @@ Instream.Cluster.RetentionPolicy.drop("my_rp", "my_database")
 |> MyApp.MyConnection.execute()
 ```
 
-### Data Queries
+#### Data Queries
 
 Writing data:
 
@@ -127,7 +133,7 @@ Writing data:
   ]
 }
 |> Instream.Data.Write.query()
-|> MyApp.MyConnection.execute()
+|> MyApp.MyConnection.execute([ async: true ])
 ```
 
 Reading data:

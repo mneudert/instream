@@ -7,7 +7,7 @@ defmodule Instream.Response do
   Maybe parses a response based on the requested result type.
   """
   @spec maybe_parse(response :: any, opts :: Keyword.t) :: any
-  def maybe_parse("", _), do: nil
+  def maybe_parse("", _), do: :ok
 
   def maybe_parse(response, opts) do
     case opts[:result_as] do

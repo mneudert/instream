@@ -26,6 +26,8 @@ defmodule Instream.Connection do
 
   defmacro __using__(otp_app: otp_app) do
     quote do
+      @before_compile unquote(__MODULE__)
+
       alias Instream.Connection
       alias Instream.Pool
       alias Instream.Query
@@ -39,6 +41,26 @@ defmodule Instream.Connection do
       def config,     do: Connection.Config.config(@otp_app, __MODULE__)
 
       def execute(%Query{} = query, opts \\ []) do
+        case opts[:async] do
+          true -> execute_async(query, opts)
+          _    -> execute_sync(query, opts)
+        end
+      end
+    end
+  end
+
+  defmacro __before_compile__(_env) do
+    quote do
+      defp execute_async(query, opts) do
+        :poolboy.transaction(
+          __pool__,
+          &GenServer.cast(&1, { :execute, query, opts })
+        )
+
+        :ok
+      end
+
+      defp execute_sync(query, opts) do
         :poolboy.transaction(
           __pool__,
           &GenServer.call(&1, { :execute, query, opts })
@@ -65,6 +87,9 @@ defmodule Instream.Connection do
 
   @doc """
   Executes a query.
+
+  Passing `[async: true]` in the options always returns :ok.
+  The command will be executed asynchronously.
   """
   defcallback execute(query :: Instream.Query.t, opts :: Keyword.t) :: any
 end

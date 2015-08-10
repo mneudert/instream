@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.5.0-dev
+
+- Enhancements
+  - Queries can be executed asynchronously
+
+- Backwards incompatible changes
+  - Write queries return `:ok` instead of `nil`
+
 ## v0.4.0 (2015-07-25)
 
 - Enhancements

@@ -29,6 +29,13 @@ defmodule Instream.Pool.Worker do
     { :reply, execute(query, opts, conn), conn }
   end
 
+  @doc false
+  def handle_cast({ :execute, query, opts }, conn) do
+    execute(query, opts, conn)
+
+    { :noreply, conn }
+  end
+
 
   # Utility methods
 
