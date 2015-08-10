@@ -4,10 +4,13 @@ defmodule Instream.Connection.ConfigTest do
   alias Instream.Connection.Config
 
   test "otp_app configuration", %{ test: test } do
-    config = [ foo: :bar ]
+    config = [ foo: :bar, writer: Awesome.Writer.Module ]
     :ok    = Application.put_env(test, __MODULE__, config)
 
-    assert ([ otp_app: test ] ++ config) == Config.config(test, __MODULE__)
+    expect = ([ otp_app: test ] ++ config) |> Enum.into(%{})
+    actual = Config.config(test, __MODULE__) |> Enum.into(%{})
+
+    assert expect == actual
   end
 
   test "missing configuration raises", %{ test: test } do
