@@ -3,8 +3,6 @@ defmodule Instream.Query do
   Query behaviour and struct definition.
   """
 
-  use Behaviour
-
   defstruct [
     payload: nil,
     type:    nil
@@ -33,12 +31,12 @@ defmodule Instream.Query do
   @doc """
   Executes the query.
   """
-  defcallback execute(query :: __MODULE__.t,
-                      opts  :: Keyword.t,
-                      conn  :: Keyword.t) :: any
+  @callback execute(query :: __MODULE__.t,
+                    opts  :: Keyword.t,
+                    conn  :: Keyword.t) :: any
 
   @doc """
   Parses the query response.
   """
-  defcallback maybe_parse(response :: any, opts :: Keyword.t) :: any
+  @callback maybe_parse(response :: any, opts :: Keyword.t) :: any
 end

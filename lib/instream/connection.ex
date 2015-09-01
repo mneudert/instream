@@ -22,8 +22,6 @@ defmodule Instream.Connection do
         username: "root"
   """
 
-  use Behaviour
-
   defmacro __using__(otp_app: otp_app) do
     quote do
       @before_compile unquote(__MODULE__)
@@ -73,17 +71,17 @@ defmodule Instream.Connection do
   @doc """
   Returns the (internal) pool module.
   """
-  defcallback __pool__ :: module
+  @callback __pool__ :: module
 
   @doc """
   Returns a supervisable pool child_spec.
   """
-  defcallback child_spec :: Supervisor.Spec.spec
+  @callback child_spec :: Supervisor.Spec.spec
 
   @doc """
   Returns the connection configuration.
   """
-  defcallback config :: Keyword.t
+  @callback config :: Keyword.t
 
   @doc """
   Executes a query.
@@ -91,5 +89,5 @@ defmodule Instream.Connection do
   Passing `[async: true]` in the options always returns :ok.
   The command will be executed asynchronously.
   """
-  defcallback execute(query :: Instream.Query.t, opts :: Keyword.t) :: any
+  @callback execute(query :: Instream.Query.t, opts :: Keyword.t) :: any
 end

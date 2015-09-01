@@ -3,8 +3,6 @@ defmodule Instream.Writer do
   Point writer behaviour.
   """
 
-  use Behaviour
-
   defmacro __using__(_opts) do
     quote do
       @behaviour unquote(__MODULE__)
@@ -15,7 +13,7 @@ defmodule Instream.Writer do
   @doc """
   Writes a point.
   """
-  defcallback write(payload :: any,
-                    opts    :: Keyword.t,
-                    conn    :: Keyword.t) :: any
+  @callback write(payload :: any,
+                  opts    :: Keyword.t,
+                  conn    :: Keyword.t) :: any
 end

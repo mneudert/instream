@@ -36,8 +36,6 @@ defmodule Instream.Series do
       }
   """
 
-  use Behaviour
-
   defmacro __using__(_opts) do
     quote do
       import unquote(__MODULE__), only: [ series: 1 ]
@@ -56,7 +54,7 @@ defmodule Instream.Series do
   - `:measurement` - the measurement of the series
   - `:tags`        - the available tags defining the series
   """
-  defcallback __meta__(atom) :: any
+  @callback __meta__(atom) :: any
 
 
   @doc """
