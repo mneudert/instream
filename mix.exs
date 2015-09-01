@@ -39,7 +39,7 @@ defmodule Instream.Mixfile do
   end
 
   def docs do
-    [ main:       "readme",
+    [ main:       "README",
       readme:     "README.md",
       source_ref: "master",
       source_url: @url_github ]
