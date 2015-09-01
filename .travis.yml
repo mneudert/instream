@@ -2,7 +2,7 @@ language: elixir
 
 env:
   global:
-    - VER_INFLUXDB=0.9.0
+    - VER_INFLUXDB=0.9.3
     - MIX_ENV=test
 
 before_install:

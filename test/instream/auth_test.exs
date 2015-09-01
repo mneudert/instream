@@ -23,7 +23,7 @@ defmodule Instream.AuthTest do
   test "invalid password" do
     %{ error: error } = Database.show() |> InvalidConnection.execute()
 
-    assert String.contains?(error, "password")
+    assert String.contains?(error, "authentication failed")
   end
 
   test "user not found" do

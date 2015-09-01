@@ -45,10 +45,10 @@ defmodule Instream.Data.WriteTest do
     assert :ok == result
 
     # wait to ensure data was written
-    :timer.sleep(100)
+    :timer.sleep(250)
 
     # check data
-    query  = "SELECT * FROM #{ measurement }" |> Read.query()
+    query  = "SELECT * FROM #{ measurement } GROUP BY *" |> Read.query()
     result = query |> Connection.execute(database: @database)
 
     %{ results: [%{ series: [%{ tags: values_tags,
@@ -77,10 +77,10 @@ defmodule Instream.Data.WriteTest do
     assert :ok == result
 
     # wait to ensure data was written
-    :timer.sleep(100)
+    :timer.sleep(250)
 
     # check data
-    query  = "SELECT * FROM #{ measurement }" |> Read.query()
+    query  = "SELECT * FROM #{ measurement } GROUP BY *" |> Read.query()
     result = query |> Connection.execute(database: @database)
 
     %{ results: [%{ series: [%{ tags: values_tags,
@@ -102,10 +102,10 @@ defmodule Instream.Data.WriteTest do
     assert :ok == result
 
     # wait to ensure data was written
-    :timer.sleep(100)
+    :timer.sleep(250)
 
     # check data
-    query  = "SELECT * FROM data_write_struct" |> Read.query()
+    query  = "SELECT * FROM data_write_struct GROUP BY *" |> Read.query()
     result = query |> Connection.execute(database: @database)
 
     %{ results: [%{ series: [%{ tags: values_tags,

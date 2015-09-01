@@ -57,7 +57,7 @@ defmodule Instream.Cluster.RetentionPolicy do
     Validate.database! database
 
     %Query{
-      payload: "SHOW RETENTION POLICIES #{ database }",
+      payload: "SHOW RETENTION POLICIES ON #{ database }",
       type:    :cluster
     }
   end
