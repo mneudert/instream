@@ -3,6 +3,7 @@
 ## v0.5.0-dev
 
 - Enhancements
+  - Convenience module for "SHOW SERVERS" queries
   - Queries can be executed asynchronously
 
 - Backwards incompatible changes
