@@ -5,6 +5,7 @@
 - Enhancements
   - Convenience module for "SHOW SERVERS" queries
   - Queries can be executed asynchronously
+  - Support for line protocol
 
 - Backwards incompatible changes
   - Write queries return `:ok` instead of `nil`

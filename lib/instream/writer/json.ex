@@ -9,7 +9,7 @@ defmodule Instream.Writer.JSON do
   alias Instream.Query.URL
 
   def write(payload, opts, conn) do
-    headers = conn |> Headers.assemble()
+    headers = Headers.assemble(conn) ++ [{ 'Content-Type', 'application/json' }]
     payload = payload |> Poison.encode!
     url     =
          conn

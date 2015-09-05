@@ -56,7 +56,8 @@ config :my_app, MyApp.MyConnection,
   hosts:  [ "localhost" ],
   pool:   [ max_overflow: 0, size: 1 ],
   port:   8086,
-  scheme: "http"
+  scheme: "http",
+  writer: Instream.Writer.JSON
 ```
 
 You now have a connection definition you can hook into your supervision tree:
