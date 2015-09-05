@@ -9,7 +9,7 @@ defmodule Instream.Mixfile do
       name:          "Instream",
       description:   "InfluxDB driver for Elixir",
       package:       package,
-      version:       "0.5.0",
+      version:       "0.6.0-dev",
       elixir:        "~> 1.0",
       deps:          deps(Mix.env),
       docs:          docs,
@@ -41,7 +41,7 @@ defmodule Instream.Mixfile do
   def docs do
     [ main:       "README",
       readme:     "README.md",
-      source_ref: "v0.5.0",
+      source_ref: "master",
       source_url: @url_github ]
   end
 
