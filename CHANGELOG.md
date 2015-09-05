@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.5.0-dev
+## v0.5.0 (2015-09-05)
 
 - Enhancements
   - Convenience module for "SHOW SERVERS" queries
