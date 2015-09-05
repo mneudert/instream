@@ -10,6 +10,7 @@ defmodule Instream.Writer.JSON do
 
   def write(payload, opts, conn) do
     headers = conn |> Headers.assemble()
+    payload = payload |> Poison.encode!
     url     =
          conn
       |> URL.write()

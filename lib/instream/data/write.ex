@@ -11,7 +11,7 @@ defmodule Instream.Data.Write do
   @spec query(payload :: map) :: Query.t
   def query(payload) do
     %Query{
-      payload: payload |> maybe_unstruct() |> Poison.encode!,
+      payload: payload |> maybe_unstruct(),
       type:    :write
     }
   end
@@ -24,7 +24,7 @@ defmodule Instream.Data.Write do
         %{
           measurement: series.__meta__(:measurement),
           fields:      payload.fields |> Map.from_struct(),
-          tags:        payload.tags |> Map.from_struct()
+          tags:        payload.tags   |> Map.from_struct()
         }
       ]
     }
