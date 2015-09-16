@@ -7,7 +7,7 @@ InfluxDB driver for Elixir
 
 __This module is highly experimental at the moment and may behave or change unexpectedly.__
 
-Tested influxdb version: `0.9.3` (see `.travis.yml` to be sure)
+Tested influxdb version: `0.9.4` (see `.travis.yml` to be sure)
 
 
 ## Setup
@@ -81,7 +81,7 @@ config :my_app, MyApp.MyConnection,
 
 For `method` you can choose between header authentication (basic auth) using
 `:basic` or query parameters using `:query`. If nothing or an invalid value
-is given the connection will be made using `:basic` authentication..
+is given the connection will be made using `:basic` authentication.
 
 
 ### Queries
