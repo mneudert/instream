@@ -1,7 +1,5 @@
 language: elixir
 
-go: 1.5
-
 env:
   global:
     - VER_INFLUXDB=0.9.4
