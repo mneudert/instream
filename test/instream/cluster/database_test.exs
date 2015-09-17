@@ -30,4 +30,26 @@ defmodule Instream.Cluster.DatabaseTest do
       values -> refute Enum.any?(values, fn ([ db ]) -> db == @database end)
     end
   end
+
+
+  test "database creation cases" do
+    _ = @database |> Database.drop() |> Connection.execute()
+    _ = @database |> Database.create() |> Connection.execute()
+
+    # already created
+    %{ results: [%{ error: message }]} =
+         @database
+      |> Database.create()
+      |> Connection.execute()
+
+    assert String.contains?(message, "already exists")
+
+    # if not exists
+    result =
+         @database
+      |> Database.create([ if_not_exists: true ])
+      |> Connection.execute()
+
+    assert %{ results: [%{}] } == result
+  end
 end

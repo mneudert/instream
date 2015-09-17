@@ -97,7 +97,7 @@ Managing Databases:
 ```elixir
 # create "my_database"
 "my_database"
-|> Instream.Cluster.Database.create()
+|> Instream.Cluster.Database.create([ if_not_exists: true ])
 |> MyApp.MyConnection.create()
 
 # drop "my_database"
