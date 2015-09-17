@@ -10,7 +10,7 @@ defmodule Instream.Pool.Worker do
   @doc """
   Starts the worker process.
   """
-  @spec start_link(conn :: Keyword.t) :: GenServer.on_start
+  @spec start_link(Keyword.t) :: GenServer.on_start
   def start_link(conn) do
     GenServer.start_link(__MODULE__, conn)
   end
@@ -18,7 +18,7 @@ defmodule Instream.Pool.Worker do
   @doc """
   Initializes the worker.
   """
-  @spec init(conn :: Keyword.t) :: { :ok, Keyword.t }
+  @spec init(Keyword.t) :: { :ok, Keyword.t }
   def init(conn), do: { :ok, conn }
 
 

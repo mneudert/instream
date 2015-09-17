@@ -8,7 +8,7 @@ defmodule Instream.Data.Read do
   @doc """
   Creates a reading query object from a raw query string.
   """
-  @spec query(query_str :: String.t) :: Query.t
+  @spec query(String.t) :: Query.t
   def query(query_str) do
     %Query{
       payload: query_str,

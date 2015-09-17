@@ -8,7 +8,7 @@ defmodule Instream.Pool.Spec do
   @doc """
   Returns a supervisable pool child_spec.
   """
-  @spec spec(conn :: module) :: Supervisor.Spec.spec
+  @spec spec(module) :: Supervisor.Spec.spec
   def spec(conn) do
     { pool_opts, worker_opts } = get_opts(conn)
 

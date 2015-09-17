@@ -9,7 +9,7 @@ defmodule Instream.Cluster.Database do
   @doc """
   Returns a query to create a database.
   """
-  @spec create(database :: String.t) :: Query.t
+  @spec create(String.t) :: Query.t
   def create(database) do
     Validate.database! database
 
@@ -22,7 +22,7 @@ defmodule Instream.Cluster.Database do
   @doc """
   Returns a query to drop a database.
   """
-  @spec drop(database :: String.t) :: Query.t
+  @spec drop(String.t) :: Query.t
   def drop(database) do
     Validate.database! database
 

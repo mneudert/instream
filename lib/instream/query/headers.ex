@@ -6,7 +6,7 @@ defmodule Instream.Query.Headers do
   @doc """
   Assembles the headers for a query.
   """
-  @spec assemble(conn :: Keyword.t) :: list
+  @spec assemble(Keyword.t) :: list
   def assemble(conn) do
     assemble_auth(conn[:auth])
   end
@@ -30,7 +30,7 @@ defmodule Instream.Query.Headers do
       iex> assemble_auth([ username: "user", password: "pass" ])
       [{'Authorization', 'Basic dXNlcjpwYXNz'}]
   """
-  @spec assemble_auth(auth :: Keyword.t) :: list
+  @spec assemble_auth(Keyword.t) :: list
   def assemble_auth(nil), do: []
   def assemble_auth(auth) do
     case auth[:method] do

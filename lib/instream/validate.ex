@@ -6,7 +6,7 @@ defmodule Instream.Validate do
   @doc """
   Validates a database name.
   """
-  @spec database!(database :: String.t) :: :ok
+  @spec database!(String.t) :: :ok
   def database!(database) do
     test = ~r/^[a-zA-Z0-9_\-]+$/
 

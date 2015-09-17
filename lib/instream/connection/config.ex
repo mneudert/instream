@@ -6,7 +6,7 @@ defmodule Instream.Connection.Config do
   @doc """
   Retrieves the connection configuration for `conn` in `otp_app`.
   """
-  @spec config(otp_app :: atom, conn :: module) :: Keyword.t
+  @spec config(atom, atom) :: Keyword.t
   def config(otp_app, conn) do
     if config = Application.get_env(otp_app, conn) do
       ([ otp_app: otp_app ] ++ config) |> add_defaults()

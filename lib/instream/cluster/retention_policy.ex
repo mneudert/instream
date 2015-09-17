@@ -9,9 +9,7 @@ defmodule Instream.Cluster.RetentionPolicy do
   @doc """
   Returns a query to alter a retention policy.
   """
-  @spec alter(name     :: String.t,
-              database :: String.t,
-              policy   :: String.t) :: Query.t
+  @spec alter(String.t, String.t, String.t) :: Query.t
   def alter(name, database, policy) do
     Validate.database! database
 
@@ -24,9 +22,7 @@ defmodule Instream.Cluster.RetentionPolicy do
   @doc """
   Returns a query to create a retention policy.
   """
-  @spec create(name     :: String.t,
-               database :: String.t,
-               policy   :: String.t) :: Query.t
+  @spec create(String.t, String.t, String.t) :: Query.t
   def create(name, database, policy) do
     Validate.database! database
 
@@ -39,7 +35,7 @@ defmodule Instream.Cluster.RetentionPolicy do
   @doc """
   Returns a query to drop a retention policy.
   """
-  @spec drop(name :: String.t, database :: String.t) :: Query.t
+  @spec drop(String.t, String.t) :: Query.t
   def drop(name, database) do
     Validate.database! database
 
@@ -52,7 +48,7 @@ defmodule Instream.Cluster.RetentionPolicy do
   @doc """
   Returns a query to list retention policies.
   """
-  @spec show(database :: String.t) :: Query.t
+  @spec show(String.t) :: Query.t
   def show(database) do
     Validate.database! database
 
