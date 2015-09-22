@@ -50,7 +50,10 @@ defmodule Instream.Writer.Line do
     Enum.join([ line ] ++ tags, ",")
   end
 
-  defp to_line(payload), do: payload |> Map.get(:points, []) |> to_line("")
+  defp to_line(%{timestamp: nil}=payload), do: to_line(payload, "")
+  defp to_line(%{timestamp: ts}=payload),  do: to_line(payload, " " <> ts)
+  defp to_line(%{}=payload),               do: to_line(payload, "")
+  defp to_line(%{}=payload, line),         do: payload |> Map.get(:points, []) |> to_line(line)
 
   defp to_line([],                 line), do: line
   defp to_line([ point | points ], line)  do

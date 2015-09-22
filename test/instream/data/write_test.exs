@@ -1,5 +1,6 @@
 defmodule Instream.Data.WriteTest do
   use ExUnit.Case, async: true
+  use Timex
 
   alias Instream.Data.Read
   alias Instream.Data.Write
@@ -92,9 +93,12 @@ defmodule Instream.Data.WriteTest do
 
 
   test "writing series struct" do
+    timestamp = Time.now
+
     data = %TestSeries{}
     data = %{ data | fields: %{ data.fields | value: 17 }}
     data = %{ data | tags:   %{ data.tags   | foo: "foo", bar: "bar" }}
+    data = %{ data | timestamp: timestamp |> Time.to_usecs }
 
     query  = data |> Write.query()
     result = query |> Connection.execute()
@@ -109,10 +113,10 @@ defmodule Instream.Data.WriteTest do
     result = query |> Connection.execute(database: @database)
 
     %{ results: [%{ series: [%{ tags: values_tags,
-                                values: value_rows }]}]} = result
+                                values: [[isots, 17]] }]}]} = result
 
     assert @tags == values_tags
-    assert 0 < length(value_rows)
+    assert true ==  Date.equal?(Date.from(timestamp, :timestamp), DateFormat.parse!(isots, "{ISOz}"))
   end
 
 

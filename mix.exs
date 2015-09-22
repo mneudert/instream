@@ -28,8 +28,9 @@ defmodule Instream.Mixfile do
 
   def deps(:test) do
     deps(:prod) ++
-      [ { :dialyze,     "~> 0.2", optional: true },
-        { :excoveralls, "~> 0.3", optional: true } ]
+      [ { :dialyze,     "~> 0.2",    optional: true },
+        { :excoveralls, "~> 0.3",    optional: true },
+        { :timex,       "~> 0.19.4", optional: true } ]
   end
 
   def deps(_) do
