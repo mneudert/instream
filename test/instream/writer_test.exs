@@ -38,10 +38,11 @@ defmodule Instream.WriterTest do
 
   test "writer protocols" do
     data = %ProtocolsSeries{}
-    data = %{ data | tags:   %{ data.tags | foo: "foo", bar: "bar" }}
+    data = %{ data | tags: %{ data.tags | foo: "foo", bar: "bar" }}
 
     # JSON (default) protocol
-    data = %{ data | fields: %{ data.fields | value: "JSON" }}
+    data = %{ data | fields:    %{ data.fields | value: "JSON" }}
+    data = %{ data | timestamp: "2015-08-14T21:32:05Z" }
 
     query  = data |> Write.query()
     result = query |> Connection.execute()
@@ -49,7 +50,8 @@ defmodule Instream.WriterTest do
     assert :ok == result
 
     # Line protocol
-    data = %{ data | fields: %{ data.fields | value: "Line" }}
+    data = %{ data | fields:    %{ data.fields | value: "Line" }}
+    data = %{ data | timestamp: 1439587926000000000 }
 
     query  = data |> Write.query()
     result = query |> LineConnection.execute()
@@ -66,7 +68,10 @@ defmodule Instream.WriterTest do
       |> Connection.execute(database: ProtocolsSeries.__meta__(:database))
 
     assert %{ results: [%{ series: [%{
-      values: [[ _, "JSON" ], [ _, "Line" ]]
+      values: [
+        [ "2015-08-14T21:32:05Z", "JSON" ],
+        [ "2015-08-14T21:32:06Z", "Line" ]
+      ]
     }]}]} = result
   end
 

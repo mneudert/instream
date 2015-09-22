@@ -50,6 +50,9 @@ defmodule Instream.Writer.Line do
     Enum.join([ line ] ++ tags, ",")
   end
 
+  defp append_timestamp(line, %{ time: nil }), do: line
+  defp append_timestamp(line, %{ time: ts }),  do: "#{ line } #{ ts }"
+
   defp to_line(payload), do: payload |> Map.get(:points, []) |> to_line("")
 
   defp to_line([],                 line), do: line
@@ -58,6 +61,7 @@ defmodule Instream.Writer.Line do
          (line <> point.measurement)
       |> append_tags(point)
       |> append_fields(point)
+      |> append_timestamp(point)
 
     to_line(points, line)
   end
