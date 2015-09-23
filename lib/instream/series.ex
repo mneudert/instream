@@ -148,8 +148,7 @@ defmodule Instream.Series do
       defstruct [
         measurement: unquote(measurement),
         fields:      %unquote(series).Fields{},
-        tags:        %unquote(series).Tags{},
-        timestamp:   nil
+        tags:        %unquote(series).Tags{}
       ]
     end
   end

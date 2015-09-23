@@ -24,43 +24,66 @@ defmodule Instream.Writer.Line do
     response
   end
 
+  defp encode_value(i) when is_integer(i), do: "#{i}i"
+  defp encode_value(s) when is_binary(s),  do: "\"#{String.replace(s, "\"", "\\\"")}\""
+  defp encode_value(true),                 do: "true"
+  defp encode_value(false),                do: "false"
+  defp encode_value(other),                do: inspect(other)
 
-  defp append_fields(line, point) do
-    fields = Map.keys(point.fields) |> Enum.map fn (field) ->
-      value = point.fields[field]
-
-      cond do
-        is_binary(value)  -> "#{ field }=\"#{ value }\""
-        is_boolean(value) -> "#{ field }=#{ value && "true" || "false" }"
-        is_integer(value) -> "#{ field }=#{ value }i"
-        true              -> "#{ field }=#{ inspect value }"
-      end
-    end
-
-    fields = Enum.filter(fields, fn (el) -> nil != el end)
-
-    line <> " " <> Enum.join(fields, ",")
+  defp encode_property s do
+    s
+      |> Kernel.to_string
+      |> String.replace(",", "\\,", global: true)
+      |> String.replace(" ", "\\ ", global: true)
+      |> String.replace("=", "\\=", global: true)
   end
 
-  defp append_tags(line, point) do
-    tags = Map.keys(point.tags) |> Enum.map fn (tag) ->
-      "#{ tag }=#{ point.tags[tag] }"
-    end
-
-    Enum.join([ line ] ++ tags, ",")
+  defp encode_fields fields do
+    fields
+      |> Enum.filter(fn
+        {_,nil} -> false
+        {_, _}  -> true
+      end)
+      |> Enum.reduce([], fn({field, value}, acc)->
+        [ "#{ encode_property field }=#{ encode_value value }" | acc ]
+      end)
+      |> Enum.join(",")
   end
 
-  defp to_line(%{timestamp: nil}=payload), do: to_line(payload, "")
-  defp to_line(%{timestamp: ts}=payload),  do: to_line(payload, " " <> ts)
-  defp to_line(%{}=payload),               do: to_line(payload, "")
-  defp to_line(%{}=payload, line),         do: payload |> Map.get(:points, []) |> to_line(line)
+  defp append_fields(line, %{fields: fields}) do
+    line <> " " <> encode_fields(fields)
+  end
 
-  defp to_line([],                 line), do: line
-  defp to_line([ point | points ], line)  do
+  defp append_tags(line, %{tags: tags}) do
+    tags
+      |> Enum.reduce([], fn({tag, value}, acc)->
+        [ "#{ encode_property tag }=#{ encode_property value }" | acc ]
+      end)
+      |> List.insert_at(0, line)
+      |> Enum.join(",")
+  end
+
+  defp append_tags(line, _) do
+    line
+  end
+
+  defp append_timestamp(line, %{timestamp: ts}) when not is_nil(ts) do
+    "#{line} #{ts}"
+  end
+
+  defp append_timestamp(line, _) do
+    line
+  end
+
+  def to_line(payload), do: payload |> Map.get(:points, []) |> to_line("")
+
+  def to_line([],                 line), do: line
+  def to_line([ point | points ], line)  do
     line =
-         (line <> point.measurement)
+         (line <> encode_property point.measurement)
       |> append_tags(point)
       |> append_fields(point)
+      |> append_timestamp(point)
 
     to_line(points, line)
   end
