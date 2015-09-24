@@ -24,7 +24,8 @@ defmodule Instream.Data.Write do
         %{
           measurement: series.__meta__(:measurement),
           fields:      payload.fields |> Map.from_struct(),
-          tags:        payload.tags   |> Map.from_struct()
+          tags:        payload.tags   |> Map.from_struct(),
+          timestamp:   Map.get(payload, :timestamp, nil)
         }
       ]
     }
