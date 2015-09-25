@@ -16,9 +16,9 @@ defmodule Instream.Query.Read do
       |> URL.append_database(opts[:database])
       |> URL.append_query(payload)
 
-    { :ok, _, _, client } = :hackney.get(url, headers)
-    { :ok, response }     = :hackney.body(client)
+    { :ok, status, headers, client } = :hackney.get(url, headers)
+    { :ok, response }                = :hackney.body(client)
 
-    response |> maybe_parse(opts)
+    { status, headers, response } |> maybe_parse(opts)
   end
 end

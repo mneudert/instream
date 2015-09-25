@@ -38,5 +38,6 @@ defmodule Instream.Query do
   @doc """
   Parses the query response.
   """
-  @callback maybe_parse(response :: any, opts :: Keyword.t) :: any
+  @callback maybe_parse(response :: Instream.Writer.response,
+                        opts     :: Keyword.t) :: any
 end

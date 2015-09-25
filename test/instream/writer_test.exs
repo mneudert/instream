@@ -7,6 +7,17 @@ defmodule Instream.WriterTest do
   alias Instream.TestHelpers.LineConnection
 
 
+  defmodule ErrorsSeries do
+    use Instream.Series
+
+    series do
+      database    :test_database
+      measurement :writer_errors
+
+      field :binary
+    end
+  end
+
   defmodule LineEncodingSeries do
     use Instream.Series
 
@@ -75,6 +86,7 @@ defmodule Instream.WriterTest do
     }]}]} = result
   end
 
+
   test "line protocol data encoding" do
     data = %LineEncodingSeries{}
     data = %{ data | fields: %{ data.fields | binary:  "binary",
@@ -99,5 +111,29 @@ defmodule Instream.WriterTest do
     assert %{ results: [%{ series: [%{
       values: [[ _, "binary", false, 1.1, 100 ]]
     }]}]} = result
+  end
+
+
+  test "protocol error decoding" do
+    data = %ErrorsSeries{}
+    data = %{ data | fields: %{ data.fields | binary:  "binary" }}
+
+    :ok = data |> Write.query() |> LineConnection.execute()
+
+    # wait to ensure data was written
+    :timer.sleep(250)
+
+    # make entry fail
+    data = %{ data | fields: %{ data.fields | binary: 12345 }}
+
+    # JSON protocol write error
+    %{ error: error } = data |> Write.query() |> Connection.execute()
+
+    assert String.contains?(error, "failed")
+
+    # Line protocol write error
+    %{ error: error } = data |> Write.query() |> LineConnection.execute()
+
+    assert String.contains?(error, "failed")
   end
 end

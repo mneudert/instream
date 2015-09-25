@@ -8,6 +8,7 @@ defmodule Instream.Writer.JSON do
   alias Instream.Query.Headers
   alias Instream.Query.URL
 
+
   def write(payload, opts, conn) do
     headers = Headers.assemble(conn) ++ [{ 'Content-Type', 'application/json' }]
     payload = payload |> Poison.encode!
@@ -16,9 +17,9 @@ defmodule Instream.Writer.JSON do
       |> URL.write()
       |> URL.append_database(opts[:database])
 
-    { :ok, _, _, client } = :hackney.post(url, headers, payload)
-    { :ok, response }     = :hackney.body(client)
+    { :ok, status, headers, client } = :hackney.post(url, headers, payload)
+    { :ok, response }                = :hackney.body(client)
 
-    response
+    { status, headers, response }
   end
 end

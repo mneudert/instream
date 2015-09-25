@@ -8,6 +8,7 @@ defmodule Instream.Writer.Line do
   alias Instream.Query.Headers
   alias Instream.Query.URL
 
+
   def write(payload, opts, conn) do
     headers = Headers.assemble(conn) ++ [{ 'Content-Type', 'text/plain' }]
     body    = payload |> to_line()
@@ -18,10 +19,10 @@ defmodule Instream.Writer.Line do
       |> URL.write()
       |> URL.append_database(db)
 
-    { :ok, _, _, client } = :hackney.post(url, headers, body)
-    { :ok, response }     = :hackney.body(client)
+    { :ok, status, headers, client } = :hackney.post(url, headers, body)
+    { :ok, response }                = :hackney.body(client)
 
-    response
+    { status, headers, response }
   end
 
 

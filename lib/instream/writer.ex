@@ -3,6 +3,11 @@ defmodule Instream.Writer do
   Point writer behaviour.
   """
 
+  @type response :: { status  :: pos_integer,
+                      headers :: list,
+                      body    :: String.t }
+
+
   defmacro __using__(_opts) do
     quote do
       @behaviour unquote(__MODULE__)
@@ -15,5 +20,5 @@ defmodule Instream.Writer do
   """
   @callback write(payload :: any,
                   opts    :: Keyword.t,
-                  conn    :: Keyword.t) :: any
+                  conn    :: Keyword.t) :: response
 end
