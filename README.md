@@ -191,6 +191,11 @@ data
 |> MyApp.MyConnection.execute()
 ```
 
+If you want to pass an explicit timestamp to the database you can use the key
+`:timestamp`. Please not that the line protocol expects this key to be a
+nanosecond precision unix timestamp (like "1439587926000000000"). The json
+protocol expects a string formatted time (like "2015-08-14T21:32:05Z").
+
 
 ## License
 
