@@ -1,6 +1,6 @@
 # Instream
 
-[![Build Status](https://travis-ci.org/mneudert/instream.svg?branch=v0.5.0)](https://travis-ci.org/mneudert/instream)
+[![Build Status](https://travis-ci.org/mneudert/instream.svg?branch=master)](https://travis-ci.org/mneudert/instream)
 [![Coverage Status](https://coveralls.io/repos/mneudert/instream/badge.svg?branch=master&service=github)](https://coveralls.io/github/mneudert/instream?branch=master)
 [![Hex.pm](https://img.shields.io/hexpm/v/instream.svg)](https://hex.pm/packages/instream)
 
