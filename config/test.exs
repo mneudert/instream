@@ -7,13 +7,13 @@ config :instream_test, Instream.TestHelpers.Connection,
   port:   8086,
   scheme: "http"
 
-config :instream_test, Instream.TestHelpers.LineConnection,
+config :instream_test, Instream.TestHelpers.JSONConnection,
   auth:   [ username: "instream_test", password: "instream_test" ],
   hosts:  [ "localhost" ],
   pool:   [ max_overflow: 0, size: 1 ],
   port:   8086,
   scheme: "http",
-  writer: Instream.Writer.Line
+  writer: Instream.Writer.JSON
 
 
 config :instream_test, Instream.TestHelpers.AnonConnection,

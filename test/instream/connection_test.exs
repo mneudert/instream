@@ -16,7 +16,7 @@ defmodule Instream.ConnectionTest do
 
 
   test "configuration" do
-    config = [ writer:  Instream.Writer.JSON,
+    config = [ writer:  Instream.Writer.Line,
                otp_app: @otp_app ] ++ @otp_config
 
     assert config == Conn.config

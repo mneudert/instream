@@ -19,6 +19,6 @@ defmodule Instream.Connection.Config do
 
   defp add_defaults(config) do
     config
-    |> Keyword.put(:writer, config[:writer] || Instream.Writer.JSON)
+    |> Keyword.put(:writer, config[:writer] || Instream.Writer.Line)
   end
 end

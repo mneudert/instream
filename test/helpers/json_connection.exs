@@ -1,3 +1,3 @@
-defmodule Instream.TestHelpers.LineConnection do
+defmodule Instream.TestHelpers.JSONConnection do
   use Instream.Connection, otp_app: :instream_test
 end

@@ -19,6 +19,13 @@ defmodule Instream.ResponseTest do
   end
 
 
+  test "raw json error response" do
+    error    = "text"
+    response = { 500, [{ "Content-Type", "application/json" }], error }
+
+    assert error == Response.maybe_parse(response, [ result_as: :raw ])
+  end
+
   test "raw non-json error response" do
     error    = "text"
     response = { 500, [], error }

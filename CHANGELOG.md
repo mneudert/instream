@@ -5,7 +5,11 @@
 - Enhancements
   - "IF NOT EXISTS" can be passed to database creation queries
   - Points can be written with explicit timestamps
+  - Switched default write method to the line protocol
   - Tags are optional when writing with the line protocol
+
+- Backwards incompatible changes
+  - Switched default write method to the line protocol
 
 ## v0.5.0 (2015-09-05)
 

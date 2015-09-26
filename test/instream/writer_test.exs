@@ -4,7 +4,7 @@ defmodule Instream.WriterTest do
   alias Instream.Data.Read
   alias Instream.Data.Write
   alias Instream.TestHelpers.Connection
-  alias Instream.TestHelpers.LineConnection
+  alias Instream.TestHelpers.JSONConnection
 
 
   defmodule ErrorsSeries do
@@ -51,21 +51,21 @@ defmodule Instream.WriterTest do
     data = %ProtocolsSeries{}
     data = %{ data | tags: %{ data.tags | foo: "foo", bar: "bar" }}
 
-    # JSON (default) protocol
+    # JSON protocol
     data = %{ data | fields:    %{ data.fields | value: "JSON" }}
     data = %{ data | timestamp: "2015-08-14T21:32:05Z" }
 
     query  = data |> Write.query()
-    result = query |> Connection.execute()
+    result = query |> JSONConnection.execute()
 
     assert :ok == result
 
-    # Line protocol
+    # Line (default) protocol
     data = %{ data | fields:    %{ data.fields | value: "Line" }}
     data = %{ data | timestamp: 1439587926000000000 }
 
     query  = data |> Write.query()
-    result = query |> LineConnection.execute()
+    result = query |> Connection.execute()
 
     assert :ok == result
 
@@ -95,7 +95,7 @@ defmodule Instream.WriterTest do
                                               integer: 100 }}
 
     query  = data |> Write.query()
-    result = query |> LineConnection.execute()
+    result = query |> Connection.execute()
 
     assert :ok == result
 
@@ -118,7 +118,7 @@ defmodule Instream.WriterTest do
     data = %ErrorsSeries{}
     data = %{ data | fields: %{ data.fields | binary:  "binary" }}
 
-    :ok = data |> Write.query() |> LineConnection.execute()
+    :ok = data |> Write.query() |> Connection.execute()
 
     # wait to ensure data was written
     :timer.sleep(250)
@@ -127,12 +127,12 @@ defmodule Instream.WriterTest do
     data = %{ data | fields: %{ data.fields | binary: 12345 }}
 
     # JSON protocol write error
-    %{ error: error } = data |> Write.query() |> Connection.execute()
+    %{ error: error } = data |> Write.query() |> JSONConnection.execute()
 
     assert String.contains?(error, "failed")
 
     # Line protocol write error
-    %{ error: error } = data |> Write.query() |> LineConnection.execute()
+    %{ error: error } = data |> Write.query() |> Connection.execute()
 
     assert String.contains?(error, "failed")
   end
