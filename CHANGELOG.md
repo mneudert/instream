@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.6.0-dev
+## v0.6.0 (2015-09-27)
 
 - Enhancements
   - "IF NOT EXISTS" can be passed to database creation queries
