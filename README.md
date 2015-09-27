@@ -158,7 +158,7 @@ Reading data:
 ```
 
 
-## Series Defintions
+## Series Definitions
 
 If you do not want to define the raw maps for writing data you can pre-define
 a seriesfor later usage:
@@ -192,7 +192,7 @@ data
 ```
 
 If you want to pass an explicit timestamp to the database you can use the key
-`:timestamp`. Please not that the line protocol expects this key to be a
+`:timestamp`. Please note that the line protocol expects this key to be a
 nanosecond precision unix timestamp (like "1439587926000000000"). The json
 protocol expects a string formatted time (like "2015-08-14T21:32:05Z").
 

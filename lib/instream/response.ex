@@ -9,8 +9,8 @@ defmodule Instream.Response do
   @spec maybe_parse(Instream.Writer.response, Keyword.t) :: any
   def maybe_parse({ _, _, "" }, _), do: :ok
 
-  def maybe_parse({ _status, headers, response }, opts)
-      when 300 <= _status
+  def maybe_parse({ status, headers, response }, opts)
+      when 300 <= status
   do
     case is_json?(headers) do
       true  -> maybe_decode_json(response, opts)
