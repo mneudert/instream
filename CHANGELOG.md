@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.7.0-dev
+
+- Deprecations
+  - Support of the JSON protocol is deprecated and will be removed with the InfluxDB 1.0 release
+
 ## v0.6.0 (2015-09-27)
 
 - Enhancements

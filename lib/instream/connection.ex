@@ -64,6 +64,26 @@ defmodule Instream.Connection do
           &GenServer.call(&1, { :execute, query, opts })
         )
       end
+
+      ## warns if deprecated JSON writer is used
+      ##
+      ## will be removed after influxdb has removed JSON support
+      ## will only warn for all otp_apps except :instream
+      config           = Application.get_env(@otp_app, __MODULE__)
+      uses_json_writer = Instream.Writer.JSON == Keyword.get(config || [], :writer)
+      is_not_instream  = :instream != @otp_app
+
+      if uses_json_writer and is_not_instream do
+        IO.write """
+        The connection "#{ __MODULE__ }"
+        is configured to use the deprecated JSON protocol.
+
+        The support for it will be remove with the release of InfluxDB 1.0.
+
+        Until then it will still be available, but it is highly discouraged to
+        do so. Please consider changing to the line protocol.
+        """
+      end
     end
   end
 
