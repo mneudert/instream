@@ -2,6 +2,9 @@
 
 ## v0.7.0-dev
 
+- Bug fixes
+  - Pool configuration (size, overflow) is now properly taken from configuration
+
 - Deprecations
   - Support of the JSON protocol is deprecated and will be removed with the InfluxDB 1.0 release
 
