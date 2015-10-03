@@ -3,6 +3,7 @@
 ## v0.7.0-dev
 
 - Enhancements
+  - Convenience module for "SHOW DIAGNOSTICS" queries
   - Convenience module for "SHOW STATS" queries
 
 - Bug fixes
