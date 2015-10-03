@@ -2,6 +2,9 @@
 
 ## v0.7.0-dev
 
+- Enhancements
+  - Convenience module for "SHOW STATS" queries
+
 - Bug fixes
   - Pool configuration (size, overflow) is now properly taken from configuration
 
