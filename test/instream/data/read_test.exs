@@ -7,6 +7,7 @@ defmodule Instream.Data.ReadTest do
   @database    "test_database"
   @measurement "empty_measurement"
 
+
   test "read from empty measurement" do
     query  = "SELECT value FROM #{ @measurement }" |> Read.query()
     result = query |> Connection.execute(database: @database)
@@ -15,7 +16,7 @@ defmodule Instream.Data.ReadTest do
   end
 
   test "database in query string" do
-    query_in  = "SELECT value FROM \"#{ @database }\".\"default\".\"#{ @measurement }\"" |> Read.query
+    query_in  = "SELECT value FROM \"#{ @database }\".\"default\".\"#{ @measurement }\"" |> Read.query()
     query_out = "SELECT value FROM #{ @measurement }" |> Read.query()
 
     result_in  = query_in  |> Connection.execute()
