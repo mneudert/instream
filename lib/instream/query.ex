@@ -5,6 +5,7 @@ defmodule Instream.Query do
 
   defstruct [
     payload: nil,
+    opts:    [],
     type:    nil
   ]
 
@@ -13,6 +14,7 @@ defmodule Instream.Query do
 
   @type t :: %__MODULE__{
     payload: payload_type,
+    opts:    Keyword.t,
     type:    query_type
   }
 

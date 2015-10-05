@@ -75,13 +75,13 @@ defmodule Instream.WriterTest do
     # check data
     result =
          "SELECT * FROM #{ ProtocolsSeries.__meta__(:measurement) } GROUP BY *"
-      |> Read.query()
+      |> Read.query(precision: :nano_seconds)
       |> Connection.execute(database: ProtocolsSeries.__meta__(:database))
 
     assert %{ results: [%{ series: [%{
       values: [
-        [ "2015-08-14T21:32:05Z", "JSON" ],
-        [ "2015-08-14T21:32:06Z", "Line" ]
+        [ 1439587925000000000, "JSON" ],
+        [ 1439587926000000000, "Line" ]
       ]
     }]}]} = result
   end

@@ -3,6 +3,20 @@ defmodule Instream.Query.URLTest do
 
   alias Instream.Query.URL
 
+
+  test "append precision" do
+    precision = :milli_seconds
+    url       = "http://localhost/query"
+    expected  = "#{ url }?epoch=ms"
+
+    assert expected == URL.append_precision(url, precision)
+
+    url      = "#{ url }?foo=bar"
+    expected = "#{ url }&epoch=ms"
+
+    assert expected == URL.append_precision(url, precision)
+  end
+
   test "append query" do
     query    = "SHOW DATABASES"
     url      = "http://localhost/query"
@@ -15,6 +29,7 @@ defmodule Instream.Query.URLTest do
 
     assert expected == URL.append_query(url, query)
   end
+
 
   test "query url" do
     url  = "http://localhost:8086/query?u=root&p=root"

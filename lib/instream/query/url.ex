@@ -3,6 +3,9 @@ defmodule Instream.Query.URL do
   URL Utility.
   """
 
+  alias Instream.Encoder.Precision
+
+
   @doc """
   Appends authentication credentials to an URL.
   """
@@ -25,6 +28,17 @@ defmodule Instream.Query.URL do
   @spec append_database(String.t, String.t) :: String.t
   def append_database(url, nil),      do: url
   def append_database(url, database), do: url |> append_param("db", database)
+
+  @doc """
+  Appends a precision value to an URL.
+
+  InfluxDB requires the "precision" to be passed as the "epoch" query parameter.
+  """
+  @spec append_precision(String.t, Precision.t) :: String.t
+  def append_precision(url, nil),      do: url
+  def append_precision(url, precision) do
+    url |> append_param("epoch", Precision.encode(precision))
+  end
 
   @doc """
   Appends a query to an URL.

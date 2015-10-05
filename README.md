@@ -155,6 +155,11 @@ Reading data:
 "SELECT * FROM \"my_database\".\"default\".\"some_measurement\""
 |> Instream.Data.Read.query()
 |> MyApp.MyConnection.execute()
+
+# passing precision (= epoch) for query results
+"SELECT * FROM some_measurement"
+|> Instream.Data.Read.query(precision: :minutes)
+|> MyApp.MyConnection.execute()
 ```
 
 
