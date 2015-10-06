@@ -126,22 +126,8 @@ Instream.Cluster.RetentionPolicy.drop("my_rp", "my_database")
 
 #### Data Queries
 
-Writing data:
-
-```elixir
-%{
-  database: "my_database",
-  points: [
-    %{
-      measurement: "some_measurement",
-      tags:        %{ foo: "foo", bar: "bar" },
-      fields:      %{ value: 0.66 }
-    }
-  ]
-}
-|> Instream.Data.Write.query()
-|> MyApp.MyConnection.execute([ async: true ])
-```
+Please see the point "Series Definitions" on how to write data
+to your InfluxDB database.
 
 Reading data:
 
@@ -194,6 +180,11 @@ data = %{ data | tags:   %{ data.tags   | bar: "bar", foo: "foo" }}
 data
 |> Instream.Data.Write.query()
 |> MyApp.MyConnection.execute()
+
+# write the point asynchronously
+data
+|> Instream.Data.Write.query()
+|> MyApp.MyConnection.execute(async: true)
 ```
 
 If you want to pass an explicit timestamp to the database you can use the key
