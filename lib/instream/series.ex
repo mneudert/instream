@@ -29,11 +29,12 @@ defmodule Instream.Series do
   Following the above usage example you will get the following struct:
 
       %MySeries{
-          database:    "my_database",
-          measurement: "cpu_load",
-          fields:      %MySeries.Fields{ value: nil },
-          tags:        %MySeries.Tags{ host: nil, core: nil }
+          fields:    %MySeries.Fields{ value: nil },
+          tags:      %MySeries.Tags{ host: nil, core: nil },
+          timestamp: nil
       }
+
+  `:timestamp` is expected to be a unix nanosecond timestamp.
   """
 
   defmacro __using__(_opts) do
