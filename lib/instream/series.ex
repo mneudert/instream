@@ -91,7 +91,7 @@ defmodule Instream.Series do
       ]
 
       Module.eval_quoted __MODULE__, [
-        unquote(__MODULE__).__struct__(__MODULE__, @measurement)
+        unquote(__MODULE__).__struct__(__MODULE__)
       ]
     end
   end
@@ -144,13 +144,12 @@ defmodule Instream.Series do
   end
 
   @doc false
-  def __struct__(series, measurement) do
+  def __struct__(series) do
     quote do
       defstruct [
-        measurement: unquote(measurement),
-        fields:      %unquote(series).Fields{},
-        tags:        %unquote(series).Tags{},
-        timestamp:   nil
+        fields:    %unquote(series).Fields{},
+        tags:      %unquote(series).Tags{},
+        timestamp: nil
       ]
     end
   end
