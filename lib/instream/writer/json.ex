@@ -11,7 +11,7 @@ defmodule Instream.Writer.JSON do
 
   def write(payload, opts, conn) do
     headers = Headers.assemble(conn) ++ [{ 'Content-Type', 'application/json' }]
-    payload = payload |> Poison.encode!
+    payload = payload |> rename_timestamp_field() |> Poison.encode!
     url     =
          conn
       |> URL.write()
@@ -21,5 +21,18 @@ defmodule Instream.Writer.JSON do
     { :ok, response }                = :hackney.body(client)
 
     { status, headers, response }
+  end
+
+
+  # rename "timestamp" field of points to "time".
+  # necessary evil until the json writer is removed.
+  defp rename_timestamp_field(%{ points: points } = payload) do
+    points = Enum.map points, fn (point) ->
+      point
+      |> Map.put(:time, Map.get(point, :timestamp, nil))
+      |> Map.delete(:timestamp)
+    end
+
+    %{ payload | points: points }
   end
 end

@@ -40,9 +40,9 @@ defmodule Instream.Encoder.Line do
 
   defp append_tags(line, _), do: line
 
-  defp append_timestamp(line, %{ time: nil }), do: line
-  defp append_timestamp(line, %{ time: ts }),  do: "#{ line } #{ ts }"
-  defp append_timestamp(line, _),              do: line
+  defp append_timestamp(line, %{ timestamp: nil }), do: line
+  defp append_timestamp(line, %{ timestamp: ts }),  do: "#{ line } #{ ts }"
+  defp append_timestamp(line, _),                   do: line
 
 
   defp encode_fields(fields) do

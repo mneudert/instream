@@ -25,7 +25,7 @@ defmodule Instream.Data.Write do
           measurement: series.__meta__(:measurement),
           fields:      payload.fields |> Map.from_struct(),
           tags:        payload.tags   |> Map.from_struct(),
-          time:        payload.timestamp
+          timestamp:   payload.timestamp
         }
       ]
     }

@@ -14,7 +14,7 @@ defmodule Instream.Encoder.LineTest do
         fields: %{
           value: 442221834240
         },
-        time: nil
+        timestamp: nil
       }
     ]
 
@@ -29,7 +29,7 @@ defmodule Instream.Encoder.LineTest do
         fields: %{
           value: 442221834240
         },
-        time: 1435362189575692182
+        timestamp: 1435362189575692182
       }
     ]
 
@@ -48,7 +48,7 @@ defmodule Instream.Encoder.LineTest do
           hostname: "server01",
           disk_type: "SSD"
         },
-        time: nil
+        timestamp: nil
       }
     ]
 
@@ -67,7 +67,7 @@ defmodule Instream.Encoder.LineTest do
           hostname: "server01",
           disk_type: "SSD"
         },
-        time: 1435362189575692182
+        timestamp: 1435362189575692182
       }
     ]
 
@@ -83,7 +83,7 @@ defmodule Instream.Encoder.LineTest do
           free_space: 442221834240,
           disk_type:  "SSD"
         },
-        time: 1435362189575692182
+        timestamp: 1435362189575692182
       }
     ]
 
@@ -101,7 +101,7 @@ defmodule Instream.Encoder.LineTest do
         fields: %{
           value: 442221834240,
         },
-        time: 1435362189575692182
+        timestamp: 1435362189575692182
       }
     ]
 
@@ -119,7 +119,7 @@ defmodule Instream.Encoder.LineTest do
         fields: %{
           value: 442221834240,
         },
-        time: nil
+        timestamp: nil
       }
     ]
 
@@ -137,7 +137,7 @@ defmodule Instream.Encoder.LineTest do
         fields: %{
           value: 442221834240,
         },
-        time: nil
+        timestamp: nil
       }
     ]
 
@@ -153,7 +153,7 @@ defmodule Instream.Encoder.LineTest do
           "value" => 442221834240,
           "working directories" => ~S|C:\My Documents\Stuff for examples,C:\My Documents|
         },
-        time: nil
+        timestamp: nil
       }
     ]
 
@@ -171,7 +171,7 @@ defmodule Instream.Encoder.LineTest do
         fields: %{
           ~S|field_key\\\\| => ~S|string field value, only " need be quoted|
         },
-        time: nil
+        timestamp: nil
       }
     ]
 
