@@ -18,7 +18,7 @@ defmodule Instream.Writer do
   @doc """
   Writes a point.
   """
-  @callback write(payload :: any,
+  @callback write(payload :: Instream.Query.t,
                   opts    :: Keyword.t,
                   conn    :: Keyword.t) :: response
 end

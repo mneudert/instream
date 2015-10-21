@@ -62,9 +62,9 @@ defmodule Instream.WriterTest do
 
     # Line (default) protocol
     data = %{ data | fields:    %{ data.fields | value: "Line" }}
-    data = %{ data | timestamp: 1439587926000000000 }
+    data = %{ data | timestamp: 1439587926 }
 
-    query  = data |> Write.query()
+    query  = data |> Write.query(precision: :seconds)
     result = query |> Connection.execute()
 
     assert :ok == result

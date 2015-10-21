@@ -188,9 +188,34 @@ data
 ```
 
 If you want to pass an explicit timestamp to the database you can use the key
-`:timestamp`. Please note that the line protocol expects this key to be a
-nanosecond precision unix timestamp (like "1439587926000000000"). The json
-protocol expects a string formatted time (like "2015-08-14T21:32:05Z").
+`:timestamp`:
+
+```elixir
+data = %MySeries{}
+data = %{ data | timestamp: 1439587926000000000 }
+```
+
+The timestamp is (by default) expected to be a nanosecond unix timestamp. To use
+a different precision (for all points in this write operation!) you can change
+this value by modifying your write call:
+
+```elixir
+data = %MySeries{}
+data = %{ data | timestamp: 1439587926 }
+
+data
+|> Instream.Data.Write.query(precision: :seconds)
+|> MyApp.MyConnection.execute(async: true)
+```
+
+Supported precision types are:
+
+- `:hours`
+- `:minutes`
+- `:seconds`
+- `:milli_seconds`
+- `:micro_seconds`
+- `:nano_seconds`
 
 
 ## License

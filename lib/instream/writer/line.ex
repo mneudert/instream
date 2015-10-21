@@ -10,15 +10,16 @@ defmodule Instream.Writer.Line do
   alias Instream.Query.URL
 
 
-  def write(payload, opts, conn) do
+  def write(query, opts, conn) do
     headers = Headers.assemble(conn) ++ [{ 'Content-Type', 'text/plain' }]
-    body    = payload |> to_line()
+    body    = query.payload |> to_line()
 
-    db  = Map.get(payload, :database, opts[:database])
+    db  = Map.get(query.payload, :database, opts[:database])
     url =
          conn
       |> URL.write()
       |> URL.append_database(db)
+      |> URL.append_precision(query.opts[:precision])
 
     { :ok, status, headers, client } = :hackney.post(url, headers, body)
     { :ok, response }                = :hackney.body(client)

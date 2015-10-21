@@ -6,6 +6,7 @@
   - Convenience module for "SHOW DIAGNOSTICS" queries
   - Convenience module for "SHOW STATS" queries
   - Precision (= epoch) can be passed to read queries
+  - Precision can be passed to write queries
 
 - Bug fixes
   - Pool configuration (size, overflow) is now properly taken from configuration

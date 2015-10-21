@@ -8,10 +8,11 @@ defmodule Instream.Data.Write do
   @doc """
   Creates a writing query object from a raw query string.
   """
-  @spec query(map) :: Query.t
-  def query(payload) do
+  @spec query(map, Keyword.t) :: Query.t
+  def query(payload, opts \\ []) do
     %Query{
       payload: payload |> maybe_unstruct(),
+      opts:    opts,
       type:    :write
     }
   end

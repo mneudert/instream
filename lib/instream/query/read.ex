@@ -14,7 +14,7 @@ defmodule Instream.Query.Read do
          conn
       |> URL.query()
       |> URL.append_database(opts[:database])
-      |> URL.append_precision(query.opts[:precision])
+      |> URL.append_epoch(query.opts[:precision])
       |> URL.append_query(query.payload)
 
     { :ok, status, headers, client } = :hackney.get(url, headers)

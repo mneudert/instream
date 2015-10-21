@@ -30,14 +30,23 @@ defmodule Instream.Query.URL do
   def append_database(url, database), do: url |> append_param("db", database)
 
   @doc """
-  Appends a precision value to an URL.
+  Appends an epoch value to an URL.
 
-  InfluxDB requires the "precision" to be passed as the "epoch" query parameter.
+  The allowed values are identical to the precision parameters of write queries.
+  """
+  @spec append_epoch(String.t, Precision.t) :: String.t
+  def append_epoch(url, nil),      do: url
+  def append_epoch(url, epoch) do
+    url |> append_param("epoch", Precision.encode(epoch))
+  end
+
+  @doc """
+  Appends a precision value to an URL.
   """
   @spec append_precision(String.t, Precision.t) :: String.t
   def append_precision(url, nil),      do: url
   def append_precision(url, precision) do
-    url |> append_param("epoch", Precision.encode(precision))
+    url |> append_param("precision", Precision.encode(precision))
   end
 
   @doc """
