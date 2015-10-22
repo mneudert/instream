@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.7.0-dev
+## v0.7.0 (2015-10-22)
 
 - Enhancements
   - Convenience module for "SHOW DIAGNOSTICS" queries
