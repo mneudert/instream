@@ -3,6 +3,7 @@
 ## v0.8.0-dev
 
 - Enhancements
+  - Fields can be defined with default values
   - Tags can be defined with default values
 
 ## v0.7.0 (2015-10-22)

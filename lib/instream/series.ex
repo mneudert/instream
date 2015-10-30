@@ -14,7 +14,8 @@ defmodule Instream.Series do
           tag :host, default: "www"
           tag :core
 
-          field :value
+          field :value, default: 100
+          field :value_desc
         end
       end
 
@@ -29,7 +30,7 @@ defmodule Instream.Series do
   Following the above usage example you will get the following struct:
 
       %MySeries{
-          fields:    %MySeries.Fields{ value: nil },
+          fields:    %MySeries.Fields{ value: 100, value_desc: nil },
           tags:      %MySeries.Tags{ host: "www", core: nil },
           timestamp: nil
       }
@@ -77,18 +78,19 @@ defmodule Instream.Series do
         :ok
       end
 
-      @fields @fields_raw |> Enum.sort()
+      @fields_names  @fields_raw |> Keyword.keys() |> Enum.sort()
+      @fields_struct @fields_raw |> Enum.sort( &unquote(__MODULE__).__sort_fields__/2 )
 
       @tags_names  @tags_raw |> Keyword.keys() |> Enum.sort()
       @tags_struct @tags_raw |> Enum.sort( &unquote(__MODULE__).__sort_tags__/2 )
 
       def __meta__(:database),    do: @database
-      def __meta__(:fields),      do: @fields
+      def __meta__(:fields),      do: @fields_names
       def __meta__(:measurement), do: @measurement
       def __meta__(:tags),        do: @tags_names
 
       Module.eval_quoted __MODULE__, [
-        unquote(__MODULE__).__struct_fields__(@fields),
+        unquote(__MODULE__).__struct_fields__(@fields_struct),
         unquote(__MODULE__).__struct_tags__(@tags_struct)
       ]
 
@@ -113,9 +115,12 @@ defmodule Instream.Series do
   @doc """
   Defines a field in the series.
   """
-  defmacro field(name) do
+  defmacro field(name, opts \\ []) do
     quote do
-      unquote(__MODULE__).__attribute__(__MODULE__, :fields_raw, unquote(name))
+      unquote(__MODULE__).__attribute__(
+        __MODULE__, :fields_raw,
+        { unquote(name), unquote(opts[:default]) }
+      )
     end
   end
 
@@ -148,6 +153,9 @@ defmodule Instream.Series do
     Module.put_attribute(mod, name, value)
   end
 
+
+  @doc false
+  def __sort_fields__({ left, _ }, { right, _ }), do: left > right
 
   @doc false
   def __sort_tags__({ left, _ }, { right, _ }), do: left > right

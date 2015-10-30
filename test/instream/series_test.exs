@@ -9,6 +9,9 @@ defmodule Instream.SeriesTest do
       tag :host,    default: "www"
       tag :host_id, default: 1
       tag :cpu
+
+      field :high
+      field :low, default: 25
     end
   end
 
@@ -39,6 +42,9 @@ defmodule Instream.SeriesTest do
     assert default.tags.host    == "www"
     assert default.tags.host_id == 1
     assert default.tags.cpu     == nil
+
+    assert default.fields.high == nil
+    assert default.fields.low  == 25
   end
 
 

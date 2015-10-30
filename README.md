@@ -177,10 +177,13 @@ You can include a default value for tags in your series definition:
 ```elixir
 series do
   tag :host, default: "www"
+
+  field :value, default: 100
 end
 ```
 
-This value will be pre-assigned when using the data struct.
+These values will be pre-assigned when using the data struct.
+All fields or tags without a default value will be set to `nil`.
 
 ### Writing Series Points
 
