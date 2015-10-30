@@ -11,7 +11,7 @@ defmodule Instream.Series do
           database    :my_database
           measurement :cpu_load
 
-          tag :host
+          tag :host, default: "www"
           tag :core
 
           field :value
@@ -30,7 +30,7 @@ defmodule Instream.Series do
 
       %MySeries{
           fields:    %MySeries.Fields{ value: nil },
-          tags:      %MySeries.Tags{ host: nil, core: nil },
+          tags:      %MySeries.Tags{ host: "www", core: nil },
           timestamp: nil
       }
 
@@ -78,16 +78,18 @@ defmodule Instream.Series do
       end
 
       @fields @fields_raw |> Enum.sort()
-      @tags   @tags_raw   |> Enum.sort()
+
+      @tags_names  @tags_raw |> Keyword.keys() |> Enum.sort()
+      @tags_struct @tags_raw |> Enum.sort( &unquote(__MODULE__).__sort_tags__/2 )
 
       def __meta__(:database),    do: @database
       def __meta__(:fields),      do: @fields
       def __meta__(:measurement), do: @measurement
-      def __meta__(:tags),        do: @tags
+      def __meta__(:tags),        do: @tags_names
 
       Module.eval_quoted __MODULE__, [
         unquote(__MODULE__).__struct_fields__(@fields),
-        unquote(__MODULE__).__struct_tags__(@tags)
+        unquote(__MODULE__).__struct_tags__(@tags_struct)
       ]
 
       Module.eval_quoted __MODULE__, [
@@ -131,9 +133,12 @@ defmodule Instream.Series do
   @doc """
   Defines a tag in the series.
   """
-  defmacro tag(name) do
+  defmacro tag(name, opts \\ []) do
     quote do
-      unquote(__MODULE__).__attribute__(__MODULE__, :tags_raw, unquote(name))
+      unquote(__MODULE__).__attribute__(
+        __MODULE__, :tags_raw,
+        { unquote(name), unquote(opts[:default]) }
+      )
     end
   end
 
@@ -142,6 +147,11 @@ defmodule Instream.Series do
   def __attribute__(mod, name, value) do
     Module.put_attribute(mod, name, value)
   end
+
+
+  @doc false
+  def __sort_tags__({ left, _ }, { right, _ }), do: left > right
+
 
   @doc false
   def __struct__(series) do

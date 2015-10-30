@@ -2,6 +2,16 @@ defmodule Instream.SeriesTest do
   use ExUnit.Case, async: true
 
 
+  defmodule DefaultValueSeries do
+    use Instream.Series
+
+    series do
+      tag :host,    default: "www"
+      tag :host_id, default: 1
+      tag :cpu
+    end
+  end
+
   defmodule EmptySeries do
     use Instream.Series
 
@@ -23,6 +33,15 @@ defmodule Instream.SeriesTest do
   end
 
 
+  test "series default values" do
+    default = %DefaultValueSeries{}
+
+    assert default.tags.host    == "www"
+    assert default.tags.host_id == 1
+    assert default.tags.cpu     == nil
+  end
+
+
   test "series metadata defaults" do
     assert EmptySeries.__meta__(:database)    == nil
     assert EmptySeries.__meta__(:fields)      == []
@@ -36,6 +55,7 @@ defmodule Instream.SeriesTest do
     assert TestSeries.__meta__(:measurement) == "cpu_load"
     assert TestSeries.__meta__(:tags)        == [ :core, :host ]
   end
+
 
   test "series struct" do
     mod        = TestSeries

@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.8.0-dev
+
+- Enhancements
+  - Tags can be defined with default values
+
 ## v0.7.0 (2015-10-22)
 
 - Enhancements

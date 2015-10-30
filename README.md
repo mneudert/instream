@@ -170,6 +170,20 @@ defmodule MySeries do
 end
 ```
 
+### Default Values
+
+You can include a default value for tags in your series definition:
+
+```elixir
+series do
+  tag :host, default: "www"
+end
+```
+
+This value will be pre-assigned when using the data struct.
+
+### Writing Series Points
+
 You can then use this module to assemble a (single!) data point for writing:
 
 ```elixir
