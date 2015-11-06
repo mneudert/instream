@@ -35,6 +35,14 @@ before_script:
   - nohup "${GOPATH}/bin/influxd" -pidfile ./influxdb.pid -config ./influxdb.conf >>./influxdb.stdout 2>>./influxdb.stderr &
   - sleep 5
 
+after_failure:
+  - echo "==> config <=="
+  - cat ./influxdb.conf
+  - echo "==> stdout <=="
+  - cat ./influxdb.stdout
+  - echo "==> stderr <=="
+  - cat ./influxdb.stderr
+
 after_success:
   - mix coveralls.travis
 
