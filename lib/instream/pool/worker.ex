@@ -13,7 +13,19 @@ defmodule Instream.Pool.Worker do
     GenServer.start_link(__MODULE__, conn)
   end
 
-  def init(conn), do: { :ok, conn }
+  def init(conn) do
+    case conn[:writer] do
+      Instream.Writer.UDP -> { :ok, connect_udp(conn) }
+      _                   -> { :ok, conn }
+    end
+  end
+
+  def terminate(_reason, conn) do
+    case conn[:udp_socket] do
+      nil    -> :ok
+      socket -> :gen_udp.close(socket)
+    end
+  end
 
 
   # GenServer callbacks
@@ -30,6 +42,13 @@ defmodule Instream.Pool.Worker do
 
 
   # Utility methods
+
+  defp connect_udp(conn) do
+    { :ok, socket } = :gen_udp.open(0, [ :binary, { :active, false }])
+
+    conn
+    |> Keyword.put_new(:udp_socket, socket)
+  end
 
   defp execute(%Query{ type: type } = query, opts, conn) do
     case type do

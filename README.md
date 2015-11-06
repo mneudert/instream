@@ -87,6 +87,23 @@ For `method` you can choose between header authentication (basic auth) using
 `:basic` or query parameters using `:query`. If nothing or an invalid value
 is given the connection will be made using `:basic` authentication.
 
+#### Writer Configuration
+
+If you are using the regular line protocol writer `Instream.Writer.Line` you
+are done without having anything to configure. It is used by default and
+connects to the port you have configured for connection.
+
+To write points over UDP you can adjust your configuration:
+
+```elixir
+config :my_app, MyApp.MyConnection,
+  hosts: [ "localhost" ],
+  port_udp: 8089,
+  writer: Instream.Writer.UDP
+```
+
+The connection will then write using UDP and connecting to the port `:port_udp`.
+All non-write queries will be send to the regular `:port` you have configured.
 
 ### Queries
 
@@ -233,6 +250,10 @@ Supported precision types are:
 - `:milli_seconds`
 - `:micro_seconds`
 - `:nano_seconds`
+
+Please be aware that the UDP protocol writer does not support custom timestamp
+precisions. All UDP timestamps are implicitly expected to already be at
+nanosecond precision.
 
 
 ## License

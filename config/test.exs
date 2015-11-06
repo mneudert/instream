@@ -15,6 +15,15 @@ config :instream, Instream.TestHelpers.JSONConnection,
   scheme: "http",
   writer: Instream.Writer.JSON
 
+config :instream, Instream.TestHelpers.UDPConnection,
+  auth:     [ username: "instream_test", password: "instream_test" ],
+  hosts:    [ "localhost" ],
+  pool:     [ max_overflow: 0, size: 1 ],
+  port:     8086,
+  port_udp: 8089,
+  scheme:   "http",
+  writer:   Instream.Writer.UDP
+
 
 config :instream, Instream.TestHelpers.AnonConnection,
   hosts:  [ "localhost" ],

@@ -5,6 +5,7 @@ defmodule Instream.WriterTest do
   alias Instream.Data.Write
   alias Instream.TestHelpers.Connection
   alias Instream.TestHelpers.JSONConnection
+  alias Instream.TestHelpers.UDPConnection
 
 
   defmodule ErrorsSeries do
@@ -69,8 +70,17 @@ defmodule Instream.WriterTest do
 
     assert :ok == result
 
+    # UDP protocol
+    data = %{ data | fields:    %{ data.fields | value: "UDP" }}
+    data = %{ data | timestamp: 1439587927000000000 }
+
+    query  = data |> Write.query()
+    result = query |> UDPConnection.execute()
+
+    assert :ok == result
+
     # wait to ensure data was written
-    :timer.sleep(250)
+    :timer.sleep(1250)
 
     # check data
     result =
@@ -81,7 +91,8 @@ defmodule Instream.WriterTest do
     assert %{ results: [%{ series: [%{
       values: [
         [ 1439587925000000000, "JSON" ],
-        [ 1439587926000000000, "Line" ]
+        [ 1439587926000000000, "Line" ],
+        [ 1439587927000000000, "UDP" ]
       ]
     }]}]} = result
   end

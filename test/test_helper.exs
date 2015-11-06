@@ -1,5 +1,6 @@
 Code.require_file("helpers/connection.exs", __DIR__)
 Code.require_file("helpers/json_connection.exs", __DIR__)
+Code.require_file("helpers/udp_connection.exs", __DIR__)
 
 Code.require_file("helpers/anon_connection.exs", __DIR__)
 Code.require_file("helpers/guest_connection.exs", __DIR__)
@@ -15,6 +16,7 @@ alias Instream.TestHelpers
 [
   TestHelpers.Connection.child_spec,
   TestHelpers.JSONConnection.child_spec,
+  TestHelpers.UDPConnection.child_spec,
 
   TestHelpers.AnonConnection.child_spec,
   TestHelpers.GuestConnection.child_spec,
