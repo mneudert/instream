@@ -47,6 +47,21 @@ defmodule Instream.WriterTest do
     end
   end
 
+  defmodule BatchSeries do
+    use Instream.Series
+
+    series do
+      database    :test_database
+      measurement :humidity
+
+      tag :location
+      tag :sensor
+      tag :scope
+
+      field :value
+    end
+  end
+
 
   test "writer protocols" do
     data = %ProtocolsSeries{}
@@ -146,5 +161,43 @@ defmodule Instream.WriterTest do
     %{ error: error } = data |> Write.query() |> Connection.execute()
 
     assert String.contains?(error, "failed")
+  end
+
+
+  test "line protocol batch series" do
+    inside = %BatchSeries{}
+    inside = %{ inside | tags: %{ inside.tags | location: "1", sensor: "abc-123", scope: "inside" }}
+
+    inside = %{ inside | fields: %{ inside.fields | value: 1.23456 }}
+    inside = %{ inside | timestamp: 1439587926 }
+
+    outside = %BatchSeries{}
+    outside = %{ outside | tags: %{ outside.tags | location: "1", sensor: "abc-123", scope: "outside" }}
+
+    outside = %{ outside | fields: %{ outside.fields | value: 9.87654 }}
+    outside = %{ outside | timestamp: 1439587926 }
+
+    data = [ inside, outside ]
+
+    query  = data |> Write.query(precision: :seconds)
+    result = query |> Connection.execute()
+
+    assert :ok == result
+
+    # wait to ensure data was written
+    :timer.sleep(250)
+
+    # check data
+    result =
+         "SELECT * FROM #{ BatchSeries.__meta__(:measurement) }"
+      |> Read.query()
+      |> Connection.execute(database: BatchSeries.__meta__(:database))
+
+    assert %{results: 
+      [%{series: [%{columns: ["time", "location", "scope", "sensor", "value"], name: "humidity",
+      values: [["2015-08-14T21:32:06Z", "1", "inside", "abc-123", 1.23456], 
+              ["2015-08-14T21:32:06Z", "1", "outside", "abc-123", 9.87654]]}]}]}
+
+     = result
   end
 end

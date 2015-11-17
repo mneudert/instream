@@ -13,7 +13,7 @@ defmodule Instream.Encoder.Line do
   def encode(points), do: points |> encode("")
 
 
-  defp encode([],                 line), do: line
+  defp encode([],                 line), do: String.rstrip(line)
   defp encode([ point | points ], line)  do
     line =
          (line <> encode_property(point.measurement))
@@ -41,7 +41,7 @@ defmodule Instream.Encoder.Line do
   defp append_tags(line, _), do: line
 
   defp append_timestamp(line, %{ timestamp: nil }), do: line
-  defp append_timestamp(line, %{ timestamp: ts }),  do: "#{ line } #{ ts }"
+  defp append_timestamp(line, %{ timestamp: ts }),  do: "#{ line } #{ ts }\n"
   defp append_timestamp(line, _),                   do: line
 
 

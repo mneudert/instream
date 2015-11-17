@@ -6,16 +6,30 @@ defmodule Instream.Data.Write do
   alias Instream.Query
 
   @doc """
+  Creates a writing query object from a list of raw queries.
+  """
+  @spec query([Map] | [], Keyword.t, Query.t) :: Query.t
+  def query([], opts, query = %Query{}), do: query(query.payload, opts)
+  def query([first | rest], opts, acc = %Query{payload: %{points: points}}) when is_map(first) and is_list(points) do
+    joined = points ++ (first |> maybe_unstruct |> Map.get(:points))
+    acc = %Query{ acc | payload: %{ acc.payload | points: joined}}
+    query(rest, opts, acc)
+  end
+  @spec query([Map], Keyword.t) :: Query.t
+  def query([first | rest], opts) when is_map(first), do: query(rest, opts, query(first, opts))
+  @doc """
   Creates a writing query object from a raw query string.
   """
-  @spec query(map, Keyword.t) :: Query.t
-  def query(payload, opts \\ []) do
+  @spec query(Map, Keyword.t) :: Query.t
+  def query(payload, opts) when is_map(payload) do
     %Query{
       payload: payload |> maybe_unstruct(),
       opts:    opts,
       type:    :write
     }
   end
+  @spec query(Map) :: Query.t
+  def query(payload) when is_map(payload), do: query(payload, [])
 
 
   defp maybe_unstruct(%{ __struct__: series } = payload) do
