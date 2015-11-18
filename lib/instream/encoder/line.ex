@@ -13,15 +13,20 @@ defmodule Instream.Encoder.Line do
   def encode(points), do: points |> encode([])
 
 
-  defp encode([],                 lines), do: lines |> Enum.join("\n")
+  defp encode([], lines) do
+    lines
+    |> Enum.reverse()
+    |> Enum.join("\n")
+  end
+
   defp encode([ point | points ], lines)  do
     line =
-      encode_property(point.measurement)
+         encode_property(point.measurement)
       |> append_tags(point)
       |> append_fields(point)
       |> append_timestamp(point)
 
-    encode(points, [line] ++ lines)
+    encode(points, [ line | lines ])
   end
 
 
