@@ -177,4 +177,21 @@ defmodule Instream.Encoder.LineTest do
 
     assert expected == Line.encode(points)
   end
+
+
+  test "multiple points" do
+    expected = "multiline value=\"first\"\nmultiline value=\"second\""
+    points   = [
+      %{
+        measurement: "multiline",
+        fields:      %{ value: "first" }
+      },
+      %{
+        measurement: "multiline",
+        fields:      %{ value: "second" }
+      }
+    ]
+
+    assert expected == Line.encode(points)
+  end
 end
