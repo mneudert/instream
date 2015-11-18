@@ -3,7 +3,7 @@
 ## v0.8.0-dev
 
 - Enhancements
-  - Batch writing using `Line` and `UDP` writers (#2)
+  - Batch writing using `Line` and `UDP` writers ([#10](https://github.com/mneudert/instream/pull/10))
   - Fields can be defined with default values
   - Tags can be defined with default values
   - Writing can be done over UDP using `Instream.Writer.UDP`
@@ -26,7 +26,7 @@
 
 - Enhancements
   - "IF NOT EXISTS" can be passed to database creation queries
-  - Points can be written with explicit timestamps
+  - Points can be written with explicit timestamps ([#8](https://github.com/mneudert/instream/pull/8))
   - Switched default write method to the line protocol
   - Tags are optional when writing with the line protocol
 
