@@ -17,9 +17,6 @@ defmodule Instream.Data.Write do
       type:    :write
     }
   end
-  def query(payload, opts) when is_map(payload) do
-    query(payload, [])
-  end
   def query([first | rest], opts) when is_map(first) do
     query(rest, opts, query(first, opts))
   end
