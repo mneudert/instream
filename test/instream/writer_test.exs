@@ -175,7 +175,7 @@ defmodule Instream.WriterTest do
     outside = %{ outside | tags: %{ outside.tags | location: "1", sensor: "abc-123", scope: "outside" }}
 
     outside = %{ outside | fields: %{ outside.fields | value: 9.87654 }}
-    outside = %{ outside | timestamp: 1439587926 }
+    outside = %{ outside | timestamp: 1439587927 }
 
     data = [ inside, outside ]
 
@@ -196,7 +196,7 @@ defmodule Instream.WriterTest do
     assert %{results: 
       [%{series: [%{columns: ["time", "location", "scope", "sensor", "value"], name: "humidity",
       values: [["2015-08-14T21:32:06Z", "1", "inside", "abc-123", 1.23456], 
-              ["2015-08-14T21:32:06Z", "1", "outside", "abc-123", 9.87654]]}]}]}
+              ["2015-08-14T21:32:07Z", "1", "outside", "abc-123", 9.87654]]}]}]}
 
      = result
   end
