@@ -10,18 +10,18 @@ defmodule Instream.Encoder.Line do
   Creates the write string for a list of data points.
   """
   @spec encode([ map ]) :: String.t
-  def encode(points), do: points |> encode("")
+  def encode(points), do: points |> encode([])
 
 
-  defp encode([],                 line), do: line
-  defp encode([ point | points ], line)  do
+  defp encode([],                 lines), do: lines |> Enum.join("\n")
+  defp encode([ point | points ], lines)  do
     line =
-         (line <> encode_property(point.measurement))
+      encode_property(point.measurement)
       |> append_tags(point)
       |> append_fields(point)
       |> append_timestamp(point)
 
-    encode(points, line)
+    encode(points, [line] ++ lines)
   end
 
 

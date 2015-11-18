@@ -119,7 +119,7 @@ Managing Databases:
 # create "my_database"
 "my_database"
 |> Instream.Cluster.Database.create([ if_not_exists: true ])
-|> MyApp.MyConnection.create()
+|> MyApp.MyConnection.execute()
 
 # drop "my_database"
 "my_database"
