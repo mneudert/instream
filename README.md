@@ -219,6 +219,11 @@ data
 data
 |> Instream.Data.Write.query()
 |> MyApp.MyConnection.execute(async: true)
+
+# write multiple points at once
+[ point_1, point_2, point_3 ]
+|> Instream.Data.Write.query()
+|> MyApp.MyConnection.execute()
 ```
 
 If you want to pass an explicit timestamp to the database you can use the key

@@ -3,6 +3,7 @@
 ## v0.8.0-dev
 
 - Enhancements
+  - Batch writing using `Line` and `UDP` writers (#2)
   - Fields can be defined with default values
   - Tags can be defined with default values
   - Writing can be done over UDP using `Instream.Writer.UDP`
