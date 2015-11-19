@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.8.0-dev
+## v0.8.0 (2015-11-18)
 
 - Enhancements
   - Batch writing using `Line` and `UDP` writers ([#10](https://github.com/mneudert/instream/pull/10))
