@@ -7,7 +7,7 @@ defmodule Instream.Cluster.ServerTest do
   test "server listing" do
     result = Server.show() |> Connection.execute()
 
-    %{ results: [%{ series: [%{ values: [[_, conn, _]] }]}]} = result
+    %{ results: [%{ series: [%{ values: [[_, conn, _, _]] }]}]} = result
 
     assert String.contains?(conn, "localhost")
   end
