@@ -1,7 +1,6 @@
 defmodule Instream.WriterTest do
   use ExUnit.Case, async: true
 
-  alias Instream.Data.Read
   alias Instream.Data.Write
   alias Instream.TestHelpers.Connection
   alias Instream.TestHelpers.JSONConnection
@@ -98,8 +97,8 @@ defmodule Instream.WriterTest do
     # check data
     result =
          "SELECT * FROM #{ ProtocolsSeries.__meta__(:measurement) } GROUP BY *"
-      |> Read.query(precision: :nano_seconds)
-      |> Connection.execute(database: ProtocolsSeries.__meta__(:database))
+      |> Connection.query([ database:  ProtocolsSeries.__meta__(:database),
+                            precision: :nano_seconds ])
 
     assert %{ results: [%{ series: [%{
       values: [
@@ -129,8 +128,7 @@ defmodule Instream.WriterTest do
     # check data
     result =
          "SELECT * FROM #{ LineEncodingSeries.__meta__(:measurement) } GROUP BY *"
-      |> Read.query()
-      |> Connection.execute(database: LineEncodingSeries.__meta__(:database))
+      |> Connection.query(database: LineEncodingSeries.__meta__(:database))
 
     assert %{ results: [%{ series: [%{
       values: [[ _, "binary", false, 1.1, 100 ]]
@@ -186,8 +184,7 @@ defmodule Instream.WriterTest do
     # check data
     result =
          "SELECT * FROM #{ BatchSeries.__meta__(:measurement) }"
-      |> Read.query()
-      |> Connection.execute(database: BatchSeries.__meta__(:database))
+      |> Connection.query(database: BatchSeries.__meta__(:database))
 
     assert %{ results: [%{ series: [%{
       columns: [ "time", "scope", "value" ],

@@ -151,18 +151,15 @@ Reading data:
 ```elixir
 # passing database to execute/1
 "SELECT * FROM some_measurement"
-|> Instream.Data.Read.query()
-|> MyApp.MyConnection.execute(database: "my_database")
+|> MyApp.MyConnection.query(database: "my_database")
 
 # defining database in the query
 "SELECT * FROM \"my_database\".\"default\".\"some_measurement\""
-|> Instream.Data.Read.query()
-|> MyApp.MyConnection.execute()
+|> MyApp.MyConnection.query()
 
 # passing precision (= epoch) for query results
 "SELECT * FROM some_measurement"
-|> Instream.Data.Read.query(precision: :minutes)
-|> MyApp.MyConnection.execute()
+|> MyApp.MyConnection.query(precision: :minutes)
 ```
 
 

@@ -27,6 +27,7 @@ defmodule Instream.Connection do
       @before_compile unquote(__MODULE__)
 
       alias Instream.Connection
+      alias Instream.Data
       alias Instream.Pool
       alias Instream.Query
 
@@ -43,6 +44,12 @@ defmodule Instream.Connection do
           true -> execute_async(query, opts)
           _    -> execute_sync(query, opts)
         end
+      end
+
+      def query(query, opts \\ []) do
+        query
+        |> Data.Read.query(opts)
+        |> execute(opts)
       end
     end
   end
@@ -110,4 +117,12 @@ defmodule Instream.Connection do
   The command will be executed asynchronously.
   """
   @callback execute(query :: Instream.Query.t, opts :: Keyword.t) :: any
+
+  @doc """
+  Executes a reading query.
+
+  See `Instream.Connection.execute/2` and `Instream.Data.Read.query/2`
+  for a complete list of available options.
+  """
+  @callback query(query :: String.t, opts :: Keyword.t) :: any
 end

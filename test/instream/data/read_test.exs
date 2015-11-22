@@ -1,7 +1,6 @@
 defmodule Instream.Data.ReadTest do
   use ExUnit.Case, async: true
 
-  alias Instream.Data.Read
   alias Instream.TestHelpers.Connection
 
   @database    "test_database"
@@ -9,18 +8,18 @@ defmodule Instream.Data.ReadTest do
 
 
   test "read from empty measurement" do
-    query  = "SELECT value FROM #{ @measurement }" |> Read.query()
-    result = query |> Connection.execute(database: @database)
+    query  = "SELECT value FROM #{ @measurement }"
+    result = query |> Connection.query(database: @database)
 
     assert %{ results: _ } = result
   end
 
   test "database in query string" do
-    query_in  = "SELECT value FROM \"#{ @database }\".\"default\".\"#{ @measurement }\"" |> Read.query()
-    query_out = "SELECT value FROM #{ @measurement }" |> Read.query()
+    query_in  = "SELECT value FROM \"#{ @database }\".\"default\".\"#{ @measurement }\""
+    query_out = "SELECT value FROM #{ @measurement }"
 
-    result_in  = query_in  |> Connection.execute()
-    result_out = query_out |> Connection.execute(database: @database)
+    result_in  = query_in  |> Connection.query()
+    result_out = query_out |> Connection.query(database: @database)
 
     assert result_in == result_out
   end

@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.9.0-dev
+
+- Enhancements
+  - Reading queries can be executed directly using `Instream.Connection.query/2`
+
 ## v0.8.0 (2015-11-18)
 
 - Enhancements

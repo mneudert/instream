@@ -1,7 +1,6 @@
 defmodule Instream.Data.WriteTest do
   use ExUnit.Case, async: true
 
-  alias Instream.Data.Read
   alias Instream.Data.Write
   alias Instream.TestHelpers.Connection
   alias Instream.TestHelpers.GuestConnection
@@ -48,8 +47,8 @@ defmodule Instream.Data.WriteTest do
     :timer.sleep(250)
 
     # check data
-    query  = "SELECT * FROM #{ measurement } GROUP BY *" |> Read.query()
-    result = query |> Connection.execute(database: @database)
+    query  = "SELECT * FROM #{ measurement } GROUP BY *"
+    result = query |> Connection.query(database: @database)
 
     %{ results: [%{ series: [%{ tags: values_tags,
                                 values: value_rows }]}]} = result
@@ -80,8 +79,8 @@ defmodule Instream.Data.WriteTest do
     :timer.sleep(250)
 
     # check data
-    query  = "SELECT * FROM #{ measurement } GROUP BY *" |> Read.query()
-    result = query |> Connection.execute(database: @database)
+    query  = "SELECT * FROM #{ measurement } GROUP BY *"
+    result = query |> Connection.query(database: @database)
 
     %{ results: [%{ series: [%{ tags: values_tags,
                                 values: value_rows }]}]} = result
@@ -105,8 +104,8 @@ defmodule Instream.Data.WriteTest do
     :timer.sleep(250)
 
     # check data
-    query  = "SELECT * FROM data_write_struct GROUP BY *" |> Read.query()
-    result = query |> Connection.execute(database: @database)
+    query  = "SELECT * FROM data_write_struct GROUP BY *"
+    result = query |> Connection.query(database: @database)
 
     %{ results: [%{ series: [%{ tags: values_tags,
                                 values: value_rows }]}]} = result
