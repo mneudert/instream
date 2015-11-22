@@ -56,6 +56,12 @@ defmodule Instream.Query.URL do
   def append_query(url, query), do: url |> append_param("q", query)
 
   @doc """
+  Returns the proper URL for a `:ping` request.
+  """
+  @spec ping(Keyword.t) :: String.t
+  def ping(conn), do: conn |> url("ping")
+
+  @doc """
   Returns the proper URL for a `:query` request.
   """
   @spec query(Keyword.t) :: String.t

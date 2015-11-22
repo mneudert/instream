@@ -105,6 +105,16 @@ config :my_app, MyApp.MyConnection,
 The connection will then write using UDP and connecting to the port `:port_udp`.
 All non-write queries will be send to the regular `:port` you have configured.
 
+#### Ping
+
+To validate a connection you can send ping requests to the server:
+
+```elixir
+Instream.Connection.ping()
+```
+
+The response will be `:pong` on success or `:error` on any failure.
+
 ### Queries
 
 Every query can be executed asynchronously by passing `[async: true]` to

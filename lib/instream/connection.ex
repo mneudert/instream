@@ -46,6 +46,8 @@ defmodule Instream.Connection do
         end
       end
 
+      def ping(), do: %Query{ type: :ping } |> execute()
+
       def query(query, opts \\ []) do
         query
         |> Data.Read.query(opts)

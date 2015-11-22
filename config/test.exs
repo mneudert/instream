@@ -58,3 +58,9 @@ config :instream, Instream.TestHelpers.QueryAuthConnection,
   pool:   [ max_overflow: 0, size: 1 ],
   port:   8086,
   scheme: "http"
+
+config :instream, Instream.TestHelpers.UnreachableConnection,
+  hosts:  [ "some.really.unreachable.host" ],
+  pool:   [ max_overflow: 0, size: 1 ],
+  port:   8086,
+  scheme: "http"
