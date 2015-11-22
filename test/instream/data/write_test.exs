@@ -1,7 +1,6 @@
 defmodule Instream.Data.WriteTest do
   use ExUnit.Case, async: true
 
-  alias Instream.Data.Write
   alias Instream.TestHelpers.Connection
   alias Instream.TestHelpers.GuestConnection
 
@@ -38,10 +37,7 @@ defmodule Instream.Data.WriteTest do
       ]
     }
 
-    query  = data |> Write.query()
-    result = query |> Connection.execute()
-
-    assert :ok == result
+    assert :ok == data |> Connection.write()
 
     # wait to ensure data was written
     :timer.sleep(250)
@@ -70,10 +66,7 @@ defmodule Instream.Data.WriteTest do
       ]
     }
 
-    query  = data |> Write.query()
-    result = query |> Connection.execute([ async: true ])
-
-    assert :ok == result
+    assert :ok == data |> Connection.write(async: true)
 
     # wait to ensure data was written
     :timer.sleep(250)
@@ -95,10 +88,7 @@ defmodule Instream.Data.WriteTest do
     data = %{ data | fields: %{ data.fields | value: 17 }}
     data = %{ data | tags:   %{ data.tags   | foo: "foo", bar: "bar" }}
 
-    query  = data |> Write.query()
-    result = query |> Connection.execute()
-
-    assert :ok == result
+    assert :ok == data |> Connection.write()
 
     # wait to ensure data was written
     :timer.sleep(250)
@@ -126,7 +116,7 @@ defmodule Instream.Data.WriteTest do
       ]
     }
 
-    %{ error: error } = data |> Write.query() |> GuestConnection.execute()
+    %{ error: error } = data |> GuestConnection.write()
 
     assert String.contains?(error, "not authorized")
   end

@@ -209,18 +209,15 @@ data = %{ data | fields: %{ data.fields | value: 17 }}
 data = %{ data | tags:   %{ data.tags   | bar: "bar", foo: "foo" }}
 
 data
-|> Instream.Data.Write.query()
-|> MyApp.MyConnection.execute()
+|> MyApp.MyConnection.write()
 
 # write the point asynchronously
 data
-|> Instream.Data.Write.query()
-|> MyApp.MyConnection.execute(async: true)
+|> MyApp.MyConnection.write(async: true)
 
 # write multiple points at once
 [ point_1, point_2, point_3 ]
-|> Instream.Data.Write.query()
-|> MyApp.MyConnection.execute()
+|> MyApp.MyConnection.write()
 ```
 
 If you want to pass an explicit timestamp to the database you can use the key
@@ -240,8 +237,7 @@ data = %MySeries{}
 data = %{ data | timestamp: 1439587926 }
 
 data
-|> Instream.Data.Write.query(precision: :seconds)
-|> MyApp.MyConnection.execute(async: true)
+|> MyApp.MyConnection.write([ async: true, precision: :seconds ])
 ```
 
 Supported precision types are:

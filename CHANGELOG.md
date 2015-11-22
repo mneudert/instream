@@ -4,6 +4,7 @@
 
 - Enhancements
   - Reading queries can be executed directly using `Instream.Connection.query/2`
+  - Writing query can be executed directly using `Insream.Connection.write/2`
 
 ## v0.8.0 (2015-11-18)
 

@@ -1,7 +1,6 @@
 defmodule Instream.WriterTest do
   use ExUnit.Case, async: true
 
-  alias Instream.Data.Write
   alias Instream.TestHelpers.Connection
   alias Instream.TestHelpers.JSONConnection
   alias Instream.TestHelpers.UDPConnection
@@ -68,28 +67,19 @@ defmodule Instream.WriterTest do
     data = %{ data | fields:    %{ data.fields | value: "JSON" }}
     data = %{ data | timestamp: "2015-08-14T21:32:05Z" }
 
-    query  = data |> Write.query()
-    result = query |> JSONConnection.execute()
-
-    assert :ok == result
+    assert :ok == data |> JSONConnection.write()
 
     # Line (default) protocol
     data = %{ data | fields:    %{ data.fields | value: "Line" }}
     data = %{ data | timestamp: 1439587926 }
 
-    query  = data |> Write.query(precision: :seconds)
-    result = query |> Connection.execute()
-
-    assert :ok == result
+    assert :ok == data |> Connection.write(precision: :seconds)
 
     # UDP protocol
     data = %{ data | fields:    %{ data.fields | value: "UDP" }}
     data = %{ data | timestamp: 1439587927000000000 }
 
-    query  = data |> Write.query()
-    result = query |> UDPConnection.execute()
-
-    assert :ok == result
+    assert :ok == data |> UDPConnection.write()
 
     # wait to ensure data was written
     :timer.sleep(1250)
@@ -117,10 +107,7 @@ defmodule Instream.WriterTest do
                                               float:   1.1,
                                               integer: 100 }}
 
-    query  = data |> Write.query()
-    result = query |> Connection.execute()
-
-    assert :ok == result
+    assert :ok == data |> Connection.write()
 
     # wait to ensure data was written
     :timer.sleep(250)
@@ -140,7 +127,7 @@ defmodule Instream.WriterTest do
     data = %ErrorsSeries{}
     data = %{ data | fields: %{ data.fields | binary:  "binary" }}
 
-    :ok = data |> Write.query() |> Connection.execute()
+    assert :ok = data |> Connection.write()
 
     # wait to ensure data was written
     :timer.sleep(250)
@@ -149,12 +136,12 @@ defmodule Instream.WriterTest do
     data = %{ data | fields: %{ data.fields | binary: 12345 }}
 
     # JSON protocol write error
-    %{ error: error } = data |> Write.query() |> JSONConnection.execute()
+    %{ error: error } = data |> JSONConnection.write()
 
     assert String.contains?(error, "failed")
 
     # Line protocol write error
-    %{ error: error } = data |> Write.query() |> Connection.execute()
+    %{ error: error } = data |> Connection.write()
 
     assert String.contains?(error, "failed")
   end
@@ -173,10 +160,7 @@ defmodule Instream.WriterTest do
     outside = %{ outside | fields:    %{ outside.fields | value: 9.87654 }}
     outside = %{ outside | timestamp: 1439587927 }
 
-    query  = [ inside, outside ] |> Write.query(precision: :seconds)
-    result = query |> Connection.execute()
-
-    assert :ok == result
+    assert :ok == [ inside, outside ] |> Connection.write(precision: :seconds)
 
     # wait to ensure data was written
     :timer.sleep(250)

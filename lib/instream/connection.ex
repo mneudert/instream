@@ -51,6 +51,12 @@ defmodule Instream.Connection do
         |> Data.Read.query(opts)
         |> execute(opts)
       end
+
+      def write(payload, opts \\ []) do
+        payload
+        |> Data.Write.query(opts)
+        |> execute(opts)
+      end
     end
   end
 
@@ -125,4 +131,12 @@ defmodule Instream.Connection do
   for a complete list of available options.
   """
   @callback query(query :: String.t, opts :: Keyword.t) :: any
+
+  @doc """
+  Executes a writing query.
+
+  See `Instream.Connection.execute/2` and `Instream.Data.Write.query/2`
+  for a complete list of available options.
+  """
+  @callback write(payload :: map | [map], opts :: Keyword.t) :: any
 end
