@@ -7,6 +7,9 @@
   - Reading queries can be executed directly using `Instream.Connection.query/2`
   - Writing query can be executed directly using `Insream.Connection.write/2`
 
+- Deprecations
+  - Using `Instream.Data.Read` or `Instream.Data.Write` directly is discouraged and will eventually be removed
+
 ## v0.8.0 (2015-11-18)
 
 - Enhancements
