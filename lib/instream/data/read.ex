@@ -13,7 +13,7 @@ defmodule Instream.Data.Read do
   - `precision`: see `Instream.Encoder.Precision` for available values
   """
   @spec query(String.t, Keyword.t) :: Query.t
-  def query(query_str, opts \\ []) do
+  def query(query_str, opts) do
     %Query{
       payload: query_str,
       opts:    opts,

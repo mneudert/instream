@@ -10,6 +10,9 @@
 - Deprecations
   - Using `Instream.Data.Read` or `Instream.Data.Write` directly is discouraged and will eventually be removed
 
+- Backwards incompatible changes
+  - The parameter `opts` for `Instream.Data.Read` and `Instream.Data.Write` is no longer optional
+
 ## v0.8.0 (2015-11-18)
 
 - Enhancements
