@@ -3,10 +3,8 @@ defmodule Instream.Writer do
   Point writer behaviour.
   """
 
-  @type response :: { status  :: pos_integer,
-                      headers :: list,
-                      body    :: String.t }
-
+  alias Instream.Query
+  alias Instream.Response
 
   defmacro __using__(_opts) do
     quote do
@@ -18,7 +16,7 @@ defmodule Instream.Writer do
   @doc """
   Writes a point.
   """
-  @callback write(payload :: Instream.Query.t,
+  @callback write(payload :: Query.t,
                   opts    :: Keyword.t,
-                  conn    :: Keyword.t) :: response
+                  conn    :: Keyword.t) :: Response.t
 end

@@ -5,7 +5,9 @@ defmodule Instream.Pool.Worker do
 
   use GenServer
 
+  alias Instream.Connection.QueryRunner
   alias Instream.Query
+
 
   @behaviour :poolboy_worker
 
@@ -52,10 +54,10 @@ defmodule Instream.Pool.Worker do
 
   defp execute(%Query{ type: type } = query, opts, conn) do
     case type do
-      :cluster -> Query.Cluster.execute(query, opts, conn)
-      :ping    -> Query.Ping.execute(query,opts, conn)
-      :read    -> Query.Read.execute(query, opts, conn)
-      :write   -> Query.Write.execute(query, opts, conn)
+      :cluster -> QueryRunner.cluster(query, opts, conn)
+      :ping    -> QueryRunner.ping(conn)
+      :read    -> QueryRunner.read(query, opts, conn)
+      :write   -> QueryRunner.write(query, opts, conn)
     end
   end
 end

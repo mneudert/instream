@@ -1,6 +1,6 @@
 defmodule Instream.Query do
   @moduledoc """
-  Query behaviour and struct definition.
+  Query struct.
   """
 
   defstruct [
@@ -17,29 +17,4 @@ defmodule Instream.Query do
     opts:    Keyword.t,
     type:    query_type
   }
-
-
-  defmacro __using__(_opts) do
-    quote do
-      alias unquote(__MODULE__)
-
-      @behaviour unquote(__MODULE__)
-
-      defdelegate maybe_parse(response, opts), to: Instream.Response
-    end
-  end
-
-
-  @doc """
-  Executes the query.
-  """
-  @callback execute(query :: __MODULE__.t,
-                    opts  :: Keyword.t,
-                    conn  :: Keyword.t) :: any
-
-  @doc """
-  Parses the query response.
-  """
-  @callback maybe_parse(response :: Instream.Writer.response,
-                        opts     :: Keyword.t) :: any
 end

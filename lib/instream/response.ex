@@ -3,10 +3,15 @@ defmodule Instream.Response do
   Response handling module.
   """
 
+  @type t :: { status  :: pos_integer,
+               headers :: list,
+               body    :: String.t }
+
+
   @doc """
   Maybe parses a response based on the requested result type.
   """
-  @spec maybe_parse(Instream.Writer.response, Keyword.t) :: any
+  @spec maybe_parse(t, Keyword.t) :: any
   def maybe_parse({ _, _, "" }, _), do: :ok
 
   def maybe_parse({ status, headers, response }, opts)
@@ -25,6 +30,15 @@ defmodule Instream.Response do
     end
   end
 
+  @doc """
+  Parses the response of a ping query.
+  """
+  @spec parse_ping(any) :: :pong | :error
+  def parse_ping({ :ok, 204, _ }), do: :pong
+  def parse_ping(_),               do: :error
+
+
+  # Internal methods
 
   defp is_json?([]), do: false
 
