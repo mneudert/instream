@@ -211,13 +211,18 @@ All fields or tags without a default value will be set to `nil`.
 
 ### Writing Series Points
 
-You can then use this module to assemble a (single!) data point for writing:
+You can then use this module to assemble a data point (one at a time)
+for writing:
 
 ```elixir
 data = %MySeries{}
 data = %{ data | fields: %{ data.fields | value: 17 }}
 data = %{ data | tags:   %{ data.tags   | bar: "bar", foo: "foo" }}
+```
 
+And then write one or many at once:
+
+```elixir
 data
 |> MyApp.MyConnection.write()
 
