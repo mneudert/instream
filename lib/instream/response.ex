@@ -59,6 +59,8 @@ defmodule Instream.Response do
   end
 
   defp maybe_wrap_error(error, opts) do
+    error = error |> String.strip()
+
     case opts[:result_as] do
       :raw -> error
       _    -> %{ error: error }
