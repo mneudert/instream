@@ -1,6 +1,8 @@
 defmodule Instream.ConnectionTest do
   use ExUnit.Case, async: true
 
+  alias Instream.Query.Builder
+
   alias Instream.TestHelpers.Connection
   alias Instream.TestHelpers.GuestConnection
   alias Instream.TestHelpers.UnreachableConnection
@@ -32,8 +34,10 @@ defmodule Instream.ConnectionTest do
 
 
   test "read from empty measurement" do
-    query  = "SELECT value FROM empty_measurement"
-    result = query |> Connection.query(database: @database)
+    result =
+         Builder.from("empty_measurement")
+      |> Builder.select("value")
+      |> Connection.query(database: @database)
 
     assert %{ results: _ } = result
   end

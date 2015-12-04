@@ -22,6 +22,13 @@ defmodule Instream.Connection do
         username: "root"
   """
 
+  alias Instream.Query
+  alias Instream.Query.Builder
+
+
+  @type query_type :: Builder.t | Query.t | String.t
+
+
   defmacro __using__(otp_app: otp_app) do
     quote do
       @before_compile unquote(__MODULE__)
@@ -46,11 +53,7 @@ defmodule Instream.Connection do
 
       def ping(), do: %Query{ type: :ping } |> execute()
 
-      def query(query, opts \\ []) do
-        query
-        |> Data.Read.query(opts)
-        |> execute(opts)
-      end
+      def query(query, opts \\ []), do: query |> execute(opts)
 
       def write(payload, opts \\ []) do
         payload
@@ -106,7 +109,7 @@ defmodule Instream.Connection do
   Passing `[async: true]` in the options always returns :ok.
   The command will be executed asynchronously.
   """
-  @callback execute(query :: Instream.Query.t, opts :: Keyword.t) :: any
+  @callback execute(query :: query_type, opts  :: Keyword.t) :: any
 
   @doc """
   Executes a reading query.

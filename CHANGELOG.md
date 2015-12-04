@@ -4,6 +4,7 @@
 
 - Enhancements
   - Error messages are returned without leading/trailing whitespace
+  - Experimental query builder
   - Ping a connection using `Instream.Connection.ping/0`
   - Reading queries can be executed directly using `Instream.Connection.query/2`
   - Writing query can be executed directly using `Insream.Connection.write/2`

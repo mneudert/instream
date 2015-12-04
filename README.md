@@ -173,6 +173,21 @@ Reading data:
 ```
 
 
+### Query Builder
+
+__Experimental definition! Will change often and unexpected! (or may disappear...)__
+
+Using the query builder you can avoid writing your select statements by hand:
+
+```elixir
+import Instream.Query.Builder
+
+from("some_measurement")
+|> select("one, or, more, fields")
+|> MyApp.MyConnection.query()
+```
+
+
 ## Series Definitions
 
 If you do not want to define the raw maps for writing data you can pre-define
