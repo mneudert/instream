@@ -4,7 +4,16 @@ defmodule Instream.Query.BuilderTest do
   alias Instream.Encoder.InfluxQL
   alias Instream.Query.Builder
 
-  test "SELECT" do
+  test "SELECT Enum.t" do
+    query =
+         Builder.from("some_measurement")
+      |> Builder.select([ "one", "or", "more", "fields" ])
+      |> InfluxQL.encode()
+
+    assert query == "SELECT one, or, more, fields FROM some_measurement"
+  end
+
+  test "SELECT String.t" do
     query =
          Builder.from("some_measurement")
       |> Builder.select("one, or, more, fields")

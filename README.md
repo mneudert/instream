@@ -182,8 +182,9 @@ Using the query builder you can avoid writing your select statements by hand:
 ```elixir
 import Instream.Query.Builder
 
+# SELECT one, or, more, fields FROM some_measurement
 from("some_measurement")
-|> select("one, or, more, fields")
+|> select([ "one", "or", "more", "fields" ])
 |> MyApp.MyConnection.query()
 ```
 
