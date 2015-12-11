@@ -186,6 +186,10 @@ import Instream.Query.Builder
 from("some_measurement")
 |> select([ "one", "or", "more", "fields" ])
 |> MyApp.MyConnection.query()
+
+# SELECT * FROM some_measurement
+from("some_measurement")
+|> MyApp.MyConnection.query()
 ```
 
 

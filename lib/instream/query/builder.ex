@@ -5,7 +5,7 @@ defmodule Instream.Query.Builder do
 
   defstruct [
     from:   nil,
-    select: nil
+    select: "*"
   ]
 
   @opaque t :: %__MODULE__{}
@@ -23,7 +23,7 @@ defmodule Instream.Query.Builder do
   Builds a `SELECT` query expression.
   """
   @spec select(t, String.t) :: t
-  def select(query, expr) do
+  def select(query, expr \\ "*") do
     %{ query | select: expr }
   end
 end
