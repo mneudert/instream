@@ -5,7 +5,8 @@ defmodule Instream.Query.Builder do
 
   defstruct [
     from:   nil,
-    select: "*"
+    select: "*",
+    where:  %{}
   ]
 
   @opaque t :: %__MODULE__{}
@@ -25,5 +26,13 @@ defmodule Instream.Query.Builder do
   @spec select(t, String.t) :: t
   def select(query, expr \\ "*") do
     %{ query | select: expr }
+  end
+
+  @doc """
+  Builds a `WHERE` query expression.
+  """
+  @spec where(t, map) :: t
+  def where(query, fields) do
+    %{ query | where: fields }
   end
 end

@@ -18,6 +18,17 @@ defmodule Instream.Query.BuilderTest do
     assert query_select == "SELECT * FROM some_measurement"
   end
 
+  test "SELECT * WHERE foo = bar" do
+    fields = %{ binary: "value", numeric: 42 }
+    query  =
+         Builder.from("some_measurement")
+      |> Builder.select()
+      |> Builder.where(fields)
+      |> InfluxQL.encode()
+
+    assert query == "SELECT * FROM some_measurement WHERE binary = 'value' AND numeric = 42"
+  end
+
   test "SELECT Enum.t" do
     query =
          Builder.from("some_measurement")

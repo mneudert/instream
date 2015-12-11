@@ -187,8 +187,9 @@ from("some_measurement")
 |> select([ "one", "or", "more", "fields" ])
 |> MyApp.MyConnection.query()
 
-# SELECT * FROM some_measurement
+# SELECT * FROM some_measurement WHERE binary = 'foo' AND numeric = 42
 from("some_measurement")
+|> where(%{ binary: "foo", numeric: 42 })
 |> MyApp.MyConnection.query()
 ```
 
