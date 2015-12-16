@@ -11,7 +11,7 @@ InfluxDB driver for Elixir
 
 __This module is experimental at the moment and may change unexpectedly.__
 
-Tested influxdb version: `0.9.5` (see [`.travis.yml`](.travis.yml) to be sure)
+Tested influxdb version: `0.9.6` (see [`.travis.yml`](.travis.yml) to be sure)
 
 
 ## Setup
