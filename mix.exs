@@ -17,7 +17,7 @@ defmodule Instream.Mixfile do
   end
 
   def application do
-    [ applications: [ :hackney ]]
+    [ applications: [ :hackney, :poison, :poolboy ]]
   end
 
   def deps(:docs) do
