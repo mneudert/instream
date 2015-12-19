@@ -32,10 +32,10 @@ defmodule Instream.Query.BuilderTest do
   test "SELECT Enum.t" do
     query =
          Builder.from("some_measurement")
-      |> Builder.select([ "one", "or", "more", "fields" ])
+      |> Builder.select([ "one field", "or", :more ])
       |> InfluxQL.encode()
 
-    assert query == "SELECT one, or, more, fields FROM some_measurement"
+    assert query == "SELECT \"one field\", or, more FROM some_measurement"
   end
 
   test "SELECT String.t" do
