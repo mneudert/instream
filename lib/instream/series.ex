@@ -40,23 +40,17 @@ defmodule Instream.Series do
 
   defmacro __using__(_opts) do
     quote do
-      import unquote(__MODULE__), only: [ series: 1 ]
+      @after_compile unquote(__MODULE__)
 
-      @behaviour unquote(__MODULE__)
+      import unquote(__MODULE__), only: [ series: 1 ]
     end
   end
 
-  @doc """
-  Provides metadata access for a series.
-
-  ## Available information
-
-  - `:database`    - the database where the series is stored
-  - `:fields`      - the fields in the series
-  - `:measurement` - the measurement of the series
-  - `:tags`        - the available tags defining the series
-  """
-  @callback __meta__(atom) :: any
+  defmacro __after_compile__(%{ module: module }, _bytecode) do
+    quote do
+      Instream.Series.Validator.proper_series?(unquote(module))
+    end
+  end
 
 
   @doc """
@@ -64,6 +58,8 @@ defmodule Instream.Series do
   """
   defmacro series(do: block) do
     quote do
+      @behaviour unquote(__MODULE__)
+
       @database    nil
       @measurement nil
 
@@ -99,6 +95,19 @@ defmodule Instream.Series do
       ]
     end
   end
+
+
+  @doc """
+  Provides metadata access for a series.
+
+  ## Available information
+
+  - `:database`    - the database where the series is stored
+  - `:fields`      - the fields in the series
+  - `:measurement` - the measurement of the series
+  - `:tags`        - the available tags defining the series
+  """
+  @callback __meta__(atom) :: any
 
 
   @doc """

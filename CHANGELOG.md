@@ -5,6 +5,7 @@
 - Enhancements
   - Error messages are returned without leading/trailing whitespace
   - Experimental query builder
+  - Incomplete or missing series definitions raise an error during compilation
   - Ping a connection using `Instream.Connection.ping/0`
   - Reading queries can be executed directly using `Instream.Connection.query/2`
   - Writing query can be executed directly using `Insream.Connection.write/2`
@@ -13,7 +14,9 @@
   - Using `Instream.Data.Read` or `Instream.Data.Write` directly is discouraged and will eventually be removed
 
 - Backwards incompatible changes
+  - The measurement of a series is no longer optional
   - The parameter `opts` for `Instream.Data.Read` and `Instream.Data.Write` is no longer optional
+  - `use`-ing `Instream.Series` without a complete series definition raises during compilation
 
 ## v0.8.0 (2015-11-18)
 

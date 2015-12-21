@@ -6,6 +6,8 @@ defmodule Instream.SeriesTest do
     use Instream.Series
 
     series do
+      measurement :hosts
+
       tag :host,    default: "www"
       tag :host_id, default: 1
       tag :cpu
@@ -13,12 +15,6 @@ defmodule Instream.SeriesTest do
       field :high
       field :low, default: 25
     end
-  end
-
-  defmodule EmptySeries do
-    use Instream.Series
-
-    series do end
   end
 
   defmodule TestSeries do
@@ -47,13 +43,6 @@ defmodule Instream.SeriesTest do
     assert default.fields.low  == 25
   end
 
-
-  test "series metadata defaults" do
-    assert EmptySeries.__meta__(:database)    == nil
-    assert EmptySeries.__meta__(:fields)      == []
-    assert EmptySeries.__meta__(:measurement) == nil
-    assert EmptySeries.__meta__(:tags)        == []
-  end
 
   test "series metadata" do
     assert TestSeries.__meta__(:database)    == "test_database"
