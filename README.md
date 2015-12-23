@@ -183,7 +183,7 @@ Using the query builder you can avoid writing your select statements by hand:
 import Instream.Query.Builder
 
 # SELECT one, or, more, fields FROM some_measurement
-from("some_measurement")
+from(MySeries)
 |> select([ "one", "or", "more", "fields" ])
 |> MyApp.MyConnection.query()
 

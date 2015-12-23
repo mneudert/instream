@@ -15,9 +15,13 @@ defmodule Instream.Query.Builder do
   @doc """
   Builds a `FROM` query expression.
   """
-  @spec from(String.t) :: t
-  def from(expr) do
-    %__MODULE__{ from: expr }
+  @spec from(String.t | atom) :: t
+  def from(series) when is_atom(series) do
+    %__MODULE__{ from: series.__meta__(:measurement) }
+  end
+
+  def from(measurement) when is_binary(measurement) do
+    %__MODULE__{ from: measurement }
   end
 
   @doc """

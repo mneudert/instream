@@ -4,13 +4,30 @@ defmodule Instream.Query.BuilderTest do
   alias Instream.Encoder.InfluxQL
   alias Instream.Query.Builder
 
+  defmodule BuilderSeries do
+    use Instream.Series
+
+    series do
+      measurement :some_measurement
+
+      tag :foo
+      tag :baz
+
+      field :bar
+      field :bat
+    end
+  end
+
+
   test "SELECT *" do
     query_default =
-         Builder.from("some_measurement")
+         BuilderSeries
+      |> Builder.from()
       |> InfluxQL.encode()
 
     query_select =
-         Builder.from("some_measurement")
+         BuilderSeries
+      |> Builder.from()
       |> Builder.select()
       |> InfluxQL.encode()
 
@@ -21,7 +38,8 @@ defmodule Instream.Query.BuilderTest do
   test "SELECT * WHERE foo = bar" do
     fields = %{ binary: "value", numeric: 42 }
     query  =
-         Builder.from("some_measurement")
+         BuilderSeries
+      |> Builder.from()
       |> Builder.select()
       |> Builder.where(fields)
       |> InfluxQL.encode()
@@ -31,7 +49,8 @@ defmodule Instream.Query.BuilderTest do
 
   test "SELECT Enum.t" do
     query =
-         Builder.from("some_measurement")
+         BuilderSeries
+      |> Builder.from()
       |> Builder.select([ "one field", "or", :more ])
       |> InfluxQL.encode()
 
@@ -40,7 +59,8 @@ defmodule Instream.Query.BuilderTest do
 
   test "SELECT String.t" do
     query =
-         Builder.from("some_measurement")
+         BuilderSeries
+      |> Builder.from()
       |> Builder.select("one, or, more, fields")
       |> InfluxQL.encode()
 
