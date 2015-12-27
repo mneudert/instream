@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.9.0-dev
+## v0.9.0 (2015-12-27)
 
 - Enhancements
   - Error messages are returned without leading/trailing whitespace
