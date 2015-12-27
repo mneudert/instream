@@ -1,7 +1,6 @@
 defmodule Instream.Mixfile do
   use Mix.Project
 
-  @url_docs "http://hexdocs.pm/instream"
   @url_github "https://github.com/mneudert/instream"
 
   def project do
@@ -48,7 +47,7 @@ defmodule Instream.Mixfile do
   def package do
     %{ files:       [ "CHANGELOG.md", "LICENSE", "mix.exs", "README.md", "lib" ],
        licenses:    [ "Apache 2.0" ],
-       links:       %{ "Docs" => @url_docs, "GitHub" => @url_github },
+       links:       %{ "GitHub" => @url_github },
        maintainers: [ "Marc Neudert" ]}
   end
 end
