@@ -23,7 +23,7 @@ defmodule Instream.Mixfile do
   def deps(:docs) do
     deps(:prod) ++
       [ { :earmark, "~> 0.1",  optional: true },
-        { :ex_doc,  "~> 0.10", optional: true } ]
+        { :ex_doc,  "~> 0.11", optional: true } ]
   end
 
   def deps(:test) do
@@ -40,7 +40,7 @@ defmodule Instream.Mixfile do
 
   def docs do
     [ extras:     [ "CHANGELOG.md", "README.md" ],
-      main:       "extra-readme",
+      main:       "readme",
       source_ref: "master",
       source_url: @url_github ]
   end
