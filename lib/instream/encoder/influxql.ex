@@ -9,6 +9,10 @@ defmodule Instream.Encoder.InfluxQL do
   Converts a query builder struct to InfluxQL.
   """
   @spec encode(Builder.t) :: String.t
+  def encode(%{ show: what } = query) when is_binary(what) do
+    show(query)
+  end
+
   def encode(query) do
     select(query)
     |> append_from(query)
@@ -92,5 +96,9 @@ defmodule Instream.Encoder.InfluxQL do
 
   defp select(query) do
     "SELECT " <> encode_select(query)
+  end
+
+  defp show(query) do
+    "SHOW #{ query.show }"
   end
 end

@@ -6,6 +6,7 @@ defmodule Instream.Query.Builder do
   defstruct [
     from:   nil,
     select: "*",
+    show:   nil,
     where:  %{}
   ]
 
@@ -30,6 +31,14 @@ defmodule Instream.Query.Builder do
   @spec select(t, String.t) :: t
   def select(query, expr \\ "*") do
     %{ query | select: expr }
+  end
+
+  @doc """
+  Build a `SHOW` query expression.
+  """
+  @spec show(atom) :: t
+  def show(what) do
+    %__MODULE__{ show: what |> Atom.to_string() |> String.upcase() }
   end
 
   @doc """

@@ -66,4 +66,13 @@ defmodule Instream.Query.BuilderTest do
 
     assert query == "SELECT one, or, more, fields FROM some_measurement"
   end
+
+
+  test "SHOW MEASUREMENTS" do
+    query=
+         Builder.show(:measurements)
+      |> InfluxQL.encode()
+
+    assert query == "SHOW MEASUREMENTS"
+  end
 end

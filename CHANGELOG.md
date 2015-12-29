@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.10.0-dev
+
+- Enhancements
+  - Query builder can construct `SHOW` statements
+
 ## v0.9.0 (2015-12-27)
 
 - Enhancements
