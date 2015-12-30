@@ -12,7 +12,7 @@ defmodule Instream.Cluster.Server do
   def show() do
     %Query{
       payload: "SHOW SERVERS",
-      type:    :cluster
+      type:    :read
     }
   end
 end

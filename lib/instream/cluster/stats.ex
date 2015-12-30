@@ -12,7 +12,7 @@ defmodule Instream.Cluster.Stats do
   def show() do
     %Query{
       payload: "SHOW STATS",
-      type:    :cluster
+      type:    :read
     }
   end
 end

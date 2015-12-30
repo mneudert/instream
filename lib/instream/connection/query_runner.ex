@@ -8,24 +8,6 @@ defmodule Instream.Connection.QueryRunner do
   alias Instream.Query.URL
   alias Instream.Response
 
-
-  @doc """
-  Executes `:cluster` queries.
-  """
-  @spec cluster(Query.t, Keyword.t, Keyword.t) :: any
-  def cluster(%Query{ payload: payload }, opts, conn) do
-    headers = conn |> Headers.assemble()
-    url     =
-         conn
-      |> URL.query()
-      |> URL.append_query(payload)
-
-    { :ok, status, headers, client } = :hackney.get(url, headers)
-    { :ok, response }                = :hackney.body(client)
-
-    { status, headers, response } |> Response.maybe_parse(opts)
-  end
-
   @doc """
   Execute `:ping` queries.
   """

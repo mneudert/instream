@@ -24,7 +24,7 @@ defmodule Instream.Cluster.Database do
 
     %Query{
       payload: payload,
-      type:    :cluster
+      type:    :read
     }
   end
 
@@ -37,7 +37,7 @@ defmodule Instream.Cluster.Database do
 
     %Query{
       payload: "DROP DATABASE #{ database }",
-      type:    :cluster
+      type:    :read
     }
   end
 
@@ -48,7 +48,7 @@ defmodule Instream.Cluster.Database do
   def show() do
     %Query{
       payload: "SHOW DATABASES",
-      type:    :cluster
+      type:    :read
     }
   end
 end

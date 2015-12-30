@@ -5,6 +5,9 @@
 - Enhancements
   - Query builder can construct `SHOW` statements
 
+- Backwards incompatible changes
+  - `:cluster` query type has been removed in favor of regular `:read` queries
+
 ## v0.9.0 (2015-12-27)
 
 - Enhancements
