@@ -3,16 +3,11 @@ defmodule Instream.Cluster.Stats do
   Stats query helper.
   """
 
-  alias Instream.Query
+  alias Instream.Query.Builder
 
   @doc """
   Returns a query to retrieve server stats.
   """
-  @spec show() :: Query.t
-  def show() do
-    %Query{
-      payload: "SHOW STATS",
-      type:    :read
-    }
-  end
+  @spec show() :: Builder.t
+  def show(), do: Builder.show(:stats)
 end

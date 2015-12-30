@@ -3,16 +3,11 @@ defmodule Instream.Cluster.Server do
   Server administration helper.
   """
 
-  alias Instream.Query
+  alias Instream.Query.Builder
 
   @doc """
   Returns a query to list servers.
   """
-  @spec show() :: Query.t
-  def show() do
-    %Query{
-      payload: "SHOW SERVERS",
-      type:    :read
-    }
-  end
+  @spec show() :: Builder.t
+  def show(), do: Builder.show(:servers)
 end

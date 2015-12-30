@@ -4,6 +4,7 @@ defmodule Instream.Cluster.Database do
   """
 
   alias Instream.Query
+  alias Instream.Query.Builder
   alias Instream.Validate
 
   @doc """
@@ -44,11 +45,6 @@ defmodule Instream.Cluster.Database do
   @doc """
   Returns a query to list databases.
   """
-  @spec show() :: Query.t
-  def show() do
-    %Query{
-      payload: "SHOW DATABASES",
-      type:    :read
-    }
-  end
+  @spec show() :: Builder.t
+  def show(), do: Builder.show(:databases)
 end

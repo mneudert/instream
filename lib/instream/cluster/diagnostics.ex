@@ -3,16 +3,11 @@ defmodule Instream.Cluster.Diagnostics do
   Diagnostics query helper.
   """
 
-  alias Instream.Query
+  alias Instream.Query.Builder
 
   @doc """
   Returns a query to retrieve server diagnostics.
   """
-  @spec show() :: Query.t
-  def show() do
-    %Query{
-      payload: "SHOW DIAGNOSTICS",
-      type:    :read
-    }
-  end
+  @spec show() :: Builder.t
+  def show(), do: Builder.show(:diagnostics)
 end
