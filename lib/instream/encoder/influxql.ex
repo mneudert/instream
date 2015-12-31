@@ -9,14 +9,26 @@ defmodule Instream.Encoder.InfluxQL do
   Converts a query builder struct to InfluxQL.
   """
   @spec encode(Builder.t) :: String.t
+  def encode(%{ command: "CREATE DATABASE" } = query) do
+    query.command
+    |> append_binary(get_argument(query, :database))
+  end
+
+  def encode(%{ command: "DROP DATABASE" } = query) do
+    query.command
+    |> append_binary(get_argument(query, :database))
+  end
+
   def encode(%{ command: "SELECT" } = query) do
-    select(query)
+    query.command
+    |> append_binary(encode_select(get_argument(query, :select)))
     |> append_from(get_argument(query, :from))
     |> append_where(get_argument(query, :where))
   end
 
   def encode(%{ command: "SHOW" } = query) do
-    show(query)
+    query.command
+    |> append_binary(get_argument(query, :show))
   end
 
   @doc """
@@ -70,6 +82,10 @@ defmodule Instream.Encoder.InfluxQL do
 
   # Internal methods
 
+  defp append_binary(str, append) do
+    "#{ str } #{ append }"
+  end
+
   defp append_from(str, from) do
     str <> " FROM " <> from
   end
@@ -92,14 +108,6 @@ defmodule Instream.Encoder.InfluxQL do
     select
     |> Enum.map( &quote_identifier/1 )
     |> Enum.join(", ")
-  end
-
-  defp select(query) do
-    "SELECT " <> encode_select(get_argument(query, :select))
-  end
-
-  defp show(query) do
-    "SHOW #{ get_argument(query, :show) }"
   end
 
 

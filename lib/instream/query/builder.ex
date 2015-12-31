@@ -10,6 +10,25 @@ defmodule Instream.Query.Builder do
 
   @opaque t :: %__MODULE__{}
 
+  @doc """
+  Builds a `CREATE DATABASE` query expression.
+  """
+  @spec create_database(String.t) :: t
+  def create_database(name) do
+    %__MODULE__{}
+    |> set_command("CREATE DATABASE")
+    |> set_argument(:database, name)
+  end
+
+  @doc """
+  Builds a `DROP DATABASE` query expression.
+  """
+  @spec drop_database(String.t) :: t
+  def drop_database(name) do
+    %__MODULE__{}
+    |> set_command("DROP DATABASE")
+    |> set_argument(:database, name)
+  end
 
   @doc """
   Builds a `FROM` query expression.

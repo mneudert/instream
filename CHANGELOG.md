@@ -3,6 +3,8 @@
 ## v0.10.0-dev
 
 - Enhancements
+  - Query builder can construct `CREATE DATABASE` statements
+  - Query builder can construct `DROP DATABASE` statements
   - Query builder can construct `SHOW` statements
 
 - Backwards incompatible changes

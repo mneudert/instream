@@ -18,6 +18,22 @@ defmodule Instream.Query.BuilderTest do
     end
   end
 
+  test "CREATE DATABASE String.t" do
+    query =
+         Builder.create_database("some_database")
+      |> InfluxQL.encode()
+
+    assert query == "CREATE DATABASE some_database"
+  end
+
+  test "DROP DATABASE String.t" do
+    query =
+         Builder.drop_database("some_database")
+      |> InfluxQL.encode()
+
+    assert query == "DROP DATABASE some_database"
+  end
+
 
   test "SELECT *" do
     query_default =
