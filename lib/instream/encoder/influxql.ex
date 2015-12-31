@@ -9,14 +9,14 @@ defmodule Instream.Encoder.InfluxQL do
   Converts a query builder struct to InfluxQL.
   """
   @spec encode(Builder.t) :: String.t
-  def encode(%{ show: what } = query) when is_binary(what) do
-    show(query)
+  def encode(%{ command: "SELECT" } = query) do
+    select(query)
+    |> append_from(get_argument(query, :from))
+    |> append_where(get_argument(query, :where))
   end
 
-  def encode(query) do
-    select(query)
-    |> append_from(query)
-    |> append_where(query)
+  def encode(%{ command: "SHOW" } = query) do
+    show(query)
   end
 
   @doc """
@@ -70,12 +70,12 @@ defmodule Instream.Encoder.InfluxQL do
 
   # Internal methods
 
-  defp append_from(str, query) do
-    str <> " FROM " <> query.from
+  defp append_from(str, from) do
+    str <> " FROM " <> from
   end
 
-  defp append_where(str, %{ where: fields }) when fields == %{}, do: str
-  defp append_where(str, %{ where: fields }) do
+  defp append_where(str, nil),   do: str
+  defp append_where(str, fields) do
     where =
          fields
       |> Map.keys()
@@ -87,18 +87,25 @@ defmodule Instream.Encoder.InfluxQL do
     str <> " WHERE " <> where
   end
 
-  defp encode_select(%{ select: select }) when is_binary(select), do: select
-  defp encode_select(%{ select: select }) when is_list(select)    do
+  defp encode_select(select) when is_binary(select), do: select
+  defp encode_select(select) when is_list(select)    do
     select
     |> Enum.map( &quote_identifier/1 )
     |> Enum.join(", ")
   end
 
   defp select(query) do
-    "SELECT " <> encode_select(query)
+    "SELECT " <> encode_select(get_argument(query, :select))
   end
 
   defp show(query) do
-    "SHOW #{ query.show }"
+    "SHOW #{ get_argument(query, :show) }"
+  end
+
+
+  # Utility methods
+
+  defp get_argument(%{ arguments: args }, argument) do
+    Map.get(args, argument, nil)
   end
 end
