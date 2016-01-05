@@ -26,6 +26,15 @@ defmodule Instream.Query.BuilderTest do
     assert query == "CREATE DATABASE some_database"
   end
 
+  test "CREATE DATABASE IF NOT EXISTS String.t" do
+    query =
+         Builder.create_database("some_database")
+      |> Builder.if_not_exists()
+      |> InfluxQL.encode()
+
+    assert query == "CREATE DATABASE IF NOT EXISTS some_database"
+  end
+
   test "DROP DATABASE String.t" do
     query =
          Builder.drop_database("some_database")

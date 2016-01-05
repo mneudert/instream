@@ -11,6 +11,7 @@ defmodule Instream.Encoder.InfluxQL do
   @spec encode(Builder.t) :: String.t
   def encode(%{ command: "CREATE DATABASE" } = query) do
     query.command
+    |> append_if_not_exists(get_argument(query, :if_not_exists, false))
     |> append_binary(get_argument(query, :database))
   end
 
@@ -90,6 +91,11 @@ defmodule Instream.Encoder.InfluxQL do
     str <> " FROM " <> from
   end
 
+  defp append_if_not_exists(str, false), do: str
+  defp append_if_not_exists(str, true)   do
+    "#{ str } IF NOT EXISTS"
+  end
+
   defp append_where(str, nil),   do: str
   defp append_where(str, fields) do
     where =
@@ -113,7 +119,7 @@ defmodule Instream.Encoder.InfluxQL do
 
   # Utility methods
 
-  defp get_argument(%{ arguments: args }, argument) do
-    Map.get(args, argument, nil)
+  defp get_argument(%{ arguments: args }, argument, default \\ nil) do
+    Map.get(args, argument, default)
   end
 end

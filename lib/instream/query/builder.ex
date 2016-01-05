@@ -46,6 +46,14 @@ defmodule Instream.Query.Builder do
   end
 
   @doc """
+  Sets the `IF NOT EXISTS` flag for queries supporting it.
+  """
+  @spec if_not_exists(t, boolean) :: t
+  def if_not_exists(query, if_not_exists \\ true) do
+    set_argument(query, :if_not_exists, if_not_exists)
+  end
+
+  @doc """
   Builds a `SELECT` query expression.
   """
   @spec select(t, String.t) :: t
