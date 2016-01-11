@@ -3,7 +3,6 @@ defmodule Instream.Cluster.Database do
   Database administration helper.
   """
 
-  alias Instream.Query
   alias Instream.Query.Builder
   alias Instream.Validate
 
@@ -14,32 +13,23 @@ defmodule Instream.Cluster.Database do
 
   - `:if_not_exists` - setting to `true` appends "IF NOT EXISTS" to the query.
   """
-  @spec create(String.t, Keyword.t) :: Query.t
+  @spec create(String.t, Keyword.t) :: Builder.t
   def create(database, opts \\ []) do
     Validate.database! database
 
-    payload = case opts[:if_not_exists] do
-      true -> "CREATE DATABASE IF NOT EXISTS #{ database }"
-      _    -> "CREATE DATABASE #{ database }"
-    end
-
-    %Query{
-      payload: payload,
-      type:    :read
-    }
+    database
+    |> Builder.create_database()
+    |> Builder.if_not_exists(opts[:if_not_exists] || false)
   end
 
   @doc """
   Returns a query to drop a database.
   """
-  @spec drop(String.t) :: Query.t
+  @spec drop(String.t) :: Builder.t
   def drop(database) do
     Validate.database! database
 
-    %Query{
-      payload: "DROP DATABASE #{ database }",
-      type:    :read
-    }
+    Builder.drop_database(database)
   end
 
   @doc """
