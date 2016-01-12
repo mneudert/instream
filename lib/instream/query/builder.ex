@@ -10,6 +10,16 @@ defmodule Instream.Query.Builder do
 
   @opaque t :: %__MODULE__{}
 
+
+  @what_map [
+    databases:    "DATABASES",
+    diagnostics:  "DIAGNOSTICS",
+    measurements: "MEASUREMENTS",
+    servers:      "SERVERS",
+    stats:        "STATS"
+  ]
+
+
   @doc """
   Builds a `CREATE DATABASE` query expression.
   """
@@ -66,7 +76,7 @@ defmodule Instream.Query.Builder do
   def show(what) do
     %__MODULE__{}
     |> set_command("SHOW")
-    |> set_argument(:show, what |> Atom.to_string() |> String.upcase())
+    |> set_argument(:show, @what_map[what])
   end
 
   @doc """

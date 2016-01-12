@@ -93,11 +93,35 @@ defmodule Instream.Query.BuilderTest do
   end
 
 
+  test "SHOW DIAGNOSTICS" do
+    query =
+         Builder.show(:diagnostics)
+      |> InfluxQL.encode()
+
+    assert query == "SHOW DIAGNOSTICS"
+  end
+
   test "SHOW MEASUREMENTS" do
-    query=
+    query =
          Builder.show(:measurements)
       |> InfluxQL.encode()
 
     assert query == "SHOW MEASUREMENTS"
+  end
+
+  test "SHOW SERVERS" do
+    query =
+         Builder.show(:servers)
+      |> InfluxQL.encode()
+
+    assert query == "SHOW SERVERS"
+  end
+
+  test "SHOW STATS" do
+    query =
+         Builder.show(:stats)
+      |> InfluxQL.encode()
+
+    assert query == "SHOW STATS"
   end
 end
