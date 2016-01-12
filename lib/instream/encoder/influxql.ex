@@ -30,6 +30,7 @@ defmodule Instream.Encoder.InfluxQL do
   def encode(%{ command: "SHOW" } = query) do
     query.command
     |> append_binary(get_argument(query, :show))
+    |> append_on(get_argument(query, :on))
   end
 
   @doc """
@@ -95,6 +96,9 @@ defmodule Instream.Encoder.InfluxQL do
   defp append_if_not_exists(str, true)   do
     "#{ str } IF NOT EXISTS"
   end
+
+  defp append_on(str, nil),      do: str
+  defp append_on(str, database), do: "#{ str } ON #{ database }"
 
   defp append_where(str, nil),   do: str
   defp append_where(str, fields) do

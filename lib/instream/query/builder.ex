@@ -12,11 +12,12 @@ defmodule Instream.Query.Builder do
 
 
   @what_map [
-    databases:    "DATABASES",
-    diagnostics:  "DIAGNOSTICS",
-    measurements: "MEASUREMENTS",
-    servers:      "SERVERS",
-    stats:        "STATS"
+    databases:          "DATABASES",
+    diagnostics:        "DIAGNOSTICS",
+    measurements:       "MEASUREMENTS",
+    retention_policies: "RETENTION POLICIES",
+    servers:            "SERVERS",
+    stats:              "STATS"
   ]
 
 
@@ -68,6 +69,12 @@ defmodule Instream.Query.Builder do
   """
   @spec select(t, String.t) :: t
   def select(query, expr \\ "*"), do: set_argument(query, :select, expr)
+
+  @doc """
+  Sets the `ON` argument for queries supporting it.
+  """
+  @spec on(t, String.t) :: t
+  def on(query, database), do: set_argument(query, :on, database)
 
   @doc """
   Build a `SHOW` query expression.

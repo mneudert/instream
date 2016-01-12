@@ -4,6 +4,7 @@ defmodule Instream.Cluster.RetentionPolicy do
   """
 
   alias Instream.Query
+  alias Instream.Query.Builder
   alias Instream.Validate
 
   @doc """
@@ -48,13 +49,12 @@ defmodule Instream.Cluster.RetentionPolicy do
   @doc """
   Returns a query to list retention policies.
   """
-  @spec show(String.t) :: Query.t
+  @spec show(String.t) :: Builder.t
   def show(database) do
     Validate.database! database
 
-    %Query{
-      payload: "SHOW RETENTION POLICIES ON #{ database }",
-      type:    :read
-    }
+    :retention_policies
+    |> Builder.show()
+    |> Builder.on(database)
   end
 end
