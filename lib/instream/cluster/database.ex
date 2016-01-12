@@ -15,9 +15,8 @@ defmodule Instream.Cluster.Database do
   """
   @spec create(String.t, Keyword.t) :: Builder.t
   def create(database, opts \\ []) do
-    Validate.database! database
-
     database
+    |> Validate.database!
     |> Builder.create_database()
     |> Builder.if_not_exists(opts[:if_not_exists] || false)
   end
@@ -27,9 +26,9 @@ defmodule Instream.Cluster.Database do
   """
   @spec drop(String.t) :: Builder.t
   def drop(database) do
-    Validate.database! database
-
-    Builder.drop_database(database)
+    database
+    |> Validate.database!
+    |> Builder.drop_database()
   end
 
   @doc """

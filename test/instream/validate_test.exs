@@ -4,8 +4,8 @@ defmodule Instream.ValidateTest do
   alias Instream.Validate
 
   test "database" do
-    Validate.database! "valid-dat4base-name"
-    Validate.database! "valid_dat4base_name"
+    assert "valid-dat4base-name" == Validate.database! "valid-dat4base-name"
+    assert "valid_dat4base_name" == Validate.database! "valid_dat4base_name"
 
     assert_raise ArgumentError, fn ->
       Validate.database! "dots.not.allowed"

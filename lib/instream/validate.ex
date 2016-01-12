@@ -5,8 +5,12 @@ defmodule Instream.Validate do
 
   @doc """
   Validates a database name.
+
+  If the validation succeeds the database name will be returned.
+
+  Otherwise an `ArgumentError` will be raised.
   """
-  @spec database!(String.t) :: :ok
+  @spec database!(String.t) :: String.t
   def database!(database) do
     test = ~r/^[a-zA-Z0-9_\-]+$/
 
@@ -14,6 +18,6 @@ defmodule Instream.Validate do
       raise ArgumentError, "invalid database name: #{ inspect database }"
     end
 
-    :ok
+    database
   end
 end
