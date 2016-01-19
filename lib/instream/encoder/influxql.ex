@@ -9,15 +9,12 @@ defmodule Instream.Encoder.InfluxQL do
   Converts a query builder struct to InfluxQL.
   """
   @spec encode(Builder.t) :: String.t
-  def encode(%{ command: "CREATE DATABASE" } = query) do
-    query.command
-    |> append_if_not_exists(get_argument(query, :if_not_exists, false))
-    |> append_binary(get_argument(query, :database))
+  def encode(%{ command: "CREATE" } = query) do
+    encode_create(get_argument(query, :what), query)
   end
 
-  def encode(%{ command: "DROP DATABASE" } = query) do
-    query.command
-    |> append_binary(get_argument(query, :database))
+  def encode(%{ command: "DROP" } = query) do
+    encode_drop(get_argument(query, :what), query)
   end
 
   def encode(%{ command: "SELECT" } = query) do
@@ -80,6 +77,22 @@ defmodule Instream.Encoder.InfluxQL do
   @spec quote_value(any) :: String.t
   def quote_value(value) when is_binary(value), do: "'#{ value }'"
   def quote_value(value),                       do: to_string(value)
+
+
+  # Extended command creation
+
+  defp encode_create("DATABASE", query) do
+    query.command
+    |> append_binary(get_argument(query, :what))
+    |> append_if_not_exists(get_argument(query, :if_not_exists, false))
+    |> append_binary(get_argument(query, :database))
+  end
+
+  defp encode_drop("DATABASE", query) do
+    query.command
+    |> append_binary(get_argument(query, :what))
+    |> append_binary(get_argument(query, :database))
+  end
 
 
   # Internal methods

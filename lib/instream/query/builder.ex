@@ -12,6 +12,7 @@ defmodule Instream.Query.Builder do
 
 
   @what_map [
+    database:           "DATABASE",
     databases:          "DATABASES",
     diagnostics:        "DIAGNOSTICS",
     measurements:       "MEASUREMENTS",
@@ -27,8 +28,9 @@ defmodule Instream.Query.Builder do
   @spec create_database(String.t) :: t
   def create_database(name) do
     %__MODULE__{}
-    |> set_command("CREATE DATABASE")
+    |> set_command("CREATE")
     |> set_argument(:database, name)
+    |> set_argument(:what, @what_map[:database])
   end
 
   @doc """
@@ -37,8 +39,9 @@ defmodule Instream.Query.Builder do
   @spec drop_database(String.t) :: t
   def drop_database(name) do
     %__MODULE__{}
-    |> set_command("DROP DATABASE")
+    |> set_command("DROP")
     |> set_argument(:database, name)
+    |> set_argument(:what, @what_map[:database])
   end
 
   @doc """
