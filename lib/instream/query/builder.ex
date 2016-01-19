@@ -35,6 +35,25 @@ defmodule Instream.Query.Builder do
   end
 
   @doc """
+  Builds a `CREATE RETENTION POLICY` query expression.
+  """
+  @spec create_retention_policy(String.t) :: t
+  def create_retention_policy(name) do
+    %__MODULE__{}
+    |> set_command("CREATE")
+    |> set_argument(:policy, name)
+    |> set_argument(:what, @what_map[:retention_policy])
+  end
+
+  @doc """
+  Sets the `DEFAULT` flag for queries supporting it.
+  """
+  @spec default(t, boolean) :: t
+  def default(query, default \\ true) do
+    set_argument(query, :default, default)
+  end
+
+  @doc """
   Builds a `DROP DATABASE` query expression.
   """
   @spec drop_database(String.t) :: t
@@ -55,6 +74,12 @@ defmodule Instream.Query.Builder do
     |> set_argument(:policy, name)
     |> set_argument(:what, @what_map[:retention_policy])
   end
+
+  @doc """
+  Sets the `DURATION` argument for queries supporting it.
+  """
+  @spec duration(t, String.t) :: t
+  def duration(query, expr), do: set_argument(query, :duration, expr)
 
   @doc """
   Builds a `FROM` query expression.
@@ -90,6 +115,12 @@ defmodule Instream.Query.Builder do
   """
   @spec on(t, String.t) :: t
   def on(query, database), do: set_argument(query, :on, database)
+
+  @doc """
+  Sets the `REPLICATION` argument for queries supporting it.
+  """
+  @spec replication(t, pos_integer) :: t
+  def replication(query, num), do: set_argument(query, :replication, num)
 
   @doc """
   Build a `SHOW` query expression.

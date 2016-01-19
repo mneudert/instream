@@ -4,15 +4,18 @@ defmodule Instream.Cluster.RetentionPolicyTest do
   alias Instream.Cluster.RetentionPolicy
   alias Instream.TestHelpers.Connection
 
-  @database   "test_database"
-  @rp_name    "rp_lifecycle"
-  @rp_policy  "DURATION 1h REPLICATION 1"
-  @rp_altered "DURATION 2h REPLICATION 1"
+  @database "test_database"
+  @rp_name  "rp_lifecycle"
+
+  @rp_altered      "DURATION 2h REPLICATION 1"
+  @rp_duration     "1h"
+  @rp_replication  1
 
   test "retention policy lifecycle" do
     # create retention policy
     creation =
-         RetentionPolicy.create(@rp_name, @database, @rp_policy)
+         @rp_name
+      |> RetentionPolicy.create(@database, @rp_duration, @rp_replication)
       |> Connection.execute()
 
     listing = RetentionPolicy.show(@database) |> Connection.execute()
@@ -29,7 +32,8 @@ defmodule Instream.Cluster.RetentionPolicyTest do
 
     # alter retention polcy
     alteration =
-         RetentionPolicy.alter(@rp_name, @database, @rp_altered)
+         @rp_name
+      |> RetentionPolicy.alter(@database, @rp_altered)
       |> Connection.execute()
 
     listing = RetentionPolicy.show(@database) |> Connection.execute()

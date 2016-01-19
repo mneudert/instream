@@ -141,8 +141,9 @@ Managing Retention Policies:
 
 ```elixir
 # create "my_rp" retention policy
+# argument order: policy, database, duration, replication, default
 Instream.Cluster.RetentionPolicy.create(
-  "my_rp", "my_database", "DURATION 1h REPLICATION 3 DEFAULT"
+  "my_rp", "my_database", "1h", 3, true
 )
 |> MyApp.MyConnection.execute()
 

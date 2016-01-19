@@ -88,6 +88,16 @@ defmodule Instream.Encoder.InfluxQL do
     |> append_binary(get_argument(query, :database))
   end
 
+  defp encode_create("RETENTION POLICY", query) do
+    query.command
+    |> append_binary(get_argument(query, :what))
+    |> append_binary(get_argument(query, :policy))
+    |> append_on(get_argument(query, :on))
+    |> append_duration(get_argument(query, :duration))
+    |> append_replication(get_argument(query, :replication))
+    |> append_default(get_argument(query, :default, false))
+  end
+
 
   defp encode_drop("DATABASE", query) do
     query.command
@@ -109,6 +119,13 @@ defmodule Instream.Encoder.InfluxQL do
     "#{ str } #{ append }"
   end
 
+  defp append_default(str, true),  do: "#{ str } DEFAULT"
+  defp append_default(str, false), do: str
+
+  defp append_duration(str, duration) do
+    "#{ str } DURATION #{ duration }"
+  end
+
   defp append_from(str, from) do
     str <> " FROM " <> from
   end
@@ -120,6 +137,10 @@ defmodule Instream.Encoder.InfluxQL do
 
   defp append_on(str, nil),      do: str
   defp append_on(str, database), do: "#{ str } ON #{ database }"
+
+  defp append_replication(str, num) do
+    "#{ str } REPLICATION #{ num |> Integer.to_string(10) }"
+  end
 
   defp append_where(str, nil),   do: str
   defp append_where(str, fields) do

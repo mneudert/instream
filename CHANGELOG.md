@@ -4,12 +4,14 @@
 
 - Enhancements
   - Query builder can construct `CREATE DATABASE` statements
+  - Query buidler can construct `CREATE RETENTION POLICY` statements
   - Query builder can construct `DROP DATABASE` statements
   - Query builder can construct `DROP RETENTION POLICY` statements
   - Query builder can construct `SHOW` statements
 
 - Backwards incompatible changes
   - `:cluster` query type has been removed in favor of regular `:read` queries
+  - Retention policy convenience function has been replaced with a more detailed version
 
 ## v0.9.0 (2015-12-27)
 

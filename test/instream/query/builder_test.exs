@@ -35,6 +35,29 @@ defmodule Instream.Query.BuilderTest do
     assert query == "CREATE DATABASE IF NOT EXISTS some_database"
   end
 
+  test "CREATE RETENTION POLICY String.t" do
+    query =
+         Builder.create_retention_policy("some_policy")
+      |> Builder.on("some_database")
+      |> Builder.duration("1h")
+      |> Builder.replication(3)
+      |> InfluxQL.encode()
+
+    assert query == "CREATE RETENTION POLICY some_policy ON some_database DURATION 1h REPLICATION 3"
+  end
+
+  test "CREATE RETENTION POLICY String.t DEFAULT" do
+    query =
+         Builder.create_retention_policy("some_policy")
+      |> Builder.on("some_database")
+      |> Builder.duration("1h")
+      |> Builder.replication(3)
+      |> Builder.default()
+      |> InfluxQL.encode()
+
+    assert query == "CREATE RETENTION POLICY some_policy ON some_database DURATION 1h REPLICATION 3 DEFAULT"
+  end
+
 
   test "DROP DATABASE String.t" do
     query =
