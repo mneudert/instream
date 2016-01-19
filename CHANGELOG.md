@@ -5,6 +5,7 @@
 - Enhancements
   - Query builder can construct `CREATE DATABASE` statements
   - Query builder can construct `DROP DATABASE` statements
+  - Query builder can construct `DROP RETENTION POLICY` statements
   - Query builder can construct `SHOW` statements
 
 - Backwards incompatible changes

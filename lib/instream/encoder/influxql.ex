@@ -88,10 +88,18 @@ defmodule Instream.Encoder.InfluxQL do
     |> append_binary(get_argument(query, :database))
   end
 
+
   defp encode_drop("DATABASE", query) do
     query.command
     |> append_binary(get_argument(query, :what))
     |> append_binary(get_argument(query, :database))
+  end
+
+  defp encode_drop("RETENTION POLICY", query) do
+    query.command
+    |> append_binary(get_argument(query, :what))
+    |> append_binary(get_argument(query, :policy))
+    |> append_on(get_argument(query, :on))
   end
 
 

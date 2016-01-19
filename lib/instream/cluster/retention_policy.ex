@@ -36,14 +36,13 @@ defmodule Instream.Cluster.RetentionPolicy do
   @doc """
   Returns a query to drop a retention policy.
   """
-  @spec drop(String.t, String.t) :: Query.t
+  @spec drop(String.t, String.t) :: Builder.t
   def drop(name, database) do
     Validate.database! database
 
-    %Query{
-      payload: "DROP RETENTION POLICY #{ name } ON #{ database }",
-      type:    :read
-    }
+    name
+    |> Builder.drop_retention_policy()
+    |> Builder.on(database)
   end
 
   @doc """

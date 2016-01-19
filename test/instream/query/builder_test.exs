@@ -35,12 +35,22 @@ defmodule Instream.Query.BuilderTest do
     assert query == "CREATE DATABASE IF NOT EXISTS some_database"
   end
 
+
   test "DROP DATABASE String.t" do
     query =
          Builder.drop_database("some_database")
       |> InfluxQL.encode()
 
     assert query == "DROP DATABASE some_database"
+  end
+
+  test "DROP RETENTION POLICY String.t ON String.t" do
+    query =
+         Builder.drop_retention_policy("some_policy")
+      |> Builder.on("some_database")
+      |> InfluxQL.encode()
+
+    assert query == "DROP RETENTION POLICY some_policy ON some_database"
   end
 
 

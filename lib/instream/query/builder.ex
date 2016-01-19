@@ -17,6 +17,7 @@ defmodule Instream.Query.Builder do
     diagnostics:        "DIAGNOSTICS",
     measurements:       "MEASUREMENTS",
     retention_policies: "RETENTION POLICIES",
+    retention_policy:   "RETENTION POLICY",
     servers:            "SERVERS",
     stats:              "STATS"
   ]
@@ -42,6 +43,17 @@ defmodule Instream.Query.Builder do
     |> set_command("DROP")
     |> set_argument(:database, name)
     |> set_argument(:what, @what_map[:database])
+  end
+
+  @doc """
+  Builds a `DROP RETENTION POLICY` query expression.
+  """
+  @spec drop_retention_policy(String.t) :: t
+  def drop_retention_policy(name) do
+    %__MODULE__{}
+    |> set_command("DROP")
+    |> set_argument(:policy, name)
+    |> set_argument(:what, @what_map[:retention_policy])
   end
 
   @doc """
