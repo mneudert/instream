@@ -33,7 +33,7 @@ defmodule Instream.Mixfile do
 
   def deps(_) do
     [ { :hackney, "~> 1.1" },
-      { :poison,  "~> 1.4" },
+      { :poison,  "~> 1.4 or ~> 2.0" },
       { :poolboy, "~> 1.5" } ]
   end
 
