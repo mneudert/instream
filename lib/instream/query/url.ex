@@ -75,6 +75,7 @@ defmodule Instream.Query.URL do
 
 
   defp append_param(url, _,   nil),  do: url
+  defp append_param(url, _,   ""),   do: url
   defp append_param(url, key, value) do
     glue = case String.contains?(url, "?") do
       true  -> "&"

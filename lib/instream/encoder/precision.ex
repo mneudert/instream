@@ -7,7 +7,8 @@ defmodule Instream.Encoder.Precision do
 
 
   @type t :: :hours | :minutes | :seconds |
-             :milli_seconds | :micro_seconds | :nano_seconds
+             :milli_seconds | :micro_seconds | :nano_seconds |
+             :rfc3339
 
 
   @doc """
@@ -20,4 +21,5 @@ defmodule Instream.Encoder.Precision do
   def encode(:milli_seconds), do: "ms"
   def encode(:micro_seconds), do: "u"
   def encode(:nano_seconds),  do: "n"
+  def encode(:rfc3339),       do: ""
 end

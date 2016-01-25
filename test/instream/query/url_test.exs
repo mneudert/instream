@@ -30,6 +30,13 @@ defmodule Instream.Query.URLTest do
     assert expected == URL.append_precision(url, precision)
   end
 
+  test "rfc3339 == default precision (not in url)" do
+    precision = :rfc3339
+    url       = "http://localhost/query"
+
+    assert url == URL.append_precision(url, precision)
+  end
+
   test "append query" do
     query    = "SHOW DATABASES"
     url      = "http://localhost/query"

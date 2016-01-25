@@ -3,6 +3,7 @@
 ## v0.10.0-dev
 
 - Enhancements
+  - Default precision (`:rfc3339`) can be explicitly set
   - Query builder can construct `CREATE DATABASE` statements
   - Query buidler can construct `CREATE RETENTION POLICY` statements
   - Query builder can construct `DROP DATABASE` statements
