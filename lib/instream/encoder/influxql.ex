@@ -115,25 +115,17 @@ defmodule Instream.Encoder.InfluxQL do
 
   # Internal methods
 
-  defp append_binary(str, append) do
-    "#{ str } #{ append }"
-  end
+  defp append_binary(str, append), do: "#{ str } #{ append }"
 
   defp append_default(str, true),  do: "#{ str } DEFAULT"
   defp append_default(str, false), do: str
 
-  defp append_duration(str, duration) do
-    "#{ str } DURATION #{ duration }"
-  end
+  defp append_duration(str, duration), do: "#{ str } DURATION #{ duration }"
 
-  defp append_from(str, from) do
-    str <> " FROM " <> from
-  end
+  defp append_from(str, from), do: "#{ str } FROM #{ from }"
 
+  defp append_if_not_exists(str, true),  do: "#{ str } IF NOT EXISTS"
   defp append_if_not_exists(str, false), do: str
-  defp append_if_not_exists(str, true)   do
-    "#{ str } IF NOT EXISTS"
-  end
 
   defp append_on(str, nil),      do: str
   defp append_on(str, database), do: "#{ str } ON #{ database }"

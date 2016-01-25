@@ -18,7 +18,7 @@ defmodule Instream.Query.BuilderTest do
     end
   end
 
-  test "CREATE DATABASE String.t" do
+  test "CREATE DATABASE" do
     query =
          Builder.create_database("some_database")
       |> InfluxQL.encode()
@@ -26,7 +26,7 @@ defmodule Instream.Query.BuilderTest do
     assert query == "CREATE DATABASE some_database"
   end
 
-  test "CREATE DATABASE IF NOT EXISTS String.t" do
+  test "CREATE DATABASE IF NOT EXISTS" do
     query =
          Builder.create_database("some_database")
       |> Builder.if_not_exists()
@@ -35,7 +35,7 @@ defmodule Instream.Query.BuilderTest do
     assert query == "CREATE DATABASE IF NOT EXISTS some_database"
   end
 
-  test "CREATE RETENTION POLICY String.t" do
+  test "CREATE RETENTION POLICY" do
     query =
          Builder.create_retention_policy("some_policy")
       |> Builder.on("some_database")
@@ -46,7 +46,7 @@ defmodule Instream.Query.BuilderTest do
     assert query == "CREATE RETENTION POLICY some_policy ON some_database DURATION 1h REPLICATION 3"
   end
 
-  test "CREATE RETENTION POLICY String.t DEFAULT" do
+  test "CREATE RETENTION POLICY DEFAULT" do
     query =
          Builder.create_retention_policy("some_policy")
       |> Builder.on("some_database")
@@ -59,7 +59,7 @@ defmodule Instream.Query.BuilderTest do
   end
 
 
-  test "DROP DATABASE String.t" do
+  test "DROP DATABASE" do
     query =
          Builder.drop_database("some_database")
       |> InfluxQL.encode()
@@ -67,7 +67,7 @@ defmodule Instream.Query.BuilderTest do
     assert query == "DROP DATABASE some_database"
   end
 
-  test "DROP RETENTION POLICY String.t ON String.t" do
+  test "DROP RETENTION POLICY" do
     query =
          Builder.drop_retention_policy("some_policy")
       |> Builder.on("some_database")
@@ -142,7 +142,7 @@ defmodule Instream.Query.BuilderTest do
     assert query == "SHOW MEASUREMENTS"
   end
 
-  test "SHOW RETENTION POLICIES ON String.t" do
+  test "SHOW RETENTION POLICIES" do
     query =
          Builder.show(:retention_policies)
       |> Builder.on("some_database")
