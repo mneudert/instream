@@ -2,8 +2,14 @@ language: elixir
 
 env:
   global:
-    - VER_INFLUXDB=0.9.6
     - MIX_ENV=test
+  matrix:
+    - VER_INFLUXDB=0.9.6
+    - VER_INFLUXDB=0.10.0
+
+matrix:
+  allow_failures:
+    - env: VER_INFLUXDB=0.10.0
 
 before_install:
   - mkdir "${HOME}/go"
