@@ -13,7 +13,7 @@ __This module is experimental at the moment and may change unexpectedly.__
 
 Tested influxdb version: `0.9.6` (see [`.travis.yml`](.travis.yml) to be sure)
 
-The (more current) version `0.10.0` is also tested. It should work, but due to
+Version `0.10.0` is also tested on travis. It should work, but due to
 a bug in `CREATE DATABASE` queries (unintentionally always behaving as if
 `IF NOT EXISTS` was passed) the tests fail. Therefore that version will
 probably not be "officially supported" but treated as "should work, untested".
