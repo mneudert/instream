@@ -11,7 +11,9 @@ InfluxDB driver for Elixir
 
 __This module is experimental at the moment and may change unexpectedly.__
 
-Tested influxdb version: `0.9.6` (see [`.travis.yml`](.travis.yml) to be sure)
+Tested influxdb version: `0.9.6` (see
+[`.travis.yml`](https://github.com/mneudert/instream/blob/master/.travis.yml)
+to be sure)
 
 Version `0.10.0` is also tested on travis. It should work, but due to
 a bug in `CREATE DATABASE` queries (unintentionally always behaving as if
