@@ -4,24 +4,24 @@ env:
   global:
     - MIX_ENV=test
   matrix:
-    - VER_INFLUXDB=v0.9.6
-    - VER_INFLUXDB=v0.10.0
-    - VER_INFLUXDB=master
+    - VER_INFLUXDB=v0.9.6  PKG_ORG=influxdb
+    - VER_INFLUXDB=v0.10.0 PKG_ORG=influxdb
+    - VER_INFLUXDB=master  PKG_ORG=influxdata
 
 matrix:
   allow_failures:
-    - env: VER_INFLUXDB=v0.10.0
-    - env: VER_INFLUXDB=master
+    - env: VER_INFLUXDB=v0.10.0 PKG_ORG=influxdb
+    - env: VER_INFLUXDB=master  PKG_ORG=influxdata
 
 before_install:
   - mkdir "${HOME}/go"
   - export GOPATH="${HOME}/go"
   - export PATH="${GOPATH}/bin:${PATH}"
-  - mkdir -p "${GOPATH}/src/github.com/influxdb"
-  - cd "${GOPATH}/src/github.com/influxdb"
-  - wget "https://github.com/influxdb/influxdb/archive/${VER_INFLUXDB}.tar.gz" -O influxdb.tar.gz && tar -xf influxdb.tar.gz
+  - mkdir -p "${GOPATH}/src/github.com/${PKG_ORG}"
+  - cd "${GOPATH}/src/github.com/${PKG_ORG}"
+  - wget "https://github.com/${PKG_ORG}/influxdb/archive/${VER_INFLUXDB}.tar.gz" -O influxdb.tar.gz && tar -xf influxdb.tar.gz
   - find . -maxdepth 1 -type d -name 'influxdb*' -exec mv {} influxdb \;
-  - cd "${GOPATH}/src/github.com/influxdb/influxdb"
+  - cd "${GOPATH}/src/github.com/${PKG_ORG}/influxdb"
   - git init .
   - go get ./...
   - go build ./...
