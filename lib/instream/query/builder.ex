@@ -100,8 +100,15 @@ defmodule Instream.Query.Builder do
   Sets the `IF NOT EXISTS` flag for queries supporting it.
   """
   @spec if_not_exists(t, boolean) :: t
-  def if_not_exists(query, if_not_exists \\ true) do
-    set_argument(query, :if_not_exists, if_not_exists)
+  def if_not_exists(qurey, if_not_exists \\ true)
+
+  def if_not_exists(query, false), do: query
+  def if_not_exists(query, true)   do
+    IO.write :stderr, "warning: Instream.Query.Builder.if_not_Exists/1,2 is" <>
+                      " deprecated and ignored by InfluxDB v0.10.0 onwards." <>
+                      "\n" <> Exception.format_stacktrace
+
+    set_argument(query, :if_not_exists, true)
   end
 
   @doc """

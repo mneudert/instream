@@ -10,6 +10,10 @@
     - Query builder can construct `DROP RETENTION POLICY` statements
     - Query builder can construct `SHOW` statements
 
+- Deprecations
+    - Using `if_not_exists` (`CREATE DATABASE`) has been deprecated and will be
+      completely removed once InfluxDB removes it
+
 - Backwards incompatible changes
     - `:cluster` query type has been removed in favor of regular `:read` queries
     - Retention policy convenience function has been replaced with a more detailed version

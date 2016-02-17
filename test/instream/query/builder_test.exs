@@ -26,15 +26,6 @@ defmodule Instream.Query.BuilderTest do
     assert query == "CREATE DATABASE some_database"
   end
 
-  test "CREATE DATABASE IF NOT EXISTS" do
-    query =
-         Builder.create_database("some_database")
-      |> Builder.if_not_exists()
-      |> InfluxQL.encode()
-
-    assert query == "CREATE DATABASE IF NOT EXISTS some_database"
-  end
-
   test "CREATE RETENTION POLICY" do
     query =
          Builder.create_retention_policy("some_policy")

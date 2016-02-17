@@ -39,7 +39,7 @@ defmodule Instream.Cluster.DatabaseTest do
     # (implicit) if not exists
     result =
          @database
-      |> Database.create([ if_not_exists: true ])
+      |> Database.create()
       |> Connection.execute()
 
     assert %{ results: [%{}] } == result
