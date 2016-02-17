@@ -5,7 +5,7 @@
 - Enhancements
     - Default precision (`:rfc3339`) can be explicitly set
     - Query builder can construct `CREATE DATABASE` statements
-    - Query buidler can construct `CREATE RETENTION POLICY` statements
+    - Query builder can construct `CREATE RETENTION POLICY` statements
     - Query builder can construct `DROP DATABASE` statements
     - Query builder can construct `DROP RETENTION POLICY` statements
     - Query builder can construct `SHOW` statements
@@ -25,12 +25,15 @@
     - Writing query can be executed directly using `Insream.Connection.write/2`
 
 - Deprecations
-    - Using `Instream.Data.Read` or `Instream.Data.Write` directly is discouraged and will eventually be removed
+    - Using `Instream.Data.Read` or `Instream.Data.Write` directly is
+      discouraged and will eventually be removed
 
 - Backwards incompatible changes
     - The measurement of a series is no longer optional
-    - The parameter `opts` for `Instream.Data.Read` and `Instream.Data.Write` is no longer optional
-    - `use`-ing `Instream.Series` without a complete series definition raises during compilation
+    - The parameter `opts` for `Instream.Data.Read` and `Instream.Data.Write` is
+      no longer optional
+    - `use`-ing `Instream.Series` without a complete series definition raises
+      during compilation
 
 ## v0.8.0 (2015-11-18)
 
@@ -52,7 +55,8 @@
     - Pool configuration (size, overflow) is now properly taken from configuration
 
 - Deprecations
-    - Support of the JSON protocol is deprecated and will be removed with the InfluxDB 1.0 release
+    - Support of the JSON protocol is deprecated and will be removed once
+      InfluxDB removes it
 
 ## v0.6.0 (2015-09-27)
 
@@ -102,7 +106,8 @@
 ## v0.2.0 (2015-04-19)
 
 - Enhancements
-    - Allows accessing raw query results (undecoded binaries) using `Instream.Connection.execute/2`
+    - Allows accessing raw query results (undecoded binaries)
+      using `Instream.Connection.execute/2`
     - Read queries (binaries) can be executed on a database
     - Write queries (map data) can be executed on a database
 
