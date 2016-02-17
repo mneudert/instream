@@ -4,13 +4,11 @@ env:
   global:
     - MIX_ENV=test
   matrix:
-    - VER_INFLUXDB=v0.9.6  PKG_ORG=influxdb
     - VER_INFLUXDB=v0.10.0 PKG_ORG=influxdb
     - VER_INFLUXDB=master  PKG_ORG=influxdata
 
 matrix:
   allow_failures:
-    - env: VER_INFLUXDB=v0.10.0 PKG_ORG=influxdb
     - env: VER_INFLUXDB=master  PKG_ORG=influxdata
 
 before_install:
