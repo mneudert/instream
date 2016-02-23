@@ -45,6 +45,9 @@ config :instream, Instream.TestHelpers.InvalidConnection,
   port:   8086,
   scheme: "http"
 
+config :instream, Instream.TestHelpers.MinimalConnection,
+  hosts: [ "localhost" ]
+
 config :instream, Instream.TestHelpers.NotFoundConnection,
   auth:   [ username: "instream_not_found", password: "instream_not_found" ],
   hosts:  [ "localhost" ],

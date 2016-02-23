@@ -7,10 +7,11 @@ defmodule Instream.Connection.ConfigTest do
     config = [ foo: :bar, writer: Awesome.Writer.Module ]
     :ok    = Application.put_env(test, __MODULE__, config)
 
-    expect = ([ otp_app: test ] ++ config) |> Enum.into(%{})
     actual = Config.config(test, __MODULE__) |> Enum.into(%{})
 
-    assert expect == actual
+    assert actual[:foo]     == config[:foo]
+    assert actual[:otp_app] == test
+    assert actual[:writer]  == config[:writer]
   end
 
   test "missing configuration raises", %{ test: test } do

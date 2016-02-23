@@ -3,6 +3,12 @@ defmodule Instream.Connection.Config do
   Configuration helper module.
   """
 
+  @defaults [
+    port:   8086,
+    scheme:  "http",
+    writer: Instream.Writer.Line
+  ]
+
   @doc """
   Retrieves the connection configuration for `conn` in `otp_app`.
   """
@@ -17,8 +23,5 @@ defmodule Instream.Connection.Config do
   end
 
 
-  defp add_defaults(config) do
-    config
-    |> Keyword.put(:writer, config[:writer] || Instream.Writer.Line)
-  end
+  defp add_defaults(config), do: Keyword.merge(@defaults, config)
 end

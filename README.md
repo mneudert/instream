@@ -78,6 +78,21 @@ Supervisor.start_link(
 )
 ```
 
+#### Default Connection Values
+
+Only the `hosts` key is mandatory for a connection configuration. The following
+values will be used as defaults if no other value is set:
+
+```elixir
+config :my_app, MyApp.MyConnection,
+  pool:   [ max_overflow: 10, size: 5 ],
+  port:   8086,
+  scheme: "http",
+  writer: Instream.Writer.Line
+```
+
+This also means that per default the connection uses no authentication.
+
 #### Authentication
 
 To connect to an influxdb instance with http_auth enabled you have to

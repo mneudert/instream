@@ -5,6 +5,7 @@ Code.require_file("helpers/udp_connection.exs", __DIR__)
 Code.require_file("helpers/anon_connection.exs", __DIR__)
 Code.require_file("helpers/guest_connection.exs", __DIR__)
 Code.require_file("helpers/invalid_connection.exs", __DIR__)
+Code.require_file("helpers/minimal_connection.exs", __DIR__)
 Code.require_file("helpers/not_found_connection.exs", __DIR__)
 Code.require_file("helpers/query_auth_connection.exs", __DIR__)
 Code.require_file("helpers/unreachable_connection.exs", __DIR__)
@@ -22,6 +23,7 @@ alias Instream.TestHelpers
   TestHelpers.AnonConnection.child_spec,
   TestHelpers.GuestConnection.child_spec,
   TestHelpers.InvalidConnection.child_spec,
+  TestHelpers.MinimalConnection.child_spec,
   TestHelpers.NotFoundConnection.child_spec,
   TestHelpers.QueryAuthConnection.child_spec,
   TestHelpers.UnreachableConnection.child_spec
