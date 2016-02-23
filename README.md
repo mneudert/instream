@@ -66,6 +66,9 @@ config :my_app, MyApp.MyConnection,
   writer: Instream.Writer.Line
 ```
 
+_Note_: While you can define as many hosts as you please only the first one
+will be used. This is subject to change.
+
 You now have a connection definition you can hook into your supervision tree:
 
 ```elixir
