@@ -114,10 +114,8 @@ defmodule Instream.Series do
   Defines the database for the series.
   """
   defmacro database(name) do
-    name = to_string(name)
-
     quote do
-      unquote(__MODULE__).__attribute__(__MODULE__, :database, unquote(name))
+      unquote(__MODULE__).__attribute__(__MODULE__, :database, to_string(unquote(name)))
     end
   end
 
@@ -137,10 +135,8 @@ defmodule Instream.Series do
   Defines the measurement of the series.
   """
   defmacro measurement(name) do
-    name = to_string(name)
-
     quote do
-      unquote(__MODULE__).__attribute__(__MODULE__, :measurement, unquote(name))
+      unquote(__MODULE__).__attribute__(__MODULE__, :measurement, to_string(unquote(name)))
     end
   end
 
