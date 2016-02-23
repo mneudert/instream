@@ -23,7 +23,7 @@ defmodule Instream.Cluster.RetentionPolicy do
   @doc """
   Returns a query to create a retention policy.
   """
-  @spec create(String.t, String.t, String.t, pos_integer, boolean) :: Query.t
+  @spec create(String.t, String.t, String.t, pos_integer, boolean) :: Builder.t
   def create(name, database, duration, replication, default \\ false) do
     Validate.database! database
 
