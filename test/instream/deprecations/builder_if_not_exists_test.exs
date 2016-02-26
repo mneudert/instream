@@ -1,4 +1,4 @@
-defmodule Instream.Query.BuilderDeprecationsTest do
+defmodule Instream.Deprecations.BuilderIfNotExistsTest do
   use ExUnit.Case, async: false
 
   import ExUnit.CaptureIO
