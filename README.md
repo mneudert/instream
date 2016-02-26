@@ -218,15 +218,15 @@ from("some_measurement")
 ## Series Definitions
 
 If you do not want to define the raw maps for writing data you can pre-define
-a seriesfor later usage:
+a series for later usage:
 
 ```elixir
 defmodule MySeries do
   use Instream.Series
 
   series do
-    database    :my_database
-    measurement :my_measurement
+    database    "my_database"
+    measurement "my_measurement"
 
     tag :bar
     tag :foo

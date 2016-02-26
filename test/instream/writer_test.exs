@@ -10,8 +10,8 @@ defmodule Instream.WriterTest do
     use Instream.Series
 
     series do
-      database    :test_database
-      measurement :location
+      database    "test_database"
+      measurement "location"
 
       tag :scope
 
@@ -23,8 +23,8 @@ defmodule Instream.WriterTest do
     use Instream.Series
 
     series do
-      database    :test_database
-      measurement :writer_errors
+      database    "test_database"
+      measurement "writer_errors"
 
       field :binary
     end
@@ -34,8 +34,8 @@ defmodule Instream.WriterTest do
     use Instream.Series
 
     series do
-      database    :test_database
-      measurement :writer_line_encoding
+      database    "test_database"
+      measurement "writer_line_encoding"
 
       field :binary
       field :boolean
@@ -48,8 +48,8 @@ defmodule Instream.WriterTest do
     use Instream.Series
 
     series do
-      database    :test_database
-      measurement :writer_protocols
+      database    "test_database"
+      measurement "writer_protocols"
 
       tag :bar
       tag :foo

@@ -8,7 +8,7 @@ defmodule Instream.Query.BuilderTest do
     use Instream.Series
 
     series do
-      measurement :some_measurement
+      measurement "some_measurement"
 
       tag :foo
       tag :baz

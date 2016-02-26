@@ -6,7 +6,7 @@ defmodule Instream.SeriesTest do
     use Instream.Series
 
     series do
-      measurement :hosts
+      measurement "hosts"
 
       tag :host,    default: "www"
       tag :host_id, default: 1
@@ -21,8 +21,8 @@ defmodule Instream.SeriesTest do
     use Instream.Series
 
     series do
-      database    :test_database
-      measurement :cpu_load
+      database    "test_database"
+      measurement "cpu_load"
 
       tag :host
       tag :core

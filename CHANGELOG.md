@@ -9,8 +9,12 @@
     - Query builder can construct `DROP DATABASE` statements
     - Query builder can construct `DROP RETENTION POLICY` statements
     - Query builder can construct `SHOW` statements
+    - Series database definitions allow anything "evaluating to a string" ([#14](https://github.com/mneudert/instream/pull/14))
+    - Series measurement definitions allow anything "evaluating to a string" ([#14](https://github.com/mneudert/instream/pull/14))
 
 - Deprecations
+    - Atoms for defining a series' database are deprecated
+    - Atoms for defining a series' measurement are deprecated
     - Using `if_not_exists` (`CREATE DATABASE`) has been deprecated and will be
       completely removed once InfluxDB removes it
 
