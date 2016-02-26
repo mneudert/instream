@@ -74,7 +74,7 @@ defmodule Instream.Connection do
       is_not_instream  = :instream != @otp_app
 
       if uses_json_writer and is_not_instream do
-        IO.write """
+        IO.write :stderr, """
         The connection "#{ __MODULE__ }"
         is configured to use the deprecated JSON protocol.
 
