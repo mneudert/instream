@@ -68,4 +68,53 @@ defmodule Instream.SeriesTest do
     assert fields == TestSeries.__meta__(:fields)
     assert tags   == TestSeries.__meta__(:tags)
   end
+
+
+  test "extended series definition" do
+    database    = "test_database"
+    measurement = "test_measurement"
+
+    defmodule ClosureDefinition do
+      use Instream.Series
+
+      series do
+        fn_database    = fn -> "test_database" end
+        fn_measurement = fn -> "test_measurement" end
+
+        database    fn_database.()
+        measurement fn_measurement.()
+      end
+    end
+
+    defmodule ExternalDefinition do
+      use Instream.Series
+
+      defmodule ExternalDefinitionProvider do
+        def database,    do: "test_database"
+        def measurement, do: "test_measurement"
+      end
+
+      series do
+        database    ExternalDefinitionProvider.database
+        measurement ExternalDefinitionProvider.measurement
+      end
+    end
+
+    defmodule InterpolatedDefinition do
+      use Instream.Series
+
+      series do
+        database    "#{ Mix.env }_database"
+        measurement "#{ Mix.env }_measurement"
+      end
+    end
+
+    assert database == ClosureDefinition.__meta__(:database)
+    assert database == ExternalDefinition.__meta__(:database)
+    assert database == InterpolatedDefinition.__meta__(:database)
+
+    assert measurement == ClosureDefinition.__meta__(:measurement)
+    assert measurement == ExternalDefinition.__meta__(:measurement)
+    assert measurement == InterpolatedDefinition.__meta__(:measurement)
+  end
 end
