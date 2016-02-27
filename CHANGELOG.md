@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.10.0-dev
+## v0.10.0 (2016-02-27)
 
 - Enhancements
     - Default precision (`:rfc3339`) can be explicitly set

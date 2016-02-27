@@ -6,7 +6,7 @@ defmodule Instream.Mixfile do
   def project do
     [ app:     :instream,
       name:    "Instream",
-      version: "0.10.0-dev",
+      version: "0.10.0",
       elixir:  "~> 1.0",
       deps:    deps,
 
@@ -47,7 +47,7 @@ defmodule Instream.Mixfile do
   defp docs do
     [ extras:     [ "CHANGELOG.md", "README.md" ],
       main:       "readme",
-      source_ref: "master",
+      source_ref: "v0.10.0",
       source_url: @url_github ]
   end
 
