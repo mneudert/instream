@@ -12,7 +12,7 @@ defmodule Instream.Cluster.RetentionPolicy do
   """
   @spec alter(String.t, String.t, String.t) :: Query.t
   def alter(name, database, policy) do
-    Validate.database! database
+    _ = Validate.database! database
 
     %Query{
       payload: "ALTER RETENTION POLICY #{ name } ON #{ database } #{ policy }",
@@ -25,7 +25,7 @@ defmodule Instream.Cluster.RetentionPolicy do
   """
   @spec create(String.t, String.t, String.t, pos_integer, boolean) :: Builder.t
   def create(name, database, duration, replication, default \\ false) do
-    Validate.database! database
+    _ = Validate.database! database
 
     name
     |> Builder.create_retention_policy()
@@ -40,7 +40,7 @@ defmodule Instream.Cluster.RetentionPolicy do
   """
   @spec drop(String.t, String.t) :: Builder.t
   def drop(name, database) do
-    Validate.database! database
+    _ = Validate.database! database
 
     name
     |> Builder.drop_retention_policy()
@@ -52,7 +52,7 @@ defmodule Instream.Cluster.RetentionPolicy do
   """
   @spec show(String.t) :: Builder.t
   def show(database) do
-    Validate.database! database
+    _ = Validate.database! database
 
     :retention_policies
     |> Builder.show()

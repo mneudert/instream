@@ -9,22 +9,22 @@ defmodule Instream.Encoder.InfluxQL do
   Converts a query builder struct to InfluxQL.
   """
   @spec encode(Builder.t) :: String.t
-  def encode(%{ command: "CREATE" } = query) do
+  def encode(%Builder{ command: "CREATE" } = query) do
     encode_create(get_argument(query, :what), query)
   end
 
-  def encode(%{ command: "DROP" } = query) do
+  def encode(%Builder{ command: "DROP" } = query) do
     encode_drop(get_argument(query, :what), query)
   end
 
-  def encode(%{ command: "SELECT" } = query) do
+  def encode(%Builder{ command: "SELECT" } = query) do
     query.command
     |> append_binary(encode_select(get_argument(query, :select)))
     |> append_from(get_argument(query, :from))
     |> append_where(get_argument(query, :where))
   end
 
-  def encode(%{ command: "SHOW" } = query) do
+  def encode(%Builder{ command: "SHOW" } = query) do
     query.command
     |> append_binary(get_argument(query, :show))
     |> append_on(get_argument(query, :on))
@@ -50,7 +50,7 @@ defmodule Instream.Encoder.InfluxQL do
       iex> quote_identifier("dáshes-and.stüff")
       "\\"dáshes-and.stüff\\""
   """
-  @spec quote_identifier(any) :: String.t
+  @spec quote_identifier(String.t) :: String.t
   def quote_identifier(ident) when is_binary(ident) do
     case Regex.match?(~r/(^[0-9]|[^a-zA-Z0-9_])/, ident) do
       false -> ident
