@@ -11,12 +11,12 @@ defmodule Instream.Connection.QueryRunner do
   @doc """
   Execute `:ping` queries.
   """
-  @spec ping(Keyword.t) :: :pong | :error
-  def ping(conn) do
+  @spec ping(Query.t, Keyword.t) :: :pong | :error
+  def ping(%Query{} = query, conn) do
     headers = conn |> Headers.assemble()
 
     conn
-    |> URL.ping()
+    |> URL.ping(query.opts[:host])
     |> :hackney.head(headers)
     |> Response.parse_ping()
   end

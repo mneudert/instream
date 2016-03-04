@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.11.0-dev
+
+- Enhancements
+    - Pings can be send to specific servers
+
 ## v0.10.0 (2016-02-27)
 
 - Enhancements

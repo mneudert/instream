@@ -51,7 +51,10 @@ defmodule Instream.Connection do
         QueryPlanner.execute(query, opts, __MODULE__)
       end
 
-      def ping(), do: %Query{ type: :ping } |> execute()
+      def ping(host \\ nil) do
+        %Query{ type: :ping, opts: [ host: host ] }
+        |> execute()
+      end
 
       def query(query, opts \\ []), do: query |> execute(opts)
 

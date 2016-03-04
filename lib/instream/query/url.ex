@@ -58,8 +58,15 @@ defmodule Instream.Query.URL do
   @doc """
   Returns the proper URL for a `:ping` request.
   """
-  @spec ping(Keyword.t) :: String.t
-  def ping(conn), do: conn |> url("ping")
+  @spec ping(Keyword.t, String.t | nil) :: String.t
+  def ping(conn, host \\ nil)
+
+  def ping(conn, nil), do: conn |> url("ping")
+  def ping(conn, host) do
+    conn
+    |> Keyword.put(:hosts, [ host ])
+    |> url("ping")
+  end
 
   @doc """
   Returns the proper URL for a `:query` request.

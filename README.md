@@ -135,6 +135,17 @@ Instream.Connection.ping()
 
 The response will be `:pong` on success or `:error` on any failure.
 
+To ping "a host other than the first in your configuration" you can pass it
+explicitly:
+
+```elixir
+Instream.Connection.ping("some.host.name")
+```
+
+All values necessary to ping the host (scheme, port, ...) will be taken from
+the connection used. It does not matter whether the host is configured in that
+connection or not.
+
 ### Queries
 
 Every query can be executed asynchronously by passing `[async: true]` to

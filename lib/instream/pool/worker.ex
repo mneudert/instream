@@ -54,7 +54,7 @@ defmodule Instream.Pool.Worker do
 
   defp execute(%Query{ type: type } = query, opts, conn) do
     case type do
-      :ping  -> QueryRunner.ping(conn)
+      :ping  -> QueryRunner.ping(query, conn)
       :read  -> QueryRunner.read(query, opts, conn)
       :write -> QueryRunner.write(query, opts, conn)
     end

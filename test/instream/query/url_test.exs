@@ -51,6 +51,18 @@ defmodule Instream.Query.URLTest do
   end
 
 
+  test "ping url with specific host" do
+    url  = "http://secondary.host/ping"
+    conn = [
+      hosts:  [ "localhost", "secondary.host" ],
+      scheme: "http"
+    ]
+
+    refute url == URL.ping(conn)
+    assert url == URL.ping(conn, List.last(conn[:hosts]))
+  end
+
+
   test "query url" do
     url  = "http://localhost:8086/query?u=root&p=root"
     conn = [
