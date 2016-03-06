@@ -9,7 +9,7 @@ defmodule Instream.Connection.QueryRunner do
   alias Instream.Response
 
   @doc """
-  Execute `:ping` queries.
+  Executes `:ping` queries.
   """
   @spec ping(Query.t, Keyword.t) :: :pong | :error
   def ping(%Query{} = query, conn) do
