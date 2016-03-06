@@ -37,6 +37,13 @@ defmodule Instream.Response do
   def parse_ping({ :ok, 204, _ }), do: :pong
   def parse_ping(_),               do: :error
 
+  @doc """
+  Parses the response of a status query.
+  """
+  @spec parse_status(any) :: :ok | :error
+  def parse_status({ :ok, 204, _ }), do: :ok
+  def parse_status(_),               do: :error
+
 
   # Internal methods
 

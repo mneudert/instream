@@ -58,6 +58,8 @@ defmodule Instream.Connection do
 
       def query(query, opts \\ []), do: query |> execute(opts)
 
+      def status(), do: %Query{ type: :status } |> execute()
+
       def write(payload, opts \\ []) do
         payload
         |> Data.Write.query(opts)
@@ -132,6 +134,11 @@ defmodule Instream.Connection do
   for a complete list of available options.
   """
   @callback query(query :: String.t, opts :: Keyword.t) :: any
+
+  @doc """
+  Checks the status of a connection (= cluster).
+  """
+  @callback status() :: :ok | :error
 
   @doc """
   Executes a writing query.

@@ -4,6 +4,7 @@
 
 - Enhancements
     - Pings can be send to specific servers
+    - Status requests can be send to a cluster
 
 ## v0.10.0 (2016-02-27)
 

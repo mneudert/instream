@@ -37,6 +37,11 @@ defmodule Instream.ConnectionTest do
     assert :pong == MinimalConnection.ping()
   end
 
+  test "status connection" do
+    assert :ok    == Connection.status()
+    assert :error == UnreachableConnection.status()
+  end
+
 
   test "read from empty measurement" do
     result =

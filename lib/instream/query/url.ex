@@ -75,6 +75,12 @@ defmodule Instream.Query.URL do
   def query(conn), do: conn |> url("query")
 
   @doc """
+  Returns the proper URL for a `:status` request.
+  """
+  @spec status(Keyword.t) :: String.t
+  def status(conn), do: conn |> url("status")
+
+  @doc """
   Returns the proper URL for a `:write` request.
   """
   @spec write(Keyword.t) :: String.t
