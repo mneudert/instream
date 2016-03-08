@@ -6,6 +6,10 @@
     - Pings can be send to specific servers
     - Status requests can be send to a cluster
 
+- Backwards incompatible changes
+    - Runtime connection configuration reading has been removed
+      in favor of compile time inlining.
+
 ## v0.10.0 (2016-02-27)
 
 - Enhancements

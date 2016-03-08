@@ -41,11 +41,12 @@ defmodule Instream.Connection do
 
       @behaviour unquote(__MODULE__)
       @otp_app   unquote(otp_app)
+      @config    Connection.Config.config(@otp_app, __MODULE__)
 
       def __pool__, do: __MODULE__.Pool
 
       def child_spec, do: Pool.Spec.spec(__MODULE__)
-      def config,     do: Connection.Config.config(@otp_app, __MODULE__)
+      def config,     do: @config
 
       def execute(query, opts \\ []) do
         QueryPlanner.execute(query, opts, __MODULE__)
