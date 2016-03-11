@@ -5,7 +5,6 @@ defmodule Instream.ConnectionTest do
 
   alias Instream.TestHelpers.Connection
   alias Instream.TestHelpers.GuestConnection
-  alias Instream.TestHelpers.MinimalConnection
   alias Instream.TestHelpers.UnreachableConnection
 
 
@@ -31,10 +30,6 @@ defmodule Instream.ConnectionTest do
   test "ping connection" do
     assert :pong  == Connection.ping()
     assert :error == UnreachableConnection.ping()
-  end
-
-  test "ping connection (minimal config)" do
-    assert :pong == MinimalConnection.ping()
   end
 
   test "status connection" do
