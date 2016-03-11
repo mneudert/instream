@@ -9,7 +9,7 @@ env:
 
 matrix:
   allow_failures:
-    - env: VER_INFLUXDB=master  PKG_ORG=influxdata
+    - env: VER_INFLUXDB=master PKG_ORG=influxdata
 
 before_install:
   - mkdir "${HOME}/go"
