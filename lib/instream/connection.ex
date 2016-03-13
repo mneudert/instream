@@ -52,14 +52,16 @@ defmodule Instream.Connection do
         QueryPlanner.execute(query, opts, __MODULE__)
       end
 
-      def ping(host \\ nil) do
+      def ping(opts) when is_list(opts), do: ping(nil, opts)
+
+      def ping(host \\ nil, opts \\ []) do
         %Query{ type: :ping, opts: [ host: host ] }
-        |> execute()
+        |> execute(opts)
       end
 
       def query(query, opts \\ []), do: query |> execute(opts)
 
-      def status(), do: %Query{ type: :status } |> execute()
+      def status(opts \\ []), do: %Query{ type: :status } |> execute(opts)
 
       def write(payload, opts \\ []) do
         payload
@@ -126,7 +128,7 @@ defmodule Instream.Connection do
   Only the connection details (scheme, port, ...) will be used to determine
   the exact url to send the ping request to.
   """
-  @callback ping(host :: String.t) :: :pong | :error
+  @callback ping(host :: String.t, opts :: Keyword.t) :: :pong | :error
 
   @doc """
   Executes a reading query.
@@ -139,7 +141,7 @@ defmodule Instream.Connection do
   @doc """
   Checks the status of a connection (= cluster).
   """
-  @callback status() :: :ok | :error
+  @callback status(opts :: Keyword.t) :: :ok | :error
 
   @doc """
   Executes a writing query.
