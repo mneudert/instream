@@ -125,7 +125,7 @@ config :my_app, MyApp.MyConnection,
 The connection will then write using UDP and connecting to the port `:port_udp`.
 All non-write queries will be send to the regular `:port` you have configured.
 
-#### Ping
+#### Ping / Status
 
 To validate a connection you can send ping requests to the server:
 
@@ -145,6 +145,12 @@ MyApp.MyConnection.ping("some.host.name")
 All values necessary to ping the host (scheme, port, ...) will be taken from
 the connection used. It does not matter whether the host is configured in that
 connection or not.
+
+To get InfluxDB to verify status of your cluster you can send a status call:
+
+```elixir
+MyApp.MyConnection.status()
+```
 
 ### Queries
 
