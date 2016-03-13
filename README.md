@@ -130,7 +130,7 @@ All non-write queries will be send to the regular `:port` you have configured.
 To validate a connection you can send ping requests to the server:
 
 ```elixir
-Instream.Connection.ping()
+MyApp.MyConnection.ping()
 ```
 
 The response will be `:pong` on success or `:error` on any failure.
@@ -139,7 +139,7 @@ To ping "a host other than the first in your configuration" you can pass it
 explicitly:
 
 ```elixir
-Instream.Connection.ping("some.host.name")
+MyApp.MyConnection.ping("some.host.name")
 ```
 
 All values necessary to ping the host (scheme, port, ...) will be taken from
