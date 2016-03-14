@@ -43,12 +43,12 @@ defmodule Instream.Connection.QueryRunner do
   @doc """
   Execute `:status` queries.
   """
-  @spec status(Keyword.t, Keyword.t) :: :ok | :error
-  def status(_opts, conn) do
+  @spec status(Query.t, Keyword.t, Keyword.t) :: :ok | :error
+  def status(%Query{} = query, _opts, conn) do
     headers = conn |> Headers.assemble()
 
     conn
-    |> URL.status()
+    |> URL.status(query.opts[:host])
     |> :hackney.head(headers)
     |> Response.parse_status()
   end

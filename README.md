@@ -152,6 +152,12 @@ To get InfluxDB to verify status of your cluster you can send a status call:
 MyApp.MyConnection.status()
 ```
 
+As with ping requests you can target a specific host:
+
+```elixir
+MyApp.MyConnection.status("some.host.name")
+```
+
 ### Queries
 
 Every query can be executed asynchronously by passing `[async: true]` to

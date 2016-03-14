@@ -61,7 +61,12 @@ defmodule Instream.Connection do
 
       def query(query, opts \\ []), do: query |> execute(opts)
 
-      def status(opts \\ []), do: %Query{ type: :status } |> execute(opts)
+      def status(opts) when is_list(opts), do: status(nil, opts)
+
+      def status(host \\ nil, opts \\ []) do
+        %Query{ type: :status, opts: [ host: host ] }
+        |> execute(opts)
+      end
 
       def write(payload, opts \\ []) do
         payload

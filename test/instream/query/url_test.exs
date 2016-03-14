@@ -129,4 +129,16 @@ defmodule Instream.Query.URLTest do
 
     assert url == URL.query(conn)
   end
+
+
+  test "status url with speicifc host" do
+    url  = "http://secondary.host/status"
+    conn = [
+      hosts:  [ "localhost", "secondary.host" ],
+      scheme: "http"
+    ]
+
+    refute url == URL.status(conn)
+    assert url == URL.status(conn, List.last(conn[:hosts]))
+  end
 end
