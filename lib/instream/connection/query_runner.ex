@@ -17,7 +17,7 @@ defmodule Instream.Connection.QueryRunner do
 
     conn
     |> URL.ping(query.opts[:host])
-    |> :hackney.head(headers)
+    |> :hackney.head(headers, "", Keyword.get(conn, :http_opts, []))
     |> Response.parse_ping()
   end
 
@@ -34,7 +34,9 @@ defmodule Instream.Connection.QueryRunner do
       |> URL.append_epoch(query.opts[:precision])
       |> URL.append_query(query.payload)
 
-    { :ok, status, headers, client } = :hackney.get(url, headers)
+    http_opts = Keyword.get(conn, :http_opts, [])
+
+    { :ok, status, headers, client } = :hackney.get(url, headers, "", http_opts)
     { :ok, response }                = :hackney.body(client)
 
     { status, headers, response } |> Response.maybe_parse(opts)
@@ -49,7 +51,7 @@ defmodule Instream.Connection.QueryRunner do
 
     conn
     |> URL.status(query.opts[:host])
-    |> :hackney.head(headers)
+    |> :hackney.head(headers, "", Keyword.get(conn, :http_opts, []))
     |> Response.parse_status()
   end
 

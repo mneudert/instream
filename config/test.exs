@@ -46,3 +46,10 @@ config :instream, Instream.TestHelpers.QueryAuthConnection,
 config :instream, Instream.TestHelpers.UnreachableConnection,
   hosts: [ "some.really.unreachable.host" ],
   pool:  [ max_overflow: 0, size: 1 ]
+
+
+config :instream, Instream.TestHelpers.ConnectionWithOpts,
+  auth:  [ username: "instream_test", password: "instream_test" ],
+  hosts: [ "localhost" ],
+  pool:  [ max_overflow: 0, size: 1 ],
+  http_opts: [ proxy: "http://invalidproxy" ]
