@@ -4,6 +4,7 @@ defmodule Instream.ConnectionTest do
   alias Instream.Query.Builder
 
   alias Instream.TestHelpers.Connection
+  alias Instream.TestHelpers.ConnectionWithOpts
   alias Instream.TestHelpers.GuestConnection
   alias Instream.TestHelpers.UnreachableConnection
 
@@ -30,11 +31,13 @@ defmodule Instream.ConnectionTest do
   test "ping connection" do
     assert :pong  == Connection.ping()
     assert :error == UnreachableConnection.ping()
+    assert :error == ConnectionWithOpts.ping()
   end
 
   test "status connection" do
     assert :ok    == Connection.status()
     assert :error == UnreachableConnection.status()
+    assert :error == ConnectionWithOpts.ping()
   end
 
 

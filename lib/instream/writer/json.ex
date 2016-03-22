@@ -17,7 +17,9 @@ defmodule Instream.Writer.JSON do
       |> URL.write()
       |> URL.append_database(opts[:database])
 
-    { :ok, status, headers, client } = :hackney.post(url, headers, payload)
+    http_opts = Keyword.get(conn, :http_opts, [])
+
+    { :ok, status, headers, client } = :hackney.post(url, headers, payload, http_opts)
     { :ok, response }                = :hackney.body(client)
 
     { status, headers, response }
