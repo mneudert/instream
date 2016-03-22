@@ -59,11 +59,12 @@ They only need to be linked to an entry in your `config.exs`:
 
 ```elixir
 config :my_app, MyApp.MyConnection,
-  hosts:  [ "localhost" ],
-  pool:   [ max_overflow: 0, size: 1 ],
-  port:   8086,
-  scheme: "http",
-  writer: Instream.Writer.Line
+  hosts:     [ "localhost" ],
+  http_opts: [ insecure: true, proxy: "http://company.proxy" ],
+  pool:      [ max_overflow: 0, size: 1 ],
+  port:      8086,
+  scheme:    "http",
+  writer:    Instream.Writer.Line
 ```
 
 _Note_: While you can define as many hosts as you please only the first one
@@ -92,6 +93,17 @@ config :my_app, MyApp.MyConnection,
 ```
 
 This also means that per default the connection uses no authentication.
+
+#### HTTP Client Configuration
+
+Internally all requests are done using
+[`:hackney`](https://github.com/benoitc/hackney).
+
+The configuration key `:http_opts` is directly passed to the client process.
+
+Please see
+[`:hackney.request/5`](https://hexdocs.pm/hackney/hackney.html#request-5)
+for a complete list of available options.
 
 #### Authentication
 
