@@ -14,12 +14,12 @@ defmodule Instream.Connection do
   ## Example Configuration
 
       config :my_application, MyConnection,
-        hosts:    [ "primary.example.com", "secondary.example.com" ],
-        password: "pass",
-        pool:     [ max_overflow: 10, size: 5 ],
-        port:     8086,
-        scheme:   "http",
-        username: "root"
+        auth:      [ method: :basic, username: "root", password: "root" ]
+        hosts:     [ "primary.example.com", "secondary.example.com" ],
+        http_opts: [ insecure: true, proxy: "http://company.proxy" ],
+        pool:      [ max_overflow: 10, size: 5 ],
+        port:      8086,
+        scheme:    "http"
   """
 
   alias Instream.Query
