@@ -17,9 +17,11 @@ defmodule Instream.Connection do
         auth:      [ method: :basic, username: "root", password: "root" ]
         hosts:     [ "primary.example.com", "secondary.example.com" ],
         http_opts: [ insecure: true, proxy: "http://company.proxy" ],
+        password:  "pass",
         pool:      [ max_overflow: 10, size: 5 ],
         port:      8086,
-        scheme:    "http"
+        scheme:    "http",
+        username:  "user"
   """
 
   alias Instream.Query
