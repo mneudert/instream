@@ -3,7 +3,8 @@
 ## v0.11.0-dev
 
 - Enhancements
-    - Hackney options can be configured ([#17](https://github.com/mneudert/instream/pull/17))
+    - Hackney options can be configured
+      ([#17](https://github.com/mneudert/instream/pull/17))
     - Pings can be send to specific servers
     - Status requests can be send to a cluster
 
@@ -20,18 +21,21 @@
     - Query builder can construct `DROP DATABASE` statements
     - Query builder can construct `DROP RETENTION POLICY` statements
     - Query builder can construct `SHOW` statements
-    - Series database definitions allow anything "evaluating to a string" ([#14](https://github.com/mneudert/instream/pull/14))
-    - Series measurement definitions allow anything "evaluating to a string" ([#14](https://github.com/mneudert/instream/pull/14))
+    - Series database definitions allow anything "evaluating to a string"
+      ([#14](https://github.com/mneudert/instream/pull/14))
+    - Series measurement definitions allow anything "evaluating to a string"
+      ([#14](https://github.com/mneudert/instream/pull/14))
 
 - Deprecations
     - Atoms for defining a series' database are deprecated
     - Atoms for defining a series' measurement are deprecated
-    - Using `if_not_exists` (`CREATE DATABASE`) has been deprecated and will be
-      completely removed once InfluxDB removes it
+    - Using `if_not_exists` (`CREATE DATABASE`) has been deprecated and
+      will be completely removed once InfluxDB removes it
 
 - Backwards incompatible changes
     - `:cluster` query type has been removed in favor of regular `:read` queries
-    - Retention policy convenience function has been replaced with a more detailed version
+    - Retention policy convenience function has been replaced
+      with a more detailed version
 
 ## v0.9.0 (2015-12-27)
 
@@ -49,15 +53,16 @@
 
 - Backwards incompatible changes
     - The measurement of a series is no longer optional
-    - The parameter `opts` for `Instream.Data.Read` and `Instream.Data.Write` is
-      no longer optional
-    - `use`-ing `Instream.Series` without a complete series definition raises
-      during compilation
+    - The parameter `opts` for `Instream.Data.Read` and `Instream.Data.Write`
+      is no longer optional
+    - `use`-ing `Instream.Series` without a complete series definition
+      raises during compilation
 
 ## v0.8.0 (2015-11-18)
 
 - Enhancements
-    - Batch writing using `Line` and `UDP` writers ([#10](https://github.com/mneudert/instream/pull/10))
+    - Batch writing using `Line` and `UDP` writers
+      ([#10](https://github.com/mneudert/instream/pull/10))
     - Fields can be defined with default values
     - Tags can be defined with default values
     - Writing can be done over UDP using `Instream.Writer.UDP`
@@ -71,17 +76,19 @@
     - Precision can be passed to write queries
 
 - Bug fixes
-    - Pool configuration (size, overflow) is now properly taken from configuration
+    - Pool configuration (size, overflow) is now
+      properly taken from configuration
 
 - Deprecations
-    - Support of the JSON protocol is deprecated and will be removed once
-      InfluxDB removes it
+    - Support of the JSON protocol is deprecated and will be
+      removed once InfluxDB removes it
 
 ## v0.6.0 (2015-09-27)
 
 - Enhancements
     - "IF NOT EXISTS" can be passed to database creation queries
-    - Points can be written with explicit timestamps ([#8](https://github.com/mneudert/instream/pull/8))
+    - Points can be written with explicit timestamps
+      ([#8](https://github.com/mneudert/instream/pull/8))
     - Switched default write method to the line protocol
     - Tags are optional when writing with the line protocol
 
