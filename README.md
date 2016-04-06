@@ -15,6 +15,10 @@ Tested influxdb version: `0.11.0` (see
 [`.travis.yml`](https://github.com/mneudert/instream/blob/master/.travis.yml)
 to be sure)
 
+`InfluxDB v0.12.0` should work as expected when not using now
+deprecated/removed methods like the JSON writer. Please use that version at
+your own discretion. Be sure to test and remove any broken parts.
+
 
 ## Setup
 
