@@ -5,6 +5,8 @@
 - Enhancements
     - Hackney options can be configured
       ([#17](https://github.com/mneudert/instream/pull/17))
+    - Line writer now prefers a database passed via arguments
+      over the one passed in the datapoint payload
     - Pings can be send to specific servers
     - Status requests can be send to a cluster
 

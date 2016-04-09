@@ -14,7 +14,7 @@ defmodule Instream.Writer.Line do
     headers = Headers.assemble(conn) ++ [{ 'Content-Type', 'text/plain' }]
     body    = query.payload |> to_line()
 
-    db  = Map.get(query.payload, :database, opts[:database])
+    db  = opts[:database] || Map.get(query.payload, :database)
     url =
          conn
       |> URL.write()
