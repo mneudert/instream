@@ -85,12 +85,12 @@ defmodule Instream.Series do
       def __meta__(:measurement), do: @measurement
       def __meta__(:tags),        do: @tags_names
 
-      Module.eval_quoted __MODULE__, [
+      Module.eval_quoted __ENV__, [
         unquote(__MODULE__).__struct_fields__(@fields_struct),
         unquote(__MODULE__).__struct_tags__(@tags_struct)
       ]
 
-      Module.eval_quoted __MODULE__, [
+      Module.eval_quoted __ENV__, [
         unquote(__MODULE__).__struct__(__MODULE__)
       ]
     end

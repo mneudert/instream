@@ -10,6 +10,11 @@
     - Pings can be send to specific servers
     - Status requests can be send to a cluster
 
+- Bug fixes
+    - Series are now compiled with full environment information
+      preventing "/path/to/lib/nofile" to be compiled as the
+      source of `MySeries.Fields` or `MySeries.Tags`
+
 - Backwards incompatible changes
     - Runtime connection configuration reading has been removed
       in favor of compile time inlining.
