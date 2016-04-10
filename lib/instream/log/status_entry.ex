@@ -4,10 +4,12 @@ defmodule Instream.Log.StatusEntry do
   """
 
   defstruct [
+    host:   nil,
     result: nil
   ]
 
   @type t :: %__MODULE__{
+    host:   String.t,
     result: atom
   }
 end

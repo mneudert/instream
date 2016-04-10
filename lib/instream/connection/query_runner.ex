@@ -3,6 +3,10 @@ defmodule Instream.Connection.QueryRunner do
   Executes a query for a connection.
   """
 
+  alias Instream.Log.PingEntry
+  alias Instream.Log.QueryEntry
+  alias Instream.Log.StatusEntry
+  alias Instream.Log.WriteEntry
   alias Instream.Query
   alias Instream.Query.Headers
   alias Instream.Query.URL
@@ -14,11 +18,18 @@ defmodule Instream.Connection.QueryRunner do
   @spec ping(Query.t, Keyword.t, Keyword.t) :: :pong | :error
   def ping(%Query{} = query, _opts, conn) do
     headers = conn |> Headers.assemble()
+    result  =
+      conn
+      |> URL.ping(query.opts[:host])
+      |> :hackney.head(headers, "", Keyword.get(conn, :http_opts, []))
+      |> Response.parse_ping()
 
-    conn
-    |> URL.ping(query.opts[:host])
-    |> :hackney.head(headers, "", Keyword.get(conn, :http_opts, []))
-    |> Response.parse_ping()
+    conn[:module].__log__(%PingEntry{
+      host:   query.opts[:host] || hd(conn[:hosts]),
+      result: result
+    })
+
+    result
   end
 
   @doc """
@@ -28,7 +39,7 @@ defmodule Instream.Connection.QueryRunner do
   def read(%Query{} = query, opts, conn) do
     headers = conn |> Headers.assemble()
     url     =
-         conn
+      conn
       |> URL.query()
       |> URL.append_database(opts[:database])
       |> URL.append_epoch(query.opts[:precision])
@@ -39,7 +50,15 @@ defmodule Instream.Connection.QueryRunner do
     { :ok, status, headers, client } = :hackney.get(url, headers, "", http_opts)
     { :ok, response }                = :hackney.body(client)
 
-    { status, headers, response } |> Response.maybe_parse(opts)
+    result =
+      { status, headers, response }
+      |> Response.maybe_parse(opts)
+
+    conn[:module].__log__(%QueryEntry{
+      query: query.payload
+    })
+
+    result
   end
 
   @doc """
@@ -48,11 +67,18 @@ defmodule Instream.Connection.QueryRunner do
   @spec status(Query.t, Keyword.t, Keyword.t) :: :ok | :error
   def status(%Query{} = query, _opts, conn) do
     headers = conn |> Headers.assemble()
+    result  =
+      conn
+      |> URL.status(query.opts[:host])
+      |> :hackney.head(headers, "", Keyword.get(conn, :http_opts, []))
+      |> Response.parse_status()
 
-    conn
-    |> URL.status(query.opts[:host])
-    |> :hackney.head(headers, "", Keyword.get(conn, :http_opts, []))
-    |> Response.parse_status()
+    conn[:module].__log__(%StatusEntry{
+      host:   query.opts[:host] || hd(conn[:hosts]),
+      result: result
+    })
+
+    result
   end
 
   @doc """
@@ -60,8 +86,15 @@ defmodule Instream.Connection.QueryRunner do
   """
   @spec write(Query.t, Keyword.t, Keyword.t) :: any
   def write(%Query{} = query, opts, conn) do
-    query
-    |> conn[:writer].write(opts, conn)
-    |> Response.maybe_parse(opts)
+    result =
+      query
+      |> conn[:writer].write(opts, conn)
+      |> Response.maybe_parse(opts)
+
+    conn[:module].__log__(%WriteEntry{
+      points: length(query.payload[:points])
+    })
+
+    result
   end
 end

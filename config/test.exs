@@ -13,6 +13,13 @@ config :instream, Instream.TestHelpers.JSONConnection,
   pool:    [ max_overflow: 0, size: 1 ],
   writer:  Instream.Writer.JSON
 
+config :instream, Instream.TestHelpers.LogConnection,
+  auth:   [ username: "instream_test", password: "instream_test" ],
+  hosts:  [ "localhost" ],
+  pool:   [ max_overflow: 0, size: 1 ],
+  port:   8086,
+  scheme: "http"
+
 config :instream, Instream.TestHelpers.UDPConnection,
   auth:     [ username: "instream_test", password: "instream_test" ],
   hosts:    [ "localhost" ],

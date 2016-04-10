@@ -141,7 +141,7 @@ config :my_app, MyApp.MyConnection,
 The connection will then write using UDP and connecting to the port `:port_udp`.
 All non-write queries will be send to the regular `:port` you have configured.
 
-#### Logging (partially working only!)
+#### Logging
 
 All queries are (by default) logged using `Logger.debug/1` via the default
 logging module `Instream.Log.DefaultLogger`. To customize logging you have to

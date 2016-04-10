@@ -16,7 +16,7 @@ defmodule Instream.Log.DefaultLogger do
   @spec log(Instream.Connection.log_entry) :: Instream.Connection.log_entry
   def log(%PingEntry{} = entry) do
     Logger.debug fn ->
-      "ping #{ inspect entry.result }"
+      [ "[ping ", entry.host, "] ", to_string(entry.result) ]
     end
 
     entry
@@ -24,7 +24,7 @@ defmodule Instream.Log.DefaultLogger do
 
   def log(%QueryEntry{} = entry) do
     Logger.debug fn ->
-      entry.query
+      [ "[query] ", entry.query ]
     end
 
     entry
@@ -32,7 +32,7 @@ defmodule Instream.Log.DefaultLogger do
 
   def log(%StatusEntry{} = entry) do
     Logger.debug fn ->
-      "status #{ inspect entry.result }"
+      [ "[status ", entry.host, "] ", to_string(entry.result) ]
     end
 
     entry
@@ -40,7 +40,7 @@ defmodule Instream.Log.DefaultLogger do
 
   def log(%WriteEntry{} = entry) do
     Logger.debug fn ->
-      "write #{ entry.points } points"
+      [ "[write] ", to_string(entry.points), " points" ]
     end
 
     entry
