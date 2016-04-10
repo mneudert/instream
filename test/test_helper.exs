@@ -1,3 +1,5 @@
+Code.require_file("helpers/nil_logger.exs", __DIR__)
+
 Code.require_file("helpers/connection.exs", __DIR__)
 Code.require_file("helpers/connection_with_opts.exs", __DIR__)
 Code.require_file("helpers/json_connection.exs", __DIR__)
