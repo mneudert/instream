@@ -7,6 +7,7 @@
       ([#17](https://github.com/mneudert/instream/pull/17))
     - Line writer now prefers a database passed via arguments
       over the one passed in the datapoint payload
+    - Logging for requests is available
     - Pings can be send to specific servers
     - Status requests can be send to a cluster
 

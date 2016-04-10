@@ -29,7 +29,7 @@ defmodule Instream.Mixfile do
   end
 
   def application do
-    [ applications: [ :hackney, :poison, :poolboy ] ]
+    [ applications: [ :hackney, :logger, :poison, :poolboy ] ]
   end
 
   defp deps do

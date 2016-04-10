@@ -141,6 +141,59 @@ config :my_app, MyApp.MyConnection,
 The connection will then write using UDP and connecting to the port `:port_udp`.
 All non-write queries will be send to the regular `:port` you have configured.
 
+#### Logging
+
+All queries are (by default) logged using `Logger.debug/1` via the default
+logging module `Instream.Log.DefaultLogger`. To customize logging you have to
+alter the configuration of your connection:
+
+```elixir
+config :my_app, MyApp.MyConnection,
+  loggers: [
+    { FirstLogger,  :log_fun, [] },
+    { SecondLogger, :log_fun, [ :additional, :args ] }
+  ]
+```
+
+This configuration replaces the default logging module.
+
+Configuration is given as a tuple of `{ module, function, arguments }`. The log
+entry will be inserted as the first argument of the method call. It will be one
+of `Instream.Log.PingEntry`, `Instream.Log.QueryEntry`,
+`Instream.Log.StatusEntry` or `Instream.Log.WriteEntry`, depending on what type
+of request should be logged.
+
+Please be aware that every logger has to return the entry it received in order
+to allow combining multiple loggers.
+
+In addition to query specific information every entry carries metadata around:
+
+- `:query_time`: milliseconds it took to send request and receive the response
+- `response_status`: status code or `0` if not applicable/available
+
+When using the default logger you have to re-configure `:logger` to be able to
+get them printed:
+
+```
+config :logger, :console,
+  format: "\n$time $metadata[$level] $levelpad$message\n",
+  metadata: [:application, :pid, :query_time, :response_status]
+```
+
+_Warning_: In order to log the `:pid` (provided by `:logger`) used to send the
+queries you need to have at least `elixir ~> 1.1.0`. Any earlier version will
+fail because the `String.Chars` protocol was not implemented for pids at that
+time.
+
+To prevent a query from logging you can pass an option to the execute call:
+
+```elixir
+query |> MyApp.MyConnection.execute(log: false)
+
+# also works with convenience methods
+MyApp.MyConnection.ping(log: false)
+```
+
 #### Ping / Status
 
 To validate a connection you can send ping requests to the server:
