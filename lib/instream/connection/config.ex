@@ -4,9 +4,10 @@ defmodule Instream.Connection.Config do
   """
 
   @defaults [
-    port:   8086,
-    scheme:  "http",
-    writer: Instream.Writer.Line
+    loggers: [{ Instream.Log.DefaultLogger, :log, [] }],
+    port:    8086,
+    scheme:   "http",
+    writer:  Instream.Writer.Line
   ]
 
   @doc """

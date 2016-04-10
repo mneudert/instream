@@ -17,6 +17,7 @@ defmodule Instream.Connection do
         auth:      [ method: :basic, username: "root", password: "root" ]
         hosts:     [ "primary.example.com", "secondary.example.com" ],
         http_opts: [ insecure: true, proxy: "http://company.proxy" ],
+        loggers:   [{ LogModule, :log_fun, [ :additional, :args ] }],
         password:  "pass",
         pool:      [ max_overflow: 10, size: 5 ],
         port:      8086,
@@ -24,16 +25,19 @@ defmodule Instream.Connection do
         username:  "user"
   """
 
+  alias Instream.Log
   alias Instream.Query
   alias Instream.Query.Builder
 
 
+  @type log_entry :: Log.PingEntry.t |Log.QueryEntry.t |
+                     Log.StatusEntry.t | Log.WriteEntry.t
   @type query_type :: Builder.t | Query.t | String.t
 
 
   defmacro __using__(otp_app: otp_app) do
-    quote do
-      @before_compile unquote(__MODULE__)
+    quote bind_quoted: [ otp_app: otp_app ] do
+      @before_compile Instream.Connection
 
       alias Instream.Connection
       alias Instream.Connection.QueryPlanner
@@ -41,11 +45,21 @@ defmodule Instream.Connection do
       alias Instream.Pool
       alias Instream.Query
 
-      @behaviour unquote(__MODULE__)
-      @otp_app   unquote(otp_app)
+      @behaviour Connection
+      @otp_app   otp_app
       @config    Connection.Config.config(@otp_app, __MODULE__)
 
-      def __pool__, do: __MODULE__.Pool
+      loggers = Enum.reduce(@config[:loggers], quote(do: entry),
+        fn (logger, acc) ->
+          { mod, fun, args } = logger
+
+          quote do
+            unquote(mod).unquote(fun)(unquote(acc), unquote_splicing(args))
+          end
+        end)
+
+      def __log__(entry), do: unquote(loggers)
+      def __pool__,       do: __MODULE__.Pool
 
       def child_spec, do: Pool.Spec.spec(__MODULE__)
       def config,     do: @config
@@ -102,6 +116,11 @@ defmodule Instream.Connection do
     end
   end
 
+
+  @doc """
+  Sends a log entry to all configured loggers.
+  """
+  @callback __log__(log_entry) :: log_entry
 
   @doc """
   Returns the (internal) pool module.
