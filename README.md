@@ -166,6 +166,15 @@ of request should be logged.
 Please be aware that every logger has to return the entry it received in order
 to allow combining multiple loggers.
 
+To prevent a query from logging you can pass an option to the execute call:
+
+```elixir
+query |> MyApp.MyConnection.execute(log: false)
+
+# also works with convenience methods
+MyApp.MyConnection.ping(log: false)
+```
+
 #### Ping / Status
 
 To validate a connection you can send ping requests to the server:

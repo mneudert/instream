@@ -16,7 +16,7 @@ defmodule Instream.Connection.QueryRunner do
   Executes `:ping` queries.
   """
   @spec ping(Query.t, Keyword.t, Keyword.t) :: :pong | :error
-  def ping(%Query{} = query, _opts, conn) do
+  def ping(%Query{} = query, opts, conn) do
     headers = conn |> Headers.assemble()
     result  =
       conn
@@ -24,10 +24,12 @@ defmodule Instream.Connection.QueryRunner do
       |> :hackney.head(headers, "", Keyword.get(conn, :http_opts, []))
       |> Response.parse_ping()
 
-    conn[:module].__log__(%PingEntry{
-      host:   query.opts[:host] || hd(conn[:hosts]),
-      result: result
-    })
+    if false != opts[:log] do
+      conn[:module].__log__(%PingEntry{
+        host:   query.opts[:host] || hd(conn[:hosts]),
+        result: result
+      })
+    end
 
     result
   end
@@ -54,9 +56,11 @@ defmodule Instream.Connection.QueryRunner do
       { status, headers, response }
       |> Response.maybe_parse(opts)
 
-    conn[:module].__log__(%QueryEntry{
-      query: query.payload
-    })
+    if false != opts[:log] do
+      conn[:module].__log__(%QueryEntry{
+        query: query.payload
+      })
+    end
 
     result
   end
@@ -65,7 +69,7 @@ defmodule Instream.Connection.QueryRunner do
   Execute `:status` queries.
   """
   @spec status(Query.t, Keyword.t, Keyword.t) :: :ok | :error
-  def status(%Query{} = query, _opts, conn) do
+  def status(%Query{} = query, opts, conn) do
     headers = conn |> Headers.assemble()
     result  =
       conn
@@ -73,10 +77,12 @@ defmodule Instream.Connection.QueryRunner do
       |> :hackney.head(headers, "", Keyword.get(conn, :http_opts, []))
       |> Response.parse_status()
 
-    conn[:module].__log__(%StatusEntry{
-      host:   query.opts[:host] || hd(conn[:hosts]),
-      result: result
-    })
+    if false != opts[:log] do
+      conn[:module].__log__(%StatusEntry{
+        host:   query.opts[:host] || hd(conn[:hosts]),
+        result: result
+      })
+    end
 
     result
   end
@@ -91,9 +97,11 @@ defmodule Instream.Connection.QueryRunner do
       |> conn[:writer].write(opts, conn)
       |> Response.maybe_parse(opts)
 
-    conn[:module].__log__(%WriteEntry{
-      points: length(query.payload[:points])
-    })
+    if false != opts[:log] do
+      conn[:module].__log__(%WriteEntry{
+        points: length(query.payload[:points])
+      })
+    end
 
     result
   end
