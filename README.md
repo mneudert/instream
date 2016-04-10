@@ -141,6 +141,31 @@ config :my_app, MyApp.MyConnection,
 The connection will then write using UDP and connecting to the port `:port_udp`.
 All non-write queries will be send to the regular `:port` you have configured.
 
+#### Logging (partially working only!)
+
+All queries are (by default) logged using `Logger.debug/1` via the default
+logging module `Instream.Log.DefaultLogger`. To customize logging you have to
+alter the configuration of your connection:
+
+```elixir
+config :my_app, MyApp.MyConnection,
+  loggers: [
+    { FirstLogger,  :log_fun, [] },
+    { SecondLogger, :log_fun, [ :additional, :args ] }
+  ]
+```
+
+This configuration replaces the default logging module.
+
+Configuration is given as a tuple of `{ module, function, arguments }`. The log
+entry will be inserted as the first argument of the method call. It will be one
+of `Instream.Log.PingEntry`, `Instream.Log.QueryEntry`,
+`Instream.Log.StatusEntry` or `Instream.Log.WriteEntry`, depending on what type
+of request should be logged.
+
+Please be aware that every logger has to return the entry it received in order
+to allow combining multiple loggers.
+
 #### Ping / Status
 
 To validate a connection you can send ping requests to the server:
