@@ -3,7 +3,11 @@ defmodule Instream.Log.StatusEntry do
   Log entry definition for status requests.
   """
 
-  defstruct []
+  defstruct [
+    result: nil
+  ]
 
-  @type t :: %__MODULE__{}
+  @type t :: %__MODULE__{
+    result: atom
+  }
 end

@@ -3,7 +3,11 @@ defmodule Instream.Log.WriteEntry do
   Log entry definition for write requests.
   """
 
-  defstruct []
+  defstruct [
+    points: nil
+  ]
 
-  @type t :: %__MODULE__{}
+  @type t :: %__MODULE__{
+    points: non_neg_integer
+  }
 end
