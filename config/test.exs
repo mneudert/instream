@@ -1,5 +1,11 @@
 use Mix.Config
 
+
+config :logger, :console,
+  format: "\n$time $metadata[$level] $levelpad$message\n",
+  metadata: [:query_time, :response_status]
+
+
 config :instream, Instream.TestHelpers.Connection,
   auth:    [ username: "instream_test", password: "instream_test" ],
   hosts:   [ "localhost" ],

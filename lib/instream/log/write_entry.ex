@@ -4,10 +4,12 @@ defmodule Instream.Log.WriteEntry do
   """
 
   defstruct [
-    points: nil
+    points:   nil,
+    metadata: nil
   ]
 
   @type t :: %__MODULE__{
-    points: non_neg_integer
+    points:   non_neg_integer,
+    metadata: Instream.Log.Metadata.t
   }
 end

@@ -40,5 +40,8 @@ defmodule Instream.Log.WriteEntryTest do
 
     assert String.contains?(log, "write")
     assert String.contains?(log, "#{ length(points) } points")
+
+    assert String.contains?(log, "query_time=")
+    assert String.contains?(log, "response_status=0")
   end
 end

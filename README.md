@@ -166,6 +166,25 @@ of request should be logged.
 Please be aware that every logger has to return the entry it received in order
 to allow combining multiple loggers.
 
+In addition to query specific information every entry carries metadata around:
+
+- `:query_time`: milliseconds it took to send request and receive the response
+- `response_status`: status code or `0` if not applicable/available
+
+When using the default logger you have to re-configure `:logger` to be able to
+get them printed:
+
+```
+config :logger, :console,
+  format: "\n$time $metadata[$level] $levelpad$message\n",
+  metadata: [:application, :pid, :query_time, :response_status]
+```
+
+_Warning_: In order to log the `:pid` (provided by `:logger`) used to send the
+queries you need to have at least `elixir ~> 1.1.0`. Any earlier version will
+fail because the `String.Chars` protocol was not implemented for pids at that
+time.
+
 To prevent a query from logging you can pass an option to the execute call:
 
 ```elixir

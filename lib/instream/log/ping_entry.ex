@@ -4,12 +4,14 @@ defmodule Instream.Log.PingEntry do
   """
 
   defstruct [
-    host:   nil,
-    result: nil
+    host:     nil,
+    result:   nil,
+    metadata: nil
   ]
 
   @type t :: %__MODULE__{
-    host:   String.t,
-    result: atom
+    host:     String.t,
+    result:   atom,
+    metadata: Instream.Log.Metadata.t
   }
 end

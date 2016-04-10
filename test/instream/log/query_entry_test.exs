@@ -16,5 +16,8 @@ defmodule Instream.Log.QueryEntryTest do
 
     assert String.contains?(log, "query")
     assert String.contains?(log, query)
+
+    assert String.contains?(log, "query_time=")
+    assert String.contains?(log, "response_status=200")
   end
 end
