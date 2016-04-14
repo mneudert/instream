@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.11.0-dev
+## v0.11.0 (2016-04-14)
 
 - Enhancements
     - Hackney options can be configured
