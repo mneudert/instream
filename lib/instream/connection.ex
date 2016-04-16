@@ -37,8 +37,6 @@ defmodule Instream.Connection do
 
   defmacro __using__(otp_app: otp_app) do
     quote bind_quoted: [ otp_app: otp_app ] do
-      @before_compile Instream.Connection
-
       alias Instream.Connection
       alias Instream.Connection.QueryPlanner
       alias Instream.Data
@@ -88,30 +86,6 @@ defmodule Instream.Connection do
         payload
         |> Data.Write.query(opts)
         |> execute(opts)
-      end
-    end
-  end
-
-  defmacro __before_compile__(_env) do
-    quote do
-      ## warns if deprecated JSON writer is used
-      ##
-      ## will be removed after influxdb has removed JSON support
-      ## will only warn for all otp_apps except :instream
-      config           = Application.get_env(@otp_app, __MODULE__)
-      uses_json_writer = Instream.Writer.JSON == Keyword.get(config || [], :writer)
-      is_not_instream  = :instream != @otp_app
-
-      if uses_json_writer and is_not_instream do
-        IO.write :stderr, """
-        The connection "#{ __MODULE__ }"
-        is configured to use the deprecated JSON protocol.
-
-        The support for it will be remove with the release of InfluxDB 1.0.
-
-        Until then it will still be available, but it is highly discouraged to
-        do so. Please consider changing to the line protocol.
-        """
       end
     end
   end

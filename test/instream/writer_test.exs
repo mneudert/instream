@@ -2,7 +2,6 @@ defmodule Instream.WriterTest do
   use ExUnit.Case, async: true
 
   alias Instream.TestHelpers.Connection
-  alias Instream.TestHelpers.JSONConnection
   alias Instream.TestHelpers.UDPConnection
 
 
@@ -63,12 +62,6 @@ defmodule Instream.WriterTest do
     data = %ProtocolsSeries{}
     data = %{ data | tags: %{ data.tags | foo: "foo", bar: "bar" }}
 
-    # JSON protocol
-    data = %{ data | fields:    %{ data.fields | value: "JSON" }}
-    data = %{ data | timestamp: "2015-08-14T21:32:05Z" }
-
-    assert :ok == data |> JSONConnection.write()
-
     # Line (default) protocol
     data = %{ data | fields:    %{ data.fields | value: "Line" }}
     data = %{ data | timestamp: 1439587926 }
@@ -92,7 +85,6 @@ defmodule Instream.WriterTest do
 
     assert %{ results: [%{ series: [%{
       values: [
-        [ 1439587925000000000, "JSON" ],
         [ 1439587926000000000, "Line" ],
         [ 1439587927000000000, "UDP" ]
       ]
@@ -134,11 +126,6 @@ defmodule Instream.WriterTest do
 
     # make entry fail
     data = %{ data | fields: %{ data.fields | binary: 12345 }}
-
-    # JSON protocol write error
-    %{ error: error } = data |> JSONConnection.write()
-
-    assert String.contains?(error, "failed")
 
     # Line protocol write error
     %{ error: error } = data |> Connection.write()

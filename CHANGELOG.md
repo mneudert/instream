@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.12.0-dev
+
+- Backwards incompatible changes
+    - Support for the JSON protocol has been removed matching its
+      removal in InfluxDB v0.12.0.
+
 ## v0.11.0 (2016-04-14)
 
 - Enhancements
