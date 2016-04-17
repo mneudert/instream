@@ -49,7 +49,11 @@ defmodule Instream.Log.DefaultLogger do
 
   # Utility methods
 
-  defp metadata(%{ metadata: metadata }) do
+  @doc false
+  def metadata(%{ metadata: metadata }) do
+    # method is public to avoid compiler notices about this method
+    # being unused when combined with a logger compile time purge level
+    # removing the `Logger.debug/2` calls.
     metadata
     |> Map.delete(:__struct__)
     |> Keyword.new()
