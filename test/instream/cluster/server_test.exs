@@ -4,6 +4,7 @@ defmodule Instream.Cluster.ServerTest do
   alias Instream.Cluster.Server
   alias Instream.TestHelpers.Connection
 
+  @tag :skip
   test "server listing" do
     result = Server.show() |> Connection.execute()
 

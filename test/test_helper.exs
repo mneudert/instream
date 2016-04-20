@@ -37,4 +37,4 @@ _ = "test_database" |> Database.drop()   |> TestHelpers.Connection.execute()
 _ = "test_database" |> Database.create() |> TestHelpers.Connection.execute()
 
 
-ExUnit.start()
+ExUnit.start(exclude: [ :skip ])
