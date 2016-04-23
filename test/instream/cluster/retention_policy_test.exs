@@ -21,12 +21,9 @@ defmodule Instream.Cluster.RetentionPolicyTest do
     listing = RetentionPolicy.show(@database) |> Connection.execute()
 
     assert creation == %{results: [%{}]}
-    assert %{results: [%{series: [%{
-      columns: ["name", "duration", "replicaN", "default"],
-      values:  listing_values
-    }]}]} = listing
+    assert %{results: [%{series: [%{values: listing_values}]}]} = listing
 
-    assert Enum.any?(listing_values, fn ([ name, duration, _, _ ]) ->
+    assert Enum.any?(listing_values, fn ([ name, duration, _, _, _ ]) ->
       name == @rp_name && duration == "1h0m0s"
     end)
 
@@ -39,12 +36,9 @@ defmodule Instream.Cluster.RetentionPolicyTest do
     listing = RetentionPolicy.show(@database) |> Connection.execute()
 
     assert alteration == %{results: [%{}]}
-    assert %{results: [%{series: [%{
-      columns: ["name", "duration", "replicaN", "default"],
-      values:  listing_values
-    }]}]} = listing
+    assert %{results: [%{series: [%{values: listing_values}]}]} = listing
 
-    assert Enum.any?(listing_values, fn ([ name, duration, _, _ ]) ->
+    assert Enum.any?(listing_values, fn ([ name, duration, _, _, _ ]) ->
       name == @rp_name && duration == "2h0m0s"
     end)
 
@@ -58,7 +52,9 @@ defmodule Instream.Cluster.RetentionPolicyTest do
     case listing_rows[:values] do
       nil    -> assert true == true
       values ->
-        refute Enum.any?(values, fn ([ name, _, _, _ ]) -> name == @rp_name end)
+        refute Enum.any?(values, fn ([ name, _, _, _, _ ]) ->
+          name == @rp_name
+        end)
     end
   end
 end

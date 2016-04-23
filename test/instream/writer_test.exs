@@ -130,7 +130,7 @@ defmodule Instream.WriterTest do
     # Line protocol write error
     %{ error: error } = data |> Connection.write()
 
-    assert String.contains?(error, "failed")
+    String.contains?(error, "conflict")
   end
 
 
