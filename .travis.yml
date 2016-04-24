@@ -15,14 +15,17 @@ before_install:
   - mkdir "${HOME}/go"
   - export GOPATH="${HOME}/go"
   - export PATH="${GOPATH}/bin:${PATH}"
+
+  - go get github.com/sparrc/gdm
+
   - mkdir -p "${GOPATH}/src/github.com/influxdata"
   - cd "${GOPATH}/src/github.com/influxdata"
   - wget "https://github.com/influxdata/influxdb/archive/${VER_INFLUXDB}.tar.gz" -O influxdb.tar.gz && tar -xf influxdb.tar.gz
   - find . -maxdepth 1 -type d -name 'influxdb*' -exec mv {} influxdb \;
   - cd "${GOPATH}/src/github.com/influxdata/influxdb"
   - git init .
-  - go get ./...
-  - go build ./...
+  - gdm restore
+  - go clean ./...
   - go install ./...
   - cd "${TRAVIS_BUILD_DIR}"
 
