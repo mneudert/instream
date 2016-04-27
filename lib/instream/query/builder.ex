@@ -18,7 +18,6 @@ defmodule Instream.Query.Builder do
     measurements:       "MEASUREMENTS",
     retention_policies: "RETENTION POLICIES",
     retention_policy:   "RETENTION POLICY",
-    servers:            "SERVERS",
     stats:              "STATS"
   ]
 

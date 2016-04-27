@@ -142,14 +142,6 @@ defmodule Instream.Query.BuilderTest do
     assert query == "SHOW RETENTION POLICIES ON some_database"
   end
 
-  test "SHOW SERVERS" do
-    query =
-         Builder.show(:servers)
-      |> InfluxQL.encode()
-
-    assert query == "SHOW SERVERS"
-  end
-
   test "SHOW STATS" do
     query =
          Builder.show(:stats)

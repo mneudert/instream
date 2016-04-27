@@ -5,6 +5,8 @@
 - Backwards incompatible changes
     - Support for the JSON protocol has been removed matching its
       removal in InfluxDB v0.12.0.
+    - Support for the "SHOW SERVERS" statement has been removed matching
+      its removal in InfluxDB v0.13.0.
 
 ## v0.11.0 (2016-04-14)
 
