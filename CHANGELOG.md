@@ -4,9 +4,9 @@
 
 - Backwards incompatible changes
     - Support for the JSON protocol has been removed matching its
-      removal in InfluxDB v0.12.0.
+      removal in InfluxDB v0.12.0
     - Support for the "SHOW SERVERS" statement has been removed matching
-      its removal in InfluxDB v0.13.0.
+      its removal in InfluxDB v0.13.0
 
 ## v0.11.0 (2016-04-14)
 
@@ -26,7 +26,7 @@
 
 - Backwards incompatible changes
     - Runtime connection configuration reading has been removed
-      in favor of compile time inlining.
+      in favor of compile time inlining
 
 ## v0.10.0 (2016-02-27)
 
