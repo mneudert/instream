@@ -13,7 +13,7 @@ Code.require_file("helpers/query_auth_connection.exs", __DIR__)
 Code.require_file("helpers/unreachable_connection.exs", __DIR__)
 
 
-alias Instream.Cluster.Database
+alias Instream.Admin.Database
 alias Instream.TestHelpers
 
 

@@ -1,7 +1,7 @@
-defmodule Instream.Cluster.DiagnosticsTest do
+defmodule Instream.Admin.DiagnosticsTest do
   use ExUnit.Case, async: true
 
-  alias Instream.Cluster.Diagnostics
+  alias Instream.Admin.Diagnostics
   alias Instream.TestHelpers.Connection
 
   test "diagnostics listing" do

@@ -236,12 +236,12 @@ Managing Databases:
 ```elixir
 # create "my_database"
 "my_database"
-|> Instream.Cluster.Database.create()
+|> Instream.Admin.Database.create()
 |> MyApp.MyConnection.execute()
 
 # drop "my_database"
 "my_database"
-|> Instream.Cluster.Database.drop()
+|> Instream.Admin.Database.drop()
 |> MyApp.MyConnection.execute()
 ```
 
@@ -250,13 +250,13 @@ Managing Retention Policies:
 ```elixir
 # create "my_rp" retention policy
 # argument order: policy, database, duration, replication, default
-Instream.Cluster.RetentionPolicy.create(
+Instream.Admin.RetentionPolicy.create(
   "my_rp", "my_database", "1h", 3, true
 )
 |> MyApp.MyConnection.execute()
 
 # drop "my_rp" retention policy
-Instream.Cluster.RetentionPolicy.drop("my_rp", "my_database")
+Instream.Admin.RetentionPolicy.drop("my_rp", "my_database")
 |> MyApp.MyConnection.execute()
 ```
 

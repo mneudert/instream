@@ -1,7 +1,7 @@
 defmodule Instream.AuthTest do
   use ExUnit.Case, async: true
 
-  alias Instream.Cluster.Database
+  alias Instream.Admin.Database
   alias Instream.TestHelpers.AnonConnection
   alias Instream.TestHelpers.GuestConnection
   alias Instream.TestHelpers.InvalidConnection

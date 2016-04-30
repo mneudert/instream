@@ -1,7 +1,7 @@
-defmodule Instream.Cluster.StatsTest do
+defmodule Instream.Admin.StatsTest do
   use ExUnit.Case, async: true
 
-  alias Instream.Cluster.Stats
+  alias Instream.Admin.Stats
   alias Instream.TestHelpers.Connection
 
   test "stats listing" do

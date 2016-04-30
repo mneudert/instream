@@ -1,7 +1,7 @@
-defmodule Instream.Cluster.RetentionPolicyTest do
+defmodule Instream.Admin.RetentionPolicyTest do
   use ExUnit.Case, async: true
 
-  alias Instream.Cluster.RetentionPolicy
+  alias Instream.Admin.RetentionPolicy
   alias Instream.TestHelpers.Connection
 
   @database "test_database"

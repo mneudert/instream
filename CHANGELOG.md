@@ -2,6 +2,15 @@
 
 ## v0.12.0-dev
 
+- Enhancements
+    - Namespace of administrational convenience modules has been changed from
+      `Cluster` to the better matching `Admin`
+
+- Deprecations
+    - The `Cluster` namespace of queries has been changed to `Admin`. For some
+      backwards compatibility the old modules are delegated to the new ones
+      until removed in the next release
+
 - Backwards incompatible changes
     - Support for the JSON protocol has been removed matching its
       removal in InfluxDB v0.12.0

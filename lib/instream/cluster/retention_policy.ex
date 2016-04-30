@@ -1,61 +1,41 @@
 defmodule Instream.Cluster.RetentionPolicy do
-  @moduledoc """
-  Retention policy administration helper.
-  """
+  @moduledoc false
 
-  alias Instream.Query
-  alias Instream.Query.Builder
-  alias Instream.Validate
+  alias Instream.Admin
 
-  @doc """
-  Returns a query to alter a retention policy.
-  """
+  @doc false
   @spec alter(String.t, String.t, String.t) :: Query.t
   def alter(name, database, policy) do
-    _ = Validate.database! database
-
-    %Query{
-      payload: "ALTER RETENTION POLICY #{ name } ON #{ database } #{ policy }",
-      type:    :read
-    }
+    warn()
+    Admin.RetentionPolicy.alter(name, database, policy)
   end
 
-  @doc """
-  Returns a query to create a retention policy.
-  """
+  @doc false
   @spec create(String.t, String.t, String.t, pos_integer, boolean) :: Builder.t
   def create(name, database, duration, replication, default \\ false) do
-    _ = Validate.database! database
-
-    name
-    |> Builder.create_retention_policy()
-    |> Builder.on(database)
-    |> Builder.duration(duration)
-    |> Builder.replication(replication)
-    |> Builder.default(default)
+    warn()
+    Admin.RetentionPolicy.create(name, database, duration, replication, default)
   end
 
-  @doc """
-  Returns a query to drop a retention policy.
-  """
+  @doc false
   @spec drop(String.t, String.t) :: Builder.t
   def drop(name, database) do
-    _ = Validate.database! database
-
-    name
-    |> Builder.drop_retention_policy()
-    |> Builder.on(database)
+    warn()
+    Admin.RetentionPolicy.drop(name, database)
   end
 
-  @doc """
-  Returns a query to list retention policies.
-  """
+  @doc false
   @spec show(String.t) :: Builder.t
   def show(database) do
-    _ = Validate.database! database
+    warn()
+    Admin.RetentionPolicy.show(database)
+  end
 
-    :retention_policies
-    |> Builder.show()
-    |> Builder.on(database)
+
+  defp warn do
+    IO.write :stderr, "warning: Instream.Cluster.RetentionPolicy has been" <>
+                      " renamed to Instream.Admin.RetentionPolicy. This" <>
+                      " module will be removed in an upcoming release\n" <>
+                      Exception.format_stacktrace
   end
 end

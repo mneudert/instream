@@ -1,13 +1,20 @@
 defmodule Instream.Cluster.Stats do
-  @moduledoc """
-  Stats query helper.
-  """
+  @moduledoc false
 
-  alias Instream.Query.Builder
+  alias Instream.Admin
 
-  @doc """
-  Returns a query to retrieve server stats.
-  """
+  @doc false
   @spec show() :: Builder.t
-  def show(), do: Builder.show(:stats)
+  def show() do
+    warn()
+    Admin.Stats.show()
+  end
+
+
+  defp warn do
+    IO.write :stderr, "warning: Instream.Cluster.Stats has been renamed" <>
+                      " to Instream.Admin.Stats. This module will be" <>
+                      " removed in an upcoming release\n" <>
+                      Exception.format_stacktrace
+  end
 end
