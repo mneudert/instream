@@ -211,7 +211,7 @@ All values necessary to ping the host (scheme, port, ...) will be taken from
 the connection used. It does not matter whether the host is configured in that
 connection or not.
 
-To get InfluxDB to verify status of your cluster you can send a status call:
+To get InfluxDB to verify status of your server you can send a status call:
 
 ```elixir
 MyApp.MyConnection.status()

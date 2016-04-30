@@ -120,11 +120,11 @@ defmodule Instream.Connection do
   @callback execute(query :: query_type, opts  :: Keyword.t) :: any
 
   @doc """
-  Pings a server in the connected cluster.
+  Pings a server.
 
   By default the first server in your connection configuration will be pinged.
 
-  The server passed does not necessarily need to be a member of your cluster.
+  The server passed does not necessarily need to belong to your connection.
   Only the connection details (scheme, port, ...) will be used to determine
   the exact url to send the ping request to.
   """
@@ -139,7 +139,7 @@ defmodule Instream.Connection do
   @callback query(query :: String.t, opts :: Keyword.t) :: any
 
   @doc """
-  Checks the status of a connection (= cluster).
+  Checks the status of a connection.
   """
   @callback status(opts :: Keyword.t) :: :ok | :error
 
