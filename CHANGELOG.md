@@ -14,6 +14,8 @@
       until removed in the next release
 
 - Backwards incompatible changes
+    - Atoms for defining a series' database are no longer supported
+    - Atoms for defining a series' measurement are no longer supported
     - Support for the JSON protocol has been removed matching its
       removal in InfluxDB v0.12.0
     - Support for the "SHOW SERVERS" statement has been removed matching

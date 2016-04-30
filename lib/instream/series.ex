@@ -113,20 +113,6 @@ defmodule Instream.Series do
   @doc """
   Defines the database for the series.
   """
-  defmacro database(name) when is_atom(name) do
-    quote do
-      IO.write :stderr, """
-      The series "#{ __MODULE__ }"
-      has a database configured using an atom.
-
-      This has been deprecated in favor of strings.
-      Configuration using atoms will eventually be removed and stop working.
-      """
-
-      database to_string(unquote(name))
-    end
-  end
-
   defmacro database(name) do
     quote do
       unquote(__MODULE__).__attribute__(__MODULE__, :database, unquote(name))
@@ -148,20 +134,6 @@ defmodule Instream.Series do
   @doc """
   Defines the measurement of the series.
   """
-  defmacro measurement(name) when is_atom(name) do
-    quote do
-      IO.write :stderr, """
-      The series "#{ __MODULE__ }"
-      has a measurement configured using an atom.
-
-      This has been deprecated in favor of strings.
-      Configuration using atoms will eventually be removed and stop working.
-      """
-
-      measurement to_string(unquote(name))
-    end
-  end
-
   defmacro measurement(name) do
     quote do
       unquote(__MODULE__).__attribute__(__MODULE__, :measurement, unquote(name))
