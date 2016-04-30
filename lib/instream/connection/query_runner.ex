@@ -34,7 +34,7 @@ defmodule Instream.Connection.QueryRunner do
 
     if false != opts[:log] do
       conn[:module].__log__(%PingEntry{
-        host:     query.opts[:host] || hd(conn[:hosts]),
+        host:     query.opts[:host] || conn[:host],
         result:   result,
         metadata: %Metadata{
           query_time:      query_time,
@@ -104,7 +104,7 @@ defmodule Instream.Connection.QueryRunner do
 
     if false != opts[:log] do
       conn[:module].__log__(%StatusEntry{
-        host:     query.opts[:host] || hd(conn[:hosts]),
+        host:     query.opts[:host] || conn[:host],
         result:   result,
         metadata: %Metadata{
           query_time:      query_time,

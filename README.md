@@ -59,16 +59,13 @@ They only need to be linked to an entry in your `config.exs`:
 
 ```elixir
 config :my_app, MyApp.MyConnection,
-  hosts:     [ "localhost" ],
+  host:      "localhost",
   http_opts: [ insecure: true, proxy: "http://company.proxy" ],
   pool:      [ max_overflow: 0, size: 1 ],
   port:      8086,
   scheme:    "http",
   writer:    Instream.Writer.Line
 ```
-
-_Note_: While you can define as many hosts as you please only the first one
-will be used. This is subject to change.
 
 You now have a connection definition you can hook into your supervision tree:
 
@@ -81,7 +78,7 @@ Supervisor.start_link(
 
 #### Default Connection Values
 
-Only the `hosts` key is mandatory for a connection configuration. The following
+Only the `host` key is mandatory for a connection configuration. The following
 values will be used as defaults if no other value is set:
 
 ```elixir
@@ -129,9 +126,9 @@ To write points over UDP you can adjust your configuration:
 
 ```elixir
 config :my_app, MyApp.MyConnection,
-  hosts: [ "localhost" ],
+  host:     "localhost",
   port_udp: 8089,
-  writer: Instream.Writer.UDP
+  writer:   Instream.Writer.UDP
 ```
 
 The connection will then write using UDP and connecting to the port `:port_udp`.

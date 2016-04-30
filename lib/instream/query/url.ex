@@ -64,7 +64,7 @@ defmodule Instream.Query.URL do
   def ping(conn, nil), do: conn |> url("ping")
   def ping(conn, host) do
     conn
-    |> Keyword.put(:hosts, [ host ])
+    |> Keyword.put(:host, host)
     |> url("ping")
   end
 
@@ -83,7 +83,7 @@ defmodule Instream.Query.URL do
   def status(conn, nil), do: conn |> url("status")
   def status(conn, host) do
     conn
-    |> Keyword.put(:hosts, [ host ])
+    |> Keyword.put(:host, host)
     |> url("status")
   end
 
@@ -108,14 +108,12 @@ defmodule Instream.Query.URL do
   defp url(conn, endpoint) do
     [
       conn[:scheme], "://",
-      url_host(conn[:hosts]), url_port(conn[:port]),
+      conn[:host], url_port(conn[:port]),
       "/", endpoint
     ]
     |> Enum.join("")
     |> append_auth(conn[:auth])
   end
-
-  defp url_host(hosts), do: hosts |> hd()
 
   defp url_port(nil),  do: ""
   defp url_port(port), do: ":#{ port }"

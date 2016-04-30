@@ -16,7 +16,7 @@ defmodule Instream.Log.PingEntryTest do
     assert String.contains?(log, "ping")
     assert String.contains?(log, "pong")
 
-    assert String.contains?(log, hd(LogConnection.config[:hosts]))
+    assert String.contains?(log, LogConnection.config[:host])
 
     assert String.contains?(log, "query_time=")
     assert String.contains?(log, "response_status=204")

@@ -52,14 +52,14 @@ defmodule Instream.Query.URLTest do
 
 
   test "ping url with specific host" do
-    url  = "http://secondary.host/ping"
+    url  = "http://specific.host/ping"
     conn = [
-      hosts:  [ "localhost", "secondary.host" ],
+      host:   "localhost",
       scheme: "http"
     ]
 
     refute url == URL.ping(conn)
-    assert url == URL.ping(conn, List.last(conn[:hosts]))
+    assert url == URL.ping(conn, "specific.host")
   end
 
 
@@ -67,7 +67,7 @@ defmodule Instream.Query.URLTest do
     url  = "http://localhost:8086/query?u=root&p=root"
     conn = [
       auth:   [ method: :query, username: "root", password: "root" ],
-      hosts:  [ "localhost" ],
+      host:   "localhost",
       port:   8086,
       scheme: "http",
     ]
@@ -79,7 +79,7 @@ defmodule Instream.Query.URLTest do
     url  = "http://localhost/query"
     conn = [
       auth:   [ method: :basic, username: "root", password: "root" ],
-      hosts:  [ "localhost" ],
+      host:   "localhost",
       scheme: "http"
     ]
 
@@ -90,7 +90,7 @@ defmodule Instream.Query.URLTest do
     url  = "http://localhost/query"
     conn = [
       auth:   [ username: "root", password: "root" ],
-      hosts:  [ "localhost" ],
+      host:   "localhost",
       scheme: "http"
     ]
 
@@ -100,7 +100,7 @@ defmodule Instream.Query.URLTest do
   test "query url without credentials" do
     url  = "http://localhost:8086/query"
     conn = [
-      hosts:  [ "localhost" ],
+      host:   "localhost",
       port:   8086,
       scheme: "http"
     ]
@@ -112,7 +112,7 @@ defmodule Instream.Query.URLTest do
     url  = "http://localhost/query?u=root&p=root"
     conn = [
       auth:   [ method: :query, username: "root", password: "root" ],
-      hosts:  [ "localhost" ],
+      host:   "localhost",
       scheme: "http"
     ]
 
@@ -123,7 +123,7 @@ defmodule Instream.Query.URLTest do
     url  = "http://localhost/query?u=root"
     conn = [
       auth:   [ method: :query, username: "root" ],
-      hosts:  [ "localhost" ],
+      host:   "localhost",
       scheme: "http"
     ]
 
@@ -132,13 +132,13 @@ defmodule Instream.Query.URLTest do
 
 
   test "status url with speicifc host" do
-    url  = "http://secondary.host/status"
+    url  = "http://specific.host/status"
     conn = [
-      hosts:  [ "localhost", "secondary.host" ],
+      host:   "localhost",
       scheme: "http"
     ]
 
     refute url == URL.status(conn)
-    assert url == URL.status(conn, List.last(conn[:hosts]))
+    assert url == URL.status(conn, "specific.host")
   end
 end

@@ -13,7 +13,7 @@ defmodule Instream.Writer.UDP do
 
     :ok = :gen_udp.send(
       conn[:udp_socket],
-      conn[:hosts] |> hd() |> to_char_list(),
+      conn[:host] |> to_char_list(),
       conn[:port_udp],
       to_char_list(payload)
     )

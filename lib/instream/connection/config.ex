@@ -16,7 +16,7 @@ defmodule Instream.Connection.Config do
   @spec config(atom, atom) :: Keyword.t
   def config(otp_app, conn) do
     if config = Application.get_env(otp_app, conn) do
-      ([ otp_app: otp_app ] ++ config) |> add_defaults()
+      ([ otp_app: otp_app ] ++ config) |> add_defaults() |> fix_hosts()
     else
       raise ArgumentError,
         "configuration for #{ inspect conn } not found in #{ inspect otp_app } configuration"
@@ -25,4 +25,14 @@ defmodule Instream.Connection.Config do
 
 
   defp add_defaults(config), do: Keyword.merge(@defaults, config)
+
+  defp fix_hosts(config) do
+    case Keyword.get(config, :hosts) do
+      nil   -> config
+      hosts ->
+        config
+        |> Keyword.delete(:hosts)
+        |> Keyword.put(:host, hd(hosts))
+    end
+  end
 end

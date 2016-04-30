@@ -7,6 +7,8 @@
       `Cluster` to the better matching `Admin`
 
 - Deprecations
+    - Configuring a connection with multiple hosts has been deprecated.
+      Instead of multiple `:hosts` only a single `:host` is now expected
     - The `Cluster` namespace of queries has been changed to `Admin`. For some
       backwards compatibility the old modules are delegated to the new ones
       until removed in the next release
