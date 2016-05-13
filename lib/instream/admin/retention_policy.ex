@@ -15,6 +15,7 @@ defmodule Instream.Admin.RetentionPolicy do
     _ = Validate.database! database
 
     %Query{
+      method:  :post,
       payload: "ALTER RETENTION POLICY #{ name } ON #{ database } #{ policy }",
       type:    :read
     }

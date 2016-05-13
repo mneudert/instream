@@ -30,6 +30,7 @@ defmodule Instream.Query.Builder do
     %__MODULE__{}
     |> set_command("CREATE")
     |> set_argument(:database, name)
+    |> set_argument(:method, :post)
     |> set_argument(:what, @what_map[:database])
   end
 
@@ -40,6 +41,7 @@ defmodule Instream.Query.Builder do
   def create_retention_policy(name) do
     %__MODULE__{}
     |> set_command("CREATE")
+    |> set_argument(:method, :post)
     |> set_argument(:policy, name)
     |> set_argument(:what, @what_map[:retention_policy])
   end
@@ -60,6 +62,7 @@ defmodule Instream.Query.Builder do
     %__MODULE__{}
     |> set_command("DROP")
     |> set_argument(:database, name)
+    |> set_argument(:method, :post)
     |> set_argument(:what, @what_map[:database])
   end
 
@@ -70,6 +73,7 @@ defmodule Instream.Query.Builder do
   def drop_retention_policy(name) do
     %__MODULE__{}
     |> set_command("DROP")
+    |> set_argument(:method, :post)
     |> set_argument(:policy, name)
     |> set_argument(:what, @what_map[:retention_policy])
   end
