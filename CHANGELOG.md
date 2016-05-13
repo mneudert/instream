@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.12.0-dev
+## v0.12.0 (2015-05-13)
 
 - Enhancements
     - Namespace of administrational convenience modules has been changed from
