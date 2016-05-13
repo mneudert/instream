@@ -278,6 +278,19 @@ Reading data:
 |> MyApp.MyConnection.query(precision: :minutes)
 ```
 
+#### POST Queries
+
+Some queries require you to switch from the regular `read only context`
+(all GET requets) to a `write context` (all POST requests).
+
+When not using the query build you have to pass that information manually
+to `execute/2`:
+
+```elixir
+"CREATE DATABASE create_in_write_mode"
+|> MyApp.MyConnection.execute(method: :post)
+```
+
 
 ### Query Builder
 

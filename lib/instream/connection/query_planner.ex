@@ -13,6 +13,10 @@ defmodule Instream.Connection.QueryPlanner do
   """
   @spec execute(Builder.t | Query.t | String.t, Keyword.t, module) :: any
   def execute(%Builder{} = query, opts, conn) do
+    opts =
+      opts
+      |> Keyword.put(:method, opts[:method] || query.arguments[:method])
+
     query
     |> InfluxQL.encode()
     |> Read.query(opts)
