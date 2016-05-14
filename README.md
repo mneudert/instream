@@ -22,7 +22,7 @@ Add Instream as a dependency to your `mix.exs` file:
 
 ```elixir
 defp deps do
-  [ { :instream, "~> 0.11" } ]
+  [ { :instream, "~> 0.12" } ]
 end
 ```
 
