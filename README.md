@@ -400,9 +400,9 @@ Supported precision types are:
 - `:hours`
 - `:minutes`
 - `:seconds`
-- `:milli_seconds`
-- `:micro_seconds`
-- `:nano_seconds`
+- `:milliseconds`
+- `:microseconds`
+- `:nanoseconds`
 
 Please be aware that the UDP protocol writer does not support custom timestamp
 precisions. All UDP timestamps are implicitly expected to already be at

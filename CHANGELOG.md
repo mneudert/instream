@@ -1,5 +1,14 @@
 # Changelog
 
+## v0.13.0-dev
+
+- Soft deprecations (no warnings)
+    - The precision units `:micro_seconds`, `:milli_seconds` and `:nano_seconds`
+      have been renamed to `:microseconds`, `:milliseconds` and `:nanoseconds`
+      to matches the upcoming `System.time_unit` definition of `Elixir 1.3.0`.
+      Old variables will continue to work but are highly discouraged
+      and will be completely deprecated in an upcoming release.
+
 ## v0.12.0 (2015-05-13)
 
 - Enhancements

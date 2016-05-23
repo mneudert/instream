@@ -81,7 +81,7 @@ defmodule Instream.WriterTest do
     result =
          "SELECT * FROM #{ ProtocolsSeries.__meta__(:measurement) } GROUP BY *"
       |> Connection.query([ database:  ProtocolsSeries.__meta__(:database),
-                            precision: :nano_seconds ])
+                            precision: :nanoseconds ])
 
     assert %{ results: [%{ series: [%{
       values: [

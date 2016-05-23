@@ -7,19 +7,24 @@ defmodule Instream.Encoder.Precision do
 
 
   @type t :: :hours | :minutes | :seconds |
+             :milliseconds | :microseconds | :nanoseconds |
              :milli_seconds | :micro_seconds | :nano_seconds |
              :rfc3339
-
 
   @doc """
   Converts a precision atom to its binary identifier.
   """
   @spec encode(t) :: String.t
-  def encode(:hours),         do: "h"
-  def encode(:minutes),       do: "m"
-  def encode(:seconds),       do: "s"
+  def encode(:hours),        do: "h"
+  def encode(:minutes),      do: "m"
+  def encode(:seconds),      do: "s"
+  def encode(:milliseconds), do: "ms"
+  def encode(:microseconds), do: "u"
+  def encode(:nanoseconds),  do: "n"
+  def encode(:rfc3339),      do: ""
+
+  # deprecated time units
   def encode(:milli_seconds), do: "ms"
   def encode(:micro_seconds), do: "u"
   def encode(:nano_seconds),  do: "n"
-  def encode(:rfc3339),       do: ""
 end
