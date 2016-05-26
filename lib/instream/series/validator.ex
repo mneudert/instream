@@ -8,22 +8,24 @@ defmodule Instream.Series.Validator do
   """
   @spec proper_series?(atom) :: no_return
   def proper_series?(series) do
-    has_series?(series)
-    has_measurement?(series)
+    _ =
+      series
+      |> defined?
+      |> measurement?
   end
 
 
-  defp has_measurement?(series) do
-    case series.__meta__(:measurement) do
-      nil -> raise ArgumentError, "missing measurement for series #{ series }"
-      _   -> :ok
+  defp defined?(series) do
+    case Module.defines?(series, { :__meta__, 1 }, :def) do
+      false -> raise ArgumentError, "missing series definition in module #{ series }"
+      _     -> series
     end
   end
 
-  defp has_series?(series) do
-    case Module.defines?(series, { :__meta__, 1 }, :def) do
-      false -> raise ArgumentError, "missing series definition in module #{ series }"
-      _     -> :ok
+  defp measurement?(series) do
+    case series.__meta__(:measurement) do
+      nil -> raise ArgumentError, "missing measurement for series #{ series }"
+      _   -> series
     end
   end
 end
