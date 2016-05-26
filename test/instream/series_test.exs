@@ -83,6 +83,8 @@ defmodule Instream.SeriesTest do
 
         database    fn_database.()
         measurement fn_measurement.()
+
+        field :satisfy_definition_rules
       end
     end
 
@@ -97,6 +99,8 @@ defmodule Instream.SeriesTest do
       series do
         database    ExternalDefinitionProvider.database
         measurement ExternalDefinitionProvider.measurement
+
+        field :satisfy_definition_rules
       end
     end
 
@@ -106,6 +110,8 @@ defmodule Instream.SeriesTest do
       series do
         database    "#{ Mix.env }_database"
         measurement "#{ Mix.env }_measurement"
+
+        field :satisfy_definition_rules
       end
     end
 

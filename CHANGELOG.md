@@ -9,6 +9,10 @@
       Old variables will continue to work but are highly discouraged
       and will be completely deprecated in an upcoming release.
 
+- Deprecations
+    - Defining a series without fields is deprecated
+      and will raise in a future version
+
 ## v0.12.0 (2015-05-13)
 
 - Enhancements

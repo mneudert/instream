@@ -12,6 +12,7 @@ defmodule Instream.Series.Validator do
       series
       |> defined?
       |> measurement?
+      |> fields?
   end
 
 
@@ -20,6 +21,20 @@ defmodule Instream.Series.Validator do
       false -> raise ArgumentError, "missing series definition in module #{ series }"
       _     -> series
     end
+  end
+
+  defp fields?(series) do
+    if 0 == length(series.__meta__(:fields)) do
+      IO.write :stderr, """
+      The series "#{ series }"
+      has been defined without fields.
+
+      This behaviour has been deprecated
+      and will stop working in a future version.
+      """
+    end
+
+    series
   end
 
   defp measurement?(series) do
