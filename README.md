@@ -336,10 +336,12 @@ end
 
 ### Default Values
 
-You can include a default value for tags in your series definition:
+You can include a default value for tags and fields in your series definition:
 
 ```elixir
 series do
+  measurement "my_measurement"
+
   tag :host, default: "www"
 
   field :value, default: 100
