@@ -13,6 +13,9 @@
     - Defining a series without fields is deprecated
       and will raise in a future version
 
+- Backwards incompatible changes
+    - The `Cluster` namespace of queries has been removed
+
 ## v0.12.0 (2015-05-13)
 
 - Enhancements
