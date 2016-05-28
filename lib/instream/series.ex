@@ -30,9 +30,9 @@ defmodule Instream.Series do
   Following the above usage example you will get the following struct:
 
       %MySeries{
-          fields:    %MySeries.Fields{ value: 100, value_desc: nil },
-          tags:      %MySeries.Tags{ host: "www", core: nil },
-          timestamp: nil
+        fields:    %MySeries.Fields{ value: 100, value_desc: nil },
+        tags:      %MySeries.Tags{ host: "www", core: nil },
+        timestamp: nil
       }
 
   `:timestamp` is expected to be a unix nanosecond timestamp.

@@ -18,8 +18,8 @@ defmodule Instream.Connection.Config do
     if config = Application.get_env(otp_app, conn) do
       ([ otp_app: otp_app ] ++ config) |> add_defaults() |> fix_hosts()
     else
-      raise ArgumentError,
-        "configuration for #{ inspect conn } not found in #{ inspect otp_app } configuration"
+      raise ArgumentError, "configuration for #{ inspect conn }" <>
+                           " not found in #{ inspect otp_app } configuration"
     end
   end
 

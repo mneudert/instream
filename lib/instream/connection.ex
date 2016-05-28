@@ -64,11 +64,18 @@ defmodule Instream.Connection do
       def child_spec, do: Pool.Spec.spec(__MODULE__)
       def config,     do: @config
 
+
+      # alias/convenience interface
+
+      def ping(opts)   when is_list(opts), do: ping(nil, opts)
+      def status(opts) when is_list(opts), do: status(nil, opts)
+
+
+      # public interface for usage
+
       def execute(query, opts \\ []) do
         QueryPlanner.execute(query, opts, __MODULE__)
       end
-
-      def ping(opts) when is_list(opts), do: ping(nil, opts)
 
       def ping(host \\ nil, opts \\ []) do
         %Query{ type: :ping, opts: [ host: host ] }
@@ -76,8 +83,6 @@ defmodule Instream.Connection do
       end
 
       def query(query, opts \\ []), do: query |> execute(opts)
-
-      def status(opts) when is_list(opts), do: status(nil, opts)
 
       def status(host \\ nil, opts \\ []) do
         %Query{ type: :status, opts: [ host: host ] }
