@@ -37,8 +37,6 @@ defmodule Instream.Connection do
 
   defmacro __using__(otp_app: otp_app) do
     quote bind_quoted: [ otp_app: otp_app ] do
-      @before_compile Instream.Connection
-
       alias Instream.Connection
       alias Instream.Connection.QueryPlanner
       alias Instream.Data
@@ -93,26 +91,6 @@ defmodule Instream.Connection do
         payload
         |> Data.Write.query(opts)
         |> execute(opts)
-      end
-    end
-  end
-
-  defmacro __before_compile__(_env) do
-    quote do
-      ## warns if multiple hosts are configured
-      config          = Application.get_env(@otp_app, __MODULE__)
-      uses_hosts      = nil != Keyword.get(config || [], :hosts)
-      is_not_instream = :instream != @otp_app
-
-      if uses_hosts and is_not_instream do
-        IO.write :stderr, """
-        The connection "#{ __MODULE__ }"
-        is configured with multiple hosts.
-
-        Will the removal of public clustering support in InfluxDB v0.12.0 this
-        is deprecated and will be removed in an upcoming release. Please change
-        to a single host configuration.
-        """
       end
     end
   end

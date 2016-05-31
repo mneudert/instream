@@ -14,6 +14,7 @@
       and will raise in a future version
 
 - Backwards incompatible changes
+    - Configuring a connection with multiple hosts is no longer supported
     - The `Cluster` namespace of queries has been removed
 
 ## v0.12.0 (2015-05-13)
