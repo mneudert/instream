@@ -77,7 +77,7 @@ defmodule Instream.Query.URL do
   @doc """
   Returns the proper URL for a `:status` request.
   """
-  @spec status(Keyword.t, String.t) :: String.t
+  @spec status(Keyword.t, String.t | nil) :: String.t
   def status(conn, host \\ nil)
 
   def status(conn, nil), do: conn |> url("status")

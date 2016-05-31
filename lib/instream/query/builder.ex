@@ -87,7 +87,7 @@ defmodule Instream.Query.Builder do
   @doc """
   Builds a `FROM` query expression.
   """
-  @spec from(String.t | atom) :: t
+  @spec from(module | String.t) :: t
   def from(series) when is_atom(series) do
     from(series.__meta__(:measurement))
   end

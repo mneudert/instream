@@ -6,7 +6,7 @@ defmodule Instream.Series.Validator do
   @doc """
   Checks if all mandatory definitions for a series are available.
   """
-  @spec proper_series?(atom) :: no_return
+  @spec proper_series?(module) :: no_return
   def proper_series?(series) do
     _ =
       series
