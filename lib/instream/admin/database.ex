@@ -8,17 +8,12 @@ defmodule Instream.Admin.Database do
 
   @doc """
   Returns a query to create a database.
-
-  Options:
-
-  - `:if_not_exists` - setting to `true` appends "IF NOT EXISTS" to the query.
   """
   @spec create(String.t, Keyword.t) :: Builder.t
-  def create(database, opts \\ []) do
+  def create(database, _opts \\ []) do
     database
     |> Validate.database!
     |> Builder.create_database()
-    |> Builder.if_not_exists(opts[:if_not_exists] || false)
   end
 
   @doc """
