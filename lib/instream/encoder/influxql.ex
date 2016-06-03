@@ -22,6 +22,8 @@ defmodule Instream.Encoder.InfluxQL do
     |> append_binary(encode_select(get_argument(query, :select)))
     |> append_from(get_argument(query, :from))
     |> append_where(get_argument(query, :where))
+    |> append_limit(get_argument(query, :limit))
+    |> append_offset(get_argument(query, :offset))
   end
 
   def encode(%Builder{ command: "SHOW" } = query) do
@@ -146,6 +148,12 @@ defmodule Instream.Encoder.InfluxQL do
 
     str <> " WHERE " <> where
   end
+
+  defp append_limit(str, nil),   do: str
+  defp append_limit(str, value), do: "#{str} LIMIT #{value}"
+
+  defp append_offset(str, nil),   do: str
+  defp append_offset(str, value), do: "#{str} OFFSET #{value}"
 
   defp encode_select(select) when is_binary(select), do: select
   defp encode_select(select) when is_list(select)    do

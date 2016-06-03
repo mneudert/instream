@@ -96,6 +96,36 @@ defmodule Instream.Query.BuilderTest do
     assert query == "SELECT * FROM some_measurement WHERE binary = 'value' AND numeric = 42"
   end
 
+  test "SELECT * WHERE foo = bar LIMIT x" do
+    fields = %{ binary: "value", numeric: 42 }
+    limit = 10
+    query  =
+         BuilderSeries
+      |> Builder.from()
+      |> Builder.select()
+      |> Builder.where(fields)
+      |> Builder.limit(limit)
+      |> InfluxQL.encode()
+
+    assert query == "SELECT * FROM some_measurement WHERE binary = 'value' AND numeric = 42 LIMIT 10"
+  end
+
+  test "SELECT * WHERE foo = bar LIMIT x OFFSET y" do
+    fields = %{ binary: "value", numeric: 42 }
+    limit = 10
+    offset = 25
+    query  =
+         BuilderSeries
+      |> Builder.from()
+      |> Builder.select()
+      |> Builder.where(fields)
+      |> Builder.limit(limit)
+      |> Builder.offset(offset)
+      |> InfluxQL.encode()
+
+    assert query == "SELECT * FROM some_measurement WHERE binary = 'value' AND numeric = 42 LIMIT 10 OFFSET 25"
+  end
+
   test "SELECT Enum.t" do
     query =
          BuilderSeries
