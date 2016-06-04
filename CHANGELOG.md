@@ -2,6 +2,10 @@
 
 ## v0.13.0-dev
 
+- Enhancements
+    - Query builder supports `LIMIT` and `OFFSET` for queries
+      ([#19](https://github.com/mneudert/instream/pull/19))
+
 - Soft deprecations (no warnings)
     - The precision units `:micro_seconds`, `:milli_seconds` and `:nano_seconds`
       have been renamed to `:microseconds`, `:milliseconds` and `:nanoseconds`
