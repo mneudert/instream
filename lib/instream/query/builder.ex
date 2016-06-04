@@ -148,6 +148,17 @@ defmodule Instream.Query.Builder do
   @spec where(t, map) :: t
   def where(query, fields), do: set_argument(query, :where, fields)
 
+  @doc """
+  Builds a `LIMIT` query expression.
+  """
+  @spec limit(t, integer) :: t
+  def limit(query, value), do: set_argument(query, :limit, value)
+
+  @doc """
+  Builds a `OFFSET` query expression.
+  """
+  @spec offset(t, integer) :: t
+  def offset(query, value), do: set_argument(query, :offset, value)
 
   # Internal methods
 
