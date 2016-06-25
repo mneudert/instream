@@ -60,7 +60,9 @@ defmodule Instream.Connection.QueryRunner do
       |> URL.append_query(query.payload)
 
     http_opts = Keyword.get(conn, :http_opts, [])
-
+    require Logger
+    Logger.warn inspect conn
+    Logger.warn inspect http_opts
     { query_time, { :ok, status, headers, client }} = :timer.tc fn ->
       (query.method || opts[:method] || :get)
       |> :hackney.request(url, headers, "", http_opts)
