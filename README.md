@@ -64,7 +64,16 @@ config :my_app, MyApp.MyConnection,
   pool:      [ max_overflow: 0, size: 1 ],
   port:      8086,
   scheme:    "http",
-  writer:    Instream.Writer.Line
+  writer:    Instream.Writer.Line,
+  timeout:   5000
+```
+
+In the above configuration example, the `timeout` applies when async is false.
+Increasing `timeout` is useful for queries that take longer time to execute.
+The `timeout` increase makes sense along with hackney recv_timeout increase:
+
+```
+http_opts: [recv_timeout: 15_000]
 ```
 
 You now have a connection definition you can hook into your supervision tree:

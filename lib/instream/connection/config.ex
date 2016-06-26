@@ -7,7 +7,8 @@ defmodule Instream.Connection.Config do
     loggers: [{ Instream.Log.DefaultLogger, :log, [] }],
     port:    8086,
     scheme:   "http",
-    writer:  Instream.Writer.Line
+    writer:  Instream.Writer.Line,
+    timeout: 5000
   ]
 
   @doc """
