@@ -6,7 +6,7 @@ defmodule Instream.Connection.Config do
   @defaults [
     loggers: [{ Instream.Log.DefaultLogger, :log, [] }],
     port:    8086,
-    scheme:   "http",
+    scheme:  "http",
     writer:  Instream.Writer.Line
   ]
 
