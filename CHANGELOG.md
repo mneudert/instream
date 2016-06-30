@@ -3,6 +3,8 @@
 ## v0.13.0-dev
 
 - Enhancements
+    - Timeouts for queries (individual and connection wide) can be configured
+      ([#21](https://github.com/mneudert/instream/pull/21))
     - Query builder supports `LIMIT` and `OFFSET` for queries
       ([#19](https://github.com/mneudert/instream/pull/19))
 

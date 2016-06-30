@@ -23,7 +23,7 @@ defmodule Instream.Connection.QueryRunner do
     { query_time, response } = :timer.tc fn ->
       conn
       |> URL.ping(query.opts[:host])
-      |> :hackney.head(headers, "", Keyword.get(conn, :http_opts, []))
+      |> :hackney.head(headers, "", http_opts(conn, opts))
     end
 
     result = response |> Response.parse_ping()
@@ -59,11 +59,9 @@ defmodule Instream.Connection.QueryRunner do
       |> URL.append_epoch(query.opts[:precision])
       |> URL.append_query(query.payload)
 
-    http_opts = Keyword.get(conn, :http_opts, [])
-
     { query_time, { :ok, status, headers, client }} = :timer.tc fn ->
       (query.method || opts[:method] || :get)
-      |> :hackney.request(url, headers, "", http_opts)
+      |> :hackney.request(url, headers, "", http_opts(conn, opts))
     end
 
     { :ok, response } = :hackney.body(client)
@@ -94,7 +92,7 @@ defmodule Instream.Connection.QueryRunner do
     { query_time, response } = :timer.tc fn ->
       conn
       |> URL.status(query.opts[:host])
-      |> :hackney.head(headers, "", Keyword.get(conn, :http_opts, []))
+      |> :hackney.head(headers, "", http_opts(conn, opts))
     end
 
     result = response |> Response.parse_status()
@@ -139,5 +137,15 @@ defmodule Instream.Connection.QueryRunner do
     end
 
     result
+  end
+
+
+  defp http_opts(conn, opts) do
+    http_opts = Keyword.get(conn, :http_opts, [])
+
+    case opts[:timeout] do
+      nil     -> http_opts
+      timeout -> Keyword.put(http_opts, :recv_timeout, timeout)
+    end
   end
 end

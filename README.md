@@ -291,6 +291,38 @@ to `execute/2`:
 |> MyApp.MyConnection.execute(method: :post)
 ```
 
+#### Query Timeout Configuration
+
+Using all default values and no specific parameters each query is allowed to
+take up to 5000 milliseconds (`GenServer.call/2` timeout) to complete.
+That may be too long or not long enough in some cases.
+
+To change that timeout you can configure your connection:
+
+```elixir
+# lowering timeout to 500 ms
+config :my_app,
+  MyApp.MyConnection,
+    query_timeout: 500
+```
+
+or pass an individual timeout for a single query:
+
+```elixir
+MyApp.MyConnection.execute(query, timeout: 250)
+```
+
+A passed or connection wide timeout configuration override any `:recv_timeout`
+of your `:hackney` (HTTP client) configuration.
+
+This does not apply to write requests. They are currently only affected by
+configured `:recv_timeout` values. Setting a connection timeout enables you to
+have a different timeout for read and write requests.
+
+_Note:_ You will probably see some `MatchError` messages. These are related
+to the current pool clients not matching for timeouts returned by `:hackney`.
+This behaviour will change "soon-ish".
+
 
 ### Query Builder
 

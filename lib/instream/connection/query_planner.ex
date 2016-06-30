@@ -13,9 +13,12 @@ defmodule Instream.Connection.QueryPlanner do
   """
   @spec execute(Builder.t | Query.t | String.t, Keyword.t, module) :: any
   def execute(%Builder{} = query, opts, conn) do
+    default_timeout = Keyword.get(conn.config(), :query_timeout)
+
     opts =
       opts
       |> Keyword.put(:method, opts[:method] || query.arguments[:method])
+      |> Keyword.put(:timeout, opts[:timeout] || default_timeout)
 
     query
     |> InfluxQL.encode()
@@ -49,9 +52,18 @@ defmodule Instream.Connection.QueryPlanner do
   end
 
   defp execute_sync(query, opts, conn) do
-    :poolboy.transaction(
-      conn.__pool__,
-      &GenServer.call(&1, { :execute, query, opts })
-    )
+    case opts[:timeout] do
+      nil ->
+        :poolboy.transaction(
+          conn.__pool__,
+          &GenServer.call(&1, { :execute, query, opts })
+        )
+
+      timeout ->
+        :poolboy.transaction(
+          conn.__pool__,
+          &GenServer.call(&1, { :execute, query, opts }, timeout)
+        )
+    end
   end
 end
