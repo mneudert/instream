@@ -69,3 +69,7 @@ config :instream, Instream.TestHelpers.ConnectionWithOpts,
   loggers:   [{ Instream.TestHelpers.NilLogger, :log, [] }],
   pool:      [ max_overflow: 0, size: 1 ],
   http_opts: [ proxy: "http://invalidproxy" ]
+
+config :instream, Instream.TestHelpers.OverrideConnection,
+  host: "original_host",
+  port: 1234

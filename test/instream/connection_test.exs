@@ -7,6 +7,7 @@ defmodule Instream.ConnectionTest do
   alias Instream.TestHelpers.ConnectionWithOpts
   alias Instream.TestHelpers.GuestConnection
   alias Instream.TestHelpers.UnreachableConnection
+  alias Instream.TestHelpers.OverrideConnection
 
 
   @database "test_database"
@@ -156,5 +157,13 @@ defmodule Instream.ConnectionTest do
     %{ error: error } = data |> GuestConnection.write()
 
     assert String.contains?(error, "not authorized")
+  end
+
+  test "connection details override" do
+    assert OverrideConnection.config[:host] == "original_host"
+    assert OverrideConnection.config[:port] == 1234
+    OverrideConnection.config [host: "new_host", port: 9876]
+    assert OverrideConnection.config[:host] == "new_host"
+    assert OverrideConnection.config[:port] == 9876
   end
 end

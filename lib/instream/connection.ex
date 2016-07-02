@@ -45,9 +45,10 @@ defmodule Instream.Connection do
 
       @behaviour Connection
       @otp_app   otp_app
-      @config    Connection.Config.config(@otp_app, __MODULE__)
 
-      loggers = Enum.reduce(@config[:loggers], quote(do: entry),
+      config = Connection.Config.config(@otp_app, __MODULE__)
+
+      loggers = Enum.reduce(config[:loggers], quote(do: entry),
         fn (logger, acc) ->
           { mod, fun, args } = logger
 
@@ -56,12 +57,18 @@ defmodule Instream.Connection do
           end
         end)
 
+      @on_load :__start_agent__
+      def __start_agent__  do
+        {ok, _pid } = Agent.start(fn -> Instream.Connection.Config.config(@otp_app, __MODULE__) end, name: __MODULE__)
+        ok
+      end
+
       def __log__(entry), do: unquote(loggers)
       def __pool__,       do: __MODULE__.Pool
 
       def child_spec, do: Pool.Spec.spec(__MODULE__)
-      def config,     do: @config
-
+      def config,     do: Agent.get(__MODULE__, &(&1))
+      def config(conf), do: Agent.update(__MODULE__, &(Keyword.merge(&1, conf)))
 
       # alias/convenience interface
 
