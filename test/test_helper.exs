@@ -11,6 +11,7 @@ Code.require_file("helpers/invalid_connection.exs", __DIR__)
 Code.require_file("helpers/not_found_connection.exs", __DIR__)
 Code.require_file("helpers/query_auth_connection.exs", __DIR__)
 Code.require_file("helpers/unreachable_connection.exs", __DIR__)
+Code.require_file("helpers/override_connection.exs", __DIR__)
 
 
 alias Instream.Admin.Database
