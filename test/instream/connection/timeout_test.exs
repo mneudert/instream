@@ -4,11 +4,36 @@ defmodule Instream.Connection.TimeoutTest do
   alias Instream.TestHelpers.Connection
 
 
+  defmodule TestSeries do
+    use Instream.Series
+
+    series do
+      database    "test_database"
+      measurement "query_timeout_test"
+
+      tag :bar
+      tag :foo
+
+      field :value
+    end
+  end
+
+
   test "timeout" do
     timeout = 1
+    query   = "SELECT SUM(foo) FROM #{ TestSeries.__meta__(:measurement) }" <>
+              " WHERE time > now() - 60s GROUP BY time(1ms)"
+
+    Enum.each 1..100, fn (i) ->
+      data = %TestSeries{}
+      data = %{ data | fields: %{ data.fields | value: i }}
+      data = %{ data | tags:   %{ data.tags   | foo: "foo", bar: "bar" }}
+
+      :ok = Connection.write(data)
+    end
 
     try do
-      Connection.execute("SHOW FIELD KEYS", timeout: timeout)
+      Connection.execute(query, timeout: timeout)
 
       flunk("expected :exit not thrown (or query was faster than 1ms)!")
     catch
