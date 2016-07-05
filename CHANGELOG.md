@@ -3,6 +3,10 @@
 ## v0.13.0-dev
 
 - Enhancements
+    - Configuration has been split into "compile time" and "runtime" parts.
+      This readds the possibility to change configuration values without
+      recompiling the connection modules
+      ([#22](https://github.com/mneudert/instream/pull/22))
     - Timeouts for queries (individual and connection wide) can be configured
       ([#21](https://github.com/mneudert/instream/pull/21))
     - Query builder supports `LIMIT` and `OFFSET` for queries

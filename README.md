@@ -76,6 +76,21 @@ Supervisor.start_link(
 )
 ```
 
+#### Runtime and Compile Time Configuration
+
+The full connection configuration is split into two parts, compile time and
+runtime configuration.
+
+Compile time configuration are, as the name implies, used during compilation
+for the connection module. Currently the only key in this category is
+`:loggers`.
+
+All other values are runtime configuration values that are directly accessed
+from the application environment using
+`Application.get_env(connection_otp_app, connection_module)`
+and therefore can be changed without recompilation.
+
+
 #### Default Connection Values
 
 Only the `host` key is mandatory for a connection configuration. The following

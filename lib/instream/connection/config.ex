@@ -3,6 +3,7 @@ defmodule Instream.Connection.Config do
   Configuration helper module.
   """
 
+  @compile_time_keys [ :loggers ]
   @defaults [
     loggers: [{ Instream.Log.DefaultLogger, :log, [] }],
     port:    8086,
@@ -12,10 +13,20 @@ defmodule Instream.Connection.Config do
 
 
   @doc """
-  Retrieves the connection configuration for `conn` in `otp_app`.
+  Retrieves the compile time part of the connection configuration.
   """
-  @spec config(atom, module) :: Keyword.t
-  def config(otp_app, conn) do
+  @spec compile_time(atom, module) :: Keyword.t
+  def compile_time(otp_app, conn) do
+    @defaults
+    |> Keyword.merge(Application.get_env(otp_app, conn, []))
+    |> Keyword.take(@compile_time_keys)
+  end
+
+  @doc """
+  Retrieves the runtime connection configuration for `conn` in `otp_app`.
+  """
+  @spec runtime(atom, module) :: Keyword.t
+  def runtime(otp_app, conn) do
     @defaults
     |> Keyword.put(:otp_app, otp_app)
     |> Keyword.merge(Application.get_env(otp_app, conn, []))

@@ -47,22 +47,24 @@ defmodule Instream.Connection do
 
       @behaviour Connection
       @otp_app   otp_app
-      @config    Connection.Config.config(@otp_app, __MODULE__)
 
-      loggers = Enum.reduce(@config[:loggers], quote(do: entry),
-        fn (logger, acc) ->
-          { mod, fun, args } = logger
+      loggers =
+        otp_app
+        |> Connection.Config.compile_time(__MODULE__)
+        |> Keyword.get(:loggers, [])
+        |> Enum.reduce(quote(do: entry), fn (logger, acc) ->
+             { mod, fun, args } = logger
 
-          quote do
-            unquote(mod).unquote(fun)(unquote(acc), unquote_splicing(args))
-          end
-        end)
+             quote do
+               unquote(mod).unquote(fun)(unquote(acc), unquote_splicing(args))
+             end
+           end)
 
       def __log__(entry), do: unquote(loggers)
       def __pool__,       do: __MODULE__.Pool
 
       def child_spec, do: Pool.Spec.spec(__MODULE__)
-      def config,     do: @config
+      def config,     do: Connection.Config.runtime(@otp_app, __MODULE__)
 
 
       # alias/convenience interface
