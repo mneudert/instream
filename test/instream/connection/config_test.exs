@@ -5,7 +5,7 @@ defmodule Instream.Connection.ConfigTest do
 
   test "missing configuration raises", %{ test: test } do
     exception = assert_raise ArgumentError, fn ->
-      Config.config(test, __MODULE__)
+      Config.validate!(test, __MODULE__)
     end
 
     assert String.contains?(exception.message, inspect __MODULE__)

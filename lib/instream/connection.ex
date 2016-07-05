@@ -43,6 +43,8 @@ defmodule Instream.Connection do
       alias Instream.Pool
       alias Instream.Query
 
+      Connection.Config.validate!(otp_app, __MODULE__)
+
       @behaviour Connection
       @otp_app   otp_app
       @config    Connection.Config.config(@otp_app, __MODULE__)
