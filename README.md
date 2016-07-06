@@ -88,8 +88,13 @@ for the connection module. Currently the only key in this category is
 All other values are runtime configuration values that are directly accessed
 from the application environment using
 `Application.get_env(connection_otp_app, connection_module)`
-and therefore can be changed without recompilation.
+and therefore can be changed without recompilation:
 
+```elixir
+old_config = MyConnection.config()
+new_config = Keyword.put(old_config, :host, "changed.host")
+:ok        = Application.put_env(:my_otp_app, MyConnection, new_config)
+```
 
 #### Default Connection Values
 
