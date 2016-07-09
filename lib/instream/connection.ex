@@ -30,7 +30,7 @@ defmodule Instream.Connection do
   alias Instream.Query.Builder
 
 
-  @type log_entry :: Log.PingEntry.t |Log.QueryEntry.t |
+  @type log_entry :: Log.PingEntry.t | Log.QueryEntry.t |
                      Log.StatusEntry.t | Log.WriteEntry.t
   @type query_type :: Builder.t | Query.t | String.t
 
@@ -126,7 +126,7 @@ defmodule Instream.Connection do
   Passing `[async: true]` in the options always returns :ok.
   The command will be executed asynchronously.
   """
-  @callback execute(query :: query_type, opts  :: Keyword.t) :: any
+  @callback execute(query :: query_type, opts :: Keyword.t) :: any
 
   @doc """
   Pings a server.
