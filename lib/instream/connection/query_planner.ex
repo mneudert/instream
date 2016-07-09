@@ -13,7 +13,7 @@ defmodule Instream.Connection.QueryPlanner do
   """
   @spec execute(Builder.t | Query.t | String.t, Keyword.t, module) :: any
   def execute(%Builder{} = query, opts, conn) do
-    default_timeout = Keyword.get(conn.config(), :query_timeout)
+    default_timeout = conn.config([ :query_timeout ])
 
     opts =
       opts

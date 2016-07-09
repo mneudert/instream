@@ -25,11 +25,12 @@ defmodule Instream.Connection.Config do
   @doc """
   Retrieves the runtime connection configuration for `conn` in `otp_app`.
   """
-  @spec runtime(atom, module) :: Keyword.t
-  def runtime(otp_app, conn) do
+  @spec runtime(atom, module, nil | nonempty_list(term)) :: Keyword.t
+  def runtime(otp_app, conn, keys) do
     @defaults
     |> Keyword.put(:otp_app, otp_app)
     |> Keyword.merge(Application.get_env(otp_app, conn, []))
+    |> maybe_fetch_deep(keys)
   end
 
   @doc """
@@ -41,5 +42,12 @@ defmodule Instream.Connection.Config do
       raise ArgumentError, "configuration for #{ inspect conn }" <>
                            " not found in #{ inspect otp_app } configuration"
     end
+  end
+
+
+  defp maybe_fetch_deep(config, nil), do: config
+  defp maybe_fetch_deep(config, keys) do
+    config
+    |> get_in(keys)
   end
 end

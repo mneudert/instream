@@ -64,7 +64,10 @@ defmodule Instream.Connection do
       def __pool__,       do: __MODULE__.Pool
 
       def child_spec, do: Pool.Spec.spec(__MODULE__)
-      def config,     do: Connection.Config.runtime(@otp_app, __MODULE__)
+
+      def config(keys \\ nil) do
+        Connection.Config.runtime(@otp_app, __MODULE__, keys)
+      end
 
 
       # alias/convenience interface
@@ -118,7 +121,7 @@ defmodule Instream.Connection do
   @doc """
   Returns the connection configuration.
   """
-  @callback config :: Keyword.t
+  @callback config(keys :: nonempty_list(term)) :: Keyword.t
 
   @doc """
   Executes a query.

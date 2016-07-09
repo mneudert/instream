@@ -16,7 +16,7 @@ defmodule Instream.Log.StatusEntryTest do
     assert String.contains?(log, "status")
     assert String.contains?(log, "ok")
 
-    assert String.contains?(log, LogConnection.config[:host])
+    assert String.contains?(log, LogConnection.config([ :host ]))
 
     assert String.contains?(log, "query_time=")
     assert String.contains?(log, "response_status=204")

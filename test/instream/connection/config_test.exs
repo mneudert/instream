@@ -2,6 +2,8 @@ defmodule Instream.Connection.ConfigTest do
   use ExUnit.Case, async: true
 
   alias Instream.Connection.Config
+  alias Instream.TestHelpers.Connection, as: TestConnection
+
 
   test "missing configuration raises", %{ test: test } do
     exception = assert_raise ArgumentError, fn ->
@@ -27,5 +29,15 @@ defmodule Instream.Connection.ConfigTest do
     Application.put_env(test, conn, Keyword.put(conn.config(), key, :exists))
 
     assert :exists == Keyword.get(conn.config(), key)
+  end
+
+
+  test "deep configuration access" do
+    assert is_list(TestConnection.config())
+
+    assert :instream       == TestConnection.config([ :otp_app ])
+    assert "instream_test" == TestConnection.config([ :auth, :username ])
+
+    assert nil == TestConnection.config([ :key_without_value ])
   end
 end
