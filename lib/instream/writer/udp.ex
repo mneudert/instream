@@ -8,13 +8,14 @@ defmodule Instream.Writer.UDP do
   alias Instream.Encoder.Line, as: Encoder
 
 
-  def write(query, _opts, conn) do
+  def write(query, _opts, %{ module: conn, udp_socket: udp_socket }) do
+    config  = conn.config()
     payload = query.payload |> to_line()
 
     :ok = :gen_udp.send(
-      conn[:udp_socket],
-      conn[:host] |> to_char_list(),
-      conn[:port_udp],
+      udp_socket,
+      config[:host] |> to_char_list(),
+      config[:port_udp],
       to_char_list(payload)
     )
 

@@ -18,5 +18,5 @@ defmodule Instream.Writer do
   """
   @callback write(payload :: Query.t,
                   opts    :: Keyword.t,
-                  conn    :: Keyword.t) :: Response.t
+                  conn    :: map) :: Response.t
 end

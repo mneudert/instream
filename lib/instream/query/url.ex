@@ -59,11 +59,11 @@ defmodule Instream.Query.URL do
   Returns the proper URL for a `:ping` request.
   """
   @spec ping(Keyword.t, String.t | nil) :: String.t
-  def ping(conn, host \\ nil)
+  def ping(config, host \\ nil)
 
-  def ping(conn, nil), do: conn |> url("ping")
-  def ping(conn, host) do
-    conn
+  def ping(config, nil), do: config |> url("ping")
+  def ping(config, host) do
+    config
     |> Keyword.put(:host, host)
     |> url("ping")
   end
@@ -72,17 +72,17 @@ defmodule Instream.Query.URL do
   Returns the proper URL for a `:query` request.
   """
   @spec query(Keyword.t) :: String.t
-  def query(conn), do: conn |> url("query")
+  def query(config), do: config |> url("query")
 
   @doc """
   Returns the proper URL for a `:status` request.
   """
   @spec status(Keyword.t, String.t | nil) :: String.t
-  def status(conn, host \\ nil)
+  def status(config, host \\ nil)
 
-  def status(conn, nil), do: conn |> url("status")
-  def status(conn, host) do
-    conn
+  def status(config, nil), do: config |> url("status")
+  def status(config, host) do
+    config
     |> Keyword.put(:host, host)
     |> url("status")
   end
@@ -91,7 +91,7 @@ defmodule Instream.Query.URL do
   Returns the proper URL for a `:write` request.
   """
   @spec write(Keyword.t) :: String.t
-  def write(conn), do: conn |> url("write")
+  def write(config), do: config |> url("write")
 
 
   defp append_param(url, _,   nil),  do: url
@@ -105,14 +105,14 @@ defmodule Instream.Query.URL do
     "#{ url }#{ glue }#{ key }=#{ URI.encode value }"
   end
 
-  defp url(conn, endpoint) do
+  defp url(config, endpoint) do
     [
-      conn[:scheme], "://",
-      conn[:host], url_port(conn[:port]),
+      config[:scheme], "://",
+      config[:host], url_port(config[:port]),
       "/", endpoint
     ]
     |> Enum.join("")
-    |> append_auth(conn[:auth])
+    |> append_auth(config[:auth])
   end
 
   defp url_port(nil),  do: ""

@@ -25,6 +25,9 @@
 
 - Backwards incompatible changes
     - Configuring a connection with multiple hosts is no longer supported
+    - Writer modules now get a map passed with the connection module
+      registered at key `:module` and (if configured) a udp socket
+      for writing at `:udp_socket`
     - The `Cluster` namespace of queries has been removed
 
 ## v0.12.0 (2015-05-13)

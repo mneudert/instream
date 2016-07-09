@@ -16,14 +16,15 @@ defmodule Instream.Connection.QueryRunner do
   @doc """
   Executes `:ping` queries.
   """
-  @spec ping(Query.t, Keyword.t, Keyword.t) :: :pong | :error
-  def ping(%Query{} = query, opts, conn) do
-    headers = conn |> Headers.assemble()
+  @spec ping(Query.t, Keyword.t, map) :: :pong | :error
+  def ping(%Query{} = query, opts, %{ module: conn }) do
+    config  = conn.config()
+    headers = Headers.assemble(config)
 
     { query_time, response } = :timer.tc fn ->
-      conn
+      config
       |> URL.ping(query.opts[:host])
-      |> :hackney.head(headers, "", http_opts(conn, opts))
+      |> :hackney.head(headers, "", http_opts(config, opts))
     end
 
     result = response |> Response.parse_ping()
@@ -33,8 +34,8 @@ defmodule Instream.Connection.QueryRunner do
     end
 
     if false != opts[:log] do
-      conn[:module].__log__(%PingEntry{
-        host:     query.opts[:host] || conn[:host],
+      conn.__log__(%PingEntry{
+        host:     query.opts[:host] || config[:host],
         result:   result,
         metadata: %Metadata{
           query_time:      query_time,
@@ -49,11 +50,12 @@ defmodule Instream.Connection.QueryRunner do
   @doc """
   Executes `:read` queries.
   """
-  @spec read(Query.t, Keyword.t, Keyword.t) :: any
-  def read(%Query{} = query, opts, conn) do
-    headers = conn |> Headers.assemble()
+  @spec read(Query.t, Keyword.t, map) :: any
+  def read(%Query{} = query, opts, %{ module: conn }) do
+    config  = conn.config()
+    headers = Headers.assemble(config)
     url     =
-      conn
+      config
       |> URL.query()
       |> URL.append_database(opts[:database])
       |> URL.append_epoch(query.opts[:precision])
@@ -61,7 +63,7 @@ defmodule Instream.Connection.QueryRunner do
 
     { query_time, { :ok, status, headers, client }} = :timer.tc fn ->
       (query.method || opts[:method] || :get)
-      |> :hackney.request(url, headers, "", http_opts(conn, opts))
+      |> :hackney.request(url, headers, "", http_opts(config, opts))
     end
 
     { :ok, response } = :hackney.body(client)
@@ -70,7 +72,7 @@ defmodule Instream.Connection.QueryRunner do
       |> Response.maybe_parse(opts)
 
     if false != opts[:log] do
-      conn[:module].__log__(%QueryEntry{
+      conn.__log__(%QueryEntry{
         query:    query.payload,
         metadata: %Metadata{
           query_time:      query_time,
@@ -85,14 +87,15 @@ defmodule Instream.Connection.QueryRunner do
   @doc """
   Execute `:status` queries.
   """
-  @spec status(Query.t, Keyword.t, Keyword.t) :: :ok | :error
-  def status(%Query{} = query, opts, conn) do
-    headers = conn |> Headers.assemble()
+  @spec status(Query.t, Keyword.t, map) :: :ok | :error
+  def status(%Query{} = query, opts, %{ module: conn }) do
+    config  = conn.config()
+    headers = Headers.assemble(config)
 
     { query_time, response } = :timer.tc fn ->
-      conn
+      config
       |> URL.status(query.opts[:host])
-      |> :hackney.head(headers, "", http_opts(conn, opts))
+      |> :hackney.head(headers, "", http_opts(config, opts))
     end
 
     result = response |> Response.parse_status()
@@ -102,8 +105,8 @@ defmodule Instream.Connection.QueryRunner do
     end
 
     if false != opts[:log] do
-      conn[:module].__log__(%StatusEntry{
-        host:     query.opts[:host] || conn[:host],
+      conn.__log__(%StatusEntry{
+        host:     query.opts[:host] || config[:host],
         result:   result,
         metadata: %Metadata{
           query_time:      query_time,
@@ -118,16 +121,18 @@ defmodule Instream.Connection.QueryRunner do
   @doc """
   Executes `:write` queries.
   """
-  @spec write(Query.t, Keyword.t, Keyword.t) :: any
-  def write(%Query{} = query, opts, conn) do
+  @spec write(Query.t, Keyword.t, map) :: any
+  def write(%Query{} = query, opts, %{ module: conn } = state) do
+    config = conn.config()
+
     { query_time, result } = :timer.tc fn ->
       query
-      |> conn[:writer].write(opts, conn)
+      |> config[:writer].write(opts, state)
       |> Response.maybe_parse(opts)
     end
 
     if false != opts[:log] do
-      conn[:module].__log__(%WriteEntry{
+      conn.__log__(%WriteEntry{
         points:   length(query.payload[:points]),
         metadata: %Metadata{
           query_time:      query_time,
@@ -140,8 +145,8 @@ defmodule Instream.Connection.QueryRunner do
   end
 
 
-  defp http_opts(conn, opts) do
-    http_opts = Keyword.get(conn, :http_opts, [])
+  defp http_opts(config, opts) do
+    http_opts = Keyword.get(config, :http_opts, [])
 
     case opts[:timeout] do
       nil     -> http_opts

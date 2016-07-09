@@ -7,8 +7,8 @@ defmodule Instream.Query.Headers do
   Assembles the headers for a query.
   """
   @spec assemble(Keyword.t) :: list
-  def assemble(conn) do
-    assemble_auth(conn[:auth])
+  def assemble(config) do
+    assemble_auth(config[:auth])
   end
 
   @doc """

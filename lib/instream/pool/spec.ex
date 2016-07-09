@@ -16,10 +16,7 @@ defmodule Instream.Pool.Spec do
   end
 
   defp get_opts(conn) do
-    { pool_opts,
-      worker_opts } = Keyword.split(conn.config, [ :pool ])
-
-    pool_opts = pool_opts[:pool] || []
+    pool_opts = conn.config([ :pool ]) || []
     pool_opts =
          pool_opts
       |> Keyword.put_new(:max_overflow, 10)
@@ -30,8 +27,6 @@ defmodule Instream.Pool.Spec do
       |> Keyword.put(:name, { :local, conn.__pool__ })
       |> Keyword.put(:worker_module, Pool.Worker)
 
-    worker_opts = worker_opts |> Keyword.put(:module, conn)
-
-    { pool_opts, worker_opts }
+    { pool_opts, %{ module: conn }}
   end
 end
