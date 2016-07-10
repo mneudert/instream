@@ -27,7 +27,7 @@ defmodule Instream.Connection.TimeoutTest do
     Enum.each 1..100, fn (i) ->
       data = %TestSeries{}
       data = %{ data | fields: %{ data.fields | value: i }}
-      data = %{ data | tags:   %{ data.tags   | foo: "foo", bar: "bar" }}
+      data = %{ data | tags:   %{ data.tags   | foo: "foo_#{ i }", bar: "bar_#{ i }" }}
 
       :ok = Connection.write(data)
     end
