@@ -45,9 +45,6 @@ defmodule Instream.Connection.Config do
   end
 
 
-  defp maybe_fetch_deep(config, nil), do: config
-  defp maybe_fetch_deep(config, keys) do
-    config
-    |> get_in(keys)
-  end
+  defp maybe_fetch_deep(config, nil),  do: config
+  defp maybe_fetch_deep(config, keys), do: get_in(config, keys)
 end
