@@ -40,4 +40,22 @@ defmodule Instream.Connection.ConfigTest do
 
     assert nil == TestConnection.config([ :key_without_value ])
   end
+
+  test "system configuration access", %{ test: test } do
+    conn    = Module.concat([ __MODULE__, SystemConfiguration ])
+    key     = :system_testing_key
+    sys_val = "fetch from system environment"
+    sys_var = "INSTREAM_TEST_CONFIG"
+
+    System.put_env(sys_var, sys_val)
+    Application.put_env(test, conn, [{ key, { :system, sys_var }}])
+
+    defmodule conn do
+      use Instream.Connection, otp_app: test
+    end
+
+    assert sys_val == conn.config([ key ])
+
+    System.delete_env(sys_var)
+  end
 end

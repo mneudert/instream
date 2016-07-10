@@ -31,6 +31,7 @@ defmodule Instream.Connection.Config do
     |> Keyword.put(:otp_app, otp_app)
     |> Keyword.merge(Application.get_env(otp_app, conn, []))
     |> maybe_fetch_deep(keys)
+    |> maybe_fetch_system()
   end
 
   @doc """
@@ -47,4 +48,7 @@ defmodule Instream.Connection.Config do
 
   defp maybe_fetch_deep(config, nil),  do: config
   defp maybe_fetch_deep(config, keys), do: get_in(config, keys)
+
+  defp maybe_fetch_system({ :system, var }), do: System.get_env(var)
+  defp maybe_fetch_system(config),           do: config
 end
