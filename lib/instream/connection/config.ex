@@ -28,10 +28,11 @@ defmodule Instream.Connection.Config do
   @spec runtime(atom, module, nil | nonempty_list(term)) :: Keyword.t
   def runtime(otp_app, _,    [ :otp_app ]), do: otp_app
   def runtime(otp_app, conn, keys)          do
-    @defaults
-    |> Keyword.merge(Application.get_env(otp_app, conn, []))
+    otp_app
+    |> Application.get_env(conn, [])
     |> maybe_fetch_deep(keys)
     |> maybe_fetch_system()
+    |> maybe_use_default(keys)
   end
 
   @doc """
@@ -59,4 +60,9 @@ defmodule Instream.Connection.Config do
 
   defp maybe_fetch_system({ :system, var }), do: System.get_env(var)
   defp maybe_fetch_system(config),           do: config
+
+
+  defp maybe_use_default(config, nil),  do: Keyword.merge(@defaults, config)
+  defp maybe_use_default(nil,    keys), do: get_in(@defaults, keys)
+  defp maybe_use_default(config, _),    do: config
 end

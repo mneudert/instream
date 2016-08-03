@@ -33,6 +33,15 @@ defmodule Instream.Connection.ConfigTest do
   end
 
 
+  test "default value access", %{ test: test } do
+    assert "http" == Config.runtime(test, __MODULE__, nil) |> Keyword.get(:scheme)
+    assert nil    == Config.runtime(test, __MODULE__, [ :auth, :username ])
+
+    assert "http"          == TestConnection.config() |> Keyword.get(:scheme)
+    assert "instream_test" == TestConnection.config([ :auth, :username ])
+  end
+
+
   test "deep configuration access" do
     assert is_list(TestConnection.config())
 
