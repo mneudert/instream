@@ -3,6 +3,7 @@ defmodule Instream.Connection.ConfigTest do
 
   alias Instream.Connection.Config
   alias Instream.TestHelpers.Connection, as: TestConnection
+  alias Instream.TestHelpers.EnvConnection
 
 
   test "missing configuration raises", %{ test: test } do
@@ -55,7 +56,23 @@ defmodule Instream.Connection.ConfigTest do
     end
 
     assert sys_val == conn.config([ key ])
+    assert sys_val == conn.config() |> get_in([ key ])
 
     System.delete_env(sys_var)
+  end
+
+  test "system configuration connection" do
+    assert nil == EnvConnection.config([ :host ])
+
+    System.put_env("INSTREAM_TEST_HOST", "localhost")
+    System.put_env("INSTREAM_TEST_PASSWORD", "instream_test")
+    System.put_env("INSTREAM_TEST_USERNAME", "instream_test")
+
+    assert "localhost" == EnvConnection.config([ :host ])
+    assert :pong == EnvConnection.ping()
+
+    System.delete_env("INSTREAM_TEST_HOST")
+    System.delete_env("INSTREAM_TEST_PASSWORD")
+    System.delete_env("INSTREAM_TEST_USERNAME")
   end
 end

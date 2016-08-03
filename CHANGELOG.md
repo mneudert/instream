@@ -7,6 +7,8 @@
       This readds the possibility to change configuration values without
       recompiling the connection modules
       ([#22](https://github.com/mneudert/instream/pull/22))
+    - Configuration values can be fetched from the system environment
+      using `{ :system, ENV_VAR }`
     - Timeouts for queries (individual and connection wide) can be configured
       ([#21](https://github.com/mneudert/instream/pull/21))
     - Query builder supports `LIMIT` and `OFFSET` for queries

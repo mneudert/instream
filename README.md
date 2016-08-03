@@ -67,6 +67,14 @@ config :my_app, MyApp.MyConnection,
   writer:    Instream.Writer.Line
 ```
 
+Configuration can be done statically (as shown above) or by referencing your
+system environment:
+
+```elixir
+config :my_app, MyApp.MyConnection,
+  port: { :system, "MY_ENV_VARIABLE" }
+```
+
 You now have a connection definition you can hook into your supervision tree:
 
 ```elixir

@@ -20,6 +20,13 @@ config :instream, Instream.TestHelpers.LogConnection,
   scheme: "http"
 
 
+config :instream, Instream.TestHelpers.EnvConnection,
+  auth:    [ username: { :system, "INSTREAM_TEST_USERNAME" },
+             password: { :system, "INSTREAM_TEST_PASSWORD" } ],
+  host:    { :system, "INSTREAM_TEST_HOST" },
+  loggers: [{ Instream.TestHelpers.NilLogger, :log, [] }],
+  pool:    [ max_overflow: 0, size: 1 ]
+
 config :instream, Instream.TestHelpers.UDPConnection,
   auth:     [ username: "instream_test", password: "instream_test" ],
   host:     "localhost",
