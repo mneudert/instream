@@ -26,9 +26,9 @@ defmodule Instream.Connection.Config do
   Retrieves the runtime connection configuration for `conn` in `otp_app`.
   """
   @spec runtime(atom, module, nil | nonempty_list(term)) :: Keyword.t
-  def runtime(otp_app, conn, keys) do
+  def runtime(otp_app, _,    [ :otp_app ]), do: otp_app
+  def runtime(otp_app, conn, keys)          do
     @defaults
-    |> Keyword.put(:otp_app, otp_app)
     |> Keyword.merge(Application.get_env(otp_app, conn, []))
     |> maybe_fetch_deep(keys)
     |> maybe_fetch_system()

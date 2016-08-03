@@ -42,6 +42,13 @@ defmodule Instream.Connection.ConfigTest do
     assert nil == TestConnection.config([ :key_without_value ])
   end
 
+  test "static otp_app configuration access", %{ test: test } do
+    assert :instream == TestConnection.config([ :otp_app ])
+
+    # not intended to be used this way!
+    assert test == Config.runtime(test, nil, [ :otp_app ])
+  end
+
   test "system configuration access", %{ test: test } do
     conn    = Module.concat([ __MODULE__, SystemConfiguration ])
     key     = :system_testing_key

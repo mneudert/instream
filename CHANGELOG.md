@@ -27,6 +27,9 @@
 
 - Backwards incompatible changes
     - Configuring a connection with multiple hosts is no longer supported
+    - The otp app of a connection is no longer returned when calling
+      `MyConnection.config/0,1`. It is now only available by specifically
+      requesting it via `MyConnection.config([ :otp_app ])`
     - Writer modules now get a map passed with the connection module
       registered at key `:module` and (if configured) a udp socket
       for writing at `:udp_socket`
