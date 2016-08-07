@@ -36,6 +36,10 @@ defmodule Instream.Encoder.Line do
 
   defp append_tags(line, %{ tags: tags }) do
     tags
+    |> Enum.filter(fn
+         { _, nil } -> false
+         { _, _   } -> true
+       end)
     |> Enum.reduce([], fn ({ tag, value }, acc)->
          [ "#{ encode_property(tag) }=#{ encode_property(value) }" | acc ]
        end)

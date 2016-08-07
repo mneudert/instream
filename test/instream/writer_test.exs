@@ -18,6 +18,21 @@ defmodule Instream.WriterTest do
     end
   end
 
+  defmodule EmptyTagSeries do
+    use Instream.Series
+
+    series do
+      database    "test_database"
+      measurement "empty_tags"
+
+      tag :filled
+      tag :defaulting, default: "default_value"
+      tag :empty
+
+      field :value
+    end
+  end
+
   defmodule ErrorsSeries do
     use Instream.Series
 
@@ -162,5 +177,30 @@ defmodule Instream.WriterTest do
       values:  [[ "2015-08-14T21:32:06Z", "inside",  1.23456 ],
                 [ "2015-08-14T21:32:07Z", "outside", 9.87654 ]]
     }]}]} = result
+  end
+
+
+  test "writing without all tags present" do
+    entry = %EmptyTagSeries{}
+    entry = %{ entry | tags:   %{ entry.tags   | filled: "filled_tag" }}
+    entry = %{ entry | fields: %{ entry.fields | value: 100 }}
+
+    assert :ok = Connection.write(entry)
+
+    # wait to ensure data was written
+    :timer.sleep(250)
+
+    # check data
+    result =
+         "SELECT * FROM #{ EmptyTagSeries.__meta__(:measurement) }"
+      |> Connection.query(database: EmptyTagSeries.__meta__(:database))
+
+    %{ results: [%{ series: [%{ columns: columns }]}]} = result
+
+    assert Enum.member?(columns, "filled")
+    assert Enum.member?(columns, "defaulting")
+    assert Enum.member?(columns, "value")
+
+    refute Enum.member?(columns, "empty")
   end
 end

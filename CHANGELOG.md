@@ -13,6 +13,8 @@
       ([#21](https://github.com/mneudert/instream/pull/21))
     - Query builder supports `LIMIT` and `OFFSET` for queries
       ([#19](https://github.com/mneudert/instream/pull/19))
+    - Writing a series struct with one or more empty tags will now properly
+      construct an entry without these tags present
 
 - Soft deprecations (no warnings)
     - The precision units `:micro_seconds`, `:milli_seconds` and `:nano_seconds`
