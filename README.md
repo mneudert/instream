@@ -254,6 +254,9 @@ Every query can be executed asynchronously by passing `[async: true]` to
 `MyApp.MyConnection.execute()`. The result will then always be an immediate
 `:ok` without waiting for the query to be actually executed.
 
+To access the raw (undecoded) response of a query you can pass
+`[result_as: :raw]` to `MyApp.MyConnection.execute()`.
+
 #### Administrative Queries
 
 Managing Databases:
