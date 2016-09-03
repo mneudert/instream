@@ -12,6 +12,8 @@ matrix:
     - env: VER_INFLUXDB=master
 
 before_install:
+  - eval "$(gimme 1.6.2)"
+
   - mkdir "${HOME}/go"
   - export GOPATH="${HOME}/go"
   - export PATH="${GOPATH}/bin:${PATH}"
