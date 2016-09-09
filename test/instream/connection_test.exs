@@ -51,7 +51,7 @@ defmodule Instream.ConnectionTest do
   end
 
   test "read using database in query string" do
-    query_in  = "SELECT value FROM \"#{ @database }\".\"default\".\"empty_measurement\""
+    query_in  = "SELECT value FROM \"#{ @database }\".\"autogen\".\"empty_measurement\""
     query_out = "SELECT value FROM empty_measurement"
 
     result_in  = query_in  |> Connection.query()

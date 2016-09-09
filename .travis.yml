@@ -4,7 +4,7 @@ env:
   global:
     - MIX_ENV=test
   matrix:
-    - VER_INFLUXDB=v0.13.0
+    - VER_INFLUXDB=v1.0.0
     - VER_INFLUXDB=master
 
 matrix:

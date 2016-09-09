@@ -9,6 +9,6 @@ defmodule Instream.Admin.StatsTest do
 
     %{ results: [%{ series: stats }]} = result
 
-    assert %{ name: _, tags: _, columns: _, values: _ } = hd(stats)
+    assert %{ name: _, columns: _, values: _ } = hd(stats)
   end
 end
