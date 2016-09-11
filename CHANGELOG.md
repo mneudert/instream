@@ -37,7 +37,7 @@
       for writing at `:udp_socket`
     - The `Cluster` namespace of queries has been removed
 
-## v0.12.0 (2015-05-13)
+## v0.12.0 (2016-05-13)
 
 - Enhancements
     - Namespace of administrational convenience modules has been changed from
