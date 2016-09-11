@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.13.0-dev
+## v0.13.0 (2016-09-11)
 
 - Enhancements
     - Configuration has been split into "compile time" and "runtime" parts.
