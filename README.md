@@ -22,7 +22,7 @@ Add Instream as a dependency to your `mix.exs` file:
 
 ```elixir
 defp deps do
-  [ { :instream, "~> 0.12" } ]
+  [{ :instream, "~> 0.12" }]
 end
 ```
 
@@ -30,7 +30,7 @@ You should also update your applications to include all necessary projects:
 
 ```elixir
 def application do
-  [ applications: [ :instream ] ]
+  [ applications: [ :instream ]]
 end
 ```
 
@@ -172,7 +172,7 @@ alter the configuration of your connection:
 config :my_app, MyApp.MyConnection,
   loggers: [
     { FirstLogger,  :log_fun, [] },
-    { SecondLogger, :log_fun, [ :additional, :args ] }
+    { SecondLogger, :log_fun, [ :additional, :args ]}
   ]
 ```
 
@@ -198,7 +198,7 @@ get them printed:
 ```
 config :logger, :console,
   format: "\n$time $metadata[$level] $levelpad$message\n",
-  metadata: [:application, :pid, :query_time, :response_status]
+  metadata: [ :application, :pid, :query_time, :response_status ]
 ```
 
 _Warning_: In order to log the `:pid` (provided by `:logger`) used to send the
@@ -448,9 +448,9 @@ data = %MySeries{}
 data = %{ data | timestamp: 1439587926000000000 }
 ```
 
-The timestamp is (by default) expected to be a nanosecond unix timestamp. To use
-a different precision (for all points in this write operation!) you can change
-this value by modifying your write call:
+The timestamp is (by default) expected to be a nanosecond unix timestamp.
+To use different precision (for all points in this write operation!) you can
+change this value by modifying your write call:
 
 ```elixir
 data = %MySeries{}
