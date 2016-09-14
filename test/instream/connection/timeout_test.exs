@@ -35,8 +35,8 @@ defmodule Instream.Connection.TimeoutTest do
     try do
       Connection.execute(query, timeout: timeout)
 
-      IO.puts :stderr, "\nTimeout test did not produce the expected"
-                       " timeout. This probably is no real error, just"
+      IO.puts :stderr, "\nTimeout test did not produce the expected" <>
+                       " timeout. This probably is no real error, just" <>
                        " the result of unmatched timing...\n"
     catch
       :exit, reason ->
