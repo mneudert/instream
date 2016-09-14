@@ -7,7 +7,7 @@ defmodule Instream.Mixfile do
     [ app:     :instream,
       name:    "Instream",
       version: "0.14.0-dev",
-      elixir:  "~> 1.0",
+      elixir:  "~> 1.2",
       deps:    deps,
 
       build_embedded:  Mix.env == :prod,
@@ -31,7 +31,7 @@ defmodule Instream.Mixfile do
   end
 
   defp deps do
-    [ { :ex_doc, ">= 0.0.0", only: :dev }, # requires elixir ~> 1.2
+    [ { :ex_doc, ">= 0.0.0", only: :dev },
 
       { :dialyze,     "~> 0.2", only: :test },
       { :excoveralls, "~> 0.5", only: :test },

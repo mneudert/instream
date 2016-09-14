@@ -1,4 +1,6 @@
-language: elixir
+language:    elixir
+elixir:      1.2.0
+otp_release: 18.0
 
 env:
   global:
