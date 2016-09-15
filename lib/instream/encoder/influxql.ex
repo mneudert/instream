@@ -86,7 +86,6 @@ defmodule Instream.Encoder.InfluxQL do
   defp encode_create("DATABASE", query) do
     query.command
     |> append_binary(get_argument(query, :what))
-    |> append_if_not_exists(get_argument(query, :if_not_exists, false))
     |> append_binary(get_argument(query, :database))
   end
 
@@ -125,9 +124,6 @@ defmodule Instream.Encoder.InfluxQL do
   defp append_duration(str, duration), do: "#{ str } DURATION #{ duration }"
 
   defp append_from(str, from), do: "#{ str } FROM #{ from }"
-
-  defp append_if_not_exists(str, true),  do: "#{ str } IF NOT EXISTS"
-  defp append_if_not_exists(str, false), do: str
 
   defp append_on(str, nil),      do: str
   defp append_on(str, database), do: "#{ str } ON #{ database }"
