@@ -6,6 +6,7 @@
     - Minimum required elixir version is now "~> 1.2"
     - Minimum required erlang version is now "~> 18.0"
     - Query builder support for "IF NOT EXISTS" has been removed
+    - Series definitions now require to contain at least one field
 
 ## v0.13.0 (2016-09-11)
 

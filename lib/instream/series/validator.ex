@@ -24,17 +24,10 @@ defmodule Instream.Series.Validator do
   end
 
   defp fields?(series) do
-    if 0 == length(series.__meta__(:fields)) do
-      IO.write :stderr, """
-      The series "#{ series }"
-      has been defined without fields.
-
-      This behaviour has been deprecated
-      and will stop working in a future version.
-      """
+    case length(series.__meta__(:fields)) do
+      0 -> raise ArgumentError, "series #{ series } has no fields"
+      _ -> series
     end
-
-    series
   end
 
   defp measurement?(series) do
