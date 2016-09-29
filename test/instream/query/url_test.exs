@@ -5,7 +5,7 @@ defmodule Instream.Query.URLTest do
 
 
   test "append epoch (read precision)" do
-    precision = :milliseconds
+    precision = :millisecond
     url       = "http://localhost/query"
     expected  = "#{ url }?epoch=ms"
 
@@ -18,7 +18,7 @@ defmodule Instream.Query.URLTest do
   end
 
   test "append precision" do
-    precision = :milliseconds
+    precision = :millisecond
     url       = "http://localhost/query"
     expected  = "#{ url }?precision=ms"
 

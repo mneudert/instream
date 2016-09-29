@@ -8,6 +8,12 @@
     - Query builder support for "IF NOT EXISTS" has been removed
     - Series definitions now require to contain at least one field
 
+- Soft deprecations (no warnings)
+    - The plural names for precision units have been soft deprecated to be
+      in line with the similar new naming in `Erlang 19.1` and the upcoming
+      `Elixir 1.4.0`. The old types will continue to work but their usage is
+      discouraged. They will be completely deprecated in an upcoming release.
+
 ## v0.13.0 (2016-09-11)
 
 - Enhancements

@@ -457,17 +457,17 @@ data = %MySeries{}
 data = %{ data | timestamp: 1439587926 }
 
 data
-|> MyApp.MyConnection.write([ async: true, precision: :seconds ])
+|> MyApp.MyConnection.write([ async: true, precision: :second ])
 ```
 
 Supported precision types are:
 
-- `:hours`
-- `:minutes`
-- `:seconds`
-- `:milliseconds`
-- `:microseconds`
-- `:nanoseconds`
+- `:hour`
+- `:minute`
+- `:second`
+- `:millisecond`
+- `:microsecond`
+- `:nanosecond`
 
 Please be aware that the UDP protocol writer does not support custom timestamp
 precisions. All UDP timestamps are implicitly expected to already be at
