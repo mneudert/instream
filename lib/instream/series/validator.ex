@@ -13,6 +13,8 @@ defmodule Instream.Series.Validator do
       |> defined?
       |> measurement?
       |> fields?
+      |> forbidden_fields?
+      |> forbidden_tags?
   end
 
 
@@ -27,6 +29,20 @@ defmodule Instream.Series.Validator do
     case length(series.__meta__(:fields)) do
       0 -> raise ArgumentError, "series #{ series } has no fields"
       _ -> series
+    end
+  end
+
+  defp forbidden_fields?(series) do
+    case Enum.any?(series.__meta__(:fields), &( &1 == :time )) do
+      true -> raise ArgumentError, "forbidden field :time defined in series #{ series }"
+      _    -> series
+    end
+  end
+
+  defp forbidden_tags?(series) do
+    case Enum.any?(series.__meta__(:tags), &( &1 == :time )) do
+      true -> raise ArgumentError, "forbidden tag :time defined in series #{ series }"
+      _    -> series
     end
   end
 

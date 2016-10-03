@@ -2,6 +2,11 @@
 
 ## v0.14.0-dev
 
+- Enhancements
+    - Fields and tags with the name `:time` will raise after compilation. They
+      are unqueryable and will be dropped by InfluxDB v1.1.0 when trying to
+      write them.
+
 - Backwards incompatible changes
     - Minimum required elixir version is now "~> 1.2"
     - Minimum required erlang version is now "~> 18.0"
