@@ -38,8 +38,8 @@ before_script:
   - nohup "${GOPATH}/bin/influxd" -pidfile ./influxdb.pid -config ./influxdb.conf >>./influxdb.stdout 2>>./influxdb.stderr &
   - sleep 5
 
-  - curl -G 'http://localhost:8086/query' --data-urlencode "q=CREATE USER instream_test WITH PASSWORD 'instream_test' WITH ALL PRIVILEGES"
-  - curl -G 'http://localhost:8086/query' --data-urlencode "q=CREATE USER instream_guest WITH PASSWORD 'instream_guest'"
+  - curl -XPOST 'http://localhost:8086/query' --data-urlencode "q=CREATE USER instream_test WITH PASSWORD 'instream_test' WITH ALL PRIVILEGES"
+  - curl -XPOST 'http://localhost:8086/query' --data-urlencode "q=CREATE USER instream_guest WITH PASSWORD 'instream_guest'"
   - sed -i 's/auth-enabled = false/auth-enabled = true/' ./influxdb.conf
   - echo -e "[[udp]]\n  enabled = true\n  bind-address = \":8089\"\n  database = \"test_database\"\n  batch-size = 1000\n  batch-timeout = \"1s\"\n  batch-pending = 5\n" >> ./influxdb.conf
 
