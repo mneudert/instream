@@ -8,7 +8,7 @@ defmodule Instream.Mixfile do
       name:    "Instream",
       version: "0.14.0-dev",
       elixir:  "~> 1.2",
-      deps:    deps,
+      deps:    deps(),
 
       build_embedded:  Mix.env == :prod,
       start_permanent: Mix.env == :prod,
@@ -21,8 +21,8 @@ defmodule Instream.Mixfile do
       ],
 
       description:   "InfluxDB driver for Elixir",
-      docs:          docs,
-      package:       package,
+      docs:          docs(),
+      package:       package(),
       test_coverage: [ tool: ExCoveralls ] ]
   end
 
