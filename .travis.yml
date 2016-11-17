@@ -7,12 +7,11 @@ env:
     - MIX_ENV=test
   matrix:
     - VER_GO=1.6.2 VER_INFLUXDB=v1.0.0
-    - VER_GO=1.7.3 VER_INFLUXDB=v1.1.0-rc2
+    - VER_GO=1.7.3 VER_INFLUXDB=v1.1.0
     - VER_GO=1.7.3 VER_INFLUXDB=master
 
 matrix:
   allow_failures:
-    - env: VER_GO=1.7.3 VER_INFLUXDB=v1.1.0-rc2
     - env: VER_GO=1.7.3 VER_INFLUXDB=master
 
 before_install:

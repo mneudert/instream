@@ -14,7 +14,7 @@ __This module has experimental parts that may change unexpectedly.__
 Tested influxdb versions:
 
 - `1.0.0`
-- `1.1.0-rc2`
+- `1.1.0`
 
 (see
 [`.travis.yml`](https://github.com/mneudert/instream/blob/master/.travis.yml)
