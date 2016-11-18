@@ -58,6 +58,17 @@ defmodule Instream.WriterTest do
     end
   end
 
+  defmodule CustomDatabaseSeries do
+    use Instream.Series
+
+    series do
+      database    "invalid_test_database"
+      measurement "writer_database_option"
+
+      field :value
+    end
+  end
+
   defmodule ProtocolsSeries do
     use Instream.Series
 
@@ -202,5 +213,26 @@ defmodule Instream.WriterTest do
     assert Enum.member?(columns, "value")
 
     refute Enum.member?(columns, "empty")
+  end
+
+
+  test "writing with passed database option" do
+    database = "test_database"
+
+    entry = %CustomDatabaseSeries{}
+    entry = %{ entry | fields: %{ entry.fields | value: 100 }}
+    assert :ok = Connection.write(entry, database: database)
+
+    # wait to ensure data was written
+    :timer.sleep(250)
+
+    # check data
+    result =
+         "SELECT * FROM #{ CustomDatabaseSeries.__meta__(:measurement) }"
+      |> Connection.query(database: database)
+
+    %{ results: [%{ series: [%{ columns: columns }]}]} = result
+
+    assert Enum.member?(columns, "value")
   end
 end

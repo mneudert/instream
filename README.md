@@ -440,6 +440,10 @@ data
 data
 |> MyApp.MyConnection.write(async: true)
 
+# write to a specific database
+data
+|> MyApp.MyConnection.write(database: "my_database")
+
 # write multiple points at once
 [ point_1, point_2, point_3 ]
 |> MyApp.MyConnection.write()
