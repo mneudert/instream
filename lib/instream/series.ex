@@ -8,7 +8,7 @@ defmodule Instream.Series do
         use Instream.Series
 
         series do
-          database    "my_database"
+          database    "my_database_optional"
           measurement "cpu_load"
 
           tag :host, default: "www"
@@ -102,7 +102,7 @@ defmodule Instream.Series do
 
   ## Available information
 
-  - `:database`    - the database where the series is stored
+  - `:database`    - the database where the series is stored (optional)
   - `:fields`      - the fields in the series
   - `:measurement` - the measurement of the series
   - `:tags`        - the available tags defining the series
