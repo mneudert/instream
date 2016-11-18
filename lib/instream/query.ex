@@ -10,7 +10,7 @@ defmodule Instream.Query do
     type:    nil
   ]
 
-  @type payload_type :: String.t
+  @type payload_type :: String.t | map
   @type query_method :: :get | :post
   @type query_type   :: :ping | :read | :write
 
