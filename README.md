@@ -482,6 +482,10 @@ Please be aware that the UDP protocol writer does not support custom timestamp
 precisions. All UDP timestamps are implicitly expected to already be at
 nanosecond precision.
 
+_Note:_ While it is possible to write multiple points a once it is currently
+not supported to write them to individual databases. The first point written
+defines the database, other values are silently ignored!
+
 
 ## License
 
