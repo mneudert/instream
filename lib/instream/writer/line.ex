@@ -15,11 +15,10 @@ defmodule Instream.Writer.Line do
     headers = Headers.assemble(config) ++ [{ 'Content-Type', 'text/plain' }]
     body    = query.payload |> to_line()
 
-    db  = opts[:database] || Map.get(query.payload, :database)
     url =
          config
       |> URL.write()
-      |> URL.append_database(db)
+      |> URL.append_database(opts[:database])
       |> URL.append_precision(query.opts[:precision])
 
     http_opts = Keyword.get(config, :http_opts, [])

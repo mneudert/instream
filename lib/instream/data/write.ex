@@ -5,6 +5,28 @@ defmodule Instream.Data.Write do
 
   alias Instream.Query
 
+
+  @doc """
+  Determines the proper database to write points to.
+
+  Later usage depends on the writer.
+  """
+  @spec determine_database(map | [map], Keyword.t) :: String.t | nil
+  def determine_database([ point | _ ], opts) do
+    determine_database(point, opts)
+  end
+
+  def determine_database(%{ __struct__: series }, opts) do
+    opts[:database] || series.__meta__(:database)
+  end
+
+  def determine_database(%{ database: database }, opts) do
+    opts[:database] || database
+  end
+
+  def determine_database(_, opts), do: opts[:database]
+
+
   @doc """
   Creates a writing query object from a single or a list of points.
   """
@@ -29,8 +51,7 @@ defmodule Instream.Data.Write do
 
   defp maybe_unstruct(%{ __struct__: series } = payload) do
     %{
-      database: series.__meta__(:database),
-      points:   [
+      points: [
         %{
           measurement: series.__meta__(:measurement),
           fields:      payload.fields |> Map.from_struct(),

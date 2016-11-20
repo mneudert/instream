@@ -95,6 +95,9 @@ defmodule Instream.Connection do
       end
 
       def write(payload, opts \\ []) do
+        database = Data.Write.determine_database(payload, opts)
+        opts     = Keyword.put(opts, :database, database)
+
         payload
         |> Data.Write.query(opts)
         |> execute(opts)
