@@ -3,6 +3,8 @@
 ## v0.14.0-dev
 
 - Enhancements
+    - Connections can be configured with a default database used when no
+      value is found in method call or series definition
     - Fields and tags with the name `:time` will raise after compilation. They
       are unqueryable and will be dropped by InfluxDB v1.1.0 when trying to
       write them.

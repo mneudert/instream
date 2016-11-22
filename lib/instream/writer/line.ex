@@ -18,7 +18,7 @@ defmodule Instream.Writer.Line do
     url =
          config
       |> URL.write()
-      |> URL.append_database(opts[:database])
+      |> URL.append_database(opts[:database] || config[:database])
       |> URL.append_precision(query.opts[:precision])
 
     http_opts = Keyword.get(config, :http_opts, [])

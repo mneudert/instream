@@ -57,7 +57,7 @@ defmodule Instream.Connection.QueryRunner do
     url     =
       config
       |> URL.query()
-      |> URL.append_database(opts[:database])
+      |> URL.append_database(opts[:database] || config[:database])
       |> URL.append_epoch(query.opts[:precision])
       |> URL.append_query(query.payload)
 
