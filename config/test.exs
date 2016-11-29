@@ -53,6 +53,13 @@ config :instream, Instream.TestHelpers.InvalidConnection,
   loggers: [{ Instream.TestHelpers.NilLogger, :log, [] }],
   pool:    [ max_overflow: 0, size: 1 ]
 
+config :instream, Instream.TestHelpers.InvalidDbConnection,
+  auth:     [ username: "instream_test", password: "instream_test" ],
+  database: "invalid_test_database",
+  host:     "localhost",
+  loggers:  [{ Instream.TestHelpers.NilLogger, :log, [] }],
+  pool:     [ max_overflow: 0, size: 1 ]
+
 config :instream, Instream.TestHelpers.NotFoundConnection,
   auth:    [ username: "instream_not_found", password: "instream_not_found" ],
   host:    "localhost",
