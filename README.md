@@ -49,6 +49,14 @@ users for the tests with their proper privileges.
 
 ## Usage
 
+_Note:_ Most queries require a database to operate on. The following places
+will be searched (in order from top to bottom) for a configured database:
+
+1. `opts[:database]` parameter
+2. Series struct (if used)
+3. Connection configuration
+4. No database used!
+
 ### Connections
 
 Defining a connection requires defining a module:
