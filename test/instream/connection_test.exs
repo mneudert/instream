@@ -40,6 +40,13 @@ defmodule Instream.ConnectionTest do
     assert :error == ConnectionWithOpts.ping()
   end
 
+  test "version connection" do
+    assert is_binary(Connection.version())
+
+    assert :error == UnreachableConnection.version()
+    assert :error == ConnectionWithOpts.version()
+  end
+
 
   test "read from empty measurement" do
     result =

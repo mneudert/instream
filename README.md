@@ -229,7 +229,7 @@ query |> MyApp.MyConnection.execute(log: false)
 MyApp.MyConnection.ping(log: false)
 ```
 
-#### Ping / Status
+#### Ping / Status / Version
 
 To validate a connection you can send ping requests to the server:
 
@@ -256,6 +256,18 @@ To get InfluxDB to verify the status of your server you can send a status call:
 MyApp.MyConnection.status()
 MyApp.MyConnection.status("some.host.name")
 ```
+
+If you are interested in the version of InfluxDB your server is reporting
+you can request it:
+
+```elixir
+MyApp.MyConnection.version()
+MyApp.MyConnection.version("some.host.name")
+```
+
+If the version if undetectable (no header returned) it will be reported
+as `"unknown"`. If the host is unreachable or an error occured the response
+will be `:error`.
 
 ### Queries
 

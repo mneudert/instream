@@ -72,8 +72,9 @@ defmodule Instream.Connection do
 
       # alias/convenience interface
 
-      def ping(opts)   when is_list(opts), do: ping(nil, opts)
-      def status(opts) when is_list(opts), do: status(nil, opts)
+      def ping(opts)    when is_list(opts), do: ping(nil, opts)
+      def status(opts)  when is_list(opts), do: status(nil, opts)
+      def version(opts) when is_list(opts), do: version(nil, opts)
 
 
       # public interface for usage
@@ -91,6 +92,11 @@ defmodule Instream.Connection do
 
       def status(host \\ nil, opts \\ []) do
         %Query{ type: :status, opts: [ host: host ] }
+        |> execute(opts)
+      end
+
+      def version(host \\ nil, opts \\ []) do
+        %Query{ type: :version, opts: [ host: host ] }
         |> execute(opts)
       end
 

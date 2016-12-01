@@ -38,6 +38,22 @@ defmodule Instream.Response do
   def parse_ping(_),               do: :error
 
   @doc """
+  Parses the response of a version query.
+
+  Returns "unknown" if the response did not contain a parseable header.
+  """
+  @spec parse_version(any) :: String.t | :error
+  def parse_version({ :ok, 204, headers }) do
+    case List.keyfind(headers, "X-Influxdb-Version", 0) do
+      { "X-Influxdb-Version", version } -> version
+
+      _ -> "unknown"
+    end
+  end
+
+  def parse_version(_), do: :error
+
+  @doc """
   Parses the response of a status query.
   """
   @spec parse_status(any) :: :ok | :error

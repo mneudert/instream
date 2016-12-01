@@ -119,6 +119,20 @@ defmodule Instream.Connection.QueryRunner do
   end
 
   @doc """
+  Executes `:version` queries.
+  """
+  @spec version(Query.t, Keyword.t, map) :: any
+  def version(%Query{} = query, opts, %{ module: conn }) do
+    config  = conn.config()
+    headers = Headers.assemble(config)
+
+    config
+    |> URL.ping(query.opts[:host])
+    |> :hackney.head(headers, "", http_opts(config, opts))
+    |> Response.parse_version()
+  end
+
+  @doc """
   Executes `:write` queries.
   """
   @spec write(Query.t, Keyword.t, map) :: any
