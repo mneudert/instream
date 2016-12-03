@@ -48,12 +48,16 @@ version = TestHelpers.Connection.version
 config  = case Version.parse(version) do
   :error       -> config
   { :ok, ver } ->
-    config = unless Version.match?(ver, "~> 1.1.0") do
-      Keyword.put(config, :exclude, [{ :influxdb_version, "1.1.0" } | config[:exclude] ])
+    config = Keyword.put(config, :exclude, config[:exclude] || [])
+
+    config = case Version.match?(ver, "~> 1.1.0") do
+      true  -> config
+      false -> Keyword.put(config, :exclude, [{ :influxdb_version, "1.1.0" } | config[:exclude] ])
     end
 
-    config = unless Version.match?(ver, "~> 1.2.0") do
-      Keyword.put(config, :exclude, [{ :influxdb_version, "1.2.0" } | config[:exclude] ])
+    config = case Version.match?(ver, "~> 1.2.0") do
+      true  -> config
+      false -> Keyword.put(config, :exclude, [{ :influxdb_version, "1.2.0" } | config[:exclude] ])
     end
 
     config
