@@ -20,7 +20,7 @@ defmodule Instream.Admin.RetentionPolicyTest do
 
     listing = RetentionPolicy.show(@database) |> Connection.execute()
 
-    assert creation == %{results: [%{}]}
+    assert %{results: [%{}]} = creation
     assert %{results: [%{series: [%{values: listing_values}]}]} = listing
 
     assert Enum.any?(listing_values, fn ([ name, duration, _, _, _ ]) ->
@@ -35,7 +35,7 @@ defmodule Instream.Admin.RetentionPolicyTest do
 
     listing = RetentionPolicy.show(@database) |> Connection.execute()
 
-    assert alteration == %{results: [%{}]}
+    assert %{results: [%{}]} = alteration
     assert %{results: [%{series: [%{values: listing_values}]}]} = listing
 
     assert Enum.any?(listing_values, fn ([ name, duration, _, _, _ ]) ->
@@ -46,7 +46,7 @@ defmodule Instream.Admin.RetentionPolicyTest do
     deletion = RetentionPolicy.drop(@rp_name, @database) |> Connection.execute()
     listing  = RetentionPolicy.show(@database) |> Connection.execute()
 
-    assert deletion == %{results: [%{}]}
+    assert %{results: [%{}]} = deletion
     assert %{results: [%{series: [ listing_rows ]}]} = listing
 
     case listing_rows[:values] do

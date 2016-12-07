@@ -13,7 +13,7 @@ defmodule Instream.Admin.DatabaseTest do
     creation = @database |> Database.create() |> Connection.execute()
     listing  = Database.show() |> Connection.execute()
 
-    assert creation == %{results: [%{}]}
+    assert %{results: [%{}]} = creation
     assert %{results: [%{series: [%{columns: ["name"], values: listing_values}]}]} = listing
 
     assert Enum.any?(listing_values, fn ([ db ]) -> db == @database end)
@@ -22,7 +22,7 @@ defmodule Instream.Admin.DatabaseTest do
     deletion = @database |> Database.drop() |> Connection.execute()
     listing  = Database.show() |> Connection.execute()
 
-    assert deletion == %{results: [%{}]}
+    assert %{results: [%{}]} = deletion
     assert %{results: [%{series: [ listing_rows ]}]} = listing
 
     case listing_rows[:values] do
@@ -42,6 +42,6 @@ defmodule Instream.Admin.DatabaseTest do
       |> Database.create()
       |> Connection.execute()
 
-    assert %{ results: [%{}] } == result
+    assert %{results: [%{}]} = result
   end
 end
