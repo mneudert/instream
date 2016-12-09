@@ -30,14 +30,38 @@ defmodule Instream.Connection.DatabaseTest do
   end
 
 
-  test "default: database from connection" do
+  test "read || default: database from connection" do
+    %{ results: [%{ error: message }]} = InvalidDbConnection.execute(
+      "SELECT * FROM database_config_test"
+    )
+
+    assert String.contains?(message, "database not found")
+    assert String.contains?(message, InvalidDbConnection.config([ :database ]))
+  end
+
+  test "read || opts database has priority over connection database" do
+    opts = [ database: "database_config_optsdb_test" ]
+
+    %{ results: [%{ error: message }]} = InvalidDbConnection.execute(
+      "SELECT * FROM database_config_test",
+      opts
+    )
+
+    assert String.contains?(message, "database not found")
+    assert String.contains?(message, opts[:database])
+    refute String.contains?(message, InvalidDbConnection.config([ :database ]))
+  end
+
+
+
+  test "write || default: database from connection" do
     %{ error: message } = InvalidDbConnection.write(%NoDatabaseSeries{})
 
     assert String.contains?(message, "database not found")
     assert String.contains?(message, InvalidDbConnection.config([ :database ]))
   end
 
-  test "series database has priority over connection database" do
+  test "write || series database has priority over connection database" do
     %{ error: message } = InvalidDbConnection.write(%DatabaseSeries{})
 
     assert String.contains?(message, "database not found")
@@ -45,7 +69,7 @@ defmodule Instream.Connection.DatabaseTest do
     refute String.contains?(message, InvalidDbConnection.config([ :database ]))
   end
 
-  test "opts database has priority over series database" do
+  test "write || opts database has priority over series database" do
     opts = [ database: "database_config_optsdb_test" ]
 
     %{ error: message } = InvalidDbConnection.write(%DatabaseSeries{}, opts)
