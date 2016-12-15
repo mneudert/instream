@@ -39,6 +39,12 @@ def application do
 end
 ```
 
+__Note__: If you are reading this on
+[GitHub](https://github.com/mneudert/instream) then the information in this file
+may be out of sync with the [Hex package](https://hex.pm/packages/instream).
+If you are using this library through Hex please refer to the appropriate
+documentation on HexDocs (link available on Hex).
+
 ### Testing
 
 To run the tests you need to have the http-authentication enabled.
