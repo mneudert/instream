@@ -8,6 +8,7 @@
     - Fields and tags with the name `:time` will raise after compilation. They
       are unqueryable and will be dropped by InfluxDB v1.1.0 when trying to
       write them.
+    - Series definitions are now automatically associated with typespecs
 
 - Backwards incompatible changes
     - Minimum required elixir version is now "~> 1.2"
