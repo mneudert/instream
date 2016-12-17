@@ -19,7 +19,7 @@ matrix:
     - elixir: 1.3.4
       env:    VER_GO=1.6.2 VER_INFLUXDB=v1.0.0
     - elixir: 1.3.4
-      env:    VER_GO=1.7.3 VER_INFLUXDB=master
+      env:    VER_GO=1.7.4 VER_INFLUXDB=master
     - elixir: 1.4.0-rc.1
       env:    VER_GO=1.6.2 VER_INFLUXDB=v1.0.0
     - elixir: 1.4.0-rc.1
