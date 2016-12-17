@@ -6,16 +6,25 @@ defmodule Instream.ResponseTest do
   alias Instream.TestHelpers.Connection
 
 
-  test "parsed response" do
+  test "response format: default (parsed)" do
     response = Database.show() |> Connection.execute()
 
     assert is_map(response)
   end
 
-  test "raw response" do
+  @tag influxdb_version: "1.1.0"
+  test "response format: csv" do
+    response = Database.show() |> Connection.execute([ result_as: :csv ])
+
+    assert is_binary(response)
+    assert "name," <> _ = response
+  end
+
+  test "response format: raw" do
     response = Database.show() |> Connection.execute([ result_as: :raw ])
 
     assert is_binary(response)
+    assert "{" <> _ = response
   end
 
 

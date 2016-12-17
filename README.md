@@ -281,8 +281,16 @@ Every query can be executed asynchronously by passing `[async: true]` to
 `MyApp.MyConnection.execute()`. The result will then always be an immediate
 `:ok` without waiting for the query to be actually executed.
 
-To access the raw (undecoded) response of a query you can pass
-`[result_as: :raw]` to `MyApp.MyConnection.execute()`.
+By default the response of a query will be a map decoded from your server's
+JSON response.
+
+Alternatively you can pass `[result_as: format]` to
+`MyApp.MyConnection.execute/2` to change the result format to one of the
+following:
+
+- `:csv`  - CSV encoded response
+- `:json` - JSON encoded response (implicit default)
+- `:raw`  - Raw server format (JSON string)
 
 #### Administrative Queries
 

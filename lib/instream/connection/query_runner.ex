@@ -53,7 +53,7 @@ defmodule Instream.Connection.QueryRunner do
   @spec read(Query.t, Keyword.t, map) :: any
   def read(%Query{} = query, opts, %{ module: conn }) do
     config  = conn.config()
-    headers = Headers.assemble(config)
+    headers = Headers.assemble(config, opts)
     url     =
       config
       |> URL.query()

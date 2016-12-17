@@ -8,6 +8,8 @@
     - Fields and tags with the name `:time` will raise after compilation. They
       are unqueryable and will be dropped by InfluxDB v1.1.0 when trying to
       write them.
+    - Queries can return CSV formatted responses from the server when
+      running InfluxDB >= 1.1.0
     - Series definitions are now automatically associated with typespecs
 
 - Backwards incompatible changes
