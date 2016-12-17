@@ -4,7 +4,7 @@ defmodule Instream.Series do
 
   ## Usage
 
-      defmodule MySeries
+      defmodule MySeries do
         use Instream.Series
 
         series do
