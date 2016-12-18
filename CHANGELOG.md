@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.14.0-dev
+## v0.14.0 (2016-12-18)
 
 - Enhancements
     - Connections can be configured with a default database used when no
