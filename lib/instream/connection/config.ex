@@ -30,6 +30,7 @@ defmodule Instream.Connection.Config do
   def runtime(otp_app, conn, keys)          do
     otp_app
     |> Application.get_env(conn, [])
+    |> Keyword.new
     |> maybe_fetch_deep(keys)
     |> maybe_fetch_system()
     |> maybe_use_default(keys)

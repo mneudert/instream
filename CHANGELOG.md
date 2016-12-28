@@ -1,5 +1,10 @@
 # Changelog
 
+## HEAD
+
+- Bug fixes
+    - [connection] Fixing `Connection.Config.runtime/3` get first key instead of last
+
 ## v0.14.0 (2016-12-18)
 
 - Enhancements
