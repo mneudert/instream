@@ -2,6 +2,9 @@
 
 ## HEAD
 
+- Enhancements
+    - [connection] Adding support to env configurations to tests
+
 - Bug fixes
     - [connection] Fixing `Connection.Config.runtime/3` get first key instead of last
 
