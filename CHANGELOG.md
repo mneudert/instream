@@ -4,6 +4,7 @@
 
 - Enhancements
     - [connection] Adding support to env configurations to tests
+    - [query] Adding support to empty map or keyword fields in `Query.Builder.where/2`
 
 - Bug fixes
     - [connection] Fixing `Connection.Config.runtime/3` get first key instead of last
