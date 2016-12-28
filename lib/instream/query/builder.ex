@@ -131,6 +131,9 @@ defmodule Instream.Query.Builder do
   Builds a `WHERE` query expression.
   """
   @spec where(t, map) :: t
+  def where(query, nil   ), do: query
+  def where(query, []    ), do: query
+  def where(query, fields) when fields == %{}, do: query
   def where(query, fields), do: set_argument(query, :where, fields)
 
   @doc """

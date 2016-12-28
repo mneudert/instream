@@ -84,6 +84,26 @@ defmodule Instream.Query.BuilderTest do
     assert query_select == "SELECT * FROM some_measurement"
   end
 
+  test "SELECT * using WHERE with empty fields" do
+    keyword_query =
+         BuilderSeries
+      |> Builder.from()
+      |> Builder.where([])
+      |> InfluxQL.encode()
+
+    map_query =
+         BuilderSeries
+      |> Builder.from()
+      |> Builder.where(%{})
+      |> InfluxQL.encode()
+
+    should_query = "SELECT * FROM some_measurement"
+
+    assert keyword_query == map_query
+    assert keyword_query == should_query
+    assert map_query     == should_query
+  end
+
   test "SELECT * WHERE foo = bar" do
     fields = %{ binary: "value", numeric: 42 }
     query  =

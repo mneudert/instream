@@ -517,6 +517,15 @@ not supported to write them to individual databases. The first point written
 defines the database, other values are silently ignored!
 
 
+## Contributing
+
+##### Custom influxdb test connection
+
+```
+export INSTREAM_HOST=localhost
+export INSTREAM_HTTP_PORT=8086
+```
+
 ## License
 
 [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0)
