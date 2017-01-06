@@ -2,9 +2,9 @@ language:    elixir
 otp_release: 18.0
 
 elixir:
-  - 1.2.2
+  - 1.2.6
   - 1.3.4
-  - 1.4.0-rc.1
+  - 1.4.0
 
 env:
   global:
@@ -20,9 +20,9 @@ matrix:
       env:    VER_GO=1.6.2 VER_INFLUXDB=v1.0.0
     - elixir: 1.3.4
       env:    VER_GO=1.7.4 VER_INFLUXDB=master
-    - elixir: 1.4.0-rc.1
+    - elixir: 1.4.0
       env:    VER_GO=1.6.2 VER_INFLUXDB=v1.0.0
-    - elixir: 1.4.0-rc.1
+    - elixir: 1.4.0
       env:    VER_GO=1.7.4 VER_INFLUXDB=master
   allow_failures:
     - env: VER_GO=1.7.4 VER_INFLUXDB=master
