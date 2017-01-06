@@ -10,7 +10,6 @@ defmodule Instream.Series.ValidatorTest do
           measurement "satisfy_definition_rules"
 
           field :time
-          tag :satisfy_definition
         end
       end
     end
