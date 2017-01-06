@@ -15,6 +15,7 @@ defmodule Instream.Series.Validator do
       |> fields?
       |> forbidden_fields?
       |> forbidden_tags?
+      |> field_tag_conflict?
   end
 
 
@@ -23,6 +24,19 @@ defmodule Instream.Series.Validator do
       false -> raise ArgumentError, "missing series definition in module #{ series }"
       _     -> series
     end
+  end
+
+  defp field_tag_conflict?(series) do
+    fields   = series.__meta__(:fields)
+    tags     = series.__meta__(:tags)
+    conflict = Enum.any? fields, fn (field) -> Enum.member?(tags, field) end
+
+    if conflict do
+      raise ArgumentError, "series #{ series } contains at least one" <>
+                           " field and tag with the same name"
+    end
+
+    series
   end
 
   defp fields?(series) do

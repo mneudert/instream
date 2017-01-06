@@ -1,6 +1,21 @@
 defmodule Instream.Series.ValidatorTest do
   use ExUnit.Case, async: true
 
+  test "field and tag with same name raises" do
+    assert_raise ArgumentError, ~r/same name/, fn ->
+      defmodule FieldTagSameName do
+        use Instream.Series
+
+        series do
+          measurement "satisfy_definition_rules"
+
+          field :conflicting_name
+          tag :conflicting_name
+        end
+      end
+    end
+  end
+
   test "forbidden field :time raises" do
     assert_raise ArgumentError, ~r/forbidden field.+time/, fn ->
       defmodule ForbiddenTimeField do

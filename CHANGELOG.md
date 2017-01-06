@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.15.0-dev
+
+- Backwards incompatible changes
+    - Series definitions raise upon compilation if the contain a tag
+      and a field with the same name. This is done to prevent the InfluxDB
+      behavior of adding "\_1" to such fields when storing them
+
 ## v0.14.0 (2016-12-18)
 
 - Enhancements
