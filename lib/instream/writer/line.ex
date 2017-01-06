@@ -23,10 +23,9 @@ defmodule Instream.Writer.Line do
 
     http_opts = Keyword.get(config, :http_opts, [])
 
-    { :ok, status, headers, client } = :hackney.post(url, headers, body, http_opts)
-    { :ok, response }                = :hackney.body(client)
-
-    { status, headers, response }
+    with { :ok, status, headers, client } <- :hackney.post(url, headers, body, http_opts),
+         { :ok, response }                <- :hackney.body(client),
+         do: { status, headers, response }
   end
 
   defp to_line(payload), do: payload |> Map.get(:points, []) |> Encoder.encode()

@@ -2,6 +2,11 @@
 
 ## v0.15.0-dev
 
+- Enhancements
+    - The line writer will now return an `{ :error, term }` style tuple if
+      a problem occurs. For example `{ :error, :nxdomain }` if the host that
+      should receive data cannot be resolved by `hackney`
+
 - Backwards incompatible changes
     - Series definitions raise upon compilation if the contain a tag
       and a field with the same name. This is done to prevent the InfluxDB

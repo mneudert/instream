@@ -3,16 +3,17 @@ defmodule Instream.Response do
   Response handling module.
   """
 
-  @type t :: { status  :: pos_integer,
-               headers :: list,
-               body    :: String.t }
+  @type t :: { :error, term } | { status  :: pos_integer,
+                                  headers :: list,
+                                  body    :: String.t }
 
 
   @doc """
   Maybe parses a response based on the requested result type.
   """
   @spec maybe_parse(t, Keyword.t) :: any
-  def maybe_parse({ _, _, "" }, _), do: :ok
+  def maybe_parse({ :error, _ } = error, _), do: error
+  def maybe_parse({ _, _, "" },          _), do: :ok
 
   def maybe_parse({ status, headers, response }, opts)
       when 300 <= status
