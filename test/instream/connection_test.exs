@@ -37,7 +37,7 @@ defmodule Instream.ConnectionTest do
   test "status connection" do
     assert :ok    == Connection.status()
     assert :error == UnreachableConnection.status()
-    assert :error == ConnectionWithOpts.ping()
+    assert :error == ConnectionWithOpts.status()
   end
 
   test "version connection" do
