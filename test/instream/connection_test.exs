@@ -4,9 +4,7 @@ defmodule Instream.ConnectionTest do
   alias Instream.Query.Builder
 
   alias Instream.TestHelpers.Connection
-  alias Instream.TestHelpers.ConnectionWithOpts
   alias Instream.TestHelpers.GuestConnection
-  alias Instream.TestHelpers.UnreachableConnection
 
 
   @database "test_database"
@@ -29,22 +27,15 @@ defmodule Instream.ConnectionTest do
 
 
   test "ping connection" do
-    assert :pong  == Connection.ping()
-    assert :error == UnreachableConnection.ping()
-    assert :error == ConnectionWithOpts.ping()
+    assert :pong == Connection.ping()
   end
 
   test "status connection" do
-    assert :ok    == Connection.status()
-    assert :error == UnreachableConnection.status()
-    assert :error == ConnectionWithOpts.status()
+    assert :ok == Connection.status()
   end
 
   test "version connection" do
     assert is_binary(Connection.version())
-
-    assert :error == UnreachableConnection.version()
-    assert :error == ConnectionWithOpts.version()
   end
 
 
