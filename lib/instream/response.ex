@@ -15,19 +15,19 @@ defmodule Instream.Response do
   def maybe_parse({ :error, _ } = error, _), do: error
   def maybe_parse({ _, _, "" },          _), do: :ok
 
-  def maybe_parse({ status, headers, response }, opts)
+  def maybe_parse({ status, headers, body }, opts)
       when 300 <= status
   do
     case is_json?(headers) do
-      true  -> maybe_decode_json(response, opts)
-      false -> maybe_wrap_error(response, opts)
+      true  -> maybe_decode_json(body, opts)
+      false -> maybe_wrap_error(body, opts)
     end
   end
 
-  def maybe_parse({ _, headers, response }, opts) do
+  def maybe_parse({ _, headers, body }, opts) do
     case is_json?(headers) do
-      true  -> maybe_decode_json(response, opts)
-      false -> response
+      true  -> maybe_decode_json(body, opts)
+      false -> body
     end
   end
 
