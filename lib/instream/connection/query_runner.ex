@@ -61,27 +61,30 @@ defmodule Instream.Connection.QueryRunner do
       |> URL.append_epoch(query.opts[:precision])
       |> URL.append_query(query.payload)
 
-    { query_time, { :ok, status, headers, client }} = :timer.tc fn ->
+    { query_time, response } = :timer.tc fn ->
       (query.method || opts[:method] || :get)
       |> :hackney.request(url, headers, "", http_opts(config, opts))
     end
 
-    { :ok, response } = :hackney.body(client)
-    result            =
-      { status, headers, response }
-      |> Response.maybe_parse(opts)
+    case response do
+      { :error, _ }                    -> response
+      { :ok, status, headers, client } ->
+        { :ok, body } = :hackney.body(client)
 
-    if false != opts[:log] do
-      conn.__log__(%QueryEntry{
-        query:    query.payload,
-        metadata: %Metadata{
-          query_time:      query_time,
-          response_status: status
-        }
-      })
+        result = Response.maybe_parse({ status, headers, body }, opts)
+
+        if false != opts[:log] do
+          conn.__log__(%QueryEntry{
+            query:    query.payload,
+            metadata: %Metadata{
+              query_time:      query_time,
+              response_status: status
+            }
+          })
+        end
+
+        result
     end
-
-    result
   end
 
   @doc """

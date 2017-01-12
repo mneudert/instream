@@ -35,6 +35,12 @@ defmodule Instream.Connection.ErrorTest do
   end
 
 
+  test "reading data from an unresolvable host" do
+    query = "SELECT * FROM connection_error_tests"
+
+    assert { :error, :nxdomain } == UnreachableConnection.query(query)
+  end
+
   test "writing data to an unresolvable host" do
     data = %TestSeries{}
 
