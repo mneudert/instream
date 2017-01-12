@@ -27,7 +27,7 @@ defmodule Instream.Connection.QueryRunner do
       |> :hackney.head(headers, "", http_opts(config, opts))
     end
 
-    result = response |> Response.parse_ping()
+    result = Response.parse_ping(response)
     status = case response do
       { :ok, status, _ } -> status
       _                  -> 0
@@ -98,7 +98,7 @@ defmodule Instream.Connection.QueryRunner do
       |> :hackney.head(headers, "", http_opts(config, opts))
     end
 
-    result = response |> Response.parse_status()
+    result = Response.parse_status(response)
     status = case response do
       { :ok, status, _ } -> status
       _                  -> 0
