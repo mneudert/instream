@@ -1,45 +1,26 @@
-Code.require_file("helpers/hackney_pool.exs", __DIR__)
-Code.require_file("helpers/nil_logger.exs", __DIR__)
-
-Code.require_file("helpers/connection.exs", __DIR__)
-Code.require_file("helpers/connection_with_opts.exs", __DIR__)
-Code.require_file("helpers/env_connection.exs", __DIR__)
-Code.require_file("helpers/log_connection.exs", __DIR__)
-Code.require_file("helpers/udp_connection.exs", __DIR__)
-
-Code.require_file("helpers/anon_connection.exs", __DIR__)
-Code.require_file("helpers/guest_connection.exs", __DIR__)
-Code.require_file("helpers/invalid_connection.exs", __DIR__)
-Code.require_file("helpers/invalid_db_connection.exs", __DIR__)
-Code.require_file("helpers/not_found_connection.exs", __DIR__)
-Code.require_file("helpers/query_auth_connection.exs", __DIR__)
-Code.require_file("helpers/timeout_connection.exs", __DIR__)
-Code.require_file("helpers/unreachable_connection.exs", __DIR__)
-
-
 alias Instream.Admin.Database
 alias Instream.TestHelpers
 
+# grab ALL helpers and start connections
+File.ls!("test/helpers")
+|> Enum.map(fn (helper) ->
+     Code.require_file("helpers/#{helper}", __DIR__)
+     helper
+   end)
+|> Enum.filter(&( String.contains?(&1, "connection") ))
+|> Enum.map(fn (helper) ->
+     conn =
+       helper
+       |> String.replace(".exs", "")
+       |> String.replace("udp", "UDP") # adjust camelize behaviour
+       |> Macro.camelize()
 
-[
-  TestHelpers.Connection.child_spec,
-  TestHelpers.ConnectionWithOpts.child_spec,
-  TestHelpers.EnvConnection.child_spec,
-  TestHelpers.LogConnection.child_spec,
-  TestHelpers.UDPConnection.child_spec,
-
-  TestHelpers.AnonConnection.child_spec,
-  TestHelpers.GuestConnection.child_spec,
-  TestHelpers.InvalidConnection.child_spec,
-  TestHelpers.InvalidDbConnection.child_spec,
-  TestHelpers.NotFoundConnection.child_spec,
-  TestHelpers.QueryAuthConnection.child_spec,
-  TestHelpers.TimeoutConnection.child_spec,
-  TestHelpers.UnreachableConnection.child_spec
-]
+     Module.concat([ Instream.TestHelpers, conn ]).child_spec
+   end)
 |> Supervisor.start_link(strategy: :one_for_one)
 
 
+# setup test database
 _ = "test_database" |> Database.drop()   |> TestHelpers.Connection.execute()
 _ = "test_database" |> Database.create() |> TestHelpers.Connection.execute()
 
