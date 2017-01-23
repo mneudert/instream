@@ -1,3 +1,4 @@
+Code.require_file("helpers/hackney_pool.exs", __DIR__)
 Code.require_file("helpers/nil_logger.exs", __DIR__)
 
 Code.require_file("helpers/connection.exs", __DIR__)
@@ -12,6 +13,7 @@ Code.require_file("helpers/invalid_connection.exs", __DIR__)
 Code.require_file("helpers/invalid_db_connection.exs", __DIR__)
 Code.require_file("helpers/not_found_connection.exs", __DIR__)
 Code.require_file("helpers/query_auth_connection.exs", __DIR__)
+Code.require_file("helpers/timeout_connection.exs", __DIR__)
 Code.require_file("helpers/unreachable_connection.exs", __DIR__)
 
 
@@ -32,6 +34,7 @@ alias Instream.TestHelpers
   TestHelpers.InvalidDbConnection.child_spec,
   TestHelpers.NotFoundConnection.child_spec,
   TestHelpers.QueryAuthConnection.child_spec,
+  TestHelpers.TimeoutConnection.child_spec,
   TestHelpers.UnreachableConnection.child_spec
 ]
 |> Supervisor.start_link(strategy: :one_for_one)
@@ -39,6 +42,10 @@ alias Instream.TestHelpers
 
 _ = "test_database" |> Database.drop()   |> TestHelpers.Connection.execute()
 _ = "test_database" |> Database.create() |> TestHelpers.Connection.execute()
+
+
+# hook up custom hackney pool
+Application.put_env(:hackney, :pool_handler, TestHelpers.HackneyPool)
 
 
 # configure and start ExUnit
