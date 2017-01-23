@@ -145,6 +145,8 @@ Internally all requests are done using
 [`:hackney`](https://github.com/benoitc/hackney).
 
 The configuration key `:http_opts` is directly passed to the client process.
+Parts of it are also used internally by `:hackney` to control more generic
+behaviour (request pool to be used and it's configuration).
 
 Please see
 [`:hackney.request/5`](https://hexdocs.pm/hackney/hackney.html#request-5)
