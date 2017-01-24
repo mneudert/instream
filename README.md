@@ -152,6 +152,10 @@ Please see
 [`:hackney.request/5`](https://hexdocs.pm/hackney/hackney.html#request-5)
 for a complete list of available options.
 
+Setting the `:http_opts` key when calling a connection method allows usage of
+per-call options. The options are merged with the connection options and then
+passed on.
+
 #### Authentication
 
 To connect to an influxdb instance with http_auth enabled you have to

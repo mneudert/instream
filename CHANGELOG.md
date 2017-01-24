@@ -3,6 +3,8 @@
 ## v0.15.0-dev
 
 - Enhancements
+    - Every connection method (like `read` or `write`) can set per-call
+      `http_opts` passed on to the `hackney` client
     - Querying for data can now return an `{ :error, term }` style tuple if the
       communication with the server failed. For example `{ :error, :nxdomain }`
       if the host that is queried cannot be resolved by `hackney`

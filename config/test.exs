@@ -83,9 +83,3 @@ config :instream, Instream.TestHelpers.ConnectionWithOpts,
   loggers:   [{ Instream.TestHelpers.NilLogger, :log, [] }],
   pool:      [ max_overflow: 0, size: 1 ],
   http_opts: [ proxy: "http://invalidproxy" ]
-
-config :instream, Instream.TestHelpers.TimeoutConnection,
-  host:      "localhost",
-  loggers:   [{ Instream.TestHelpers.NilLogger, :log, [] }],
-  pool:      [ max_overflow: 0, size: 1 ],
-  http_opts: [ pool: :instream_test_sleeper ]

@@ -163,11 +163,15 @@ defmodule Instream.Connection.QueryRunner do
 
 
   defp http_opts(config, opts) do
-    http_opts = Keyword.get(config, :http_opts, [])
-
-    case opts[:timeout] do
-      nil     -> http_opts
-      timeout -> Keyword.put(http_opts, :recv_timeout, timeout)
+    call_opts    = Keyword.get(opts, :http_opts, [])
+    config_opts  = Keyword.get(config, :http_opts, [])
+    special_opts = case opts[:timeout] do
+      nil     -> []
+      timeout -> [ recv_timeout: timeout ]
     end
+
+    special_opts
+    |> Keyword.merge(config_opts)
+    |> Keyword.merge(call_opts)
   end
 end

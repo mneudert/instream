@@ -21,7 +21,8 @@ defmodule Instream.Writer.Line do
       |> URL.append_database(opts[:database] || config[:database])
       |> URL.append_precision(query.opts[:precision])
 
-    http_opts = Keyword.get(config, :http_opts, [])
+    http_opts = Keyword.merge(Keyword.get(config, :http_opts, []),
+                              Keyword.get(opts, :http_opts, []))
 
     with { :ok, status, headers, client } <- :hackney.post(url, headers, body, http_opts),
          { :ok, body }                    <- :hackney.body(client),
