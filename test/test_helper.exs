@@ -48,6 +48,11 @@ config  = case Version.parse(version) do
       false -> Keyword.put(config, :exclude, [{ :influxdb_version, "1.2.0" } | config[:exclude] ])
     end
 
+    config = case Version.match?(ver, "~> 1.3.0") do
+      true  -> config
+      false -> Keyword.put(config, :exclude, [{ :influxdb_version, "1.3.0" } | config[:exclude] ])
+    end
+
     config
 end
 
