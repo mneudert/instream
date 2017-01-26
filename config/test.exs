@@ -13,11 +13,9 @@ config :instream, Instream.TestHelpers.Connection,
   pool:    [ max_overflow: 0, size: 1 ]
 
 config :instream, Instream.TestHelpers.LogConnection,
-  auth:   [ username: "instream_test", password: "instream_test" ],
-  host:   "localhost",
-  pool:   [ max_overflow: 0, size: 1 ],
-  port:   8086,
-  scheme: "http"
+  auth: [ username: "instream_test", password: "instream_test" ],
+  host: "localhost",
+  pool: [ max_overflow: 0, size: 1 ]
 
 
 config :instream, Instream.TestHelpers.EnvConnection,
