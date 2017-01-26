@@ -24,6 +24,10 @@ matrix:
       env:    VER_GO=1.6.2 VER_INFLUXDB=v1.0.0
     - elixir: 1.4.0
       env:    VER_GO=1.7.4 VER_INFLUXDB=master
+  include:
+    - elixir:      1.4.0
+      env:         VER_GO=1.7.3 VER_INFLUXDB=v1.1.0
+      otp_release: 19.0
   allow_failures:
     - env: VER_GO=1.7.4 VER_INFLUXDB=master
 
