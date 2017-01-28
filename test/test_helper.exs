@@ -34,26 +34,17 @@ config = ExUnit.configuration
 
 version = TestHelpers.Connection.version
 config  = case Version.parse(version) do
-  :error       -> config
-  { :ok, ver } ->
-    config = Keyword.put(config, :exclude, config[:exclude] || [])
+  :error           -> config
+  { :ok, version } ->
+    versions = [ "1.1.0", "1.2.0", "1.3.0" ]
+    config   = Keyword.put(config, :exclude, config[:exclude] || [])
 
-    config = case Version.match?(ver, "~> 1.1.0") do
-      true  -> config
-      false -> Keyword.put(config, :exclude, [{ :influxdb_version, "1.1.0" } | config[:exclude] ])
+    Enum.reduce versions, config, fn (ver, acc) ->
+      case Version.match?(version, "~> #{ ver }") do
+        true  -> acc
+        false -> Keyword.put(acc, :exclude, [{ :influxdb_version, ver } | acc[:exclude] ])
+      end
     end
-
-    config = case Version.match?(ver, "~> 1.2.0") do
-      true  -> config
-      false -> Keyword.put(config, :exclude, [{ :influxdb_version, "1.2.0" } | config[:exclude] ])
-    end
-
-    config = case Version.match?(ver, "~> 1.3.0") do
-      true  -> config
-      false -> Keyword.put(config, :exclude, [{ :influxdb_version, "1.3.0" } | config[:exclude] ])
-    end
-
-    config
 end
 
 IO.puts "Running tests for InfluxDB version: #{ version }"
