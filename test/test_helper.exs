@@ -3,15 +3,11 @@ alias Instream.TestHelpers
 
 # grab ALL helpers and start connections
 File.ls!("test/helpers")
-|> Enum.map(fn (helper) ->
-     Code.require_file("helpers/#{helper}", __DIR__)
-     helper
-   end)
 |> Enum.filter(&( String.contains?(&1, "connection") ))
 |> Enum.map(fn (helper) ->
      conn =
        helper
-       |> String.replace(".exs", "")
+       |> String.replace(".ex", "")
        |> String.replace("udp", "UDP") # adjust camelize behaviour
        |> Macro.camelize()
 
