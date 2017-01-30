@@ -8,9 +8,11 @@
     - Querying for data can now return an `{ :error, term }` style tuple if the
       communication with the server failed. For example `{ :error, :nxdomain }`
       if the host that is queried cannot be resolved by `hackney`
+      ([#33](https://github.com/mneudert/instream/issues/33))
     - The line writer will now return an `{ :error, term }` style tuple if
       a problem occurs. For example `{ :error, :nxdomain }` if the host that
       should receive data cannot be resolved by `hackney`
+      ([#33](https://github.com/mneudert/instream/issues/33))
 
 - Backwards incompatible changes
     - Series definitions raise upon compilation if the contain a tag
