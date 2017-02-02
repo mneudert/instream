@@ -53,6 +53,10 @@ To run the tests you need to have the http-authentication enabled.
 Using the statements from the `.travis.yml` you can generate all necessary
 users for the tests with their proper privileges.
 
+The test suite will automatically try to detect the version of InfluxDB
+available. Upon successful detection features not avaialable will be excluded,
+for example the `:csv` response type being available since InfluxDB `1.1.0`.
+
 
 ## Usage
 
