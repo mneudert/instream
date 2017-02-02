@@ -105,6 +105,7 @@ defmodule Instream.WriterTest do
     }]}]} = result
   end
 
+  @tag :udp
   test "writer protocol: UDP" do
     data = %ProtocolsSeries{}
     data = %{ data | fields:    %{ data.fields | value: "UDP" }}

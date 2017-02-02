@@ -57,6 +57,13 @@ The test suite will automatically try to detect the version of InfluxDB
 available. Upon successful detection features not avaialable will be excluded,
 for example the `:csv` response type being available since InfluxDB `1.1.0`.
 
+If you have not configured your InfluxDB testing instance to provide an UDP
+endpoint to the "test\_database", you can exclude these tests manually:
+
+```shell
+mix test --exclude udp
+```
+
 
 ## Usage
 
