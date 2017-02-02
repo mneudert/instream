@@ -76,44 +76,54 @@ defmodule Instream.WriterTest do
       database    "test_database"
       measurement "writer_protocols"
 
-      tag :bar
-      tag :foo
+      tag :proto
 
       field :value
     end
   end
 
 
-  test "writer protocols" do
+  test "writer protocol: Line" do
     data = %ProtocolsSeries{}
-    data = %{ data | tags: %{ data.tags | foo: "foo", bar: "bar" }}
-
-    # Line (default) protocol
     data = %{ data | fields:    %{ data.fields | value: "Line" }}
+    data = %{ data | tags:      %{ data.tags   | proto: "Line" }}
     data = %{ data | timestamp: 1439587926 }
 
     assert :ok == data |> Connection.write(precision: :second)
 
-    # UDP protocol
+    # wait to ensure data was written
+    :timer.sleep(100)
+
+    # check data
+    result =
+         "SELECT * FROM #{ ProtocolsSeries.__meta__(:measurement) } WHERE proto='Line'"
+      |> Connection.query([ database:  ProtocolsSeries.__meta__(:database),
+                            precision: :nanosecond ])
+
+    assert %{ results: [%{ series: [%{
+      values: [[ 1439587926000000000, "Line", "Line" ]]
+    }]}]} = result
+  end
+
+  test "writer protocol: UDP" do
+    data = %ProtocolsSeries{}
     data = %{ data | fields:    %{ data.fields | value: "UDP" }}
+    data = %{ data | tags:      %{ data.tags   | proto: "UDP" }}
     data = %{ data | timestamp: 1439587927000000000 }
 
     assert :ok == data |> UDPConnection.write()
 
     # wait to ensure data was written
-    :timer.sleep(1250)
+    :timer.sleep(1000)
 
     # check data
     result =
-         "SELECT * FROM #{ ProtocolsSeries.__meta__(:measurement) } GROUP BY *"
+         "SELECT * FROM #{ ProtocolsSeries.__meta__(:measurement) } WHERE proto='UDP'"
       |> Connection.query([ database:  ProtocolsSeries.__meta__(:database),
                             precision: :nanosecond ])
 
     assert %{ results: [%{ series: [%{
-      values: [
-        [ 1439587926000000000, "Line" ],
-        [ 1439587927000000000, "UDP" ]
-      ]
+      values: [[ 1439587927000000000, "UDP", "UDP" ]]
     }]}]} = result
   end
 
