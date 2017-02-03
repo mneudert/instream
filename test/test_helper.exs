@@ -25,6 +25,26 @@ _ = "test_database" |> Database.create() |> TestHelpers.Connection.execute()
 Application.put_env(:hackney, :pool_handler, TestHelpers.HackneyPool)
 
 
+# start up inets fake influxdb server
+root          = to_char_list(__DIR__)
+httpd_config  = [
+  document_root: root,
+  modules:       [:instream_testhelpers_inets_proxy],
+  port:          0,
+  server_name:   'instream_testhelpers_inets_proxy',
+  server_root:   root
+]
+
+{ :ok, httpd_pid } = :inets.start(:httpd, httpd_config)
+
+inets_env =
+  :instream
+  |> Application.get_env(TestHelpers.InetsConnection)
+  |> Keyword.put(:port, :httpd.info(httpd_pid)[:port])
+
+Application.put_env(:instream, TestHelpers.InetsConnection, inets_env)
+
+
 # configure InfluxDB test exclusion
 config = ExUnit.configuration
 

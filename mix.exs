@@ -11,6 +11,7 @@ defmodule Instream.Mixfile do
       deps:    deps(),
 
       elixirc_paths:   elixirc_paths(Mix.env),
+      erlc_paths:      erlc_paths(Mix.env),
       build_embedded:  Mix.env == :prod,
       start_permanent: Mix.env == :prod,
 
@@ -49,6 +50,9 @@ defmodule Instream.Mixfile do
 
   defp elixirc_paths(:test), do: [ "lib", "test/helpers" ]
   defp elixirc_paths(_),     do: [ "lib" ]
+
+  defp erlc_paths(:test), do: [ "src", "test/helpers/inets" ]
+  defp erlc_paths(_),     do: [ "src" ]
 
   defp package do
     %{ files:       [ "CHANGELOG.md", "LICENSE", "mix.exs", "README.md", "lib" ],

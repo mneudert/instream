@@ -34,6 +34,14 @@ config :instream, Instream.TestHelpers.UDPConnection,
   writer:   Instream.Writer.UDP
 
 
+config :instream, Instream.TestHelpers.InetsConnection,
+  # port will be set properly during test setup
+  host:    "localhost",
+  loggers: [{ Instream.TestHelpers.NilLogger, :log, [] }],
+  pool:    [ max_overflow: 0, size: 1 ],
+  port:    99999
+
+
 config :instream, Instream.TestHelpers.AnonConnection,
   host:    "localhost",
   loggers: [{ Instream.TestHelpers.NilLogger, :log, [] }],
