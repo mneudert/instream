@@ -53,9 +53,9 @@ To run the tests you need to have the http-authentication enabled.
 Using the statements from the `.travis.yml` you can generate all necessary
 users for the tests with their proper privileges.
 
-The test suite will automatically try to detect the version of InfluxDB
-available. Upon successful detection features not avaialable will be excluded,
-for example the `:csv` response type being available since InfluxDB `1.1.0`.
+The test suite will automatically exclude tests not working for your current
+environment. This includes checking the available InfluxDB version and
+OTP release.
 
 If you have not configured your InfluxDB testing instance to provide an UDP
 endpoint to the "test\_database", you can exclude these tests manually:

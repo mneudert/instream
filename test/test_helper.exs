@@ -25,7 +25,7 @@ _ = "test_database" |> Database.create() |> TestHelpers.Connection.execute()
 Application.put_env(:hackney, :pool_handler, TestHelpers.HackneyPool)
 
 
-# configure and start ExUnit
+# configure InfluxDB test exclusion
 config = ExUnit.configuration
 
 version = TestHelpers.Connection.version
@@ -45,4 +45,21 @@ end
 
 IO.puts "Running tests for InfluxDB version: #{ version }"
 
+
+# configure OTP test exclusion
+release          = :otp_release |> :erlang.system_info() |> to_string()
+{ :ok, version } = Version.parse("#{ release }.0.0")
+versions         = [ "19.0" ]
+
+config = Enum.reduce versions, config, fn (ver, acc) ->
+  case Version.match?(version, "~> #{ ver }") do
+    true  -> acc
+    false -> Keyword.put(acc, :exclude, [{ :otp_release, ver } | acc[:exclude] ])
+  end
+end
+
+IO.puts "Running tests for OTP release: #{ release }"
+
+
+# start ExUnit
 ExUnit.start(config)
