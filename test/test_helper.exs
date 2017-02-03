@@ -32,7 +32,7 @@ version = TestHelpers.Connection.version
 config  = case Version.parse(version) do
   :error           -> config
   { :ok, version } ->
-    versions = [ "1.1.0", "1.2.0", "1.3.0" ]
+    versions = [ "1.1", "1.2", "1.3" ]
     config   = Keyword.put(config, :exclude, config[:exclude] || [])
 
     Enum.reduce versions, config, fn (ver, acc) ->

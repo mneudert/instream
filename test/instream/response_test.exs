@@ -12,7 +12,7 @@ defmodule Instream.ResponseTest do
     assert is_map(response)
   end
 
-  @tag influxdb_version: "1.1.0"
+  @tag influxdb_version: "1.1"
   test "response format: csv" do
     response = Database.show() |> Connection.execute([ result_as: :csv ])
 
