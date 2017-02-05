@@ -21,7 +21,7 @@ defmodule Instream.SeriesTest do
     use Instream.Series
 
     series do
-      database    "test_database"
+      database    "test_series_database"
       measurement "cpu_load"
 
       tag :host
@@ -45,7 +45,7 @@ defmodule Instream.SeriesTest do
 
 
   test "series metadata" do
-    assert TestSeries.__meta__(:database)    == "test_database"
+    assert TestSeries.__meta__(:database)    == "test_series_database"
     assert TestSeries.__meta__(:fields)      == [ :value ]
     assert TestSeries.__meta__(:measurement) == "cpu_load"
     assert TestSeries.__meta__(:tags)        == [ :core, :host ]
@@ -71,15 +71,15 @@ defmodule Instream.SeriesTest do
 
 
   test "extended series definition" do
-    database    = "test_database"
-    measurement = "test_measurement"
+    database    = "test_series_database"
+    measurement = "test_series_measurement"
 
     defmodule ClosureDefinition do
       use Instream.Series
 
       series do
-        fn_database    = fn -> "test_database" end
-        fn_measurement = fn -> "test_measurement" end
+        fn_database    = fn -> "test_series_database" end
+        fn_measurement = fn -> "test_series_measurement" end
 
         database    fn_database.()
         measurement fn_measurement.()
@@ -92,8 +92,8 @@ defmodule Instream.SeriesTest do
       use Instream.Series
 
       defmodule ExternalDefinitionProvider do
-        def database,    do: "test_database"
-        def measurement, do: "test_measurement"
+        def database,    do: "test_series_database"
+        def measurement, do: "test_series_measurement"
       end
 
       series do
@@ -108,8 +108,8 @@ defmodule Instream.SeriesTest do
       use Instream.Series
 
       series do
-        database    "#{ Mix.env }_database"
-        measurement "#{ Mix.env }_measurement"
+        database    "#{ Mix.env }_series_database"
+        measurement "#{ Mix.env }_series_measurement"
 
         field :satisfy_definition_rules
       end
