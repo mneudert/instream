@@ -3,7 +3,7 @@ defmodule Instream.ConnectionTest do
 
   alias Instream.Query.Builder
 
-  alias Instream.TestHelpers.Connection
+  alias Instream.TestHelpers.DefaultConnection
   alias Instream.TestHelpers.GuestConnection
 
 
@@ -27,15 +27,15 @@ defmodule Instream.ConnectionTest do
 
 
   test "ping connection" do
-    assert :pong == Connection.ping()
+    assert :pong == DefaultConnection.ping()
   end
 
   test "status connection" do
-    assert :ok == Connection.status()
+    assert :ok == DefaultConnection.status()
   end
 
   test "version connection" do
-    assert is_binary(Connection.version())
+    assert is_binary(DefaultConnection.version())
   end
 
 
@@ -43,7 +43,7 @@ defmodule Instream.ConnectionTest do
     result =
          Builder.from("empty_measurement")
       |> Builder.select("value")
-      |> Connection.query(database: @database)
+      |> DefaultConnection.query(database: @database)
 
     assert %{ results: _ } = result
   end
@@ -52,8 +52,8 @@ defmodule Instream.ConnectionTest do
     query_in  = "SELECT value FROM \"#{ @database }\".\"autogen\".\"empty_measurement\""
     query_out = "SELECT value FROM empty_measurement"
 
-    result_in  = query_in  |> Connection.query()
-    result_out = query_out |> Connection.query(database: @database)
+    result_in  = query_in  |> DefaultConnection.query()
+    result_out = query_out |> DefaultConnection.query(database: @database)
 
     assert result_in == result_out
   end
@@ -72,14 +72,14 @@ defmodule Instream.ConnectionTest do
       ]
     }
 
-    assert :ok == data |> Connection.write()
+    assert :ok == data |> DefaultConnection.write()
 
     # wait to ensure data was written
     :timer.sleep(250)
 
     # check data
     query  = "SELECT * FROM #{ measurement } GROUP BY *"
-    result = query |> Connection.query(database: @database)
+    result = query |> DefaultConnection.query(database: @database)
 
     %{ results: [%{ series: [%{ tags: values_tags,
                                 values: value_rows }]}]} = result
@@ -101,14 +101,14 @@ defmodule Instream.ConnectionTest do
       ]
     }
 
-    assert :ok == data |> Connection.write(async: true)
+    assert :ok == data |> DefaultConnection.write(async: true)
 
     # wait to ensure data was written
     :timer.sleep(250)
 
     # check data
     query  = "SELECT * FROM #{ measurement } GROUP BY *"
-    result = query |> Connection.query(database: @database)
+    result = query |> DefaultConnection.query(database: @database)
 
     %{ results: [%{ series: [%{ tags: values_tags,
                                 values: value_rows }]}]} = result
@@ -123,14 +123,14 @@ defmodule Instream.ConnectionTest do
     data = %{ data | fields: %{ data.fields | value: 17 }}
     data = %{ data | tags:   %{ data.tags   | foo: "foo", bar: "bar" }}
 
-    assert :ok == data |> Connection.write()
+    assert :ok == data |> DefaultConnection.write()
 
     # wait to ensure data was written
     :timer.sleep(250)
 
     # check data
     query  = "SELECT * FROM data_write_struct GROUP BY *"
-    result = query |> Connection.query(database: @database)
+    result = query |> DefaultConnection.query(database: @database)
 
     %{ results: [%{ series: [%{ tags: values_tags,
                                 values: value_rows }]}]} = result

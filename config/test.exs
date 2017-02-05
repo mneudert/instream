@@ -6,7 +6,7 @@ config :logger, :console,
   metadata: [:query_time, :response_status]
 
 
-config :instream, Instream.TestHelpers.Connection,
+config :instream, Instream.TestHelpers.DefaultConnection,
   auth:    [ username: "instream_test", password: "instream_test" ],
   host:    "localhost",
   loggers: [{ Instream.TestHelpers.NilLogger, :log, [] }],
@@ -84,7 +84,7 @@ config :instream, Instream.TestHelpers.UnreachableConnection,
   pool:    [ max_overflow: 0, size: 1 ]
 
 
-config :instream, Instream.TestHelpers.ConnectionWithOpts,
+config :instream, Instream.TestHelpers.OptionsConnection,
   host:      "localhost",
   loggers:   [{ Instream.TestHelpers.NilLogger, :log, [] }],
   pool:      [ max_overflow: 0, size: 1 ],

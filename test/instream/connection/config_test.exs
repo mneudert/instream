@@ -2,7 +2,7 @@ defmodule Instream.Connection.ConfigTest do
   use ExUnit.Case, async: true
 
   alias Instream.Connection.Config
-  alias Instream.TestHelpers.Connection, as: TestConnection
+  alias Instream.TestHelpers.DefaultConnection
   alias Instream.TestHelpers.EnvConnection
 
 
@@ -37,22 +37,22 @@ defmodule Instream.Connection.ConfigTest do
     assert "http" == Config.runtime(test, __MODULE__, nil) |> Keyword.get(:scheme)
     assert nil    == Config.runtime(test, __MODULE__, [ :auth, :username ])
 
-    assert "http"          == TestConnection.config() |> Keyword.get(:scheme)
-    assert "instream_test" == TestConnection.config([ :auth, :username ])
+    assert "http"          == DefaultConnection.config() |> Keyword.get(:scheme)
+    assert "instream_test" == DefaultConnection.config([ :auth, :username ])
   end
 
 
   test "deep configuration access" do
-    assert is_list(TestConnection.config())
+    assert is_list(DefaultConnection.config())
 
-    assert :instream       == TestConnection.config([ :otp_app ])
-    assert "instream_test" == TestConnection.config([ :auth, :username ])
+    assert :instream       == DefaultConnection.config([ :otp_app ])
+    assert "instream_test" == DefaultConnection.config([ :auth, :username ])
 
-    assert nil == TestConnection.config([ :key_without_value ])
+    assert nil == DefaultConnection.config([ :key_without_value ])
   end
 
   test "static otp_app configuration access", %{ test: test } do
-    assert :instream == TestConnection.config([ :otp_app ])
+    assert :instream == DefaultConnection.config([ :otp_app ])
 
     # not intended to be used this way!
     assert test == Config.runtime(test, nil, [ :otp_app ])

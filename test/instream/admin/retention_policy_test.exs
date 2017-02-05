@@ -2,7 +2,7 @@ defmodule Instream.Admin.RetentionPolicyTest do
   use ExUnit.Case, async: true
 
   alias Instream.Admin.RetentionPolicy
-  alias Instream.TestHelpers.Connection
+  alias Instream.TestHelpers.DefaultConnection
 
   @database "test_database"
   @rp_name  "rp_lifecycle"
@@ -16,9 +16,9 @@ defmodule Instream.Admin.RetentionPolicyTest do
     creation =
          @rp_name
       |> RetentionPolicy.create(@database, @rp_duration, @rp_replication)
-      |> Connection.execute()
+      |> DefaultConnection.execute()
 
-    listing = RetentionPolicy.show(@database) |> Connection.execute()
+    listing = RetentionPolicy.show(@database) |> DefaultConnection.execute()
 
     assert %{results: [%{}]} = creation
     assert %{results: [%{series: [%{values: listing_values}]}]} = listing
@@ -31,9 +31,9 @@ defmodule Instream.Admin.RetentionPolicyTest do
     alteration =
          @rp_name
       |> RetentionPolicy.alter(@database, @rp_altered)
-      |> Connection.execute()
+      |> DefaultConnection.execute()
 
-    listing = RetentionPolicy.show(@database) |> Connection.execute()
+    listing = RetentionPolicy.show(@database) |> DefaultConnection.execute()
 
     assert %{results: [%{}]} = alteration
     assert %{results: [%{series: [%{values: listing_values}]}]} = listing
@@ -43,8 +43,8 @@ defmodule Instream.Admin.RetentionPolicyTest do
     end)
 
     # delete retention policy
-    deletion = RetentionPolicy.drop(@rp_name, @database) |> Connection.execute()
-    listing  = RetentionPolicy.show(@database) |> Connection.execute()
+    deletion = RetentionPolicy.drop(@rp_name, @database) |> DefaultConnection.execute()
+    listing  = RetentionPolicy.show(@database) |> DefaultConnection.execute()
 
     assert %{results: [%{}]} = deletion
     assert %{results: [%{series: [ listing_rows ]}]} = listing

@@ -17,8 +17,8 @@ File.ls!("test/helpers")
 
 
 # setup test database
-_ = "test_database" |> Database.drop()   |> TestHelpers.Connection.execute()
-_ = "test_database" |> Database.create() |> TestHelpers.Connection.execute()
+_ = "test_database" |> Database.drop()   |> TestHelpers.DefaultConnection.execute()
+_ = "test_database" |> Database.create() |> TestHelpers.DefaultConnection.execute()
 
 
 # hook up custom hackney pool
@@ -48,7 +48,7 @@ Application.put_env(:instream, TestHelpers.InetsConnection, inets_env)
 # configure InfluxDB test exclusion
 config = ExUnit.configuration
 
-version = TestHelpers.Connection.version
+version = TestHelpers.DefaultConnection.version
 config  = case Version.parse(version) do
   :error           -> config
   { :ok, version } ->

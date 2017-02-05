@@ -1,7 +1,7 @@
 defmodule Instream.Connection.ErrorTest do
   use ExUnit.Case, async: true
 
-  alias Instream.TestHelpers.ConnectionWithOpts
+  alias Instream.TestHelpers.OptionsConnection
   alias Instream.TestHelpers.UnreachableConnection
 
 
@@ -21,17 +21,17 @@ defmodule Instream.Connection.ErrorTest do
 
   test "ping connection" do
     assert :error == UnreachableConnection.ping()
-    assert :error == ConnectionWithOpts.ping()
+    assert :error == OptionsConnection.ping()
   end
 
   test "status connection" do
     assert :error == UnreachableConnection.status()
-    assert :error == ConnectionWithOpts.status()
+    assert :error == OptionsConnection.status()
   end
 
   test "version connection" do
     assert :error == UnreachableConnection.version()
-    assert :error == ConnectionWithOpts.version()
+    assert :error == OptionsConnection.version()
   end
 
 

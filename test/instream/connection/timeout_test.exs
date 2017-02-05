@@ -1,7 +1,7 @@
 defmodule Instream.Connection.TimeoutTest do
   use ExUnit.Case, async: true
 
-  alias Instream.TestHelpers.Connection
+  alias Instream.TestHelpers.DefaultConnection
 
 
   test "timeout" do
@@ -12,7 +12,7 @@ defmodule Instream.Connection.TimeoutTest do
     ]
 
     try do
-      Connection.execute("", opts)
+      DefaultConnection.execute("", opts)
 
       flunk "did not receive expected timeout"
     catch

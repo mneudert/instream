@@ -2,16 +2,16 @@ defmodule Instream.Admin.DatabaseTest do
   use ExUnit.Case, async: true
 
   alias Instream.Admin.Database
-  alias Instream.TestHelpers.Connection
+  alias Instream.TestHelpers.DefaultConnection
 
   @database "test_database_lifecycle"
 
   test "database lifecycle" do
-    _ = @database |> Database.drop() |> Connection.execute()
+    _ = @database |> Database.drop() |> DefaultConnection.execute()
 
     # create test database
-    creation = @database |> Database.create() |> Connection.execute()
-    listing  = Database.show() |> Connection.execute()
+    creation = @database |> Database.create() |> DefaultConnection.execute()
+    listing  = Database.show() |> DefaultConnection.execute()
 
     assert %{results: [%{}]} = creation
     assert %{results: [%{series: [%{columns: ["name"], values: listing_values}]}]} = listing
@@ -19,8 +19,8 @@ defmodule Instream.Admin.DatabaseTest do
     assert Enum.any?(listing_values, fn ([ db ]) -> db == @database end)
 
     # delete test database
-    deletion = @database |> Database.drop() |> Connection.execute()
-    listing  = Database.show() |> Connection.execute()
+    deletion = @database |> Database.drop() |> DefaultConnection.execute()
+    listing  = Database.show() |> DefaultConnection.execute()
 
     assert %{results: [%{}]} = deletion
     assert %{results: [%{series: [ listing_rows ]}]} = listing
@@ -33,14 +33,14 @@ defmodule Instream.Admin.DatabaseTest do
 
 
   test "database creation cases" do
-    _ = @database |> Database.drop() |> Connection.execute()
-    _ = @database |> Database.create() |> Connection.execute()
+    _ = @database |> Database.drop() |> DefaultConnection.execute()
+    _ = @database |> Database.create() |> DefaultConnection.execute()
 
     # (implicit) if not exists
     result =
          @database
       |> Database.create()
-      |> Connection.execute()
+      |> DefaultConnection.execute()
 
     assert %{results: [%{}]} = result
   end

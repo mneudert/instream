@@ -1,7 +1,7 @@
 defmodule Instream.WriterTest do
   use ExUnit.Case, async: true
 
-  alias Instream.TestHelpers.Connection
+  alias Instream.TestHelpers.DefaultConnection
   alias Instream.TestHelpers.UDPConnection
 
 
@@ -89,7 +89,7 @@ defmodule Instream.WriterTest do
     data = %{ data | tags:      %{ data.tags   | proto: "Line" }}
     data = %{ data | timestamp: 1439587926 }
 
-    assert :ok == data |> Connection.write(precision: :second)
+    assert :ok == data |> DefaultConnection.write(precision: :second)
 
     # wait to ensure data was written
     :timer.sleep(100)
@@ -97,8 +97,8 @@ defmodule Instream.WriterTest do
     # check data
     result =
          "SELECT * FROM #{ ProtocolsSeries.__meta__(:measurement) } WHERE proto='Line'"
-      |> Connection.query([ database:  ProtocolsSeries.__meta__(:database),
-                            precision: :nanosecond ])
+      |> DefaultConnection.query([ database:  ProtocolsSeries.__meta__(:database),
+                                   precision: :nanosecond ])
 
     assert %{ results: [%{ series: [%{
       values: [[ 1439587926000000000, "Line", "Line" ]]
@@ -120,8 +120,8 @@ defmodule Instream.WriterTest do
     # check data
     result =
          "SELECT * FROM #{ ProtocolsSeries.__meta__(:measurement) } WHERE proto='UDP'"
-      |> Connection.query([ database:  ProtocolsSeries.__meta__(:database),
-                            precision: :nanosecond ])
+      |> DefaultConnection.query([ database:  ProtocolsSeries.__meta__(:database),
+                                   precision: :nanosecond ])
 
     assert %{ results: [%{ series: [%{
       values: [[ 1439587927000000000, "UDP", "UDP" ]]
@@ -136,7 +136,7 @@ defmodule Instream.WriterTest do
                                               float:   1.1,
                                               integer: 100 }}
 
-    assert :ok == data |> Connection.write()
+    assert :ok == data |> DefaultConnection.write()
 
     # wait to ensure data was written
     :timer.sleep(250)
@@ -144,7 +144,7 @@ defmodule Instream.WriterTest do
     # check data
     result =
          "SELECT * FROM #{ LineEncodingSeries.__meta__(:measurement) } GROUP BY *"
-      |> Connection.query(database: LineEncodingSeries.__meta__(:database))
+      |> DefaultConnection.query(database: LineEncodingSeries.__meta__(:database))
 
     assert %{ results: [%{ series: [%{
       values: [[ _, "binary", false, 1.1, 100 ]]
@@ -156,7 +156,7 @@ defmodule Instream.WriterTest do
     data = %ErrorsSeries{}
     data = %{ data | fields: %{ data.fields | binary:  "binary" }}
 
-    assert :ok = data |> Connection.write()
+    assert :ok = data |> DefaultConnection.write()
 
     # wait to ensure data was written
     :timer.sleep(250)
@@ -165,7 +165,7 @@ defmodule Instream.WriterTest do
     data = %{ data | fields: %{ data.fields | binary: 12345 }}
 
     # Line protocol write error
-    %{ error: error } = data |> Connection.write()
+    %{ error: error } = data |> DefaultConnection.write()
 
     String.contains?(error, "conflict")
   end
@@ -184,7 +184,7 @@ defmodule Instream.WriterTest do
     outside = %{ outside | fields:    %{ outside.fields | value: 9.87654 }}
     outside = %{ outside | timestamp: 1439587927 }
 
-    assert :ok == [ inside, outside ] |> Connection.write(precision: :second)
+    assert :ok == [ inside, outside ] |> DefaultConnection.write(precision: :second)
 
     # wait to ensure data was written
     :timer.sleep(250)
@@ -192,7 +192,7 @@ defmodule Instream.WriterTest do
     # check data
     result =
          "SELECT * FROM #{ BatchSeries.__meta__(:measurement) }"
-      |> Connection.query(database: BatchSeries.__meta__(:database))
+      |> DefaultConnection.query(database: BatchSeries.__meta__(:database))
 
     assert %{ results: [%{ series: [%{
       columns: [ "time", "scope", "value" ],
@@ -207,7 +207,7 @@ defmodule Instream.WriterTest do
     entry = %{ entry | tags:   %{ entry.tags   | filled: "filled_tag" }}
     entry = %{ entry | fields: %{ entry.fields | value: 100 }}
 
-    assert :ok = Connection.write(entry)
+    assert :ok = DefaultConnection.write(entry)
 
     # wait to ensure data was written
     :timer.sleep(250)
@@ -215,7 +215,7 @@ defmodule Instream.WriterTest do
     # check data
     result =
          "SELECT * FROM #{ EmptyTagSeries.__meta__(:measurement) }"
-      |> Connection.query(database: EmptyTagSeries.__meta__(:database))
+      |> DefaultConnection.query(database: EmptyTagSeries.__meta__(:database))
 
     %{ results: [%{ series: [%{ columns: columns }]}]} = result
 
@@ -232,7 +232,7 @@ defmodule Instream.WriterTest do
 
     entry = %CustomDatabaseSeries{}
     entry = %{ entry | fields: %{ entry.fields | value: 100 }}
-    assert :ok = Connection.write(entry, database: database)
+    assert :ok = DefaultConnection.write(entry, database: database)
 
     # wait to ensure data was written
     :timer.sleep(250)
@@ -240,7 +240,7 @@ defmodule Instream.WriterTest do
     # check data
     result =
          "SELECT * FROM #{ CustomDatabaseSeries.__meta__(:measurement) }"
-      |> Connection.query(database: database)
+      |> DefaultConnection.query(database: database)
 
     %{ results: [%{ series: [%{ columns: columns }]}]} = result
 
