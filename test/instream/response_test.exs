@@ -3,7 +3,7 @@ defmodule Instream.ResponseTest do
 
   alias Instream.Admin.Database
   alias Instream.Response
-  alias Instream.TestHelpers.DefaultConnection
+  alias Instream.TestHelpers.Connections.DefaultConnection
 
 
   test "response format: default (parsed)" do

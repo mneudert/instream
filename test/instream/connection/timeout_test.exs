@@ -1,7 +1,7 @@
 defmodule Instream.Connection.TimeoutTest do
   use ExUnit.Case, async: true
 
-  alias Instream.TestHelpers.DefaultConnection
+  alias Instream.TestHelpers.Connections.DefaultConnection
 
 
   test "timeout" do

@@ -2,7 +2,7 @@ defmodule Instream.Admin.RetentionPolicyTest do
   use ExUnit.Case, async: true
 
   alias Instream.Admin.RetentionPolicy
-  alias Instream.TestHelpers.DefaultConnection
+  alias Instream.TestHelpers.Connections.DefaultConnection
 
   @database "test_database"
   @rp_name  "rp_lifecycle"

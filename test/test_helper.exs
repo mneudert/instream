@@ -1,8 +1,9 @@
 alias Instream.Admin.Database
 alias Instream.TestHelpers
+alias Instream.TestHelpers.Connections
 
 # grab ALL helpers and start connections
-File.ls!("test/helpers")
+File.ls!("test/helpers/connections")
 |> Enum.filter( &String.contains?(&1, "connection") )
 |> Enum.map(fn (helper) ->
      conn =
@@ -11,14 +12,14 @@ File.ls!("test/helpers")
        |> String.replace("udp", "UDP") # adjust camelize behaviour
        |> Macro.camelize()
 
-     Module.concat([ Instream.TestHelpers, conn ]).child_spec
+     Module.concat([ Connections, conn ]).child_spec
    end)
 |> Supervisor.start_link(strategy: :one_for_one)
 
 
 # setup test database
-_ = "test_database" |> Database.drop()   |> TestHelpers.DefaultConnection.execute()
-_ = "test_database" |> Database.create() |> TestHelpers.DefaultConnection.execute()
+_ = "test_database" |> Database.drop()   |> Connections.DefaultConnection.execute()
+_ = "test_database" |> Database.create() |> Connections.DefaultConnection.execute()
 
 
 # hook up custom hackney pool
@@ -39,16 +40,16 @@ httpd_config  = [
 
 inets_env =
   :instream
-  |> Application.get_env(TestHelpers.InetsConnection)
+  |> Application.get_env(Connections.InetsConnection)
   |> Keyword.put(:port, :httpd.info(httpd_pid)[:port])
 
-Application.put_env(:instream, TestHelpers.InetsConnection, inets_env)
+Application.put_env(:instream, Connections.InetsConnection, inets_env)
 
 
 # configure InfluxDB test exclusion
 config = ExUnit.configuration
 
-version = TestHelpers.DefaultConnection.version
+version = Connections.DefaultConnection.version
 config  = case Version.parse(version) do
   :error           -> config
   { :ok, version } ->

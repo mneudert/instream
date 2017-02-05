@@ -2,8 +2,8 @@ defmodule Instream.Connection.ConfigTest do
   use ExUnit.Case, async: true
 
   alias Instream.Connection.Config
-  alias Instream.TestHelpers.DefaultConnection
-  alias Instream.TestHelpers.EnvConnection
+  alias Instream.TestHelpers.Connections.DefaultConnection
+  alias Instream.TestHelpers.Connections.EnvConnection
 
 
   test "missing configuration raises", %{ test: test } do

@@ -1,91 +1,94 @@
 use Mix.Config
 
+alias Instream.TestHelpers
+alias Instream.TestHelpers.Connections, as: TestConnections
+
 
 config :logger, :console,
   format: "\n$time $metadata[$level] $levelpad$message\n",
   metadata: [:query_time, :response_status]
 
 
-config :instream, Instream.TestHelpers.DefaultConnection,
+config :instream,TestConnections.DefaultConnection,
   auth:    [ username: "instream_test", password: "instream_test" ],
   host:    "localhost",
-  loggers: [{ Instream.TestHelpers.NilLogger, :log, [] }],
+  loggers: [{TestHelpers.NilLogger, :log, [] }],
   pool:    [ max_overflow: 0, size: 1 ]
 
-config :instream, Instream.TestHelpers.LogConnection,
+config :instream,TestConnections.LogConnection,
   auth: [ username: "instream_test", password: "instream_test" ],
   host: "localhost",
   pool: [ max_overflow: 0, size: 1 ]
 
 
-config :instream, Instream.TestHelpers.EnvConnection,
+config :instream,TestConnections.EnvConnection,
   auth:    [ username: { :system, "INSTREAM_TEST_USERNAME" },
              password: { :system, "INSTREAM_TEST_PASSWORD" } ],
   host:    { :system, "INSTREAM_TEST_HOST" },
-  loggers: [{ Instream.TestHelpers.NilLogger, :log, [] }],
+  loggers: [{TestHelpers.NilLogger, :log, [] }],
   pool:    [ max_overflow: 0, size: 1 ]
 
-config :instream, Instream.TestHelpers.UDPConnection,
+config :instream,TestConnections.UDPConnection,
   auth:     [ username: "instream_test", password: "instream_test" ],
   host:     "localhost",
-  loggers:  [{ Instream.TestHelpers.NilLogger, :log, [] }],
+  loggers:  [{TestHelpers.NilLogger, :log, [] }],
   pool:     [ max_overflow: 0, size: 1 ],
   port_udp: 8089,
   writer:   Instream.Writer.UDP
 
 
-config :instream, Instream.TestHelpers.InetsConnection,
+config :instream,TestConnections.InetsConnection,
   # port will be set properly during test setup
   host:    "localhost",
-  loggers: [{ Instream.TestHelpers.NilLogger, :log, [] }],
+  loggers: [{TestHelpers.NilLogger, :log, [] }],
   pool:    [ max_overflow: 0, size: 1 ],
   port:    99999
 
 
-config :instream, Instream.TestHelpers.AnonConnection,
+config :instream,TestConnections.AnonConnection,
   host:    "localhost",
-  loggers: [{ Instream.TestHelpers.NilLogger, :log, [] }],
+  loggers: [{TestHelpers.NilLogger, :log, [] }],
   pool:    [ max_overflow: 0, size: 1 ]
 
-config :instream, Instream.TestHelpers.GuestConnection,
+config :instream,TestConnections.GuestConnection,
   auth:    [ username: "instream_guest", password: "instream_guest" ],
   host:    "localhost",
-  loggers: [{ Instream.TestHelpers.NilLogger, :log, [] }],
+  loggers: [{TestHelpers.NilLogger, :log, [] }],
   pool:    [ max_overflow: 0, size: 1 ]
 
-config :instream, Instream.TestHelpers.InvalidConnection,
+config :instream,TestConnections.InvalidConnection,
   auth:    [ username: "instream_test", password: "instream_invalid" ],
   host:    "localhost",
-  loggers: [{ Instream.TestHelpers.NilLogger, :log, [] }],
+  loggers: [{TestHelpers.NilLogger, :log, [] }],
   pool:    [ max_overflow: 0, size: 1 ]
 
-config :instream, Instream.TestHelpers.InvalidDbConnection,
+config :instream,TestConnections.InvalidDbConnection,
   auth:     [ username: "instream_test", password: "instream_test" ],
   database: "invalid_test_database",
   host:     "localhost",
-  loggers:  [{ Instream.TestHelpers.NilLogger, :log, [] }],
+  loggers:  [{TestHelpers.NilLogger, :log, [] }],
   pool:     [ max_overflow: 0, size: 1 ]
 
-config :instream, Instream.TestHelpers.NotFoundConnection,
+config :instream,TestConnections.NotFoundConnection,
   auth:    [ username: "instream_not_found", password: "instream_not_found" ],
   host:    "localhost",
-  loggers: [{ Instream.TestHelpers.NilLogger, :log, [] }],
+  loggers: [{TestHelpers.NilLogger, :log, [] }],
   pool:    [ max_overflow: 0, size: 1 ]
 
-config :instream, Instream.TestHelpers.QueryAuthConnection,
+config :instream,TestConnections.QueryAuthConnection,
   auth:    [ method: :query, username: "instream_test", password: "instream_test" ],
   host:    "localhost",
-  loggers: [{ Instream.TestHelpers.NilLogger, :log, [] }],
+  loggers: [{TestHelpers.NilLogger, :log, [] }],
   pool:    [ max_overflow: 0, size: 1 ]
 
-config :instream, Instream.TestHelpers.UnreachableConnection,
+config :instream,TestConnections.UnreachableConnection,
   host:    "some.really.unreachable.host",
-  loggers: [{ Instream.TestHelpers.NilLogger, :log, [] }],
+  loggers: [{TestHelpers.NilLogger, :log, [] }],
   pool:    [ max_overflow: 0, size: 1 ]
 
 
-config :instream, Instream.TestHelpers.OptionsConnection,
+config :instream,TestConnections.OptionsConnection,
   host:      "localhost",
-  loggers:   [{ Instream.TestHelpers.NilLogger, :log, [] }],
+  loggers:   [{TestHelpers.NilLogger, :log, [] }],
   pool:      [ max_overflow: 0, size: 1 ],
   http_opts: [ proxy: "http://invalidproxy" ]

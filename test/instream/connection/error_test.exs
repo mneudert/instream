@@ -1,8 +1,8 @@
 defmodule Instream.Connection.ErrorTest do
   use ExUnit.Case, async: true
 
-  alias Instream.TestHelpers.OptionsConnection
-  alias Instream.TestHelpers.UnreachableConnection
+  alias Instream.TestHelpers.Connections.OptionsConnection
+  alias Instream.TestHelpers.Connections.UnreachableConnection
 
 
   defmodule TestSeries do

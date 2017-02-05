@@ -2,7 +2,7 @@ defmodule Instream.Admin.DatabaseTest do
   use ExUnit.Case, async: true
 
   alias Instream.Admin.Database
-  alias Instream.TestHelpers.DefaultConnection
+  alias Instream.TestHelpers.Connections.DefaultConnection
 
   @database "test_database_lifecycle"
 

@@ -3,8 +3,8 @@ defmodule Instream.ConnectionTest do
 
   alias Instream.Query.Builder
 
-  alias Instream.TestHelpers.DefaultConnection
-  alias Instream.TestHelpers.GuestConnection
+  alias Instream.TestHelpers.Connections.DefaultConnection
+  alias Instream.TestHelpers.Connections.GuestConnection
 
 
   @database "test_database"

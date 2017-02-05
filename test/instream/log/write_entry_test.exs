@@ -3,7 +3,7 @@ defmodule Instream.Log.WriteEntryTest do
 
   import ExUnit.CaptureIO
 
-  alias Instream.TestHelpers.LogConnection
+  alias Instream.TestHelpers.Connections.LogConnection
 
 
   defmodule TestSeries do

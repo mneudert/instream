@@ -3,7 +3,7 @@ defmodule Instream.Log.StatusEntryTest do
 
   import ExUnit.CaptureIO
 
-  alias Instream.TestHelpers.LogConnection
+  alias Instream.TestHelpers.Connections.LogConnection
 
 
   test "logging status requests" do

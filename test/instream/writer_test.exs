@@ -1,8 +1,8 @@
 defmodule Instream.WriterTest do
   use ExUnit.Case, async: true
 
-  alias Instream.TestHelpers.DefaultConnection
-  alias Instream.TestHelpers.UDPConnection
+  alias Instream.TestHelpers.Connections.DefaultConnection
+  alias Instream.TestHelpers.Connections.UDPConnection
 
 
   defmodule BatchSeries do

@@ -3,7 +3,7 @@ defmodule Instream.Log.OptionFalse do
 
   import ExUnit.CaptureIO
 
-  alias Instream.TestHelpers.LogConnection
+  alias Instream.TestHelpers.Connections.LogConnection
 
 
   test "not logging ping requests" do

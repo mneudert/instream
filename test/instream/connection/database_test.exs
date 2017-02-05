@@ -1,7 +1,7 @@
 defmodule Instream.Connection.DatabaseTest do
   use ExUnit.Case, async: true
 
-  alias Instream.TestHelpers.InvalidDbConnection
+  alias Instream.TestHelpers.Connections.InvalidDbConnection
 
 
   defmodule DatabaseSeries do

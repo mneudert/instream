@@ -2,11 +2,11 @@ defmodule Instream.AuthTest do
   use ExUnit.Case, async: true
 
   alias Instream.Admin.Database
-  alias Instream.TestHelpers.AnonConnection
-  alias Instream.TestHelpers.GuestConnection
-  alias Instream.TestHelpers.InvalidConnection
-  alias Instream.TestHelpers.NotFoundConnection
-  alias Instream.TestHelpers.QueryAuthConnection
+  alias Instream.TestHelpers.Connections.AnonConnection
+  alias Instream.TestHelpers.Connections.GuestConnection
+  alias Instream.TestHelpers.Connections.InvalidConnection
+  alias Instream.TestHelpers.Connections.NotFoundConnection
+  alias Instream.TestHelpers.Connections.QueryAuthConnection
 
 
   test "anonymous user connection" do
