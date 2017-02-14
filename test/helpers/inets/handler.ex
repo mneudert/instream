@@ -29,4 +29,10 @@ defmodule Instream.TestHelpers.Inets.Handler do
 
     {:proceed, [{:response, {:response, head, body}}]}
   end
+
+
+  if Version.compare(System.version, "1.3.0") == :lt do
+    # wrap "to_charlist" to allow usage
+    defp to_charlist(data), do: to_char_list(data)
+  end
 end
