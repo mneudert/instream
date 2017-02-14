@@ -1,18 +1,18 @@
 defmodule Instream.Connection.TimeoutTest do
   use ExUnit.Case, async: true
 
-  alias Instream.TestHelpers.Connections.DefaultConnection
+  alias Instream.TestHelpers.Connections.InetsConnection
 
 
   test "timeout" do
-    timeout = 7
+    timeout = 10
     opts    = [
-      http_opts: [ pool: :instream_test_sleeper ],
-      timeout:   timeout
+      database: "timeout",
+      timeout:  timeout
     ]
 
     try do
-      DefaultConnection.execute("", opts)
+      InetsConnection.query("", opts)
 
       flunk "did not receive expected timeout"
     catch

@@ -1,5 +1,4 @@
 alias Instream.Admin.Database
-alias Instream.TestHelpers
 alias Instream.TestHelpers.Connections
 
 # grab ALL helpers and start connections
@@ -20,10 +19,6 @@ File.ls!("test/helpers/connections")
 # setup test database
 _ = "test_database" |> Database.drop()   |> Connections.DefaultConnection.execute()
 _ = "test_database" |> Database.create() |> Connections.DefaultConnection.execute()
-
-
-# hook up custom hackney pool
-Application.put_env(:hackney, :pool_handler, TestHelpers.HackneyPool)
 
 
 # start up inets fake influxdb server
