@@ -1,9 +1,9 @@
 defmodule Instream.WriterTest do
   use ExUnit.Case, async: true
 
+  alias Instream.Admin.RetentionPolicy
   alias Instream.TestHelpers.Connections.DefaultConnection
   alias Instream.TestHelpers.Connections.UDPConnection
-
 
   defmodule BatchSeries do
     use Instream.Series
@@ -245,5 +245,30 @@ defmodule Instream.WriterTest do
     %{ results: [%{ series: [%{ columns: columns }]}]} = result
 
     assert Enum.member?(columns, "value")
+  end
+
+  test "writing with passed retention policy option" do
+    RetentionPolicy.create("one_week", "test_database", "1w", 1)
+    |> DefaultConnection.execute()
+
+    data = %ProtocolsSeries{}
+    data = %{ data | fields: %{ data.fields | value: "Line" }}
+    data = %{ data | tags:   %{ data.tags   | proto: "ForRp" }}
+
+    assert :ok == data |> DefaultConnection.write(retention_policy: "one_week")
+
+    :timer.sleep(100)
+
+    %{results: [should_not_be_in_default_rp]} =
+      "SELECT * FROM writer_protocols WHERE proto='ForRp'"
+      |> DefaultConnection.query(database: "test_database")
+
+    refute Map.has_key?(should_not_be_in_default_rp, :series)
+
+    result =
+      ~s[SELECT * FROM "one_week"."writer_protocols" WHERE proto='ForRp']
+      |> DefaultConnection.query(database: "test_database")
+
+    assert %{ results: [%{ series: [%{values: [[ _, "ForRp", "Line" ]]}]}]} = result
   end
 end
