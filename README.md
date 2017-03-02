@@ -517,6 +517,14 @@ data
 |> MyApp.MyConnection.write([ async: true, precision: :second ])
 ```
 
+If you want to specify the target retention policy name for the write, you can do so like this:
+
+```elixir
+data
+|> MyApp.MyConnection.write(retention_policy: "two_weeks")
+```
+
+
 Supported precision types are:
 
 - `:hour`

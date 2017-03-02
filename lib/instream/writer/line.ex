@@ -20,6 +20,7 @@ defmodule Instream.Writer.Line do
       |> URL.write()
       |> URL.append_database(opts[:database] || config[:database])
       |> URL.append_precision(query.opts[:precision])
+      |> URL.append_retention_policy(query.opts[:retention_policy])
 
     http_opts = Keyword.merge(Keyword.get(config, :http_opts, []),
                               Keyword.get(opts, :http_opts, []))

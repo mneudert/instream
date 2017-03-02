@@ -50,6 +50,13 @@ defmodule Instream.Query.URL do
   end
 
   @doc """
+  Appends a retention policy to a URL.
+  """
+  @spec append_retention_policy(String.t, String.t) :: String.t
+  def append_retention_policy(url, nil),      do: url
+  def append_retention_policy(url, retention_policy_name), do: url |> append_param("rp", retention_policy_name)
+
+  @doc """
   Appends a query to an URL.
   """
   @spec append_query(String.t, String.t) :: String.t
