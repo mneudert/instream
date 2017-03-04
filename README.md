@@ -13,8 +13,8 @@ __This module has experimental parts that may change unexpectedly.__
 
 Tested influxdb versions:
 
-- `1.0.0`
-- `1.1.0`
+- `1.0.2`
+- `1.1.2`
 - `1.2.1-rc5`
 
 (see

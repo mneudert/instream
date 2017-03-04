@@ -6,8 +6,8 @@ env:
   global:
     - MIX_ENV=test
   matrix:
-    - VER_GO=1.6.2 VER_INFLUXDB=v1.0.0
-    - VER_GO=1.7.3 VER_INFLUXDB=v1.1.0
+    - VER_GO=1.6.2 VER_INFLUXDB=v1.0.2
+    - VER_GO=1.7.3 VER_INFLUXDB=v1.1.2
     - VER_GO=1.7.4 VER_INFLUXDB=v1.2.1-rc5
     - VER_GO=1.7.4 VER_INFLUXDB=master
 
