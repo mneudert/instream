@@ -9,6 +9,8 @@
       communication with the server failed. For example `{ :error, :nxdomain }`
       if the host that is queried cannot be resolved by `hackney`
       ([#33](https://github.com/mneudert/instream/issues/33))
+    - The line writer now accepts a retention policy used for writing
+      ([#34](https://github.com/mneudert/instream/pull/34))
     - The line writer will now return an `{ :error, term }` style tuple if
       a problem occurs. For example `{ :error, :nxdomain }` if the host that
       should receive data cannot be resolved by `hackney`
