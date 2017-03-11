@@ -12,7 +12,7 @@ defmodule Instream.Writer.Line do
 
   def write(query, opts, %{ module: conn }) do
     config  = conn.config()
-    headers = Headers.assemble(config) ++ [{ 'Content-Type', 'text/plain' }]
+    headers = Headers.assemble(config) ++ [{ "Content-Type", "text/plain" }]
     body    = query.payload |> to_line()
 
     url =
