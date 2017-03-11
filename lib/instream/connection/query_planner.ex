@@ -52,18 +52,9 @@ defmodule Instream.Connection.QueryPlanner do
   end
 
   defp execute_sync(query, opts, conn) do
-    case opts[:timeout] do
-      nil ->
-        :poolboy.transaction(
-          conn.__pool__,
-          &GenServer.call(&1, { :execute, query, opts })
-        )
-
-      timeout ->
-        :poolboy.transaction(
-          conn.__pool__,
-          &GenServer.call(&1, { :execute, query, opts }, timeout)
-        )
-    end
+    :poolboy.transaction(
+      conn.__pool__,
+      &GenServer.call(&1, { :execute, query, opts })
+    )
   end
 end

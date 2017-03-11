@@ -11,13 +11,6 @@ defmodule Instream.Connection.TimeoutTest do
       timeout:  timeout
     ]
 
-    try do
-      InetsConnection.query("", opts)
-
-      flunk "did not receive expected timeout"
-    catch
-      :exit, reason ->
-        assert { :timeout, { GenServer, :call, [ _, _, ^timeout ]}} = reason
-    end
+    assert { :error, :timeout } == InetsConnection.query("", opts)
   end
 end

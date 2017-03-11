@@ -15,6 +15,9 @@
       a problem occurs. For example `{ :error, :nxdomain }` if the host that
       should receive data cannot be resolved by `hackney`
       ([#33](https://github.com/mneudert/instream/issues/33))
+    - Timeouts occurring when executing a query are now returned as
+      `{ :error, :timeout }` instead of raising
+      ([#33](https://github.com/mneudert/instream/issues/33))
 
 - Backwards incompatible changes
     - Series definitions raise upon compilation if the contain a tag

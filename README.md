@@ -403,10 +403,6 @@ This does not apply to write requests. They are currently only affected by
 configured `:recv_timeout` values. Setting a connection timeout enables you to
 have a different timeout for read and write requests.
 
-_Note:_ You will probably see some `MatchError` messages. These are related
-to the current pool clients not matching for timeouts returned by `:hackney`.
-This behaviour will change "soon-ish".
-
 
 ### Query Builder
 
