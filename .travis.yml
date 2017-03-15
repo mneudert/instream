@@ -8,7 +8,7 @@ env:
   matrix:
     - VER_GO=1.6.2 VER_INFLUXDB=v1.0.2
     - VER_GO=1.7.3 VER_INFLUXDB=v1.1.2
-    - VER_GO=1.7.4 VER_INFLUXDB=v1.2.2
+    - VER_GO=1.7.4 VER_INFLUXDB=v1.2.2 TRAVIS_COVERAGE=true
     - VER_GO=1.7.4 VER_INFLUXDB=master
 
 matrix:
@@ -66,8 +66,10 @@ after_failure:
   - echo "==> stderr <=="
   - cat ./influxdb.stderr
 
-after_success:
-  - mix coveralls.travis
+after_success: |
+  if [ ! -z "${TRAVIS_COVERAGE}" ]; then
+    mix coveralls.travis
+  fi
 
 after_script:
   - kill `cat ./influxdb.pid`
