@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.15.0-dev
+## v0.15.0 (2017-03-16)
 
 - Enhancements
     - Every connection method (like `read` or `write`) can set per-call
