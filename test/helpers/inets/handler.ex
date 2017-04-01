@@ -3,6 +3,9 @@ defmodule Instream.TestHelpers.Inets.Handler do
 
   require Record
 
+  alias Instream.TestHelpers.Undeprecate
+
+
   Record.defrecord :mod, Record.extract(:mod, from_lib: "inets/include/httpd.hrl")
 
   def serve(mod_data), do: serve_uri(mod(mod_data, :request_uri), mod_data)
@@ -23,16 +26,10 @@ defmodule Instream.TestHelpers.Inets.Handler do
     body = '{"results": [{}]}'
     head = [
       code:           200,
-      content_length: body |> length() |> to_charlist(),
+      content_length: body |> length() |> Undeprecate.to_charlist(),
       content_type:   'application/json'
     ]
 
     {:proceed, [{:response, {:response, head, body}}]}
-  end
-
-
-  if Version.compare(System.version, "1.3.0") == :lt do
-    # wrap "to_charlist" to allow usage
-    defp to_charlist(data), do: to_char_list(data)
   end
 end
