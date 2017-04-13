@@ -7,7 +7,7 @@ defmodule Instream.Query.URL do
 
 
   @doc """
-  Appends authentication credentials to an URL.
+  Appends authentication credentials to a URL.
   """
   @spec append_auth(String.t, Keyword.t) :: String.t
   def append_auth(url, nil), do: url
@@ -23,14 +23,14 @@ defmodule Instream.Query.URL do
   end
 
   @doc """
-  Appends a database to an URL.
+  Appends a database to a URL.
   """
   @spec append_database(String.t, String.t) :: String.t
   def append_database(url, nil),      do: url
   def append_database(url, database), do: url |> append_param("db", database)
 
   @doc """
-  Appends an epoch value to an URL.
+  Appends an epoch value to a URL.
 
   The allowed values are identical to the precision parameters of write queries.
   """
@@ -41,7 +41,7 @@ defmodule Instream.Query.URL do
   end
 
   @doc """
-  Appends a precision value to an URL.
+  Appends a precision value to a URL.
   """
   @spec append_precision(String.t, Precision.t) :: String.t
   def append_precision(url, nil),      do: url
@@ -50,7 +50,7 @@ defmodule Instream.Query.URL do
   end
 
   @doc """
-  Appends a retention policy to an URL.
+  Appends a retention policy to a URL.
   """
   @spec append_retention_policy(String.t, String.t) :: String.t
   def append_retention_policy(url, nil),   do: url
@@ -59,7 +59,7 @@ defmodule Instream.Query.URL do
   end
 
   @doc """
-  Appends a query to an URL.
+  Appends a query to a URL.
   """
   @spec append_query(String.t, String.t) :: String.t
   def append_query(url, query), do: url |> append_param("q", query)
