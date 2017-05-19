@@ -116,6 +116,22 @@ Supervisor.start_link(
 )
 ```
 
+**Note:** If you already have a supervision tree (from a Phoenix app, for example), you add instream by going to [app_name].ex, and altering the children array:
+
+```elixir
+def start(_type, _args) do
+  import Supervisor.Spec
+  children = [
+    # Start the Ecto repository
+    supervisor(Cdr.Repo, []),
+    Cdr.Telemetry.Influx.child_spec(),  # <-- added line
+    supervisor(Cdr.Web.Endpoint, []),
+  ]
+  opts = [strategy: :one_for_one, name: Cdr.Supervisor]
+  Supervisor.start_link(children, opts)
+end
+```
+
 #### Runtime and Compile Time Configuration
 
 The full connection configuration is split into two parts, compile time and
