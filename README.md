@@ -3,6 +3,7 @@
 [![Build Status](https://travis-ci.org/mneudert/instream.svg?branch=master)](https://travis-ci.org/mneudert/instream)
 [![Coverage Status](https://coveralls.io/repos/mneudert/instream/badge.svg?branch=master&service=github)](https://coveralls.io/github/mneudert/instream?branch=master)
 [![Hex.pm](https://img.shields.io/hexpm/v/instream.svg)](https://hex.pm/packages/instream)
+[![Deps Status](https://beta.hexfaktor.org/badge/all/github/mneudert/instream.svg)](https://beta.hexfaktor.org/github/mneudert/instream)
 
 InfluxDB driver for Elixir
 
