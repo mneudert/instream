@@ -9,7 +9,7 @@ env:
     - VER_GO=1.6.2 VER_INFLUXDB=v1.0.2
     - VER_GO=1.7.3 VER_INFLUXDB=v1.1.5
     - VER_GO=1.7.4 VER_INFLUXDB=v1.2.3 TRAVIS_COVERAGE=true
-    - VER_GO=1.7.4 VER_INFLUXDB=master
+    - VER_GO=1.8.1 VER_INFLUXDB=master
 
 matrix:
   include:
@@ -21,7 +21,7 @@ matrix:
       env:         VER_GO=1.7.4 VER_INFLUXDB=v1.2.3
       otp_release: 19.0
   allow_failures:
-    - env: VER_GO=1.7.4 VER_INFLUXDB=master
+    - env: VER_GO=1.8.1 VER_INFLUXDB=master
 
 before_install:
   - eval "$(gimme ${VER_GO})"
