@@ -115,7 +115,7 @@ defmodule Instream.Series do
   """
   defmacro database(name) do
     quote do
-      unquote(__MODULE__).__attribute__(__MODULE__, :database, unquote(name))
+      unquote(__MODULE__).__attribute__(__MODULE__, :database, to_string(unquote(name)))
     end
   end
 
@@ -136,7 +136,7 @@ defmodule Instream.Series do
   """
   defmacro measurement(name) do
     quote do
-      unquote(__MODULE__).__attribute__(__MODULE__, :measurement, unquote(name))
+      unquote(__MODULE__).__attribute__(__MODULE__, :measurement, to_string(unquote(name)))
     end
   end
 

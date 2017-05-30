@@ -31,6 +31,21 @@ defmodule Instream.SeriesTest do
     end
   end
 
+  defmodule ComplexDatabaseTestSeries do
+    use Instream.Series
+
+    series do
+      prefix = fn
+        (atom, :dev) -> :"development_#{atom}"
+        (atom, :test) -> :"testing_#{atom}"
+        (atom, :prod) -> :"production_#{atom}"
+      end
+
+      database prefix.(:database, Mix.env)
+      measurement prefix.(:measurement, Mix.env)
+    end
+  end
+
 
   test "series default values" do
     default = %DefaultValueSeries{}
@@ -41,6 +56,11 @@ defmodule Instream.SeriesTest do
 
     assert default.fields.high == nil
     assert default.fields.low  == 25
+  end
+
+  test "series with complex database expression" do
+    assert ComplexDatabaseTestSeries.__meta__(:database) == "testing_database"
+    assert ComplexDatabaseTestSeries.__meta__(:measurement) == "testing_measurement"
   end
 
 
