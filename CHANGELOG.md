@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.16.0-dev
+
+- Enhancements
+    - System environment configuration can set an optional default value
+      to be used if the environment variable is unset
+
 ## v0.15.0 (2017-03-16)
 
 - Enhancements

@@ -77,6 +77,23 @@ defmodule Instream.Connection.ConfigTest do
     System.delete_env(sys_var)
   end
 
+  test "system configuration access (with default)", %{ test: test } do
+    conn    = Module.concat([ __MODULE__, SystemConfigurationDefault ])
+    key     = :system_testing_key
+    default = "fetch from system environment"
+    sys_var = "INSTREAM_TEST_CONFIG_DEFAULT"
+
+    System.delete_env(sys_var)
+    Application.put_env(test, conn, [{ key, { :system, sys_var, default }}])
+
+    defmodule conn do
+      use Instream.Connection, otp_app: test
+    end
+
+    assert default == conn.config([ key ])
+    assert default == conn.config() |> get_in([ key ])
+  end
+
   test "system configuration connection" do
     assert nil == EnvConnection.config([ :host ])
 

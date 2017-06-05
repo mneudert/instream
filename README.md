@@ -105,6 +105,10 @@ system environment:
 ```elixir
 config :my_app, MyApp.MyConnection,
   port: { :system, "MY_ENV_VARIABLE" }
+
+# additional default will only be used if environment variable is UNSET
+config :my_app, MyApp.MyConnection
+  port: { :system, "MY_ENV_VARIABLE", "6808" }
 ```
 
 Each connection defines a `child_spec/0` to help you hook it into your
