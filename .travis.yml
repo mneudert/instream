@@ -23,53 +23,58 @@ matrix:
   allow_failures:
     - env: VER_GO=1.8.1 VER_INFLUXDB=master
 
-before_install:
-  - eval "$(gimme ${VER_GO})"
+before_install: |-
+  eval "$(gimme ${VER_GO})"
 
-  - mkdir "${HOME}/go"
-  - export GOPATH="${HOME}/go"
-  - export PATH="${GOPATH}/bin:${PATH}"
+  mkdir "${HOME}/go"
+  export GOPATH="${HOME}/go"
+  export PATH="${GOPATH}/bin:${PATH}"
 
-  - go get github.com/sparrc/gdm
+  go get github.com/sparrc/gdm
 
-  - mkdir -p "${GOPATH}/src/github.com/influxdata"
-  - cd "${GOPATH}/src/github.com/influxdata"
-  - wget "https://github.com/influxdata/influxdb/archive/${VER_INFLUXDB}.tar.gz" -O influxdb.tar.gz && tar -xf influxdb.tar.gz
-  - find . -maxdepth 1 -type d -name 'influxdb*' -exec mv {} influxdb \;
-  - cd "${GOPATH}/src/github.com/influxdata/influxdb"
-  - git init .
-  - gdm restore
-  - go clean ./...
-  - sed -i -e "s/version = \"unknown\"/version = \"${VER_INFLUXDB//v}\"/g" cmd/influxd/main.go
-  - go install ./...
-  - cd "${TRAVIS_BUILD_DIR}"
+  mkdir -p "${GOPATH}/src/github.com/influxdata"
 
-before_script:
-  - influxd config > ./influxdb.conf
-  - nohup "${GOPATH}/bin/influxd" -pidfile ./influxdb.pid -config ./influxdb.conf >>./influxdb.stdout 2>>./influxdb.stderr &
-  - sleep 5
+  pushd "${GOPATH}/src/github.com/influxdata"
+    wget "https://github.com/influxdata/influxdb/archive/${VER_INFLUXDB}.tar.gz" -O influxdb.tar.gz && tar -xf influxdb.tar.gz
+    find . -maxdepth 1 -type d -name 'influxdb*' -exec mv {} influxdb \;
 
-  - curl -XPOST 'http://localhost:8086/query' --data-urlencode "q=CREATE USER instream_test WITH PASSWORD 'instream_test' WITH ALL PRIVILEGES"
-  - curl -XPOST 'http://localhost:8086/query' --data-urlencode "q=CREATE USER instream_guest WITH PASSWORD 'instream_guest'"
-  - sed -i 's/auth-enabled = false/auth-enabled = true/' ./influxdb.conf
-  - echo -e "[[udp]]\n  enabled = true\n  bind-address = \":8089\"\n  database = \"test_database\"\n  batch-size = 1000\n  batch-timeout = \"1s\"\n  batch-pending = 5\n" >> ./influxdb.conf
+    pushd influxdb
+      git init .
+      gdm restore
+      go clean ./...
 
-  - kill `cat ./influxdb.pid`
-  - nohup "${GOPATH}/bin/influxd" -pidfile ./influxdb.pid -config ./influxdb.conf >>./influxdb.stdout 2>>./influxdb.stderr &
-  - sleep 5
+      sed -i -e "s/version = \"unknown\"/version = \"${VER_INFLUXDB//v}\"/g" cmd/influxd/main.go
 
-after_failure:
-  - echo "==> config <=="
-  - cat ./influxdb.conf
-  - echo "==> stdout <=="
-  - cat ./influxdb.stdout
-  - echo "==> stderr <=="
-  - cat ./influxdb.stderr
+      go install ./...
+    popd
+  popd
 
-after_success: |
+before_script: |-
+  influxd config > ./influxdb.conf
+  nohup "${GOPATH}/bin/influxd" -pidfile ./influxdb.pid -config ./influxdb.conf >>./influxdb.stdout 2>>./influxdb.stderr &
+  sleep 5
+
+  curl -XPOST 'http://localhost:8086/query' --data-urlencode "q=CREATE USER instream_test WITH PASSWORD 'instream_test' WITH ALL PRIVILEGES"
+  curl -XPOST 'http://localhost:8086/query' --data-urlencode "q=CREATE USER instream_guest WITH PASSWORD 'instream_guest'"
+  sed -i 's/auth-enabled = false/auth-enabled = true/' ./influxdb.conf
+  echo -e "[[udp]]\n  enabled = true\n  bind-address = \":8089\"\n  database = \"test_database\"\n  batch-size = 1000\n  batch-timeout = \"1s\"\n  batch-pending = 5\n" >> ./influxdb.conf
+
+  kill $(cat ./influxdb.pid)
+  nohup "${GOPATH}/bin/influxd" -pidfile ./influxdb.pid -config ./influxdb.conf >>./influxdb.stdout 2>>./influxdb.stderr &
+  sleep 5
+
+after_failure: |-
+  echo '==> config <=='
+  cat ./influxdb.conf
+  echo '==> stdout <=='
+  cat ./influxdb.stdout
+  echo '==> stderr <=='
+  cat ./influxdb.stderr
+
+after_success: |-
   if [ ! -z "${TRAVIS_COVERAGE}" ]; then
     mix coveralls.travis
   fi
 
 after_script:
-  - kill `cat ./influxdb.pid`
+  - kill $(cat ./influxdb.pid)
