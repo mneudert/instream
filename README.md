@@ -420,6 +420,16 @@ This does not apply to write requests. They are currently only affected by
 configured `:recv_timeout` values. Setting a connection timeout enables you to
 have a different timeout for read and write requests.
 
+For the underlying worker pool you can define a separate timeout:
+
+```elixir
+config :my_app,
+  MyApp.MyConnection,
+    pool_timeout: 500
+```
+
+This configuration will be used to wait for an available worker to execute a
+query and defaults to `5_000`.
 
 ### Query Builder
 

@@ -32,4 +32,17 @@ defmodule Instream.TestHelpers.Inets.Handler do
 
     {:proceed, [{:response, {:response, head, body}}]}
   end
+
+  defp serve_uri('/query?db=timeout_long', _mod_data) do
+    :timer.sleep(10000)
+
+    body = '{"results": [{}]}'
+    head = [
+      code:           200,
+      content_length: body |> length() |> Undeprecate.to_charlist(),
+      content_type:   'application/json'
+    ]
+
+    {:proceed, [{:response, {:response, head, body}}]}
+  end
 end

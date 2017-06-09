@@ -3,8 +3,16 @@
 ## v0.16.0-dev
 
 - Enhancements
+    - Queries can be executed with an additional option `:pool_timeout`
+      used to wait for an available worker process. This option is
+      independent of other configured/passed timeouts
     - System environment configuration can set an optional default value
       to be used if the environment variable is unset
+
+- Bug fixes
+    - All queries now use a `GenServer.call/3` timeout of `:infinity`. This
+      allows raising the timeouts for a call above the default of `5_000`
+      ([#38](https://github.com/mneudert/instream/issues/38))
 
 ## v0.15.0 (2017-03-16)
 

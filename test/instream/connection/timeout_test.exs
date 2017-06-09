@@ -1,5 +1,5 @@
 defmodule Instream.Connection.TimeoutTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case, async: false
 
   alias Instream.TestHelpers.Connections.InetsConnection
 
@@ -8,6 +8,16 @@ defmodule Instream.Connection.TimeoutTest do
     timeout = 10
     opts    = [
       database: "timeout",
+      timeout:  timeout
+    ]
+
+    assert { :error, :timeout } == InetsConnection.query("", opts)
+  end
+
+  test "timeout above GenServer defaults" do
+    timeout = 7500
+    opts    = [
+      database: "timeout_long",
       timeout:  timeout
     ]
 
