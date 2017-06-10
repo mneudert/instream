@@ -22,9 +22,9 @@ config :instream, TestConnections.LogConnection,
 
 
 config :instream, TestConnections.EnvConnection,
-  auth:    [ username: { :system, "INSTREAM_TEST_USERNAME" },
-             password: { :system, "INSTREAM_TEST_PASSWORD" } ],
-  host:    { :system, "INSTREAM_TEST_HOST" },
+  auth:    [ username: { :system, "INSTREAM_TEST_ENV_USERNAME" },
+             password: { :system, "INSTREAM_TEST_ENV_PASSWORD" } ],
+  host:    { :system, "INSTREAM_TEST_ENV_HOST" },
   loggers: [{TestHelpers.NilLogger, :log, [] }],
   pool:    [ max_overflow: 0, size: 1 ]
 

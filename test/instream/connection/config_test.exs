@@ -97,15 +97,15 @@ defmodule Instream.Connection.ConfigTest do
   test "system configuration connection" do
     assert nil == EnvConnection.config([ :host ])
 
-    System.put_env("INSTREAM_TEST_HOST", "localhost")
-    System.put_env("INSTREAM_TEST_PASSWORD", "instream_test")
-    System.put_env("INSTREAM_TEST_USERNAME", "instream_test")
+    System.put_env("INSTREAM_TEST_ENV_HOST", "localhost")
+    System.put_env("INSTREAM_TEST_ENV_PASSWORD", "instream_test")
+    System.put_env("INSTREAM_TEST_ENV_USERNAME", "instream_test")
 
     assert "localhost" == EnvConnection.config([ :host ])
     assert :pong == EnvConnection.ping()
 
-    System.delete_env("INSTREAM_TEST_HOST")
-    System.delete_env("INSTREAM_TEST_PASSWORD")
-    System.delete_env("INSTREAM_TEST_USERNAME")
+    System.delete_env("INSTREAM_TEST_ENV_HOST")
+    System.delete_env("INSTREAM_TEST_ENV_PASSWORD")
+    System.delete_env("INSTREAM_TEST_ENV_USERNAME")
   end
 end
