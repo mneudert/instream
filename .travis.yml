@@ -3,13 +3,10 @@ otp_release: 18.0
 elixir:      1.2.6
 
 env:
-  global:
-    - MIX_ENV=test
-  matrix:
-    - VER_GO=1.6.2 VER_INFLUXDB=v1.0.2
-    - VER_GO=1.7.3 VER_INFLUXDB=v1.1.5
-    - VER_GO=1.7.4 VER_INFLUXDB=v1.2.3 TRAVIS_COVERAGE=true
-    - VER_GO=1.8.1 VER_INFLUXDB=master
+  - VER_GO=1.6.2 VER_INFLUXDB=v1.0.2
+  - VER_GO=1.7.3 VER_INFLUXDB=v1.1.5
+  - VER_GO=1.7.4 VER_INFLUXDB=v1.2.3 TRAVIS_COVERAGE=true
+  - VER_GO=1.8.1 VER_INFLUXDB=master
 
 matrix:
   include:
