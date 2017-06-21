@@ -16,6 +16,7 @@ Tested influxdb versions:
 - `1.0.2`
 - `1.1.5`
 - `1.2.4`
+- `1.3.0`
 
 (see
 [`.travis.yml`](https://github.com/mneudert/instream/blob/master/.travis.yml)
