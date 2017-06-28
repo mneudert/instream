@@ -66,10 +66,10 @@ IO.puts "Running tests for InfluxDB version: #{ version }"
 # configure OTP test exclusion
 release          = :otp_release |> :erlang.system_info() |> to_string()
 { :ok, version } = Version.parse("#{ release }.0.0")
-versions         = [ "19.0" ]
+versions         = [ "19.0", "20.0" ]
 
 config = Enum.reduce versions, config, fn (ver, acc) ->
-  case Version.match?(version, "~> #{ ver }") do
+  case Version.match?(version, ">= #{ ver }.0") do
     true  -> acc
     false -> Keyword.put(acc, :exclude, [{ :otp_release, ver } | acc[:exclude] ])
   end
