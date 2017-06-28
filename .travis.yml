@@ -18,6 +18,9 @@ matrix:
     - elixir:      1.4.5
       env:         VER_GO=1.8.1 VER_INFLUXDB=v1.3.0
       otp_release: 19.3
+    - elixir:      1.4.5
+      env:         VER_GO=1.8.1 VER_INFLUXDB=v1.3.0
+      otp_release: 20.0
   allow_failures:
     - env: VER_GO=1.8.3 VER_INFLUXDB=master
 
