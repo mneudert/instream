@@ -4,5 +4,5 @@ defmodule Instream.TestHelpers.Undeprecate do
     _   -> :to_charlist
   end
 
-  defdelegate to_charlist(data), to: Kernel, as: fun_to_charlist
+  defdelegate to_charlist(data), to: String, as: fun_to_charlist
 end
