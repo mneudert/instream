@@ -6,6 +6,7 @@ defmodule Instream.Writer.UDP do
   use Instream.Writer
 
   alias Instream.Encoder.Line, as: Encoder
+  alias Instream.Util
 
 
   def write(query, _opts, %{ module: conn, udp_socket: udp_socket }) do
@@ -14,9 +15,9 @@ defmodule Instream.Writer.UDP do
 
     :ok = :gen_udp.send(
       udp_socket,
-      config[:host] |> to_char_list(),
+      Util.to_charlist(config[:host]),
       config[:port_udp],
-      to_char_list(payload)
+      Util.to_charlist(payload)
     )
 
     { 200, [], "" }  # always ":ok"
