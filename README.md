@@ -308,7 +308,7 @@ MyApp.MyConnection.version("some.host.name")
 ```
 
 If the version if undetectable (no header returned) it will be reported
-as `"unknown"`. If the host is unreachable or an error occured the response
+as `"unknown"`. If the host is unreachable or an error occurred the response
 will be `:error`.
 
 ### Queries
