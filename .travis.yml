@@ -15,10 +15,12 @@ matrix:
       env:    VER_GO=1.8.1 VER_INFLUXDB=v1.3.1
     - elixir: 1.4.5
       env:    VER_GO=1.8.1 VER_INFLUXDB=v1.3.1
-    - elixir:      1.4.5
+    - elixir: 1.5.0
+      env:    VER_GO=1.8.1 VER_INFLUXDB=v1.3.1
+    - elixir:      1.5.0
       env:         VER_GO=1.8.1 VER_INFLUXDB=v1.3.1
       otp_release: 19.3
-    - elixir:      1.4.5
+    - elixir:      1.5.0
       env:         VER_GO=1.8.1 VER_INFLUXDB=v1.3.1
       otp_release: 20.0
   allow_failures:
