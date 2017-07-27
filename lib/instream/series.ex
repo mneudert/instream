@@ -21,7 +21,7 @@ defmodule Instream.Series do
 
   ## Metadata
 
-  The metadata of a series (i.e. the measurement) can
+  The metadata of a series (e.g. the measurement) can
   be retrieved using the `__meta__/1` method.
 
   ## Struct

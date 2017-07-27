@@ -14,7 +14,7 @@ defmodule Instream.Database do
 
   ## Metadata
 
-  The metadata of a database (i.e. the name) can
+  The metadata of a database (e.g. the name) can
   be retrieved using the `__meta__/1` method.
   """
 
