@@ -45,7 +45,7 @@ Application.put_env(:instream, Connections.InetsConnection, inets_env)
 # configure InfluxDB test exclusion
 config = ExUnit.configuration
 
-version = Connections.DefaultConnection.version
+version = to_string(Connections.DefaultConnection.version)
 config  = case Version.parse(version) do
   :error           -> config
   { :ok, version } ->
