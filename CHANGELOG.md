@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.16.0-dev
+## v0.16.0 (2017-09-25)
 
 - Enhancements
     - Queries can be executed with an additional option `:pool_timeout`
