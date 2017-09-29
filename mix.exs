@@ -7,7 +7,7 @@ defmodule Instream.Mixfile do
     [ app:     :instream,
       name:    "Instream",
       version: "0.17.0-dev",
-      elixir:  "~> 1.2",
+      elixir:  "~> 1.3",
       deps:    deps(),
 
       elixirc_paths:   elixirc_paths(Mix.env),

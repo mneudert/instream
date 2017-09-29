@@ -1,5 +1,4 @@
 alias Instream.Admin.Database
-alias Instream.Util
 alias Instream.TestHelpers.Connections
 
 # grab ALL helpers and start connections
@@ -23,7 +22,7 @@ _ = "test_database" |> Database.create() |> Connections.DefaultConnection.execut
 
 
 # start up inets fake influxdb server
-root          = Util.to_charlist(__DIR__)
+root          = String.to_charlist(__DIR__)
 httpd_config  = [
   document_root: root,
   modules:       [:instream_testhelpers_inets_proxy],

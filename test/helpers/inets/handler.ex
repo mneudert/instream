@@ -3,8 +3,6 @@ defmodule Instream.TestHelpers.Inets.Handler do
 
   require Record
 
-  alias Instream.Util
-
 
   Record.defrecord :mod, Record.extract(:mod, from_lib: "inets/include/httpd.hrl")
 
@@ -26,7 +24,7 @@ defmodule Instream.TestHelpers.Inets.Handler do
     body = '{"results": [{}]}'
     head = [
       code:           200,
-      content_length: body |> length() |> Util.to_charlist(),
+      content_length: body |> length() |> String.to_charlist(),
       content_type:   'application/json'
     ]
 
@@ -39,7 +37,7 @@ defmodule Instream.TestHelpers.Inets.Handler do
     body = '{"results": [{}]}'
     head = [
       code:           200,
-      content_length: body |> length() |> Util.to_charlist(),
+      content_length: body |> length() |> String.to_charlist(),
       content_type:   'application/json'
     ]
 
