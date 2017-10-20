@@ -42,16 +42,15 @@ defmodule Instream.Series do
     quote do
       @after_compile unquote(__MODULE__)
 
-      import unquote(__MODULE__), only: [ series: 1 ]
+      import unquote(__MODULE__), only: [series: 1]
     end
   end
 
-  defmacro __after_compile__(%{ module: module }, _bytecode) do
+  defmacro __after_compile__(%{module: module}, _bytecode) do
     quote do
       Instream.Series.Validator.proper_series?(unquote(module))
     end
   end
-
 
   @doc """
   Defines the series.
@@ -60,7 +59,7 @@ defmodule Instream.Series do
     quote do
       @behaviour unquote(__MODULE__)
 
-      @database    nil
+      @database nil
       @measurement nil
 
       Module.register_attribute(__MODULE__, :fields_raw, accumulate: true)
@@ -74,28 +73,27 @@ defmodule Instream.Series do
         :ok
       end
 
-      @fields_names  @fields_raw |> Keyword.keys() |> Enum.sort()
-      @fields_struct @fields_raw |> Enum.sort( &unquote(__MODULE__).__sort_fields__/2 )
+      @fields_names @fields_raw |> Keyword.keys() |> Enum.sort()
+      @fields_struct @fields_raw |> Enum.sort(&unquote(__MODULE__).__sort_fields__/2)
 
-      @tags_names  @tags_raw |> Keyword.keys() |> Enum.sort()
-      @tags_struct @tags_raw |> Enum.sort( &unquote(__MODULE__).__sort_tags__/2 )
+      @tags_names @tags_raw |> Keyword.keys() |> Enum.sort()
+      @tags_struct @tags_raw |> Enum.sort(&unquote(__MODULE__).__sort_tags__/2)
 
-      def __meta__(:database),    do: @database
-      def __meta__(:fields),      do: @fields_names
+      def __meta__(:database), do: @database
+      def __meta__(:fields), do: @fields_names
       def __meta__(:measurement), do: @measurement
-      def __meta__(:tags),        do: @tags_names
+      def __meta__(:tags), do: @tags_names
 
-      Module.eval_quoted __ENV__, [
+      Module.eval_quoted(__ENV__, [
         unquote(__MODULE__).__struct_fields__(@fields_struct),
         unquote(__MODULE__).__struct_tags__(@tags_struct)
-      ]
+      ])
 
-      Module.eval_quoted __ENV__, [
+      Module.eval_quoted(__ENV__, [
         unquote(__MODULE__).__struct__(__MODULE__)
-      ]
+      ])
     end
   end
-
 
   @doc """
   Provides metadata access for a series.
@@ -108,7 +106,6 @@ defmodule Instream.Series do
   - `:tags`        - the available tags defining the series
   """
   @callback __meta__(atom) :: any
-
 
   @doc """
   Defines the database for the series.
@@ -124,10 +121,10 @@ defmodule Instream.Series do
   """
   defmacro field(name, opts \\ []) do
     quote do
-      unquote(__MODULE__).__attribute__(
-        __MODULE__, :fields_raw,
-        { unquote(name), unquote(opts[:default]) }
-      )
+      unquote(__MODULE__).__attribute__(__MODULE__, :fields_raw, {
+        unquote(name),
+        unquote(opts[:default])
+      })
     end
   end
 
@@ -145,41 +142,36 @@ defmodule Instream.Series do
   """
   defmacro tag(name, opts \\ []) do
     quote do
-      unquote(__MODULE__).__attribute__(
-        __MODULE__, :tags_raw,
-        { unquote(name), unquote(opts[:default]) }
-      )
+      unquote(__MODULE__).__attribute__(__MODULE__, :tags_raw, {
+        unquote(name),
+        unquote(opts[:default])
+      })
     end
   end
-
 
   @doc false
   def __attribute__(mod, name, value) do
     Module.put_attribute(mod, name, value)
   end
 
+  @doc false
+  def __sort_fields__({left, _}, {right, _}), do: left > right
 
   @doc false
-  def __sort_fields__({ left, _ }, { right, _ }), do: left > right
-
-  @doc false
-  def __sort_tags__({ left, _ }, { right, _ }), do: left > right
-
+  def __sort_tags__({left, _}, {right, _}), do: left > right
 
   @doc false
   def __struct__(series) do
     quote do
       @type t :: %unquote(series){
-        fields:    unquote(series).Fields.t,
-        tags:      unquote(series).Tags.t,
-        timestamp: non_neg_integer,
-      }
+              fields: unquote(series).Fields.t(),
+              tags: unquote(series).Tags.t(),
+              timestamp: non_neg_integer
+            }
 
-      defstruct [
-        fields:    %unquote(series).Fields{},
-        tags:      %unquote(series).Tags{},
-        timestamp: nil
-      ]
+      defstruct fields: %unquote(series).Fields{},
+                tags: %unquote(series).Tags{},
+                timestamp: nil
     end
   end
 

@@ -13,44 +13,55 @@ defmodule Instream.Log.DefaultLogger do
   @doc """
   Logs a request.
   """
-  @spec log(Instream.Connection.log_entry) :: Instream.Connection.log_entry
+  @spec log(Instream.Connection.log_entry()) :: Instream.Connection.log_entry()
   def log(%PingEntry{} = entry) do
-    Logger.debug(fn ->
-      [ "[ping ", entry.host, "] ", to_string(entry.result) ]
-    end, metadata(entry))
+    Logger.debug(
+      fn ->
+        ["[ping ", entry.host, "] ", to_string(entry.result)]
+      end,
+      metadata(entry)
+    )
 
     entry
   end
 
   def log(%QueryEntry{} = entry) do
-    Logger.debug(fn ->
-      [ "[query] ", entry.query ]
-    end, metadata(entry))
+    Logger.debug(
+      fn ->
+        ["[query] ", entry.query]
+      end,
+      metadata(entry)
+    )
 
     entry
   end
 
   def log(%StatusEntry{} = entry) do
-    Logger.debug(fn ->
-      [ "[status ", entry.host, "] ", to_string(entry.result) ]
-    end, metadata(entry))
+    Logger.debug(
+      fn ->
+        ["[status ", entry.host, "] ", to_string(entry.result)]
+      end,
+      metadata(entry)
+    )
 
     entry
   end
 
   def log(%WriteEntry{} = entry) do
-    Logger.debug(fn ->
-      [ "[write] ", to_string(entry.points), " points" ]
-    end, metadata(entry))
+    Logger.debug(
+      fn ->
+        ["[write] ", to_string(entry.points), " points"]
+      end,
+      metadata(entry)
+    )
 
     entry
   end
 
-
   # Utility methods
 
   @doc false
-  def metadata(%{ metadata: metadata }) do
+  def metadata(%{metadata: metadata}) do
     # method is public to avoid compiler notices about this method
     # being unused when combined with a logger compile time purge level
     # removing the `Logger.debug/2` calls.

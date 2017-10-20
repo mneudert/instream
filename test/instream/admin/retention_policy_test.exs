@@ -5,16 +5,16 @@ defmodule Instream.Admin.RetentionPolicyTest do
   alias Instream.TestHelpers.Connections.DefaultConnection
 
   @database "test_database"
-  @rp_name  "rp_lifecycle"
+  @rp_name "rp_lifecycle"
 
-  @rp_altered      "DURATION 2h REPLICATION 1"
-  @rp_duration     "1h"
-  @rp_replication  1
+  @rp_altered "DURATION 2h REPLICATION 1"
+  @rp_duration "1h"
+  @rp_replication 1
 
   test "retention policy lifecycle" do
     # create retention policy
     creation =
-         @rp_name
+      @rp_name
       |> RetentionPolicy.create(@database, @rp_duration, @rp_replication)
       |> DefaultConnection.execute()
 
@@ -23,13 +23,13 @@ defmodule Instream.Admin.RetentionPolicyTest do
     assert %{results: [%{}]} = creation
     assert %{results: [%{series: [%{values: listing_values}]}]} = listing
 
-    assert Enum.any?(listing_values, fn ([ name, duration, _, _, _ ]) ->
-      name == @rp_name && duration == "1h0m0s"
-    end)
+    assert Enum.any?(listing_values, fn [name, duration, _, _, _] ->
+             name == @rp_name && duration == "1h0m0s"
+           end)
 
     # alter retention polcy
     alteration =
-         @rp_name
+      @rp_name
       |> RetentionPolicy.alter(@database, @rp_altered)
       |> DefaultConnection.execute()
 
@@ -38,23 +38,25 @@ defmodule Instream.Admin.RetentionPolicyTest do
     assert %{results: [%{}]} = alteration
     assert %{results: [%{series: [%{values: listing_values}]}]} = listing
 
-    assert Enum.any?(listing_values, fn ([ name, duration, _, _, _ ]) ->
-      name == @rp_name && duration == "2h0m0s"
-    end)
+    assert Enum.any?(listing_values, fn [name, duration, _, _, _] ->
+             name == @rp_name && duration == "2h0m0s"
+           end)
 
     # delete retention policy
     deletion = RetentionPolicy.drop(@rp_name, @database) |> DefaultConnection.execute()
-    listing  = RetentionPolicy.show(@database) |> DefaultConnection.execute()
+    listing = RetentionPolicy.show(@database) |> DefaultConnection.execute()
 
     assert %{results: [%{}]} = deletion
-    assert %{results: [%{series: [ listing_rows ]}]} = listing
+    assert %{results: [%{series: [listing_rows]}]} = listing
 
     case listing_rows[:values] do
-      nil    -> assert true == true
+      nil ->
+        assert true == true
+
       values ->
-        refute Enum.any?(values, fn ([ name, _, _, _, _ ]) ->
-          name == @rp_name
-        end)
+        refute Enum.any?(values, fn [name, _, _, _, _] ->
+                 name == @rp_name
+               end)
     end
   end
 end

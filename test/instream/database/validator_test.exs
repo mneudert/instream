@@ -14,7 +14,8 @@ defmodule Instream.Database.ValidatorTest do
       defmodule MissingName do
         use Instream.Database
 
-        database do end
+        database do
+        end
       end
     end
   end

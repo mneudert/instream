@@ -8,19 +8,19 @@ defmodule Instream.Query.BuilderTest do
     use Instream.Series
 
     series do
-      measurement "some_measurement"
+      measurement("some_measurement")
 
-      tag :foo
-      tag :baz
+      tag(:foo)
+      tag(:baz)
 
-      field :bar
-      field :bat
+      field(:bar)
+      field(:bat)
     end
   end
 
   test "CREATE DATABASE" do
     query =
-         Builder.create_database("some_database")
+      Builder.create_database("some_database")
       |> InfluxQL.encode()
 
     assert query == "CREATE DATABASE some_database"
@@ -28,31 +28,32 @@ defmodule Instream.Query.BuilderTest do
 
   test "CREATE RETENTION POLICY" do
     query =
-         Builder.create_retention_policy("some_policy")
+      Builder.create_retention_policy("some_policy")
       |> Builder.on("some_database")
       |> Builder.duration("1h")
       |> Builder.replication(3)
       |> InfluxQL.encode()
 
-    assert query == "CREATE RETENTION POLICY some_policy ON some_database DURATION 1h REPLICATION 3"
+    assert query ==
+             "CREATE RETENTION POLICY some_policy ON some_database DURATION 1h REPLICATION 3"
   end
 
   test "CREATE RETENTION POLICY DEFAULT" do
     query =
-         Builder.create_retention_policy("some_policy")
+      Builder.create_retention_policy("some_policy")
       |> Builder.on("some_database")
       |> Builder.duration("1h")
       |> Builder.replication(3)
       |> Builder.default()
       |> InfluxQL.encode()
 
-    assert query == "CREATE RETENTION POLICY some_policy ON some_database DURATION 1h REPLICATION 3 DEFAULT"
+    assert query ==
+             "CREATE RETENTION POLICY some_policy ON some_database DURATION 1h REPLICATION 3 DEFAULT"
   end
-
 
   test "DROP DATABASE" do
     query =
-         Builder.drop_database("some_database")
+      Builder.drop_database("some_database")
       |> InfluxQL.encode()
 
     assert query == "DROP DATABASE some_database"
@@ -60,22 +61,21 @@ defmodule Instream.Query.BuilderTest do
 
   test "DROP RETENTION POLICY" do
     query =
-         Builder.drop_retention_policy("some_policy")
+      Builder.drop_retention_policy("some_policy")
       |> Builder.on("some_database")
       |> InfluxQL.encode()
 
     assert query == "DROP RETENTION POLICY some_policy ON some_database"
   end
 
-
   test "SELECT *" do
     query_default =
-         BuilderSeries
+      BuilderSeries
       |> Builder.from()
       |> InfluxQL.encode()
 
     query_select =
-         BuilderSeries
+      BuilderSeries
       |> Builder.from()
       |> Builder.select()
       |> InfluxQL.encode()
@@ -85,9 +85,10 @@ defmodule Instream.Query.BuilderTest do
   end
 
   test "SELECT * WHERE foo = bar" do
-    fields = %{ binary: "value", numeric: 42 }
-    query  =
-         BuilderSeries
+    fields = %{binary: "value", numeric: 42}
+
+    query =
+      BuilderSeries
       |> Builder.from()
       |> Builder.select()
       |> Builder.where(fields)
@@ -97,25 +98,28 @@ defmodule Instream.Query.BuilderTest do
   end
 
   test "SELECT * WHERE foo = bar LIMIT x" do
-    fields = %{ binary: "value", numeric: 42 }
+    fields = %{binary: "value", numeric: 42}
     limit = 10
-    query  =
-         BuilderSeries
+
+    query =
+      BuilderSeries
       |> Builder.from()
       |> Builder.select()
       |> Builder.where(fields)
       |> Builder.limit(limit)
       |> InfluxQL.encode()
 
-    assert query == "SELECT * FROM some_measurement WHERE binary = 'value' AND numeric = 42 LIMIT 10"
+    assert query ==
+             "SELECT * FROM some_measurement WHERE binary = 'value' AND numeric = 42 LIMIT 10"
   end
 
   test "SELECT * WHERE foo = bar LIMIT x OFFSET y" do
-    fields = %{ binary: "value", numeric: 42 }
+    fields = %{binary: "value", numeric: 42}
     limit = 10
     offset = 25
-    query  =
-         BuilderSeries
+
+    query =
+      BuilderSeries
       |> Builder.from()
       |> Builder.select()
       |> Builder.where(fields)
@@ -123,14 +127,15 @@ defmodule Instream.Query.BuilderTest do
       |> Builder.offset(offset)
       |> InfluxQL.encode()
 
-    assert query == "SELECT * FROM some_measurement WHERE binary = 'value' AND numeric = 42 LIMIT 10 OFFSET 25"
+    assert query ==
+             "SELECT * FROM some_measurement WHERE binary = 'value' AND numeric = 42 LIMIT 10 OFFSET 25"
   end
 
   test "SELECT Enum.t" do
     query =
-         BuilderSeries
+      BuilderSeries
       |> Builder.from()
-      |> Builder.select([ "one field", "or", :more ])
+      |> Builder.select(["one field", "or", :more])
       |> InfluxQL.encode()
 
     assert query == "SELECT \"one field\", or, more FROM some_measurement"
@@ -138,7 +143,7 @@ defmodule Instream.Query.BuilderTest do
 
   test "SELECT String.t" do
     query =
-         BuilderSeries
+      BuilderSeries
       |> Builder.from()
       |> Builder.select("one, or, more, fields")
       |> InfluxQL.encode()
@@ -146,10 +151,9 @@ defmodule Instream.Query.BuilderTest do
     assert query == "SELECT one, or, more, fields FROM some_measurement"
   end
 
-
   test "SHOW DIAGNOSTICS" do
     query =
-         Builder.show(:diagnostics)
+      Builder.show(:diagnostics)
       |> InfluxQL.encode()
 
     assert query == "SHOW DIAGNOSTICS"
@@ -157,7 +161,7 @@ defmodule Instream.Query.BuilderTest do
 
   test "SHOW MEASUREMENTS" do
     query =
-         Builder.show(:measurements)
+      Builder.show(:measurements)
       |> InfluxQL.encode()
 
     assert query == "SHOW MEASUREMENTS"
@@ -165,7 +169,7 @@ defmodule Instream.Query.BuilderTest do
 
   test "SHOW RETENTION POLICIES" do
     query =
-         Builder.show(:retention_policies)
+      Builder.show(:retention_policies)
       |> Builder.on("some_database")
       |> InfluxQL.encode()
 
@@ -174,7 +178,7 @@ defmodule Instream.Query.BuilderTest do
 
   test "SHOW STATS" do
     query =
-         Builder.show(:stats)
+      Builder.show(:stats)
       |> InfluxQL.encode()
 
     assert query == "SHOW STATS"

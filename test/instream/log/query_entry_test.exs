@@ -5,14 +5,15 @@ defmodule Instream.Log.QueryEntryTest do
 
   alias Instream.TestHelpers.Connections.LogConnection
 
-
   test "logging read request" do
     query = "SELECT value FROM empty_measurement"
-    log   = capture_io :user, fn ->
-      _ = LogConnection.query(query)
 
-      :timer.sleep(10)
-    end
+    log =
+      capture_io(:user, fn ->
+        _ = LogConnection.query(query)
+
+        :timer.sleep(10)
+      end)
 
     assert String.contains?(log, "query")
     assert String.contains?(log, query)

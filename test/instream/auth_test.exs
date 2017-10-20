@@ -8,7 +8,6 @@ defmodule Instream.AuthTest do
   alias Instream.TestHelpers.Connections.NotFoundConnection
   alias Instream.TestHelpers.Connections.QueryAuthConnection
 
-
   test "anonymous user connection" do
     assert fn ->
       Database.show()
@@ -20,12 +19,11 @@ defmodule Instream.AuthTest do
 
   test "query auth connection" do
     refute (fn ->
-      Database.show()
-      |> QueryAuthConnection.execute()
-      |> Map.has_key?(:error)
-    end).()
+              Database.show()
+              |> QueryAuthConnection.execute()
+              |> Map.has_key?(:error)
+            end).()
   end
-
 
   test "invalid password" do
     assert fn ->

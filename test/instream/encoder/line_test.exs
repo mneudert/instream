@@ -8,11 +8,12 @@ defmodule Instream.Encoder.LineTest do
 
   test "simplest valid point" do
     expected = "disk_free value=442221834240i"
-    points   = [
+
+    points = [
       %{
         measurement: "disk_free",
         fields: %{
-          value: 442221834240
+          value: 442_221_834_240
         },
         timestamp: nil
       }
@@ -23,13 +24,14 @@ defmodule Instream.Encoder.LineTest do
 
   test "with timestamp" do
     expected = "disk_free value=442221834240i 1435362189575692182"
-    points   = [
+
+    points = [
       %{
         measurement: "disk_free",
         fields: %{
-          value: 442221834240
+          value: 442_221_834_240
         },
-        timestamp: 1435362189575692182
+        timestamp: 1_435_362_189_575_692_182
       }
     ]
 
@@ -38,11 +40,12 @@ defmodule Instream.Encoder.LineTest do
 
   test "with tags" do
     expected = "disk_free,hostname=server01,disk_type=SSD value=442221834240i"
-    points   = [
+
+    points = [
       %{
         measurement: "disk_free",
         fields: %{
-          value: 442221834240
+          value: 442_221_834_240
         },
         tags: %{
           hostname: "server01",
@@ -57,17 +60,18 @@ defmodule Instream.Encoder.LineTest do
 
   test "with tags and timestamp" do
     expected = "disk_free,hostname=server01,disk_type=SSD value=442221834240i 1435362189575692182"
-    points   = [
+
+    points = [
       %{
         measurement: "disk_free",
         fields: %{
-          value: 442221834240
+          value: 442_221_834_240
         },
         tags: %{
           hostname: "server01",
           disk_type: "SSD"
         },
-        timestamp: 1435362189575692182
+        timestamp: 1_435_362_189_575_692_182
       }
     ]
 
@@ -76,14 +80,15 @@ defmodule Instream.Encoder.LineTest do
 
   test "multiple fields" do
     expected = "disk_free free_space=442221834240i,disk_type=\"SSD\" 1435362189575692182"
-    points   = [
+
+    points = [
       %{
         measurement: "disk_free",
         fields: %{
-          free_space: 442221834240,
-          disk_type:  "SSD"
+          free_space: 442_221_834_240,
+          disk_type: "SSD"
         },
-        timestamp: 1435362189575692182
+        timestamp: 1_435_362_189_575_692_182
       }
     ]
 
@@ -91,17 +96,19 @@ defmodule Instream.Encoder.LineTest do
   end
 
   test "escaping commas and spaces" do
-    expected = ~S|total\ disk\ free,volumes=/net\,/home\,/ value=442221834240i 1435362189575692182|
-    points   = [
+    expected =
+      ~S|total\ disk\ free,volumes=/net\,/home\,/ value=442221834240i 1435362189575692182|
+
+    points = [
       %{
         measurement: "total disk free",
         tags: %{
           volumes: "/net,/home,/"
         },
         fields: %{
-          value: 442221834240,
+          value: 442_221_834_240
         },
-        timestamp: 1435362189575692182
+        timestamp: 1_435_362_189_575_692_182
       }
     ]
 
@@ -110,14 +117,15 @@ defmodule Instream.Encoder.LineTest do
 
   test "escaping equals signs" do
     expected = ~S|disk_free,a\=b=y\=z value=442221834240i|
-    points   = [
+
+    points = [
       %{
         measurement: "disk_free",
         tags: %{
           "a=b" => "y=z"
         },
         fields: %{
-          value: 442221834240,
+          value: 442_221_834_240
         },
         timestamp: nil
       }
@@ -128,14 +136,15 @@ defmodule Instream.Encoder.LineTest do
 
   test "with backslash in tag value" do
     expected = ~S|disk_free,path=C:\Windows value=442221834240i|
-    points   = [
+
+    points = [
       %{
         measurement: "disk_free",
         tags: %{
           path: ~S|C:\Windows|
         },
         fields: %{
-          value: 442221834240,
+          value: 442_221_834_240
         },
         timestamp: nil
       }
@@ -145,12 +154,14 @@ defmodule Instream.Encoder.LineTest do
   end
 
   test "escaping field key" do
-    expected = ~S|disk_free working\ directories="C:\My Documents\Stuff for examples,C:\My Documents",value=442221834240i|
-    points   = [
+    expected =
+      ~S|disk_free working\ directories="C:\My Documents\Stuff for examples,C:\My Documents",value=442221834240i|
+
+    points = [
       %{
         measurement: "disk_free",
         fields: %{
-          "value" => 442221834240,
+          "value" => 442_221_834_240,
           "working directories" => ~S|C:\My Documents\Stuff for examples,C:\My Documents|
         },
         timestamp: nil
@@ -161,8 +172,10 @@ defmodule Instream.Encoder.LineTest do
   end
 
   test "showing all escaping and quoting together" do
-    expected = ~S|"measurement\ with\ quotes",tag\ key\ with\ spaces=tag\,value\,with"commas" field_key\\\\="string field value, only \" need be quoted"|
-    points   = [
+    expected =
+      ~S|"measurement\ with\ quotes",tag\ key\ with\ spaces=tag\,value\,with"commas" field_key\\\\="string field value, only \" need be quoted"|
+
+    points = [
       %{
         measurement: ~S|"measurement with quotes"|,
         tags: %{
@@ -178,17 +191,17 @@ defmodule Instream.Encoder.LineTest do
     assert expected == Line.encode(points)
   end
 
-
   test "multiple points" do
     expected = "multiline value=\"first\"\nmultiline value=\"second\""
-    points   = [
+
+    points = [
       %{
         measurement: "multiline",
-        fields:      %{ value: "first" }
+        fields: %{value: "first"}
       },
       %{
         measurement: "multiline",
-        fields:      %{ value: "second" }
+        fields: %{value: "second"}
       }
     ]
 

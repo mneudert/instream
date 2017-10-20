@@ -6,10 +6,9 @@ defmodule Instream.Query.Headers do
   @doc """
   Assembles the headers for a query.
   """
-  @spec assemble(Keyword.t, Keyword.t) :: list
+  @spec assemble(Keyword.t(), Keyword.t()) :: list
   def assemble(config, options \\ []) do
-    assemble_auth(config[:auth])
-    ++ assemble_encoding(options[:result_as])
+    assemble_auth(config[:auth]) ++ assemble_encoding(options[:result_as])
   end
 
   @doc """
@@ -31,12 +30,13 @@ defmodule Instream.Query.Headers do
       iex> assemble_auth([ username: "user", password: "pass" ])
       [{"Authorization", "Basic dXNlcjpwYXNz"}]
   """
-  @spec assemble_auth(Keyword.t) :: list
+  @spec assemble_auth(Keyword.t()) :: list
   def assemble_auth(nil), do: []
+
   def assemble_auth(auth) do
     case auth[:method] do
       :query -> []
-      _      -> basic_auth_header(auth[:username], auth[:password])
+      _ -> basic_auth_header(auth[:username], auth[:password])
     end
   end
 
@@ -59,18 +59,18 @@ defmodule Instream.Query.Headers do
       [{"Accept", "application/json"}]
   """
   @spec assemble_encoding(nil | atom) :: list
-  def assemble_encoding(nil),   do: []
-  def assemble_encoding(:csv),  do: [{ "Accept", "application/csv" }]
-  def assemble_encoding(:json), do: [{ "Accept", "application/json" }]
-  def assemble_encoding(:raw),  do: []
+  def assemble_encoding(nil), do: []
+  def assemble_encoding(:csv), do: [{"Accept", "application/csv"}]
+  def assemble_encoding(:json), do: [{"Accept", "application/json"}]
+  def assemble_encoding(:raw), do: []
 
+  defp basic_auth_header(nil, _), do: []
+  defp basic_auth_header(_, nil), do: []
 
-  defp basic_auth_header(nil,  _),   do: []
-  defp basic_auth_header(_,    nil), do: []
   defp basic_auth_header(user, pass) do
-    credentials = "#{ user }:#{ pass }" |> Base.encode64
-    header      = "Basic #{ credentials }"
+    credentials = "#{user}:#{pass}" |> Base.encode64()
+    header = "Basic #{credentials}"
 
-    [{ "Authorization", header }]
+    [{"Authorization", header}]
   end
 end

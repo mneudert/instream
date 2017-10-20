@@ -7,8 +7,8 @@ defmodule Instream.Admin.DiagnosticsTest do
   test "diagnostics listing" do
     result = Diagnostics.show() |> DefaultConnection.execute()
 
-    %{ results: [%{ series: diagnostics }]} = result
+    %{results: [%{series: diagnostics}]} = result
 
-    assert %{ name: _, columns: _, values: _ } = hd(diagnostics)
+    assert %{name: _, columns: _, values: _} = hd(diagnostics)
   end
 end

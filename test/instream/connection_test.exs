@@ -6,25 +6,22 @@ defmodule Instream.ConnectionTest do
   alias Instream.TestHelpers.Connections.DefaultConnection
   alias Instream.TestHelpers.Connections.GuestConnection
 
-
   @database "test_database"
-  @tags     %{ foo: "foo", bar: "bar" }
-
+  @tags %{foo: "foo", bar: "bar"}
 
   defmodule TestSeries do
     use Instream.Series
 
     series do
-      database    "test_database"
-      measurement "data_write_struct"
+      database("test_database")
+      measurement("data_write_struct")
 
-      tag :bar
-      tag :foo
+      tag(:bar)
+      tag(:foo)
 
-      field :value
+      field(:value)
     end
   end
-
 
   test "ping connection" do
     assert :pong == DefaultConnection.ping()
@@ -38,36 +35,35 @@ defmodule Instream.ConnectionTest do
     assert is_binary(DefaultConnection.version())
   end
 
-
   test "read from empty measurement" do
     result =
-         Builder.from("empty_measurement")
+      Builder.from("empty_measurement")
       |> Builder.select("value")
       |> DefaultConnection.query(database: @database)
 
-    assert %{ results: _ } = result
+    assert %{results: _} = result
   end
 
   test "read using database in query string" do
-    query_in  = "SELECT value FROM \"#{ @database }\".\"autogen\".\"empty_measurement\""
+    query_in = "SELECT value FROM \"#{@database}\".\"autogen\".\"empty_measurement\""
     query_out = "SELECT value FROM empty_measurement"
 
-    result_in  = query_in  |> DefaultConnection.query()
+    result_in = query_in |> DefaultConnection.query()
     result_out = query_out |> DefaultConnection.query(database: @database)
 
     assert result_in == result_out
   end
 
-
   test "write data" do
     measurement = "write_data"
-    data        = %{
+
+    data = %{
       database: @database,
       points: [
         %{
           measurement: measurement,
           tags: @tags,
-          fields: %{ value: 0.66 }
+          fields: %{value: 0.66}
         }
       ]
     }
@@ -78,11 +74,10 @@ defmodule Instream.ConnectionTest do
     :timer.sleep(250)
 
     # check data
-    query  = "SELECT * FROM #{ measurement } GROUP BY *"
+    query = "SELECT * FROM #{measurement} GROUP BY *"
     result = query |> DefaultConnection.query(database: @database)
 
-    %{ results: [%{ series: [%{ tags: values_tags,
-                                values: value_rows }]}]} = result
+    %{results: [%{series: [%{tags: values_tags, values: value_rows}]}]} = result
 
     assert @tags == values_tags
     assert 0 < length(value_rows)
@@ -90,13 +85,14 @@ defmodule Instream.ConnectionTest do
 
   test "write data async" do
     measurement = "write_data_async"
-    data        = %{
+
+    data = %{
       database: @database,
       points: [
         %{
           measurement: measurement,
           tags: @tags,
-          fields: %{ value: 0.99 }
+          fields: %{value: 0.99}
         }
       ]
     }
@@ -107,21 +103,19 @@ defmodule Instream.ConnectionTest do
     :timer.sleep(250)
 
     # check data
-    query  = "SELECT * FROM #{ measurement } GROUP BY *"
+    query = "SELECT * FROM #{measurement} GROUP BY *"
     result = query |> DefaultConnection.query(database: @database)
 
-    %{ results: [%{ series: [%{ tags: values_tags,
-                                values: value_rows }]}]} = result
+    %{results: [%{series: [%{tags: values_tags, values: value_rows}]}]} = result
 
     assert @tags == values_tags
     assert 0 < length(value_rows)
   end
 
-
   test "writing series struct" do
     data = %TestSeries{}
-    data = %{ data | fields: %{ data.fields | value: 17 }}
-    data = %{ data | tags:   %{ data.tags   | foo: "foo", bar: "bar" }}
+    data = %{data | fields: %{data.fields | value: 17}}
+    data = %{data | tags: %{data.tags | foo: "foo", bar: "bar"}}
 
     assert :ok == data |> DefaultConnection.write()
 
@@ -129,16 +123,14 @@ defmodule Instream.ConnectionTest do
     :timer.sleep(250)
 
     # check data
-    query  = "SELECT * FROM data_write_struct GROUP BY *"
+    query = "SELECT * FROM data_write_struct GROUP BY *"
     result = query |> DefaultConnection.query(database: @database)
 
-    %{ results: [%{ series: [%{ tags: values_tags,
-                                values: value_rows }]}]} = result
+    %{results: [%{series: [%{tags: values_tags, values: value_rows}]}]} = result
 
     assert @tags == values_tags
     assert 0 < length(value_rows)
   end
-
 
   test "write data with missing privileges" do
     data = %{
@@ -146,12 +138,12 @@ defmodule Instream.ConnectionTest do
       points: [
         %{
           measurement: "write_data_privileges",
-          fields: %{ value: 0.66 }
+          fields: %{value: 0.66}
         }
       ]
     }
 
-    %{ error: error } = data |> GuestConnection.write()
+    %{error: error} = data |> GuestConnection.write()
 
     assert String.contains?(error, "not authorized")
   end

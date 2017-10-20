@@ -11,26 +11,25 @@ defmodule Instream.Admin.DatabaseTest do
 
     # create test database
     creation = @database |> Database.create() |> DefaultConnection.execute()
-    listing  = Database.show() |> DefaultConnection.execute()
+    listing = Database.show() |> DefaultConnection.execute()
 
     assert %{results: [%{}]} = creation
     assert %{results: [%{series: [%{columns: ["name"], values: listing_values}]}]} = listing
 
-    assert Enum.any?(listing_values, fn ([ db ]) -> db == @database end)
+    assert Enum.any?(listing_values, fn [db] -> db == @database end)
 
     # delete test database
     deletion = @database |> Database.drop() |> DefaultConnection.execute()
-    listing  = Database.show() |> DefaultConnection.execute()
+    listing = Database.show() |> DefaultConnection.execute()
 
     assert %{results: [%{}]} = deletion
-    assert %{results: [%{series: [ listing_rows ]}]} = listing
+    assert %{results: [%{series: [listing_rows]}]} = listing
 
     case listing_rows[:values] do
-      nil    -> assert true == true
-      values -> refute Enum.any?(values, fn ([ db ]) -> db == @database end)
+      nil -> assert true == true
+      values -> refute Enum.any?(values, fn [db] -> db == @database end)
     end
   end
-
 
   test "database creation cases" do
     _ = @database |> Database.drop() |> DefaultConnection.execute()
@@ -38,7 +37,7 @@ defmodule Instream.Admin.DatabaseTest do
 
     # (implicit) if not exists
     result =
-         @database
+      @database
       |> Database.create()
       |> DefaultConnection.execute()
 

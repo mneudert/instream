@@ -22,16 +22,15 @@ defmodule Instream.Database do
     quote do
       @after_compile unquote(__MODULE__)
 
-      import unquote(__MODULE__), only: [ database: 1 ]
+      import unquote(__MODULE__), only: [database: 1]
     end
   end
 
-  defmacro __after_compile__(%{ module: module }, _bytecode) do
+  defmacro __after_compile__(%{module: module}, _bytecode) do
     quote do
       Instream.Database.Validator.proper_series?(unquote(module))
     end
   end
-
 
   @doc """
   Defines the database.
@@ -54,7 +53,6 @@ defmodule Instream.Database do
     end
   end
 
-
   @doc """
   Provides metadata access for a database.
 
@@ -64,7 +62,6 @@ defmodule Instream.Database do
   """
   @callback __meta__(atom) :: any
 
-
   @doc """
   Defines the name of the database.
   """
@@ -73,7 +70,6 @@ defmodule Instream.Database do
       unquote(__MODULE__).__attribute__(__MODULE__, :name, unquote(dbname))
     end
   end
-
 
   @doc false
   def __attribute__(mod, name, value) do

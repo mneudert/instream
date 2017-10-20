@@ -12,7 +12,6 @@ defmodule Instream.Writer do
     end
   end
 
-
   @doc """
   Writes a point.
 
@@ -20,7 +19,5 @@ defmodule Instream.Writer do
   write operation. Please refer to the `Instream.Pool.Worker` module to see
   which parameters are available.
   """
-  @callback write(payload              :: Query.t,
-                  opts                 :: Keyword.t,
-                  worker_state :: map) :: Response.t
+  @callback write(payload :: Query.t(), opts :: Keyword.t(), worker_state :: map) :: Response.t()
 end

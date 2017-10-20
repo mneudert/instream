@@ -3,24 +3,25 @@ defmodule Instream.Connection.TimeoutTest do
 
   alias Instream.TestHelpers.Connections.InetsConnection
 
-
   test "timeout" do
     timeout = 10
-    opts    = [
+
+    opts = [
       database: "timeout",
-      timeout:  timeout
+      timeout: timeout
     ]
 
-    assert { :error, :timeout } == InetsConnection.query("", opts)
+    assert {:error, :timeout} == InetsConnection.query("", opts)
   end
 
   test "timeout above GenServer defaults" do
     timeout = 7500
-    opts    = [
+
+    opts = [
       database: "timeout_long",
-      timeout:  timeout
+      timeout: timeout
     ]
 
-    assert { :error, :timeout } == InetsConnection.query("", opts)
+    assert {:error, :timeout} == InetsConnection.query("", opts)
   end
 end

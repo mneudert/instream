@@ -7,8 +7,8 @@ defmodule Instream.Admin.StatsTest do
   test "stats listing" do
     result = Stats.show() |> DefaultConnection.execute()
 
-    %{ results: [%{ series: stats }]} = result
+    %{results: [%{series: stats}]} = result
 
-    assert %{ name: _, columns: _, values: _ } = hd(stats)
+    assert %{name: _, columns: _, values: _} = hd(stats)
   end
 end

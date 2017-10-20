@@ -8,6 +8,6 @@ defmodule Instream.Admin.Stats do
   @doc """
   Returns a query to retrieve server stats.
   """
-  @spec show() :: Builder.t
+  @spec show() :: Builder.t()
   def show(), do: Builder.show(:stats)
 end

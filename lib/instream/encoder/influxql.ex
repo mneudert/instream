@@ -8,16 +8,16 @@ defmodule Instream.Encoder.InfluxQL do
   @doc """
   Converts a query builder struct to InfluxQL.
   """
-  @spec encode(Builder.t) :: String.t
-  def encode(%Builder{ command: "CREATE" } = query) do
+  @spec encode(Builder.t()) :: String.t()
+  def encode(%Builder{command: "CREATE"} = query) do
     encode_create(get_argument(query, :what), query)
   end
 
-  def encode(%Builder{ command: "DROP" } = query) do
+  def encode(%Builder{command: "DROP"} = query) do
     encode_drop(get_argument(query, :what), query)
   end
 
-  def encode(%Builder{ command: "SELECT" } = query) do
+  def encode(%Builder{command: "SELECT"} = query) do
     query.command
     |> append_binary(encode_select(get_argument(query, :select)))
     |> append_from(get_argument(query, :from))
@@ -26,7 +26,7 @@ defmodule Instream.Encoder.InfluxQL do
     |> append_offset(get_argument(query, :offset))
   end
 
-  def encode(%Builder{ command: "SHOW" } = query) do
+  def encode(%Builder{command: "SHOW"} = query) do
     query.command
     |> append_binary(get_argument(query, :show))
     |> append_on(get_argument(query, :on))
@@ -52,11 +52,11 @@ defmodule Instream.Encoder.InfluxQL do
       iex> quote_identifier("dáshes-and.stüff")
       "\\"dáshes-and.stüff\\""
   """
-  @spec quote_identifier(String.t) :: String.t
+  @spec quote_identifier(String.t()) :: String.t()
   def quote_identifier(ident) when is_binary(ident) do
     case Regex.match?(~r/(^[0-9]|[^a-zA-Z0-9_])/, ident) do
       false -> ident
-      true  -> "\"#{ ident }\""
+      true -> "\"#{ident}\""
     end
   end
 
@@ -76,10 +76,9 @@ defmodule Instream.Encoder.InfluxQL do
       iex> quote_value("stringy")
       "'stringy'"
   """
-  @spec quote_value(any) :: String.t
-  def quote_value(value) when is_binary(value), do: "'#{ value }'"
-  def quote_value(value),                       do: to_string(value)
-
+  @spec quote_value(any) :: String.t()
+  def quote_value(value) when is_binary(value), do: "'#{value}'"
+  def quote_value(value), do: to_string(value)
 
   # Extended command creation
 
@@ -99,7 +98,6 @@ defmodule Instream.Encoder.InfluxQL do
     |> append_default(get_argument(query, :default, false))
   end
 
-
   defp encode_drop("DATABASE", query) do
     query.command
     |> append_binary(get_argument(query, :what))
@@ -113,31 +111,31 @@ defmodule Instream.Encoder.InfluxQL do
     |> append_on(get_argument(query, :on))
   end
 
-
   # Internal methods
 
-  defp append_binary(str, append), do: "#{ str } #{ append }"
+  defp append_binary(str, append), do: "#{str} #{append}"
 
-  defp append_default(str, true),  do: "#{ str } DEFAULT"
+  defp append_default(str, true), do: "#{str} DEFAULT"
   defp append_default(str, false), do: str
 
-  defp append_duration(str, duration), do: "#{ str } DURATION #{ duration }"
+  defp append_duration(str, duration), do: "#{str} DURATION #{duration}"
 
-  defp append_from(str, from), do: "#{ str } FROM #{ from }"
+  defp append_from(str, from), do: "#{str} FROM #{from}"
 
-  defp append_on(str, nil),      do: str
-  defp append_on(str, database), do: "#{ str } ON #{ database }"
+  defp append_on(str, nil), do: str
+  defp append_on(str, database), do: "#{str} ON #{database}"
 
   defp append_replication(str, num) do
-    "#{ str } REPLICATION #{ num |> Integer.to_string(10) }"
+    "#{str} REPLICATION #{num |> Integer.to_string(10)}"
   end
 
-  defp append_where(str, nil),   do: str
+  defp append_where(str, nil), do: str
+
   defp append_where(str, fields) do
     where =
-         fields
+      fields
       |> Map.keys()
-      |> Enum.map(fn (field) ->
+      |> Enum.map(fn field ->
            quote_identifier(field) <> " = " <> quote_value(fields[field])
          end)
       |> Enum.join(" AND ")
@@ -145,23 +143,23 @@ defmodule Instream.Encoder.InfluxQL do
     str <> " WHERE " <> where
   end
 
-  defp append_limit(str, nil),   do: str
+  defp append_limit(str, nil), do: str
   defp append_limit(str, value), do: "#{str} LIMIT #{value}"
 
-  defp append_offset(str, nil),   do: str
+  defp append_offset(str, nil), do: str
   defp append_offset(str, value), do: "#{str} OFFSET #{value}"
 
   defp encode_select(select) when is_binary(select), do: select
-  defp encode_select(select) when is_list(select)    do
+
+  defp encode_select(select) when is_list(select) do
     select
-    |> Enum.map( &quote_identifier/1 )
+    |> Enum.map(&quote_identifier/1)
     |> Enum.join(", ")
   end
 
-
   # Utility methods
 
-  defp get_argument(%{ arguments: args }, argument, default \\ nil) do
+  defp get_argument(%{arguments: args}, argument, default \\ nil) do
     Map.get(args, argument, default)
   end
 end

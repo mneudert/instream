@@ -3,13 +3,11 @@ defmodule Instream.Log.QueryEntry do
   Log entry definition for query requests.
   """
 
-  defstruct [
-    query:    nil,
-    metadata: nil
-  ]
+  defstruct query: nil,
+            metadata: nil
 
   @type t :: %__MODULE__{
-    query:    String.t,
-    metadata: Instream.Log.Metadata.t
-  }
+          query: String.t(),
+          metadata: Instream.Log.Metadata.t()
+        }
 end

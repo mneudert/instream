@@ -3,29 +3,25 @@ defmodule Instream.Query.Builder do
   Query Builder.
   """
 
-  defstruct [
-    command:   nil,
-    arguments: %{}
-  ]
+  defstruct command: nil,
+            arguments: %{}
 
   @opaque t :: %__MODULE__{}
 
-
   @what_map [
-    database:           "DATABASE",
-    databases:          "DATABASES",
-    diagnostics:        "DIAGNOSTICS",
-    measurements:       "MEASUREMENTS",
+    database: "DATABASE",
+    databases: "DATABASES",
+    diagnostics: "DIAGNOSTICS",
+    measurements: "MEASUREMENTS",
     retention_policies: "RETENTION POLICIES",
-    retention_policy:   "RETENTION POLICY",
-    stats:              "STATS"
+    retention_policy: "RETENTION POLICY",
+    stats: "STATS"
   ]
-
 
   @doc """
   Builds a `CREATE DATABASE` query expression.
   """
-  @spec create_database(String.t) :: t
+  @spec create_database(String.t()) :: t
   def create_database(name) do
     %__MODULE__{}
     |> set_command("CREATE")
@@ -37,7 +33,7 @@ defmodule Instream.Query.Builder do
   @doc """
   Builds a `CREATE RETENTION POLICY` query expression.
   """
-  @spec create_retention_policy(String.t) :: t
+  @spec create_retention_policy(String.t()) :: t
   def create_retention_policy(name) do
     %__MODULE__{}
     |> set_command("CREATE")
@@ -57,7 +53,7 @@ defmodule Instream.Query.Builder do
   @doc """
   Builds a `DROP DATABASE` query expression.
   """
-  @spec drop_database(String.t) :: t
+  @spec drop_database(String.t()) :: t
   def drop_database(name) do
     %__MODULE__{}
     |> set_command("DROP")
@@ -69,7 +65,7 @@ defmodule Instream.Query.Builder do
   @doc """
   Builds a `DROP RETENTION POLICY` query expression.
   """
-  @spec drop_retention_policy(String.t) :: t
+  @spec drop_retention_policy(String.t()) :: t
   def drop_retention_policy(name) do
     %__MODULE__{}
     |> set_command("DROP")
@@ -81,13 +77,13 @@ defmodule Instream.Query.Builder do
   @doc """
   Sets the `DURATION` argument for queries supporting it.
   """
-  @spec duration(t, String.t) :: t
+  @spec duration(t, String.t()) :: t
   def duration(query, expr), do: set_argument(query, :duration, expr)
 
   @doc """
   Builds a `FROM` query expression.
   """
-  @spec from(module | String.t) :: t
+  @spec from(module | String.t()) :: t
   def from(series) when is_atom(series) do
     from(series.__meta__(:measurement))
   end
@@ -102,13 +98,13 @@ defmodule Instream.Query.Builder do
   @doc """
   Builds a `SELECT` query expression.
   """
-  @spec select(t, String.t) :: t
+  @spec select(t, String.t()) :: t
   def select(query, expr \\ "*"), do: set_argument(query, :select, expr)
 
   @doc """
   Sets the `ON` argument for queries supporting it.
   """
-  @spec on(t, String.t) :: t
+  @spec on(t, String.t()) :: t
   def on(query, database), do: set_argument(query, :on, database)
 
   @doc """
@@ -147,9 +143,9 @@ defmodule Instream.Query.Builder do
 
   # Internal methods
 
-  defp set_argument(%{ arguments: args } = query, key, val) do
-    %{ query | arguments: Map.put(args, key, val) }
+  defp set_argument(%{arguments: args} = query, key, val) do
+    %{query | arguments: Map.put(args, key, val)}
   end
 
-  defp set_command(query, command), do: %{ query | command: command }
+  defp set_command(query, command), do: %{query | command: command}
 end

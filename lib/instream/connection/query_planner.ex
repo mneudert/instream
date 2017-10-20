@@ -11,9 +11,9 @@ defmodule Instream.Connection.QueryPlanner do
   @doc """
   Executes a query.
   """
-  @spec execute(Builder.t | Query.t | String.t, Keyword.t, module) :: any
+  @spec execute(Builder.t() | Query.t() | String.t(), Keyword.t(), module) :: any
   def execute(%Builder{} = query, opts, conn) do
-    default_timeout = conn.config([ :query_timeout ])
+    default_timeout = conn.config([:query_timeout])
 
     opts =
       opts
@@ -29,7 +29,7 @@ defmodule Instream.Connection.QueryPlanner do
   def execute(%Query{} = query, opts, conn) do
     case opts[:async] do
       true -> execute_async(query, opts, conn)
-      _    -> execute_sync(query, opts, conn)
+      _ -> execute_sync(query, opts, conn)
     end
   end
 
@@ -39,27 +39,26 @@ defmodule Instream.Connection.QueryPlanner do
     |> execute(opts, conn)
   end
 
-
   # Internal methods
 
   defp execute_async(query, opts, conn) do
-    default_pool_timeout = conn.config([ :pool_timeout ]) || 5_000
-    pool_timeout         = opts[:pool_timeout] || default_pool_timeout
+    default_pool_timeout = conn.config([:pool_timeout]) || 5000
+    pool_timeout = opts[:pool_timeout] || default_pool_timeout
 
     worker = :poolboy.checkout(conn.__pool__, pool_timeout)
-    :ok    =  GenServer.cast(worker, { :execute, query, opts })
-    :ok    = :poolboy.checkin(conn.__pool__, worker)
+    :ok = GenServer.cast(worker, {:execute, query, opts})
+    :ok = :poolboy.checkin(conn.__pool__, worker)
 
     :ok
   end
 
   defp execute_sync(query, opts, conn) do
-    default_pool_timeout = conn.config([ :pool_timeout ]) || 5_000
-    pool_timeout         = opts[:pool_timeout] || default_pool_timeout
+    default_pool_timeout = conn.config([:pool_timeout]) || 5000
+    pool_timeout = opts[:pool_timeout] || default_pool_timeout
 
     worker = :poolboy.checkout(conn.__pool__, pool_timeout)
-    result =  GenServer.call(worker, { :execute, query, opts }, :infinity)
-    :ok    = :poolboy.checkin(conn.__pool__, worker)
+    result = GenServer.call(worker, {:execute, query, opts}, :infinity)
+    :ok = :poolboy.checkin(conn.__pool__, worker)
 
     result
   end

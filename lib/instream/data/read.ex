@@ -13,13 +13,13 @@ defmodule Instream.Data.Read do
   - `method`:    whether to use a "GET" or "POST" request (as atom)
   - `precision`: see `Instream.Encoder.Precision` for available values
   """
-  @spec query(String.t, Keyword.t) :: Query.t
+  @spec query(String.t(), Keyword.t()) :: Query.t()
   def query(query_str, opts) do
     %Query{
-      method:  opts[:method] || :get,
+      method: opts[:method] || :get,
       payload: query_str,
-      opts:    opts,
-      type:    :read
+      opts: opts,
+      type: :read
     }
   end
 end
