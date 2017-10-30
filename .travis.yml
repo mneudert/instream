@@ -14,12 +14,12 @@ matrix:
   include:
     - elixir: 1.4.5
       env:    VER_GO=1.8.3 VER_INFLUXDB=v1.3.6
-    - elixir: 1.5.1
+    - elixir: 1.5.2
       env:    VER_GO=1.8.3 VER_INFLUXDB=v1.3.6
-    - elixir:      1.5.1
+    - elixir:      1.5.2
       env:         VER_GO=1.8.3 VER_INFLUXDB=v1.3.6
       otp_release: 19.3
-    - elixir:      1.5.1
+    - elixir:      1.5.2
       env:         VER_GO=1.8.3 VER_INFLUXDB=v1.3.6 TRAVIS_COVERAGE=true
       otp_release: 20.0
   allow_failures:
