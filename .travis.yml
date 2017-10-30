@@ -7,20 +7,20 @@ env:
   - VER_GO=1.6.2 VER_INFLUXDB=v1.0.2
   - VER_GO=1.7.3 VER_INFLUXDB=v1.1.5
   - VER_GO=1.7.4 VER_INFLUXDB=v1.2.4
-  - VER_GO=1.8.3 VER_INFLUXDB=v1.3.6
+  - VER_GO=1.8.3 VER_INFLUXDB=v1.3.7
   - VER_GO=1.8.3 VER_INFLUXDB=master
 
 matrix:
   include:
     - elixir: 1.4.5
-      env:    VER_GO=1.8.3 VER_INFLUXDB=v1.3.6
+      env:    VER_GO=1.8.3 VER_INFLUXDB=v1.3.7
     - elixir: 1.5.2
-      env:    VER_GO=1.8.3 VER_INFLUXDB=v1.3.6
+      env:    VER_GO=1.8.3 VER_INFLUXDB=v1.3.7
     - elixir:      1.5.2
-      env:         VER_GO=1.8.3 VER_INFLUXDB=v1.3.6
+      env:         VER_GO=1.8.3 VER_INFLUXDB=v1.3.7
       otp_release: 19.3
     - elixir:      1.5.2
-      env:         VER_GO=1.8.3 VER_INFLUXDB=v1.3.6 TRAVIS_COVERAGE=true
+      env:         VER_GO=1.8.3 VER_INFLUXDB=v1.3.7 TRAVIS_COVERAGE=true
       otp_release: 20.0
   allow_failures:
     - env: VER_GO=1.8.3 VER_INFLUXDB=master
