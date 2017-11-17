@@ -50,7 +50,7 @@ config =
       config
 
     {:ok, version} ->
-      versions = ["1.1", "1.2", "1.3"]
+      versions = ["1.1", "1.2", "1.3", "1.4"]
       config = Keyword.put(config, :exclude, config[:exclude] || [])
 
       Enum.reduce(versions, config, fn ver, acc ->
