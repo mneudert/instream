@@ -7,7 +7,7 @@ defmodule Instream.Mixfile do
     [
       app: :instream,
       name: "Instream",
-      version: "0.17.0",
+      version: "0.17.1-dev",
       elixir: "~> 1.3",
       deps: deps(),
       elixirc_paths: elixirc_paths(Mix.env()),
@@ -44,7 +44,7 @@ defmodule Instream.Mixfile do
     [
       extras: ["CHANGELOG.md", "README.md"],
       main: "readme",
-      source_ref: "v0.17.0",
+      source_ref: "v0.17",
       source_url: @url_github
     ]
   end
