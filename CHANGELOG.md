@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.17.1 (2017-12-16)
+
+- Enhancements
+    - Support for Elixir 1.5 style `child_spec` has been added
+      ([#39](https://github.com/mneudert/instream/pull/39))
+
 ## v0.17.0 (2017-12-10)
 
 - Backwards incompatible changes

@@ -64,7 +64,7 @@ defmodule Instream.Connection do
       def __log__(entry), do: unquote(loggers)
       def __pool__, do: __MODULE__.Pool
 
-      def child_spec, do: Pool.Spec.spec(__MODULE__)
+      def child_spec(_ \\ []), do: Pool.Spec.spec(__MODULE__)
 
       def config(keys \\ nil) do
         Connection.Config.runtime(@otp_app, __MODULE__, keys)
@@ -123,7 +123,7 @@ defmodule Instream.Connection do
   @doc """
   Returns a supervisable pool child_spec.
   """
-  @callback child_spec :: Supervisor.Spec.spec()
+  @callback child_spec(_ignored :: term) :: Supervisor.Spec.spec()
 
   @doc """
   Returns the connection configuration.
