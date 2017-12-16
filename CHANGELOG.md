@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.17.1-dev
+## v0.17.1 (2017-12-16)
 
 - Enhancements
     - Support for Elixir 1.5 style `child_spec` has been added
