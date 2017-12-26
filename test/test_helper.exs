@@ -41,7 +41,6 @@ Application.put_env(:instream, Connections.InetsConnection, inets_env)
 
 # configure InfluxDB test exclusion
 config = ExUnit.configuration()
-
 version = to_string(Connections.DefaultConnection.version())
 
 config =
