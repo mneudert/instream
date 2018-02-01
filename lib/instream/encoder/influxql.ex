@@ -136,8 +136,8 @@ defmodule Instream.Encoder.InfluxQL do
       fields
       |> Map.keys()
       |> Enum.map(fn field ->
-           quote_identifier(field) <> " = " <> quote_value(fields[field])
-         end)
+        quote_identifier(field) <> " = " <> quote_value(fields[field])
+      end)
       |> Enum.join(" AND ")
 
     str <> " WHERE " <> where

@@ -35,12 +35,12 @@ defmodule Instream.Encoder.Line do
   defp append_tags(line, %{tags: tags}) do
     tags
     |> Enum.filter(fn
-         {_, nil} -> false
-         {_, _} -> true
-       end)
+      {_, nil} -> false
+      {_, _} -> true
+    end)
     |> Enum.reduce([], fn {tag, value}, acc ->
-         ["#{encode_property(tag)}=#{encode_property(value)}" | acc]
-       end)
+      ["#{encode_property(tag)}=#{encode_property(value)}" | acc]
+    end)
     |> List.insert_at(0, line)
     |> Enum.join(",")
   end
@@ -54,12 +54,12 @@ defmodule Instream.Encoder.Line do
   defp encode_fields(fields) do
     fields
     |> Enum.filter(fn
-         {_, nil} -> false
-         {_, _} -> true
-       end)
+      {_, nil} -> false
+      {_, _} -> true
+    end)
     |> Enum.reduce([], fn {field, value}, acc ->
-         ["#{encode_property(field)}=#{encode_value(value)}" | acc]
-       end)
+      ["#{encode_property(field)}=#{encode_value(value)}" | acc]
+    end)
     |> Enum.join(",")
   end
 

@@ -54,12 +54,12 @@ defmodule Instream.Connection do
         |> Connection.Config.compile_time(__MODULE__)
         |> Keyword.get(:loggers, [])
         |> Enum.reduce(quote(do: entry), fn logger, acc ->
-             {mod, fun, args} = logger
+          {mod, fun, args} = logger
 
-             quote do
-               unquote(mod).unquote(fun)(unquote(acc), unquote_splicing(args))
-             end
-           end)
+          quote do
+            unquote(mod).unquote(fun)(unquote(acc), unquote_splicing(args))
+          end
+        end)
 
       def __log__(entry), do: unquote(loggers)
       def __pool__, do: __MODULE__.Pool

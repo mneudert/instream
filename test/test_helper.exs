@@ -5,14 +5,14 @@ alias Instream.TestHelpers.Connections
 File.ls!("test/helpers/connections")
 |> Enum.filter(&String.contains?(&1, "connection"))
 |> Enum.map(fn helper ->
-     conn =
-       helper
-       |> String.replace(".ex", "")
-       |> String.replace("udp", "UDP")
-       |> Macro.camelize()
+  conn =
+    helper
+    |> String.replace(".ex", "")
+    |> String.replace("udp", "UDP")
+    |> Macro.camelize()
 
-     Module.concat([Connections, conn]).child_spec
-   end)
+  Module.concat([Connections, conn]).child_spec
+end)
 |> Supervisor.start_link(strategy: :one_for_one)
 
 # setup test database

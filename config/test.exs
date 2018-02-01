@@ -10,15 +10,15 @@ connections =
   File.ls!("test/helpers/connections")
   |> Enum.filter(&String.contains?(&1, "connection"))
   |> Enum.map(fn helper ->
-       # adjust camelize behaviour
-       conn =
-         helper
-         |> String.replace(".ex", "")
-         |> String.replace("udp", "UDP")
-         |> Macro.camelize()
+    # adjust camelize behaviour
+    conn =
+      helper
+      |> String.replace(".ex", "")
+      |> String.replace("udp", "UDP")
+      |> Macro.camelize()
 
-       Module.concat([TestHelpers.Connections, conn])
-     end)
+    Module.concat([TestHelpers.Connections, conn])
+  end)
 
 # setup global configuration defaults
 Enum.each(connections, fn connection ->
@@ -31,15 +31,15 @@ end)
 connections
 |> Enum.reject(&(&1 == TestHelpers.Connections.AnonConnection))
 |> Enum.each(fn connection ->
-     config :instream, connection, auth: [username: "instream_test", password: "instream_test"]
-   end)
+  config :instream, connection, auth: [username: "instream_test", password: "instream_test"]
+end)
 
 # setup logging defaults
 connections
 |> Enum.reject(&(&1 == TestHelpers.Connections.LogConnection))
 |> Enum.each(fn connection ->
-     config :instream, connection, loggers: [{TestHelpers.NilLogger, :log, []}]
-   end)
+  config :instream, connection, loggers: [{TestHelpers.NilLogger, :log, []}]
+end)
 
 # connection specific configuration
 config :instream, TestHelpers.Connections.EnvConnection,

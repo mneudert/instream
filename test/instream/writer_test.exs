@@ -97,9 +97,9 @@ defmodule Instream.WriterTest do
     result =
       "SELECT * FROM #{ProtocolsSeries.__meta__(:measurement)} WHERE proto='Line'"
       |> DefaultConnection.query(
-           database: ProtocolsSeries.__meta__(:database),
-           precision: :nanosecond
-         )
+        database: ProtocolsSeries.__meta__(:database),
+        precision: :nanosecond
+      )
 
     assert %{
              results: [
@@ -130,9 +130,9 @@ defmodule Instream.WriterTest do
     result =
       "SELECT * FROM #{ProtocolsSeries.__meta__(:measurement)} WHERE proto='UDP'"
       |> DefaultConnection.query(
-           database: ProtocolsSeries.__meta__(:database),
-           precision: :nanosecond
-         )
+        database: ProtocolsSeries.__meta__(:database),
+        precision: :nanosecond
+      )
 
     assert %{
              results: [
