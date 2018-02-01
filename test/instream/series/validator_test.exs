@@ -7,10 +7,10 @@ defmodule Instream.Series.ValidatorTest do
         use Instream.Series
 
         series do
-          measurement("satisfy_definition_rules")
+          measurement "satisfy_definition_rules"
 
-          field(:conflicting_name)
-          tag(:conflicting_name)
+          field :conflicting_name
+          tag :conflicting_name
         end
       end
     end
@@ -22,9 +22,9 @@ defmodule Instream.Series.ValidatorTest do
         use Instream.Series
 
         series do
-          measurement("satisfy_definition_rules")
+          measurement "satisfy_definition_rules"
 
-          field(:time)
+          field :time
         end
       end
     end
@@ -36,10 +36,10 @@ defmodule Instream.Series.ValidatorTest do
         use Instream.Series
 
         series do
-          measurement("satisfy_definition_rules")
+          measurement "satisfy_definition_rules"
 
-          field(:satisfy_definition)
-          tag(:time)
+          field :satisfy_definition
+          tag :time
         end
       end
     end
@@ -51,7 +51,7 @@ defmodule Instream.Series.ValidatorTest do
         use Instream.Series
 
         series do
-          measurement("satisfy_definition_rules")
+          measurement "satisfy_definition_rules"
         end
       end
     end

@@ -7,12 +7,12 @@ defmodule Instream.Connection.DatabaseTest do
     use Instream.Series
 
     series do
-      database("database_config_seriesdb_test")
-      measurement("database_config_seriesdb_test")
+      database "database_config_seriesdb_test"
+      measurement "database_config_seriesdb_test"
 
-      tag(:foo, default: :bar)
+      tag :foo, default: :bar
 
-      field(:value, default: 100)
+      field :value, default: 100
     end
   end
 
@@ -20,11 +20,11 @@ defmodule Instream.Connection.DatabaseTest do
     use Instream.Series
 
     series do
-      measurement("database_config_nodb_test")
+      measurement "database_config_nodb_test"
 
-      tag(:foo, default: :bar)
+      tag :foo, default: :bar
 
-      field(:value, default: 100)
+      field :value, default: 100
     end
   end
 

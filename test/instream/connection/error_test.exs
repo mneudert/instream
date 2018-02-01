@@ -8,12 +8,12 @@ defmodule Instream.Connection.ErrorTest do
     use Instream.Series
 
     series do
-      database("test_database")
-      measurement("connection_error_tests")
+      database "test_database"
+      measurement "connection_error_tests"
 
-      tag(:foo, default: :bar)
+      tag :foo, default: :bar
 
-      field(:value, default: 100)
+      field :value, default: 100
     end
   end
 

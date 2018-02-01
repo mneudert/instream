@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.18.0-dev
+
+- Enhancements
+    - Supporting rules for the elixir formatter are available
+
 ## v0.17.1 (2017-12-16)
 
 - Enhancements

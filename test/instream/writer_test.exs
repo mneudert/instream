@@ -9,12 +9,12 @@ defmodule Instream.WriterTest do
     use Instream.Series
 
     series do
-      database("test_database")
-      measurement("location")
+      database "test_database"
+      measurement "location"
 
-      tag(:scope)
+      tag :scope
 
-      field(:value)
+      field :value
     end
   end
 
@@ -22,14 +22,14 @@ defmodule Instream.WriterTest do
     use Instream.Series
 
     series do
-      database("test_database")
-      measurement("empty_tags")
+      database "test_database"
+      measurement "empty_tags"
 
-      tag(:filled)
-      tag(:defaulting, default: "default_value")
-      tag(:empty)
+      tag :filled
+      tag :defaulting, default: "default_value"
+      tag :empty
 
-      field(:value)
+      field :value
     end
   end
 
@@ -37,10 +37,10 @@ defmodule Instream.WriterTest do
     use Instream.Series
 
     series do
-      database("test_database")
-      measurement("writer_errors")
+      database "test_database"
+      measurement "writer_errors"
 
-      field(:binary)
+      field :binary
     end
   end
 
@@ -48,13 +48,13 @@ defmodule Instream.WriterTest do
     use Instream.Series
 
     series do
-      database("test_database")
-      measurement("writer_line_encoding")
+      database "test_database"
+      measurement "writer_line_encoding"
 
-      field(:binary)
-      field(:boolean)
-      field(:float)
-      field(:integer)
+      field :binary
+      field :boolean
+      field :float
+      field :integer
     end
   end
 
@@ -62,10 +62,10 @@ defmodule Instream.WriterTest do
     use Instream.Series
 
     series do
-      database("invalid_test_database")
-      measurement("writer_database_option")
+      database "invalid_test_database"
+      measurement "writer_database_option"
 
-      field(:value)
+      field :value
     end
   end
 
@@ -73,12 +73,12 @@ defmodule Instream.WriterTest do
     use Instream.Series
 
     series do
-      database("test_database")
-      measurement("writer_protocols")
+      database "test_database"
+      measurement "writer_protocols"
 
-      tag(:proto)
+      tag :proto
 
-      field(:value)
+      field :value
     end
   end
 

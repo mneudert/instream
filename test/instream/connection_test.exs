@@ -13,13 +13,13 @@ defmodule Instream.ConnectionTest do
     use Instream.Series
 
     series do
-      database("test_database")
-      measurement("data_write_struct")
+      database "test_database"
+      measurement "data_write_struct"
 
-      tag(:bar)
-      tag(:foo)
+      tag :bar
+      tag :foo
 
-      field(:value)
+      field :value
     end
   end
 

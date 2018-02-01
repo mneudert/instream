@@ -5,14 +5,14 @@ defmodule Instream.SeriesTest do
     use Instream.Series
 
     series do
-      measurement("hosts")
+      measurement "hosts"
 
-      tag(:host, default: "www")
-      tag(:host_id, default: 1)
-      tag(:cpu)
+      tag :host, default: "www"
+      tag :host_id, default: 1
+      tag :cpu
 
-      field(:high)
-      field(:low, default: 25)
+      field :high
+      field :low, default: 25
     end
   end
 
@@ -20,13 +20,13 @@ defmodule Instream.SeriesTest do
     use Instream.Series
 
     series do
-      database("test_series_database")
-      measurement("cpu_load")
+      database "test_series_database"
+      measurement "cpu_load"
 
-      tag(:host)
-      tag(:core)
+      tag :host
+      tag :core
 
-      field(:value)
+      field :value
     end
   end
 
@@ -76,10 +76,10 @@ defmodule Instream.SeriesTest do
         fn_database = fn -> "test_series_database" end
         fn_measurement = fn -> "test_series_measurement" end
 
-        database(fn_database.())
-        measurement(fn_measurement.())
+        database fn_database.()
+        measurement fn_measurement.()
 
-        field(:satisfy_definition_rules)
+        field :satisfy_definition_rules
       end
     end
 
@@ -92,10 +92,10 @@ defmodule Instream.SeriesTest do
       end
 
       series do
-        database(ExternalDefinitionProvider.database())
-        measurement(ExternalDefinitionProvider.measurement())
+        database ExternalDefinitionProvider.database()
+        measurement ExternalDefinitionProvider.measurement()
 
-        field(:satisfy_definition_rules)
+        field :satisfy_definition_rules
       end
     end
 
@@ -103,10 +103,10 @@ defmodule Instream.SeriesTest do
       use Instream.Series
 
       series do
-        database("#{Mix.env()}_series_database")
-        measurement("#{Mix.env()}_series_measurement")
+        database "#{Mix.env()}_series_database"
+        measurement "#{Mix.env()}_series_measurement"
 
-        field(:satisfy_definition_rules)
+        field :satisfy_definition_rules
       end
     end
 

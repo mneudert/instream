@@ -9,12 +9,12 @@ defmodule Instream.Log.WriteEntryTest do
     use Instream.Series
 
     series do
-      database("test_database")
-      measurement("log_write_entry_test")
+      database "test_database"
+      measurement "log_write_entry_test"
 
-      tag(:t)
+      tag :t
 
-      field(:f)
+      field :f
     end
   end
 
