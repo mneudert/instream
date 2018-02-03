@@ -495,6 +495,29 @@ end
 These values will be pre-assigned when using the data struct.
 All fields or tags without a default value will be set to `nil`.
 
+### Series Hydration (Experimental)
+
+Whenever you want to convert a plain map or a query result into a specific
+series you can use the builtin hydration methods:
+
+```elixir
+# plain map
+MySeries.from_map(%{
+  timestamp: 1234567890,
+  some_tag: "hydrate",
+  some_field: 123
+})
+
+# query result
+"SELECT * FROM \"my_measurement\""
+|> MyConnection.query()
+|> MySeries.from_result()
+```
+
+The timestamp itself is kept "as is". There is (at the moment) no automatic
+conversion done between to ensure a consistent precisions. This should be done
+beforehand or kept in mind when writing a hydrated point.
+
 ### Writing Series Points
 
 You can then use this module to assemble a data point (one at a time)

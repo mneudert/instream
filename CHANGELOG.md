@@ -3,6 +3,8 @@
 ## v0.18.0-dev
 
 - Enhancements
+    - Experimental support to convert plain maps or query results into series
+      structs has been added
     - Supporting rules for the elixir formatter are available
 
 ## v0.17.1 (2017-12-16)
