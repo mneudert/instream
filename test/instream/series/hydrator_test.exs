@@ -17,18 +17,21 @@ defmodule Instream.Series.HydratorTest do
     hydrated =
       TestSeries.from_map(%{
         foo: "hydrate_foo",
-        value: 666
+        value: 666,
+        timestamp: 1_439_587_926_000_000_000
       })
 
-    assert 666 == hydrated.fields.value
-    assert "hydrate_foo" == hydrated.tags.foo
+    assert hydrated.fields.value == 666
+    assert hydrated.tags.foo == "hydrate_foo"
+    assert hydrated.timestamp == 1_439_587_926_000_000_000
   end
 
   test "hydrating from map (defaults)" do
     hydrated = TestSeries.from_map(%{})
 
-    assert 100 == hydrated.fields.value
-    assert "bar" == hydrated.tags.foo
+    assert hydrated.fields.value == 100
+    assert hydrated.tags.foo == "bar"
+    assert hydrated.timestamp == nil
   end
 
   test "hydrating from map (unknown keys)" do
@@ -49,7 +52,7 @@ defmodule Instream.Series.HydratorTest do
                 columns: ["time", "value"],
                 name: "write_data_async",
                 tags: %{foo: "bar"},
-                values: [["2015-08-14T21:32:06Z", 200], ["2015-08-14T21:32:07Z", 300]]
+                values: [[1_439_587_926_000_000_000, 200], [1_439_587_927_000_000_000, 300]]
               }
             ]
           }
@@ -58,10 +61,12 @@ defmodule Instream.Series.HydratorTest do
 
     [first, second] = hydrated
 
-    assert 200 == first.fields.value
-    assert "bar" == first.tags.foo
+    assert first.fields.value == 200
+    assert first.tags.foo == "bar"
+    assert first.timestamp == 1_439_587_926_000_000_000
 
-    assert 300 == second.fields.value
-    assert "bar" == second.tags.foo
+    assert second.fields.value == 300
+    assert second.tags.foo == "bar"
+    assert second.timestamp == 1_439_587_927_000_000_000
   end
 end
