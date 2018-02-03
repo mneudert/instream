@@ -38,4 +38,30 @@ defmodule Instream.Series.HydratorTest do
     refute Map.has_key?(hydrated.fields, :unknown)
     refute Map.has_key?(hydrated.tags, :unknown)
   end
+
+  test "hydrating from query result" do
+    hydrated =
+      TestSeries.from_result(%{
+        results: [
+          %{
+            series: [
+              %{
+                columns: ["time", "value"],
+                name: "write_data_async",
+                tags: %{foo: "bar"},
+                values: [["2015-08-14T21:32:06Z", 200], ["2015-08-14T21:32:07Z", 300]]
+              }
+            ]
+          }
+        ]
+      })
+
+    [first, second] = hydrated
+
+    assert 200 == first.fields.value
+    assert "bar" == first.tags.foo
+
+    assert 300 == second.fields.value
+    assert "bar" == second.tags.foo
+  end
 end

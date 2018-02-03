@@ -18,4 +18,24 @@ defmodule Instream.Series.Hydrator do
       tags: struct(Module.concat(series, Tags), data_tags)
     })
   end
+
+  @doc """
+  Converts a query result map into a list of series definition structs.
+
+  Keys not defined in the series are silently dropped.
+  """
+  @spec from_result(module, map) :: [struct]
+  def from_result(series, %{results: [%{series: [data]}]}) do
+    data_tags = Map.get(data, :tags, %{})
+
+    Enum.map(Map.get(data, :values, []), fn values ->
+      data_fields =
+        data.columns
+        |> Enum.zip(values)
+        |> Enum.map(fn {k, v} -> {String.to_atom(k), v} end)
+        |> Enum.into(%{})
+
+      from_map(series, Map.merge(data_tags, data_fields))
+    end)
+  end
 end
