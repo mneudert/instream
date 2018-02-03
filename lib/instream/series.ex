@@ -92,6 +92,10 @@ defmodule Instream.Series do
       Module.eval_quoted(__ENV__, [
         unquote(__MODULE__).__struct__(__MODULE__)
       ])
+
+      def from_map(data) do
+        Instream.Series.Hydrator.from_map(__MODULE__, data)
+      end
     end
   end
 
@@ -106,6 +110,13 @@ defmodule Instream.Series do
   - `:tags`        - the available tags defining the series
   """
   @callback __meta__(atom) :: any
+
+  @doc """
+  Creates a series dataset from any given map.
+
+  Keys not defined in the series are silently dropped.
+  """
+  @callback from_map(map) :: struct
 
   @doc """
   Defines the database for the series.
