@@ -1,7 +1,7 @@
-language:    elixir
-sudo:        false
+language: elixir
+sudo: false
 otp_release: 18.3
-elixir:      1.3.4
+elixir: 1.3.4
 
 env:
   - VER_GO=1.6.2 VER_INFLUXDB=v1.0.2
@@ -14,14 +14,14 @@ env:
 matrix:
   include:
     - elixir: 1.4.5
-      env:    VER_GO=1.9.2 VER_INFLUXDB=v1.4.3
+      env: VER_GO=1.9.2 VER_INFLUXDB=v1.4.3
     - elixir: 1.5.2
-      env:    VER_GO=1.9.2 VER_INFLUXDB=v1.4.3
-    - elixir:      1.5.2
-      env:         VER_GO=1.9.2 VER_INFLUXDB=v1.4.3
+      env: VER_GO=1.9.2 VER_INFLUXDB=v1.4.3
+    - elixir: 1.5.2
+      env: VER_GO=1.9.2 VER_INFLUXDB=v1.4.3
       otp_release: 19.3
-    - elixir:      1.5.2
-      env:         VER_GO=1.9.2 VER_INFLUXDB=v1.4.3 TRAVIS_COVERAGE=true
+    - elixir: 1.5.2
+      env: VER_GO=1.9.2 VER_INFLUXDB=v1.4.3 TRAVIS_COVERAGE=true
       otp_release: 20.2
   allow_failures:
     - env: VER_GO=1.9.2 VER_INFLUXDB=master
