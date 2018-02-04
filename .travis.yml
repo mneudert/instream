@@ -1,28 +1,27 @@
 language: elixir
 sudo: false
-otp_release: 18.3
-elixir: 1.3.4
-
-env:
-  - VER_GO=1.6.2 VER_INFLUXDB=v1.0.2
-  - VER_GO=1.7.3 VER_INFLUXDB=v1.1.5
-  - VER_GO=1.7.4 VER_INFLUXDB=v1.2.4
-  - VER_GO=1.8.3 VER_INFLUXDB=v1.3.9
-  - VER_GO=1.9.2 VER_INFLUXDB=v1.4.3
-  - VER_GO=1.9.2 VER_INFLUXDB=master
 
 matrix:
   include:
+    - elixir: 1.3.4
+      otp_release: 18.3
+      env: VER_GO=1.6.2 VER_INFLUXDB=v1.0.2
     - elixir: 1.4.5
-      env: VER_GO=1.9.2 VER_INFLUXDB=v1.4.3
-    - elixir: 1.5.2
-      env: VER_GO=1.9.2 VER_INFLUXDB=v1.4.3
-    - elixir: 1.5.2
-      env: VER_GO=1.9.2 VER_INFLUXDB=v1.4.3
       otp_release: 19.3
+      env: VER_GO=1.7.3 VER_INFLUXDB=v1.1.5
     - elixir: 1.5.2
-      env: VER_GO=1.9.2 VER_INFLUXDB=v1.4.3 TRAVIS_COVERAGE=true
       otp_release: 20.2
+      env: VER_GO=1.7.4 VER_INFLUXDB=v1.2.4
+    - elixir: 1.5.2
+      otp_release: 20.2
+      env: VER_GO=1.8.3 VER_INFLUXDB=v1.3.9
+    - elixir: 1.5.2
+      otp_release: 20.2
+      env: VER_GO=1.9.2 VER_INFLUXDB=v1.4.3
+      after_success: mix coveralls.travis
+    - elixir: 1.5.2
+      otp_release: 20.2
+      env: VER_GO=1.9.2 VER_INFLUXDB=master
   allow_failures:
     - env: VER_GO=1.9.2 VER_INFLUXDB=master
 
@@ -93,11 +92,6 @@ after_failure: |-
   cat ./influxdb.stdout
   echo '==> stderr <=='
   cat ./influxdb.stderr
-
-after_success: |-
-  if [ ! -z "${TRAVIS_COVERAGE}" ]; then
-    mix coveralls.travis
-  fi
 
 after_script:
   - kill $(cat ./influxdb.pid)
