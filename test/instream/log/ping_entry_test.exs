@@ -1,13 +1,13 @@
 defmodule Instream.Log.PingEntryTest do
   use ExUnit.Case, async: false
 
-  import ExUnit.CaptureIO
+  import ExUnit.CaptureLog
 
   alias Instream.TestHelpers.Connections.LogConnection
 
   test "logging ping requests" do
     log =
-      capture_io(:user, fn ->
+      capture_log(fn ->
         :pong = LogConnection.ping()
 
         :timer.sleep(10)

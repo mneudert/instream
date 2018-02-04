@@ -1,7 +1,7 @@
 defmodule Instream.Log.QueryEntryTest do
   use ExUnit.Case, async: false
 
-  import ExUnit.CaptureIO
+  import ExUnit.CaptureLog
 
   alias Instream.TestHelpers.Connections.LogConnection
 
@@ -9,7 +9,7 @@ defmodule Instream.Log.QueryEntryTest do
     query = "SELECT value FROM empty_measurement"
 
     log =
-      capture_io(:user, fn ->
+      capture_log(fn ->
         _ = LogConnection.query(query)
 
         :timer.sleep(10)

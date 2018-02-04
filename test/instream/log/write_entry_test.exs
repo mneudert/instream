@@ -1,7 +1,7 @@
 defmodule Instream.Log.WriteEntryTest do
   use ExUnit.Case, async: false
 
-  import ExUnit.CaptureIO
+  import ExUnit.CaptureLog
 
   alias Instream.TestHelpers.Connections.LogConnection
 
@@ -31,7 +31,7 @@ defmodule Instream.Log.WriteEntryTest do
     ]
 
     log =
-      capture_io(:user, fn ->
+      capture_log(fn ->
         :ok = LogConnection.write(points)
 
         :timer.sleep(10)

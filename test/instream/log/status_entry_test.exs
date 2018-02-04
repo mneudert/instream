@@ -1,13 +1,13 @@
 defmodule Instream.Log.StatusEntryTest do
   use ExUnit.Case, async: false
 
-  import ExUnit.CaptureIO
+  import ExUnit.CaptureLog
 
   alias Instream.TestHelpers.Connections.LogConnection
 
   test "logging status requests" do
     log =
-      capture_io(:user, fn ->
+      capture_log(fn ->
         :ok = LogConnection.status()
 
         :timer.sleep(10)
