@@ -1,6 +1,8 @@
 defmodule Instream.WriterTest do
   use ExUnit.Case, async: true
 
+  import Instream.TestHelpers.Retry
+
   alias Instream.Admin.RetentionPolicy
   alias Instream.TestHelpers.Connections.DefaultConnection
   alias Instream.TestHelpers.Connections.UDPConnection
@@ -90,28 +92,34 @@ defmodule Instream.WriterTest do
 
     assert :ok == data |> DefaultConnection.write(precision: :second)
 
-    # wait to ensure data was written
-    :timer.sleep(100)
-
-    # check data
-    result =
-      "SELECT * FROM #{ProtocolsSeries.__meta__(:measurement)} WHERE proto='Line'"
-      |> DefaultConnection.query(
-        database: ProtocolsSeries.__meta__(:database),
-        precision: :nanosecond
-      )
-
-    assert %{
-             results: [
+    assert retry(
+             250,
+             25,
+             fn ->
+               DefaultConnection.query(
+                 "SELECT * FROM #{ProtocolsSeries.__meta__(:measurement)} WHERE proto='Line'",
+                 database: ProtocolsSeries.__meta__(:database),
+                 precision: :nanosecond
+               )
+             end,
+             fn
                %{
-                 series: [
+                 results: [
                    %{
-                     values: [[1_439_587_926_000_000_000, "Line", "Line"]]
+                     series: [
+                       %{
+                         values: [[1_439_587_926_000_000_000, "Line", "Line"]]
+                       }
+                     ]
                    }
                  ]
-               }
-             ]
-           } = result
+               } ->
+                 true
+
+               _ ->
+                 false
+             end
+           )
   end
 
   @tag :udp
@@ -123,28 +131,34 @@ defmodule Instream.WriterTest do
 
     assert :ok == data |> UDPConnection.write()
 
-    # wait to ensure data was written
-    :timer.sleep(1000)
-
-    # check data
-    result =
-      "SELECT * FROM #{ProtocolsSeries.__meta__(:measurement)} WHERE proto='UDP'"
-      |> DefaultConnection.query(
-        database: ProtocolsSeries.__meta__(:database),
-        precision: :nanosecond
-      )
-
-    assert %{
-             results: [
+    assert retry(
+             2500,
+             50,
+             fn ->
+               DefaultConnection.query(
+                 "SELECT * FROM #{ProtocolsSeries.__meta__(:measurement)} WHERE proto='UDP'",
+                 database: ProtocolsSeries.__meta__(:database),
+                 precision: :nanosecond
+               )
+             end,
+             fn
                %{
-                 series: [
+                 results: [
                    %{
-                     values: [[1_439_587_927_000_000_000, "UDP", "UDP"]]
+                     series: [
+                       %{
+                         values: [[1_439_587_927_000_000_000, "UDP", "UDP"]]
+                       }
+                     ]
                    }
                  ]
-               }
-             ]
-           } = result
+               } ->
+                 true
+
+               _ ->
+                 false
+             end
+           )
   end
 
   test "line protocol data encoding" do
@@ -163,32 +177,40 @@ defmodule Instream.WriterTest do
 
     assert :ok == data |> DefaultConnection.write()
 
-    # wait to ensure data was written
-    :timer.sleep(250)
-
-    # check data
-    result =
-      "SELECT * FROM #{LineEncodingSeries.__meta__(:measurement)} GROUP BY *"
-      |> DefaultConnection.query(database: LineEncodingSeries.__meta__(:database))
-
-    assert %{
-             results: [
+    assert retry(
+             1000,
+             25,
+             fn ->
+               DefaultConnection.query(
+                 "SELECT * FROM #{LineEncodingSeries.__meta__(:measurement)} GROUP BY *",
+                 database: LineEncodingSeries.__meta__(:database)
+               )
+             end,
+             fn
                %{
-                 series: [
+                 results: [
                    %{
-                     values: [[_, "binary", false, 1.1, 100]]
+                     series: [
+                       %{
+                         values: [[_, "binary", false, 1.1, 100]]
+                       }
+                     ]
                    }
                  ]
-               }
-             ]
-           } = result
+               } ->
+                 true
+
+               _ ->
+                 false
+             end
+           )
   end
 
   test "protocol error decoding" do
     data = %ErrorsSeries{}
     data = %{data | fields: %{data.fields | binary: "binary"}}
 
-    assert :ok = data |> DefaultConnection.write()
+    assert :ok == data |> DefaultConnection.write()
 
     # wait to ensure data was written
     :timer.sleep(250)
@@ -217,29 +239,37 @@ defmodule Instream.WriterTest do
 
     assert :ok == [inside, outside] |> DefaultConnection.write(precision: :second)
 
-    # wait to ensure data was written
-    :timer.sleep(250)
-
-    # check data
-    result =
-      "SELECT * FROM #{BatchSeries.__meta__(:measurement)}"
-      |> DefaultConnection.query(database: BatchSeries.__meta__(:database))
-
-    assert %{
-             results: [
+    assert retry(
+             250,
+             25,
+             fn ->
+               DefaultConnection.query(
+                 "SELECT * FROM #{BatchSeries.__meta__(:measurement)}",
+                 database: BatchSeries.__meta__(:database)
+               )
+             end,
+             fn
                %{
-                 series: [
+                 results: [
                    %{
-                     columns: ["time", "scope", "value"],
-                     values: [
-                       ["2015-08-14T21:32:06Z", "inside", 1.23456],
-                       ["2015-08-14T21:32:07Z", "outside", 9.87654]
+                     series: [
+                       %{
+                         columns: ["time", "scope", "value"],
+                         values: [
+                           ["2015-08-14T21:32:06Z", "inside", 1.23456],
+                           ["2015-08-14T21:32:07Z", "outside", 9.87654]
+                         ]
+                       }
                      ]
                    }
                  ]
-               }
-             ]
-           } = result
+               } ->
+                 true
+
+               _ ->
+                 false
+             end
+           )
   end
 
   test "writing without all tags present" do
@@ -249,21 +279,24 @@ defmodule Instream.WriterTest do
 
     assert :ok = DefaultConnection.write(entry)
 
-    # wait to ensure data was written
-    :timer.sleep(250)
+    assert retry(
+             250,
+             25,
+             fn ->
+               DefaultConnection.query(
+                 "SELECT * FROM #{EmptyTagSeries.__meta__(:measurement)}",
+                 database: EmptyTagSeries.__meta__(:database)
+               )
+             end,
+             fn
+               %{results: [%{series: [%{columns: columns}]}]} ->
+                 Enum.member?(columns, "filled") && Enum.member?(columns, "defaulting") &&
+                   Enum.member?(columns, "value") && !Enum.member?(columns, "empty")
 
-    # check data
-    result =
-      "SELECT * FROM #{EmptyTagSeries.__meta__(:measurement)}"
-      |> DefaultConnection.query(database: EmptyTagSeries.__meta__(:database))
-
-    %{results: [%{series: [%{columns: columns}]}]} = result
-
-    assert Enum.member?(columns, "filled")
-    assert Enum.member?(columns, "defaulting")
-    assert Enum.member?(columns, "value")
-
-    refute Enum.member?(columns, "empty")
+               _ ->
+                 false
+             end
+           )
   end
 
   test "writing with passed database option" do
@@ -271,19 +304,23 @@ defmodule Instream.WriterTest do
 
     entry = %CustomDatabaseSeries{}
     entry = %{entry | fields: %{entry.fields | value: 100}}
+
     assert :ok = DefaultConnection.write(entry, database: database)
 
-    # wait to ensure data was written
-    :timer.sleep(250)
-
-    # check data
-    result =
-      "SELECT * FROM #{CustomDatabaseSeries.__meta__(:measurement)}"
-      |> DefaultConnection.query(database: database)
-
-    %{results: [%{series: [%{columns: columns}]}]} = result
-
-    assert Enum.member?(columns, "value")
+    assert retry(
+             250,
+             25,
+             fn ->
+               DefaultConnection.query(
+                 "SELECT * FROM #{CustomDatabaseSeries.__meta__(:measurement)}",
+                 database: database
+               )
+             end,
+             fn
+               %{results: [%{series: [%{columns: columns}]}]} -> Enum.member?(columns, "value")
+               _ -> false
+             end
+           )
   end
 
   test "writing with passed retention policy option" do
@@ -296,18 +333,31 @@ defmodule Instream.WriterTest do
 
     assert :ok == data |> DefaultConnection.write(retention_policy: "one_week")
 
-    :timer.sleep(100)
+    assert retry(
+             250,
+             25,
+             fn ->
+               [
+                 DefaultConnection.query(
+                   "SELECT * FROM writer_protocols WHERE proto='ForRp'",
+                   database: "test_database"
+                 ),
+                 DefaultConnection.query(
+                   ~s[SELECT * FROM "one_week"."writer_protocols" WHERE proto='ForRp'],
+                   database: "test_database"
+                 )
+               ]
+             end,
+             fn
+               [
+                 %{results: [should_not_be_in_default_rp]},
+                 %{results: [%{series: [%{values: [[_, "ForRp", "Line"]]}]}]}
+               ] ->
+                 !Map.has_key?(should_not_be_in_default_rp, :series)
 
-    %{results: [should_not_be_in_default_rp]} =
-      "SELECT * FROM writer_protocols WHERE proto='ForRp'"
-      |> DefaultConnection.query(database: "test_database")
-
-    refute Map.has_key?(should_not_be_in_default_rp, :series)
-
-    result =
-      ~s[SELECT * FROM "one_week"."writer_protocols" WHERE proto='ForRp']
-      |> DefaultConnection.query(database: "test_database")
-
-    assert %{results: [%{series: [%{values: [[_, "ForRp", "Line"]]}]}]} = result
+               _ ->
+                 false
+             end
+           )
   end
 end
