@@ -212,7 +212,29 @@ defmodule Instream.WriterTest do
              |> DefaultConnection.write()
 
     # wait to ensure data was written
-    :timer.sleep(250)
+    assert retry(
+             250,
+             25,
+             fn ->
+               DefaultConnection.query(
+                 "SELECT * FROM #{ErrorsSeries.__meta__(:measurement)}",
+                 database: ErrorsSeries.__meta__(:database)
+               )
+             end,
+             fn
+               %{
+                 results: [
+                   %{
+                     series: [_]
+                   }
+                 ]
+               } ->
+                 true
+
+               _ ->
+                 false
+             end
+           )
 
     # make entry fail
     %{error: error} =
