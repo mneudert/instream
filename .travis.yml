@@ -18,6 +18,9 @@ matrix:
     - elixir: 1.6.2
       otp_release: 20.2
       env: VER_GO=1.9.2 VER_INFLUXDB=v1.4.3
+    - elixir: 1.6.2
+      otp_release: 20.2
+      env: VER_GO=1.9.2 VER_INFLUXDB=v1.5.0
       after_success: mix coveralls.travis
     - elixir: 1.6.2
       otp_release: 20.2
