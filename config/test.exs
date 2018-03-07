@@ -74,4 +74,4 @@ config :instream, TestHelpers.Connections.UDPConnection,
   writer: Instream.Writer.UDP
 
 config :instream, TestHelpers.Connections.UnreachableConnection,
-  host: "some.really.unreachable.host"
+  host: "some-really-unreachable-host"
