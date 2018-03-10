@@ -23,8 +23,7 @@ connections =
 # setup global configuration defaults
 Enum.each(connections, fn connection ->
   config :instream, connection,
-    host: "localhost",
-    pool: [max_overflow: 0, size: 1]
+    host: "localhost"
 end)
 
 # setup authentication defaults

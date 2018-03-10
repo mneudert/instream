@@ -1,5 +1,5 @@
 defmodule Instream.Connection.TimeoutTest do
-  use ExUnit.Case, async: false
+  use ExUnit.Case, async: true
 
   alias Instream.TestHelpers.Connections.InetsConnection
 
