@@ -32,54 +32,6 @@ defmodule Instream.Encoder.InfluxQL do
     |> append_on(get_argument(query, :on))
   end
 
-  @doc """
-  Quotes an identifier if necessary.
-
-  ## Examples
-
-      iex> quote_identifier("unquoted")
-      "unquoted"
-
-      iex> quote_identifier("_unquoted")
-      "_unquoted"
-
-      iex> quote_identifier("100quotes")
-      "\\"100quotes\\""
-
-      iex> quote_identifier("quotes for whitespace")
-      "\\"quotes for whitespace\\""
-
-      iex> quote_identifier("dáshes-and.stüff")
-      "\\"dáshes-and.stüff\\""
-  """
-  @spec quote_identifier(String.t()) :: String.t()
-  def quote_identifier(ident) when is_binary(ident) do
-    case Regex.match?(~r/(^[0-9]|[^a-zA-Z0-9_])/, ident) do
-      false -> ident
-      true -> "\"#{ident}\""
-    end
-  end
-
-  def quote_identifier(ident), do: ident |> to_string() |> quote_identifier()
-
-  @doc """
-  Quotes a value in a query.
-
-  ## Examples
-
-      iex> quote_value(100)
-      "100"
-
-      iex> quote_value(:foo)
-      "foo"
-
-      iex> quote_value("stringy")
-      "'stringy'"
-  """
-  @spec quote_value(any) :: String.t()
-  def quote_value(value) when is_binary(value), do: "'#{value}'"
-  def quote_value(value), do: to_string(value)
-
   # Extended command creation
 
   defp encode_create("DATABASE", query) do
@@ -136,7 +88,7 @@ defmodule Instream.Encoder.InfluxQL do
       fields
       |> Map.keys()
       |> Enum.map(fn field ->
-        quote_identifier(field) <> " = " <> quote_value(fields[field])
+        InfluxQL.Quote.identifier(field) <> " = " <> InfluxQL.Quote.value(fields[field])
       end)
       |> Enum.join(" AND ")
 
@@ -153,7 +105,7 @@ defmodule Instream.Encoder.InfluxQL do
 
   defp encode_select(select) when is_list(select) do
     select
-    |> Enum.map(&quote_identifier/1)
+    |> Enum.map(&InfluxQL.Quote.identifier/1)
     |> Enum.join(", ")
   end
 

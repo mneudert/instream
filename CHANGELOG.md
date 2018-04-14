@@ -7,6 +7,10 @@
       structs has been added
     - Supporting rules for the elixir formatter are available
 
+- Backwards incompatible changes
+    - Quoting of identifiers/values has been extracted to the package
+      `influxql` ([hex](https://hex.pm/packages/influxql))
+
 ## v0.17.1 (2017-12-16)
 
 - Enhancements
