@@ -5,6 +5,8 @@
 - Enhancements
     - Experimental support to convert plain maps or query results into series
       structs has been added
+    - Passwords are automatically redacted from logged queries when using the
+      default logger
     - Supporting rules for the elixir formatter are available
 
 - Backwards incompatible changes

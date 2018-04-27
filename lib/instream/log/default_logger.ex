@@ -28,7 +28,7 @@ defmodule Instream.Log.DefaultLogger do
   def log(%QueryEntry{} = entry) do
     Logger.debug(
       fn ->
-        ["[query] ", entry.query]
+        ["[query] ", InfluxQL.Sanitize.redact_passwords(entry.query)]
       end,
       metadata(entry)
     )
