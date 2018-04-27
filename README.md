@@ -262,11 +262,6 @@ config :logger, :console,
   metadata: [ :application, :pid, :query_time, :response_status ]
 ```
 
-_Warning_: In order to log the `:pid` (provided by `:logger`) used to send the
-queries you need to have at least `elixir ~> 1.1.0`. Any earlier version will
-fail because the `String.Chars` protocol was not implemented for pids at that
-time.
-
 To prevent a query from logging you can pass an option to the execute call:
 
 ```elixir
