@@ -22,8 +22,7 @@ connections =
 
 # setup global configuration defaults
 Enum.each(connections, fn connection ->
-  config :instream, connection,
-    host: "localhost"
+  config :instream, connection, host: "localhost"
 end)
 
 # setup authentication defaults

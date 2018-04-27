@@ -143,10 +143,14 @@ defmodule Instream.Series do
   """
   defmacro field(name, opts \\ []) do
     quote do
-      unquote(__MODULE__).__attribute__(__MODULE__, :fields_raw, {
-        unquote(name),
-        unquote(opts[:default])
-      })
+      unquote(__MODULE__).__attribute__(
+        __MODULE__,
+        :fields_raw,
+        {
+          unquote(name),
+          unquote(opts[:default])
+        }
+      )
     end
   end
 
@@ -164,10 +168,14 @@ defmodule Instream.Series do
   """
   defmacro tag(name, opts \\ []) do
     quote do
-      unquote(__MODULE__).__attribute__(__MODULE__, :tags_raw, {
-        unquote(name),
-        unquote(opts[:default])
-      })
+      unquote(__MODULE__).__attribute__(
+        __MODULE__,
+        :tags_raw,
+        {
+          unquote(name),
+          unquote(opts[:default])
+        }
+      )
     end
   end
 
