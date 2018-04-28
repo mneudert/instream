@@ -63,7 +63,7 @@ config =
 IO.puts("Running tests for InfluxDB version: #{version}")
 
 # configure OTP test exclusion
-release = :otp_release |> :erlang.system_info() |> to_string()
+release = System.otp_release()
 {:ok, version} = Version.parse("#{release}.0.0")
 versions = ["19.0", "20.0"]
 
