@@ -110,7 +110,7 @@ config :my_app, MyApp.MyConnection,
   port: { :system, "MY_ENV_VARIABLE" }
 
 # additional default will only be used if environment variable is UNSET
-config :my_app, MyApp.MyConnection
+config :my_app, MyApp.MyConnection,
   port: { :system, "MY_ENV_VARIABLE", "6808" }
 ```
 
