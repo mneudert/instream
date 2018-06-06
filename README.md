@@ -589,6 +589,32 @@ _Note:_ While it is possible to write multiple points a once it is currently
 not supported to write them to individual databases. The first point written
 defines the database, other values are silently ignored!
 
+### Writing Raw Points
+
+When not using Series Definitions raw points can be written using a map like this:
+
+```elixir
+%{
+  points: [
+    %{
+      database: "my_database", # Can be omitted, so default is used.
+      measurement: "my_measurement",
+      fields: %{answer: 42, value: 1},
+      tags: %{foo: "bar"},
+      timestamp: 1439587926000000000 # Nanosecond unix timestamp with default precision, can be omitted.
+    },
+    # more points possible ...
+  ],
+  database: "my_database", # Can be omitted, so default is used.
+}
+|> MyApp.MyConnection.write()
+```
+
+* The field `timestamp` can be omitted, so InfluxDB will use the receive time.
+* The field `database` can be used to write to a custom database. 
+
+Please be aware that only the database from the first point will be used when writing multiple points.
+
 
 ## License
 
