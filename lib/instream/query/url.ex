@@ -118,7 +118,13 @@ defmodule Instream.Query.URL do
         false -> "?"
       end
 
-    "#{url}#{glue}#{key}=#{URI.encode(value)}"
+    encoded_value =
+      case String.contains?(url, "&") do
+        true -> "#{URI.encode_www_form(value)}"
+        false -> "#{URI.encode(value)}"
+      end
+
+    "#{url}#{glue}#{key}=#{encoded_value}"
   end
 
   defp url(config, endpoint) do
