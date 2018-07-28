@@ -37,14 +37,14 @@ defmodule Instream.Query.URLTest do
   end
 
   test "append query" do
-    query = "SHOW DATABASES"
+    query = ~s(SELECT "value" FROM "foo&bar?baz")
     url = "http://localhost/query"
-    expected = "#{url}?q=#{URI.encode(query)}"
+    expected = "#{url}?q=SELECT+%22value%22+FROM+%22foo%26bar%3Fbaz%22"
 
     assert expected == URL.append_query(url, query)
 
     url = "#{url}?foo=bar"
-    expected = "#{url}&q=#{URI.encode(query)}"
+    expected = "#{url}&q=SELECT+%22value%22+FROM+%22foo%26bar%3Fbaz%22"
 
     assert expected == URL.append_query(url, query)
   end
