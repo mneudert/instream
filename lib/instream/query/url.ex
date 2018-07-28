@@ -118,7 +118,9 @@ defmodule Instream.Query.URL do
         false -> "?"
       end
 
-    "#{url}#{glue}#{key}=#{URI.encode(value)}"
+    param = URI.encode_query([{key, value}])
+
+    "#{url}#{glue}#{param}"
   end
 
   defp url(config, endpoint) do
