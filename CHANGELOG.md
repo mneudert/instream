@@ -9,6 +9,11 @@
       default logger
     - Supporting rules for the elixir formatter are available
 
+- Bug fixes
+    - Special characters in url parameter values (like `&` or `?` in a query)
+      are now properly escaped
+      ([#43](https://github.com/mneudert/instream/pull/43))
+
 - Backwards incompatible changes
     - Quoting of identifiers/values has been extracted to the package
       `influxql` ([hex](https://hex.pm/packages/influxql))
