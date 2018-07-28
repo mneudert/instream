@@ -15,17 +15,17 @@ matrix:
     - elixir: 1.6.6
       otp_release: 21.0
       env: VER_GO=1.8.3 VER_INFLUXDB=v1.3.9
-    - elixir: 1.6.6
+    - elixir: 1.7.1
       otp_release: 21.0
       env: VER_GO=1.9.2 VER_INFLUXDB=v1.4.3
-    - elixir: 1.6.6
+    - elixir: 1.7.1
       otp_release: 21.0
       env: VER_GO=1.9.2 VER_INFLUXDB=v1.5.4
-    - elixir: 1.6.6
+    - elixir: 1.7.1
       otp_release: 21.0
       env: VER_GO=1.9.2 VER_INFLUXDB=v1.6.0
       after_success: mix coveralls.travis
-    - elixir: 1.6.6
+    - elixir: 1.7.1
       otp_release: 21.0
       env: VER_GO=1.9.2 VER_INFLUXDB=master
   allow_failures:
