@@ -6,7 +6,6 @@
 
 InfluxDB driver for Elixir
 
-
 ## Warning
 
 __This module has experimental parts that may change unexpectedly.__
@@ -25,14 +24,17 @@ Tested influxdb versions:
 [`.travis.yml`](https://github.com/mneudert/instream/blob/master/.travis.yml)
 to be sure)
 
-
 ## Setup
 
 Add Instream as a dependency to your `mix.exs` file:
 
 ```elixir
 defp deps do
-  [{ :instream, "~> 0.17" }]
+  [
+    # ...
+    {:instream, "~> 0.17"},
+    # ...
+  ]
 end
 ```
 
@@ -40,7 +42,13 @@ You should also update your applications to include all necessary projects:
 
 ```elixir
 def application do
-  [ applications: [ :instream ]]
+  [
+    applications: [
+      # ...
+      :instream,
+      # ...
+    ]
+  ]
 end
 ```
 
@@ -68,7 +76,6 @@ endpoint to the "test\_database", you can exclude these tests manually:
 mix test --exclude udp
 ```
 
-
 ## Usage
 
 _Note:_ Most queries require a database to operate on. The following places
@@ -95,12 +102,12 @@ They only need to be linked to an entry in your `config.exs`:
 ```elixir
 config :my_app, MyApp.MyConnection,
   database:  "my_default_database",
-  host:      "localhost",
-  http_opts: [ insecure: true, proxy: "http://company.proxy" ],
-  pool:      [ max_overflow: 0, size: 1 ],
-  port:      8086,
-  scheme:    "http",
-  writer:    Instream.Writer.Line
+  host: "localhost",
+  http_opts: [insecure: true, proxy: "http://company.proxy"],
+  pool: [max_overflow: 0, size: 1],
+  port: 8086,
+  scheme: "http",
+  writer: Instream.Writer.Line
 ```
 
 Configuration can be done statically (as shown above) or by referencing your
@@ -108,11 +115,11 @@ system environment:
 
 ```elixir
 config :my_app, MyApp.MyConnection,
-  port: { :system, "MY_ENV_VARIABLE" }
+  port: {:system, "MY_ENV_VARIABLE"}
 
 # additional default will only be used if environment variable is UNSET
 config :my_app, MyApp.MyConnection,
-  port: { :system, "MY_ENV_VARIABLE", "6808" }
+  port: {:system, "MY_ENV_VARIABLE", "6808"}
 ```
 
 Each connection defines `child_spec/0,1` to help you hook it into your
@@ -157,7 +164,7 @@ and therefore can be changed without recompilation:
 ```elixir
 old_config = MyConnection.config()
 new_config = Keyword.put(old_config, :host, "changed.host")
-:ok        = Application.put_env(:my_otp_app, MyConnection, new_config)
+:ok = Application.put_env(:my_otp_app, MyConnection, new_config)
 ```
 
 #### Default Connection Values
@@ -167,8 +174,8 @@ values will be used as defaults if no other value is set:
 
 ```elixir
 config :my_app, MyApp.MyConnection,
-  pool:   [ max_overflow: 10, size: 5 ],
-  port:   8086,
+  pool: [max_overflow: 10, size: 5],
+  port: 8086,
   scheme: "http",
   writer: Instream.Writer.Line
 ```
@@ -199,7 +206,7 @@ configure your credentials:
 
 ```elixir
 config :my_app, MyApp.MyConnection,
-  auth: [ method: :basic, username: "root", password: "root" ]
+  auth: [method: :basic, username: "root", password: "root"]
 ```
 
 For `method` you can choose between header authentication (basic auth) using
@@ -216,9 +223,9 @@ To write points over UDP you can adjust your configuration:
 
 ```elixir
 config :my_app, MyApp.MyConnection,
-  host:     "localhost",
+  host: "localhost",
   port_udp: 8089,
-  writer:   Instream.Writer.UDP
+  writer: Instream.Writer.UDP
 ```
 
 The connection will then write using UDP and connecting to the port `:port_udp`.
@@ -233,14 +240,14 @@ alter the configuration of your connection:
 ```elixir
 config :my_app, MyApp.MyConnection,
   loggers: [
-    { FirstLogger,  :log_fun, [] },
-    { SecondLogger, :log_fun, [ :additional, :args ]}
+    {FirstLogger, :log_fun, []},
+    {SecondLogger, :log_fun, [:additional, :args]}
   ]
 ```
 
 This configuration replaces the default logging module.
 
-Configuration is given as a tuple of `{ module, function, arguments }`. The log
+Configuration is given as a tuple of `{module, function, arguments}`. The log
 entry will be inserted as the first argument of the method call. It will be one
 of `Instream.Log.PingEntry`, `Instream.Log.QueryEntry`,
 `Instream.Log.StatusEntry` or `Instream.Log.WriteEntry`, depending on what type
@@ -260,13 +267,13 @@ get them printed:
 ```
 config :logger, :console,
   format: "\n$time $metadata[$level] $levelpad$message\n",
-  metadata: [ :application, :pid, :query_time, :response_status ]
+  metadata: [:application, :pid, :query_time, :response_status]
 ```
 
 To prevent a query from logging you can pass an option to the execute call:
 
 ```elixir
-query |> MyApp.MyConnection.execute(log: false)
+MyApp.MyConnection.execute(query, log: false)
 
 # also works with convenience methods
 MyApp.MyConnection.ping(log: false)
@@ -444,15 +451,14 @@ import Instream.Query.Builder
 
 # SELECT one, or, more, fields FROM some_measurement
 from(MySeries)
-|> select([ "one", "or", "more", "fields" ])
+|> select(["one", "or", "more", "fields"])
 |> MyApp.MyConnection.query()
 
 # SELECT * FROM some_measurement WHERE binary = 'foo' AND numeric = 42
 from("some_measurement")
-|> where(%{ binary: "foo", numeric: 42 })
+|> where(%{binary: "foo", numeric: 42})
 |> MyApp.MyConnection.query()
 ```
-
 
 ## Series Definitions
 
@@ -522,27 +528,23 @@ for writing:
 
 ```elixir
 data = %MySeries{}
-data = %{ data | fields: %{ data.fields | value: 17 }}
-data = %{ data | tags:   %{ data.tags   | bar: "bar", foo: "foo" }}
+data = %{data | fields: %{data.fields | value: 17}}
+data = %{data | tags: %{data.tags | bar: "bar", foo: "foo"}}
 ```
 
 And then write one or many at once:
 
 ```elixir
-data
-|> MyApp.MyConnection.write()
+MyApp.MyConnection.write(data)
 
 # write the point asynchronously
-data
-|> MyApp.MyConnection.write(async: true)
+MyApp.MyConnection.write(data, async: true)
 
 # write to a specific database
-data
-|> MyApp.MyConnection.write(database: "my_database")
+MyApp.MyConnection.write(data, database: "my_database")
 
 # write multiple points at once
-[ point_1, point_2, point_3 ]
-|> MyApp.MyConnection.write()
+MyApp.MyConnection.write([point_1, point_2, point_3])
 ```
 
 If you want to pass an explicit timestamp to the database you can use the key
@@ -550,7 +552,7 @@ If you want to pass an explicit timestamp to the database you can use the key
 
 ```elixir
 data = %MySeries{}
-data = %{ data | timestamp: 1439587926000000000 }
+data = %{data | timestamp: 1439587926000000000}
 ```
 
 The timestamp is (by default) expected to be a nanosecond unix timestamp.
@@ -559,18 +561,16 @@ change this value by modifying your write call:
 
 ```elixir
 data = %MySeries{}
-data = %{ data | timestamp: 1439587926 }
+data = %{data | timestamp: 1439587926}
 
-data
-|> MyApp.MyConnection.write([ async: true, precision: :second ])
+MyApp.MyConnection.write(data, async: true, precision: :second)
 ```
 
 If you want to specify the target retention policy name for the write,
 you can do so like this (line protocol only!):
 
 ```elixir
-data
-|> MyApp.MyConnection.write(retention_policy: "two_weeks")
+MyApp.MyConnection.write(data, retention_policy: "two_weeks")
 ```
 
 Supported precision types are:
@@ -615,7 +615,6 @@ When not using Series Definitions raw points can be written using a map like thi
 * The field `database` can be used to write to a custom database. 
 
 Please be aware that only the database from the first point will be used when writing multiple points.
-
 
 ## License
 
