@@ -18,6 +18,12 @@ defmodule Instream.Connection.Supervisor do
 
   @doc false
   def init(conn) do
+    :ok =
+      case conn.config([:init]) do
+        nil -> :ok
+        {mod, fun} -> apply(mod, fun, [conn])
+      end
+
     supervise([Pool.Spec.spec(conn)], strategy: :one_for_one)
   end
 end

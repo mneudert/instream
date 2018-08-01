@@ -3,6 +3,10 @@
 ## v0.18.0-dev
 
 - Enhancements
+    - Configuration can be done on connection (re-) start by setting a
+      `{ mod, fun }` tuple for the config key `:init`. This method will be
+      called with the connection module name as the first (and only) parameter
+      and is expected to return `:ok`
     - Experimental support to convert plain maps or query results into series
       structs has been added
     - Passwords are automatically redacted from logged queries when using the
