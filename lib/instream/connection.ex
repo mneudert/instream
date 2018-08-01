@@ -41,7 +41,6 @@ defmodule Instream.Connection do
       alias Instream.Connection
       alias Instream.Connection.QueryPlanner
       alias Instream.Data
-      alias Instream.Pool
       alias Instream.Query
 
       Connection.Config.validate!(otp_app, __MODULE__)
@@ -64,7 +63,13 @@ defmodule Instream.Connection do
       def __log__(entry), do: unquote(loggers)
       def __pool__, do: __MODULE__.Pool
 
-      def child_spec(_ \\ []), do: Pool.Spec.spec(__MODULE__)
+      def child_spec(_ \\ []) do
+        Supervisor.Spec.supervisor(
+          Instream.Connection.Supervisor,
+          [__MODULE__],
+          id: __MODULE__.Supervisor
+        )
+      end
 
       def config(keys \\ nil) do
         Connection.Config.runtime(@otp_app, __MODULE__, keys)
@@ -121,7 +126,7 @@ defmodule Instream.Connection do
   @callback __pool__ :: module
 
   @doc """
-  Returns a supervisable pool child_spec.
+  Returns a supervisable connection child_spec.
   """
   @callback child_spec(_ignored :: term) :: Supervisor.Spec.spec()
 
