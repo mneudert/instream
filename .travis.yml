@@ -23,7 +23,7 @@ matrix:
       env: VER_GO=1.9.2 VER_INFLUXDB=v1.5.4
     - elixir: 1.7.1
       otp_release: 21.0
-      env: VER_GO=1.9.2 VER_INFLUXDB=v1.6.0
+      env: VER_GO=1.9.2 VER_INFLUXDB=v1.6.1
       after_success: mix coveralls.travis
     - elixir: 1.7.1
       otp_release: 21.0
