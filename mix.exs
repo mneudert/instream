@@ -34,7 +34,7 @@ defmodule Instream.Mixfile do
   defp deps do
     [
       {:ex_doc, ">= 0.0.0", only: :dev},
-      {:excoveralls, "~> 0.8", only: :test},
+      {:excoveralls, "~> 0.9", only: :test},
       {:hackney, "~> 1.1"},
       {:influxql, "~> 0.1.0"},
       {:poison, "~> 2.0 or ~> 3.0"},
