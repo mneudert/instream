@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.18.0-dev
+## v0.18.0 (2018-08-11)
 
 - Enhancements
     - Configuration can be done on connection (re-) start by setting a
