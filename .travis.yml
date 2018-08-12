@@ -3,16 +3,16 @@ sudo: false
 
 matrix:
   include:
-    - elixir: 1.3.4
+    - elixir: 1.5.3
       otp_release: 18.3
       env: VER_GO=1.6.2 VER_INFLUXDB=v1.0.2
-    - elixir: 1.4.5
+    - elixir: 1.6.6
       otp_release: 19.3
       env: VER_GO=1.7.3 VER_INFLUXDB=v1.1.5
-    - elixir: 1.5.3
+    - elixir: 1.7.2
       otp_release: 20.3
       env: VER_GO=1.7.4 VER_INFLUXDB=v1.2.4
-    - elixir: 1.6.6
+    - elixir: 1.7.2
       otp_release: 21.0
       env: VER_GO=1.8.3 VER_INFLUXDB=v1.3.9
     - elixir: 1.7.2

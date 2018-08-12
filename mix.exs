@@ -8,7 +8,7 @@ defmodule Instream.Mixfile do
       app: :instream,
       name: "Instream",
       version: "0.19.0-dev",
-      elixir: "~> 1.3",
+      elixir: "~> 1.5",
       deps: deps(),
       description: "InfluxDB driver for Elixir",
       docs: docs(),
