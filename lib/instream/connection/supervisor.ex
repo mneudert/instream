@@ -12,8 +12,7 @@ defmodule Instream.Connection.Supervisor do
   """
   @spec start_link(atom) :: Supervisor.on_start()
   def start_link(conn) do
-    opts = [name: Module.concat(conn, Supervisor)]
-    Supervisor.start_link(__MODULE__, conn, opts)
+    Supervisor.start_link(__MODULE__, conn, name: Module.concat(conn, Supervisor))
   end
 
   @doc false
@@ -24,6 +23,6 @@ defmodule Instream.Connection.Supervisor do
         {mod, fun} -> apply(mod, fun, [conn])
       end
 
-    supervise([Pool.Spec.spec(conn)], strategy: :one_for_one)
+    Supervisor.init([Pool.Spec.spec(conn)], strategy: :one_for_one)
   end
 end
