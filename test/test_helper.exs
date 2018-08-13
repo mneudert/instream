@@ -12,7 +12,7 @@ File.ls!("test/helpers/connections")
     |> String.replace("udp", "UDP")
     |> Macro.camelize()
 
-  Module.concat([Connections, conn]).child_spec
+  Module.concat(Connections, conn)
 end)
 |> Supervisor.start_link(strategy: :one_for_one)
 

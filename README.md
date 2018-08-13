@@ -103,12 +103,7 @@ needs to be hooked up into your supervision tree:
 ```elixir
 children = [
   # ...
-
-  # elixir < 1.5.0
-  MyApp.Connection.child_spec(),
-  # elixir >= 1.5.0
   MyApp.Connection,
-
   # ...
 ]
 ```
