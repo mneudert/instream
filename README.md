@@ -154,19 +154,6 @@ connection is available for use.
 
 The function is expected to always return `:ok`.
 
-#### Configuration (system environment)
-
-A third way is to grab values from your system environment directly:
-
-```elixir
-config :my_app, MyApp.MyConnection,
-  port: {:system, "MY_ENV_VARIABLE"}
-
-# additional default will only be used if environment variable is UNSET
-config :my_app, MyApp.MyConnection,
-  port: {:system, "MY_ENV_VARIABLE", "6808"}
-```
-
 #### Runtime and Compile Time Configuration
 
 The full connection configuration is split into two parts, compile time and

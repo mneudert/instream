@@ -2,6 +2,11 @@
 
 ## v0.19.0-dev
 
+- Soft deprecations (no warnings)
+    - Support for `{ :system, "ENV_VARIABLE" }` configuration has been
+      removed from the documentation. It will eventually be removed completely
+      after a proper deprecation phase
+
 - Backwards incompatible changes
     - Minimum required elixir version is now "~> 1.5"
 
