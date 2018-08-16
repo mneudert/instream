@@ -18,11 +18,9 @@ defmodule Instream.Connection do
         host:      "influxdb.example.com",
         http_opts: [ insecure: true, proxy: "http://company.proxy" ],
         loggers:   [{ LogModule, :log_fun, [ :additional, :args ] }],
-        password:  "pass",
         pool:      [ max_overflow: 10, size: 5 ],
         port:      8086,
-        scheme:    "http",
-        username:  "user"
+        scheme:    "http"
   """
 
   alias Instream.Log
