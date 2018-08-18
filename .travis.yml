@@ -5,31 +5,31 @@ matrix:
   include:
     - elixir: 1.5.3
       otp_release: 18.3
-      env: VER_GO=1.6.2 VER_INFLUXDB=v1.0.2
+      env: PKG_MGMT=gdm VER_GO=1.6.2 VER_INFLUXDB=v1.0.2
     - elixir: 1.6.6
       otp_release: 19.3
-      env: VER_GO=1.7.3 VER_INFLUXDB=v1.1.5
+      env: PKG_MGMT=gdm VER_GO=1.7.3 VER_INFLUXDB=v1.1.5
     - elixir: 1.7.2
       otp_release: 20.3
-      env: VER_GO=1.7.4 VER_INFLUXDB=v1.2.4
+      env: PKG_MGMT=gdm VER_GO=1.7.4 VER_INFLUXDB=v1.2.4
     - elixir: 1.7.2
       otp_release: 21.0
-      env: VER_GO=1.8.3 VER_INFLUXDB=v1.3.9
+      env: PKG_MGMT=gdm VER_GO=1.8.3 VER_INFLUXDB=v1.3.9
     - elixir: 1.7.2
       otp_release: 21.0
-      env: VER_GO=1.9.2 VER_INFLUXDB=v1.4.3
+      env: PKG_MGMT=gdm VER_GO=1.9.2 VER_INFLUXDB=v1.4.3
     - elixir: 1.7.2
       otp_release: 21.0
-      env: VER_GO=1.9.2 VER_INFLUXDB=v1.5.4
+      env: PKG_MGMT=gdm VER_GO=1.9.2 VER_INFLUXDB=v1.5.4
     - elixir: 1.7.2
       otp_release: 21.0
-      env: VER_GO=1.9.2 VER_INFLUXDB=v1.6.1
+      env: PKG_MGMT=dep VER_GO=1.9.2 VER_INFLUXDB=v1.6.1
       after_success: mix coveralls.travis
     - elixir: 1.7.2
       otp_release: 21.0
-      env: VER_GO=1.10.3 VER_INFLUXDB=master
+      env: PKG_MGMT=dep VER_GO=1.10.3 VER_INFLUXDB=master
   allow_failures:
-    - env: VER_GO=1.10.3 VER_INFLUXDB=master
+    - env: PKG_MGMT=dep VER_GO=1.10.3 VER_INFLUXDB=master
 
 before_install: |-
   eval "$(gimme ${VER_GO})"
@@ -38,7 +38,11 @@ before_install: |-
   export GOPATH="${HOME}/go"
   export PATH="${GOPATH}/bin:${PATH}"
 
-  go get github.com/sparrc/gdm
+  if [ 'dep' = "${PKG_MGMT}" ]; then
+    go get github.com/golang/dep/cmd/dep
+  else
+    go get github.com/sparrc/gdm
+  fi
 
   mkdir -p "${GOPATH}/src/github.com/influxdata"
 
@@ -48,7 +52,13 @@ before_install: |-
 
     pushd influxdb
       git init .
-      gdm restore
+
+      if [ 'dep' = "${PKG_MGMT}" ]; then
+        dep ensure
+      else
+        gdm restore
+      fi
+
       go clean ./...
 
       sed -i -e "s/version = \"unknown\"/version = \"${VER_INFLUXDB//v}\"/g" cmd/influxd/main.go
