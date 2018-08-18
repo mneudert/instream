@@ -111,7 +111,7 @@ after_failure: |-
   echo '==> stderr <=='
   cat ./influxdb.stderr
 
-after_script:
+after_script: |-
   if [ -f ./influxdb.pid ]; then
     kill $(cat ./influxdb.pid)
   fi
