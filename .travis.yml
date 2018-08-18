@@ -27,9 +27,9 @@ matrix:
       after_success: mix coveralls.travis
     - elixir: 1.7.2
       otp_release: 21.0
-      env: VER_GO=1.9.2 VER_INFLUXDB=master
+      env: VER_GO=1.10.3 VER_INFLUXDB=master
   allow_failures:
-    - env: VER_GO=1.9.2 VER_INFLUXDB=master
+    - env: VER_GO=1.10.3 VER_INFLUXDB=master
 
 before_install: |-
   eval "$(gimme ${VER_GO})"
