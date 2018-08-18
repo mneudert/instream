@@ -82,13 +82,15 @@ before_script: |-
   }
 
   function stop_influxdb {
-    kill $(cat ./influxdb.pid)
+    if [ -f ./influxdb.pid ]; then
+      kill $(cat ./influxdb.pid)
+    fi
 
     while curl -d -o /dev/null 'http://localhost:8086' 2>/dev/null; do
       sleep 1
     done
 
-    rm ./influxdb.pid
+    rm -f ./influxdb.pid
   }
 
   start_influxdb
@@ -110,4 +112,6 @@ after_failure: |-
   cat ./influxdb.stderr
 
 after_script:
-  - kill $(cat ./influxdb.pid)
+  if [ -f ./influxdb.pid ]; then
+    kill $(cat ./influxdb.pid)
+  fi
