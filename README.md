@@ -6,11 +6,9 @@
 
 InfluxDB driver for Elixir
 
-## Warning
+## InfluxDB Support
 
-__This module has experimental parts that may change unexpectedly.__
-
-Tested influxdb versions:
+Tested InfluxDB versions:
 
 - `1.0.2`
 - `1.1.5`
@@ -208,8 +206,8 @@ passed on.
 
 #### Authentication
 
-To connect to an influxdb instance with http_auth enabled you have to
-configure your credentials:
+To connect to an InfluxDB instance with http authentication enabled
+you have to configure your credentials:
 
 ```elixir
 config :my_app, MyApp.MyConnection,
