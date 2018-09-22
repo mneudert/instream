@@ -41,22 +41,26 @@ defmodule Instream.Connection.QueryPlanner do
 
   defp execute_async(query, opts, conn) do
     default_pool_timeout = conn.config([:pool_timeout]) || 5000
+
+    pool_name = Module.concat(conn, Pool)
     pool_timeout = opts[:pool_timeout] || default_pool_timeout
 
-    worker = :poolboy.checkout(conn.__pool__, pool_timeout)
+    worker = :poolboy.checkout(pool_name, pool_timeout)
     :ok = GenServer.cast(worker, {:execute, query, opts})
-    :ok = :poolboy.checkin(conn.__pool__, worker)
+    :ok = :poolboy.checkin(pool_name, worker)
 
     :ok
   end
 
   defp execute_sync(query, opts, conn) do
     default_pool_timeout = conn.config([:pool_timeout]) || 5000
+
+    pool_name = Module.concat(conn, Pool)
     pool_timeout = opts[:pool_timeout] || default_pool_timeout
 
-    worker = :poolboy.checkout(conn.__pool__, pool_timeout)
+    worker = :poolboy.checkout(pool_name, pool_timeout)
     result = GenServer.call(worker, {:execute, query, opts}, :infinity)
-    :ok = :poolboy.checkin(conn.__pool__, worker)
+    :ok = :poolboy.checkin(pool_name, worker)
 
     result
   end

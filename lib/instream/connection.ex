@@ -59,7 +59,6 @@ defmodule Instream.Connection do
         end)
 
       def __log__(entry), do: unquote(loggers)
-      def __pool__, do: __MODULE__.Pool
 
       def child_spec(_ \\ []) do
         Supervisor.Spec.supervisor(
@@ -117,11 +116,6 @@ defmodule Instream.Connection do
   Sends a log entry to all configured loggers.
   """
   @callback __log__(log_entry) :: log_entry
-
-  @doc """
-  Returns the (internal) pool module.
-  """
-  @callback __pool__ :: module
 
   @doc """
   Returns a supervisable connection child_spec.
