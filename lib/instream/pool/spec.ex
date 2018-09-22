@@ -1,7 +1,5 @@
 defmodule Instream.Pool.Spec do
-  @moduledoc """
-  Connection pool specification helper.
-  """
+  @moduledoc false
 
   alias Instream.Pool
 

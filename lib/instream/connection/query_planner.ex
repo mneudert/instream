@@ -1,7 +1,5 @@
 defmodule Instream.Connection.QueryPlanner do
-  @moduledoc """
-  Query planning coordinating the execution of all queries.
-  """
+  @moduledoc false
 
   alias Instream.Data.Read
   alias Instream.Encoder.InfluxQL

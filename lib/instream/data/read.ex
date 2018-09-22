@@ -1,7 +1,5 @@
 defmodule Instream.Data.Read do
-  @moduledoc """
-  Database read query helper.
-  """
+  @moduledoc false
 
   alias Instream.Query
 

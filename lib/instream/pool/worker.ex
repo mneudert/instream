@@ -1,7 +1,5 @@
 defmodule Instream.Pool.Worker do
-  @moduledoc """
-  Pool worker.
-  """
+  @moduledoc false
 
   use GenServer
 

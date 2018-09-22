@@ -1,7 +1,5 @@
 defmodule Instream.Connection.QueryRunner do
-  @moduledoc """
-  Executes a query for a connection.
-  """
+  @moduledoc false
 
   alias Instream.Log.Metadata
   alias Instream.Log.PingEntry

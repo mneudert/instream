@@ -1,7 +1,5 @@
 defmodule Instream.Response do
-  @moduledoc """
-  Response handling module.
-  """
+  @moduledoc false
 
   @type t :: {:error, term} | {status :: pos_integer, headers :: list, body :: String.t()}
 

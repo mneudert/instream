@@ -1,7 +1,5 @@
 defmodule Instream.Data.Write do
-  @moduledoc """
-  Database write query helper.
-  """
+  @moduledoc false
 
   alias Instream.Query
 
