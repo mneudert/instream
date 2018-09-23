@@ -12,8 +12,8 @@
       after a proper deprecation phase
 
 - Backwards incompatible changes
-    - Public access to the internal pool module name has been removed
     - Minimum required elixir version is now "~> 1.5"
+    - Public access to the internal pool module name has been removed
 
 ## v0.18.0 (2018-08-11)
 
