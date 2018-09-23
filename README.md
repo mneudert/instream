@@ -152,6 +152,25 @@ connection is available for use.
 
 The function is expected to always return `:ok`.
 
+#### Configuration (inline defaults)
+
+For some use cases (e.g. testing) it may be sufficient to define hardcoded
+configuration defaults outside of your application environment:
+
+```elixir
+defmodule MyApp.MyConnection do
+  use Instream.Connection,
+    otp_app: :my_app,
+    config: [
+      host: "localhost",
+      port: 8086
+    ]
+end
+```
+
+These values will be overwritten by and/or merged with the
+application environment values when the configuration is accessed.
+
 #### Runtime and Compile Time Configuration
 
 The full connection configuration is split into two parts, compile time and

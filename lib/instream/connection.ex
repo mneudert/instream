@@ -34,21 +34,23 @@ defmodule Instream.Connection do
           | Log.WriteEntry.t()
   @type query_type :: Builder.t() | Query.t() | String.t()
 
-  defmacro __using__(otp_app: otp_app) do
-    quote bind_quoted: [otp_app: otp_app] do
+  defmacro __using__(opts) do
+    quote bind_quoted: [opts: opts] do
       alias Instream.Connection
       alias Instream.Connection.QueryPlanner
       alias Instream.Data
       alias Instream.Query
 
-      Connection.Config.validate!(otp_app, __MODULE__)
-
       @behaviour Connection
-      @otp_app otp_app
+
+      @otp_app opts[:otp_app]
+      @config opts[:config] || []
+
+      Connection.Config.validate!(@otp_app, __MODULE__)
 
       loggers =
-        otp_app
-        |> Connection.Config.compile_time(__MODULE__)
+        @otp_app
+        |> Connection.Config.compile_time(__MODULE__, @config)
         |> Keyword.get(:loggers, [])
         |> Enum.reduce(quote(do: entry), fn logger, acc ->
           {mod, fun, args} = logger
@@ -69,7 +71,7 @@ defmodule Instream.Connection do
       end
 
       def config(keys \\ nil) do
-        Connection.Config.runtime(@otp_app, __MODULE__, keys)
+        Connection.Config.runtime(@otp_app, __MODULE__, keys, @config)
       end
 
       # alias/convenience interface

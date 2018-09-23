@@ -2,6 +2,10 @@
 
 ## v0.19.0-dev
 
+- Enhancements
+    - Connections can be declared with compile time configuration defaults
+      that are later overwritten by the application environment
+
 - Soft deprecations (no warnings)
     - Support for `{ :system, "ENV_VARIABLE" }` configuration has been
       removed from the documentation. It will eventually be removed completely
