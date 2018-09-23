@@ -193,11 +193,11 @@ new_config = Keyword.put(old_config, :host, "changed.host")
 
 #### Default Connection Values
 
-Only the `host` key is mandatory for a connection configuration. The following
-values will be used as defaults if no other value is set:
+The following values will be used as defaults if no other value is set:
 
 ```elixir
 config :my_app, MyApp.MyConnection,
+  host: "localhost",
   pool: [max_overflow: 10, size: 5],
   port: 8086,
   scheme: "http",

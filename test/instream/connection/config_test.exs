@@ -93,7 +93,9 @@ defmodule Instream.Connection.ConfigTest do
   end
 
   test "system configuration connection" do
-    assert nil == EnvConnection.config([:host])
+    System.put_env("INSTREAM_TEST_ENV_HOST", "remotehost")
+
+    assert "remotehost" == EnvConnection.config([:host])
 
     System.put_env("INSTREAM_TEST_ENV_HOST", "localhost")
     System.put_env("INSTREAM_TEST_ENV_PASSWORD", "instream_test")

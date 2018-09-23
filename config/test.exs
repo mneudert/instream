@@ -20,11 +20,6 @@ connections =
     Module.concat([TestHelpers.Connections, conn])
   end)
 
-# setup global configuration defaults
-Enum.each(connections, fn connection ->
-  config :instream, connection, host: "localhost"
-end)
-
 # setup authentication defaults
 connections
 |> Enum.reject(&(&1 == TestHelpers.Connections.AnonConnection))

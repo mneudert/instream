@@ -12,6 +12,7 @@
       after a proper deprecation phase
 
 - Backwards incompatible changes
+    - Default configuration has been extended with `host: "localhost"`
     - Minimum required elixir version is now "~> 1.5"
     - Public access to the internal pool module name has been removed
 

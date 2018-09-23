@@ -5,6 +5,7 @@ defmodule Instream.Connection.Config do
 
   @compile_time_keys [:loggers]
   @global_defaults [
+    host: "localhost",
     loggers: [{Instream.Log.DefaultLogger, :log, []}],
     port: 8086,
     scheme: "http",
