@@ -46,8 +46,6 @@ defmodule Instream.Connection do
       @otp_app opts[:otp_app]
       @config opts[:config] || []
 
-      Connection.Config.validate!(@otp_app, __MODULE__)
-
       loggers =
         @otp_app
         |> Connection.Config.compile_time(__MODULE__, @config)

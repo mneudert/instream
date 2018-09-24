@@ -39,18 +39,6 @@ defmodule Instream.Connection.Config do
     |> maybe_use_default(keys)
   end
 
-  @doc """
-  Validates a connection configuration and raises if an error exists.
-  """
-  @spec validate!(atom, module) :: no_return
-  def validate!(otp_app, conn) do
-    if :error == Application.fetch_env(otp_app, conn) do
-      raise ArgumentError,
-            "configuration for #{inspect(conn)}" <>
-              " not found in #{inspect(otp_app)} configuration"
-    end
-  end
-
   defp maybe_fetch_deep(config, nil), do: config
   defp maybe_fetch_deep(config, keys), do: get_in(config, keys)
 

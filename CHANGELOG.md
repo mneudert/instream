@@ -14,6 +14,7 @@
 - Backwards incompatible changes
     - Default configuration has been extended with `host: "localhost"`
     - Minimum required elixir version is now "~> 1.5"
+    - Missing application configuration will no longer raise during compilation
     - Public access to the internal pool module name has been removed
 
 ## v0.18.0 (2018-08-11)
