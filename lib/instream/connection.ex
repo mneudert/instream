@@ -125,7 +125,7 @@ defmodule Instream.Connection do
   @doc """
   Returns the connection configuration.
   """
-  @callback config(keys :: nonempty_list(term)) :: Keyword.t()
+  @callback config(keys :: nil | nonempty_list(term)) :: Keyword.t()
 
   @doc """
   Executes a query.
