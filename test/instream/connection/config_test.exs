@@ -88,15 +88,11 @@ defmodule Instream.Connection.ConfigTest do
     assert "remotehost" == EnvConnection.config([:host])
 
     System.put_env("INSTREAM_TEST_ENV_HOST", "localhost")
-    System.put_env("INSTREAM_TEST_ENV_PASSWORD", "instream_test")
-    System.put_env("INSTREAM_TEST_ENV_USERNAME", "instream_test")
 
     assert "localhost" == EnvConnection.config([:host])
     assert :pong == EnvConnection.ping()
 
     System.delete_env("INSTREAM_TEST_ENV_HOST")
-    System.delete_env("INSTREAM_TEST_ENV_PASSWORD")
-    System.delete_env("INSTREAM_TEST_ENV_USERNAME")
   end
 
   test "inline configuration defaults" do

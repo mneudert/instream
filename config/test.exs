@@ -35,12 +35,7 @@ connections
 end)
 
 # connection specific configuration
-config :instream, TestHelpers.Connections.EnvConnection,
-  auth: [
-    username: {:system, "INSTREAM_TEST_ENV_USERNAME"},
-    password: {:system, "INSTREAM_TEST_ENV_PASSWORD"}
-  ],
-  host: {:system, "INSTREAM_TEST_ENV_HOST"}
+config :instream, TestHelpers.Connections.EnvConnection, host: {:system, "INSTREAM_TEST_ENV_HOST"}
 
 config :instream, TestHelpers.Connections.GuestConnection,
   auth: [username: "instream_guest", password: "instream_guest"]
