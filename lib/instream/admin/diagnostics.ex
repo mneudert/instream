@@ -1,7 +1,5 @@
 defmodule Instream.Admin.Diagnostics do
-  @moduledoc """
-  Diagnostics query helper.
-  """
+  @moduledoc false
 
   alias Instream.Query.Builder
 

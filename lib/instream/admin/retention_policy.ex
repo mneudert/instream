@@ -1,7 +1,5 @@
 defmodule Instream.Admin.RetentionPolicy do
-  @moduledoc """
-  Retention policy administration helper.
-  """
+  @moduledoc false
 
   alias Instream.Query
   alias Instream.Query.Builder

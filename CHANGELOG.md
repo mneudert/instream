@@ -7,6 +7,9 @@
       that are later overwritten by the application environment
 
 - Soft deprecations (no warnings)
+    - All "administrative query modules" have been removed from the
+      documentation. They will eventually be removed completely after
+      a proper deprecation phase
     - Support for `{ :system, "ENV_VARIABLE" }` configuration has been
       removed from the documentation. It will eventually be removed completely
       after a proper deprecation phase

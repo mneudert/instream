@@ -1,7 +1,5 @@
 defmodule Instream.Admin.Stats do
-  @moduledoc """
-  Stats query helper.
-  """
+  @moduledoc false
 
   alias Instream.Query.Builder
 

@@ -1,7 +1,5 @@
 defmodule Instream.Admin.Database do
-  @moduledoc """
-  Database administration helper.
-  """
+  @moduledoc false
 
   alias Instream.Query.Builder
   alias Instream.Validate

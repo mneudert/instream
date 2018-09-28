@@ -360,37 +360,6 @@ following:
 - `:json` - JSON encoded response (implicit default)
 - `:raw`  - Raw server format (JSON string)
 
-#### Administrative Queries
-
-Managing Databases:
-
-```elixir
-# create "my_database"
-"my_database"
-|> Instream.Admin.Database.create()
-|> MyApp.MyConnection.execute()
-
-# drop "my_database"
-"my_database"
-|> Instream.Admin.Database.drop()
-|> MyApp.MyConnection.execute()
-```
-
-Managing Retention Policies:
-
-```elixir
-# create "my_rp" retention policy
-# argument order: policy, database, duration, replication, default
-Instream.Admin.RetentionPolicy.create(
-  "my_rp", "my_database", "1h", 3, true
-)
-|> MyApp.MyConnection.execute()
-
-# drop "my_rp" retention policy
-Instream.Admin.RetentionPolicy.drop("my_rp", "my_database")
-|> MyApp.MyConnection.execute()
-```
-
 #### Data Queries
 
 Please see the point "Series Definitions" on how to write data
