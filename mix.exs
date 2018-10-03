@@ -26,7 +26,7 @@ defmodule Instream.Mixfile do
 
   def application do
     [
-      applications: [:hackney, :logger, :poison, :poolboy],
+      extra_applications: [:logger],
       included_applications: [:influxql]
     ]
   end
