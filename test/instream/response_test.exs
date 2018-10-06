@@ -29,20 +29,23 @@ defmodule Instream.ResponseTest do
   test "raw json error response" do
     error = "text"
     response = {500, [{"Content-Type", "application/json"}], error}
+    parse_opts = [json_library: Poison, result_as: :raw]
 
-    assert error == Response.maybe_parse(response, result_as: :raw)
+    assert error == Response.maybe_parse(response, parse_opts)
   end
 
   test "raw non-json error response" do
     error = "text"
     response = {500, [], error}
+    parse_opts = [json_library: Poison, result_as: :raw]
 
-    assert error == Response.maybe_parse(response, result_as: :raw)
+    assert error == Response.maybe_parse(response, parse_opts)
   end
 
   test "regular non-json response" do
     response = "text"
+    parse_opts = [json_library: Poison]
 
-    assert response == Response.maybe_parse({200, [], response}, [])
+    assert response == Response.maybe_parse({200, [], response}, parse_opts)
   end
 end

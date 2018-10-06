@@ -54,6 +54,9 @@ defmodule Instream.Connection.QueryRunner do
   @spec read(Query.t(), Keyword.t(), map) :: any
   def read(%Query{} = query, opts, %{module: conn}) do
     config = conn.config()
+    json_library = Keyword.get(config, :json_library, Poison)
+    opts = Keyword.put(opts, :json_library, json_library)
+
     headers = Headers.assemble(config, opts)
 
     url =
@@ -149,6 +152,8 @@ defmodule Instream.Connection.QueryRunner do
   @spec write(Query.t(), Keyword.t(), map) :: any
   def write(%Query{} = query, opts, %{module: conn} = state) do
     config = conn.config()
+    json_library = Keyword.get(config, :json_library, Poison)
+    opts = Keyword.put(opts, :json_library, json_library)
 
     {query_time, result} =
       :timer.tc(fn ->

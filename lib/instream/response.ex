@@ -69,7 +69,7 @@ defmodule Instream.Response do
   defp maybe_decode_json(response, opts) do
     case opts[:result_as] do
       :raw -> response
-      _ -> response |> Poison.decode!(keys: :atoms)
+      _ -> opts[:json_library].decode!(response, keys: :atoms)
     end
   end
 
