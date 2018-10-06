@@ -36,20 +36,6 @@ defp deps do
 end
 ```
 
-You should also update your applications to include all necessary projects:
-
-```elixir
-def application do
-  [
-    applications: [
-      # ...
-      :instream,
-      # ...
-    ]
-  ]
-end
-```
-
 __Note__: If you are reading this on
 [GitHub](https://github.com/mneudert/instream) then the information in this file
 may be out of sync with the [Hex package](https://hex.pm/packages/instream).
