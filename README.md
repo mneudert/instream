@@ -183,6 +183,7 @@ The following values will be used as defaults if no other value is set:
 
 ```elixir
 config :my_app, MyApp.MyConnection,
+  json_library: Poison,
   host: "localhost",
   pool: [max_overflow: 10, size: 5],
   port: 8086,
@@ -208,6 +209,18 @@ for a complete list of available options.
 Setting the `:http_opts` key when calling a connection method allows usage of
 per-call options. The options are merged with the connection options and then
 passed on.
+
+#### JSON Configuration
+
+By default the library used for encoding/decoding JSON is `:poison`. For the
+time `:instream` directly depends on it to ensure it is available.
+
+If you want to use another library you can switch it:
+
+```elixir
+config :my_app, MyConnection,
+  json_library: MyJSONLibrary
+```
 
 #### Authentication
 

@@ -5,6 +5,8 @@
 - Enhancements
     - Connections can be declared with compile time configuration defaults
       that are later overwritten by the application environment
+    - The library used for JSON encoding/decoding can be changed
+      by using the `:json_library` configuration
 
 - Soft deprecations (no warnings)
     - All "administrative query modules" have been removed from the
