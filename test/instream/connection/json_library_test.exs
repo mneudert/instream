@@ -7,7 +7,7 @@ defmodule Instream.Connection.JSONLibraryTest do
     use Instream.Connection,
       otp_app: :instream,
       config: [
-        json_library: JSONLibrary,
+        json_decoder: JSONLibrary,
         loggers: []
       ]
   end

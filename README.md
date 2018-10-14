@@ -183,12 +183,12 @@ The following values will be used as defaults if no other value is set:
 
 ```elixir
 config :my_app, MyApp.MyConnection,
-  json_library: Poison,
   host: "localhost",
   pool: [max_overflow: 10, size: 5],
   port: 8086,
   scheme: "http",
-  writer: Instream.Writer.Line
+  writer: Instream.Writer.Line,
+  json_decoder: Poison
 ```
 
 This also means that per default the connection uses no authentication.
@@ -219,7 +219,7 @@ If you want to use another library you can switch it:
 
 ```elixir
 config :my_app, MyConnection,
-  json_library: MyJSONLibrary
+  json_decoder: MyJSONLibrary
 ```
 
 #### Authentication
