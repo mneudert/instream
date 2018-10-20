@@ -1,8 +1,8 @@
-defmodule Instream.Connection.JSONLibraryTest do
+defmodule Instream.Connection.JSONTest do
   use ExUnit.Case, async: true
 
   defmodule JSONConnection do
-    alias Instream.Connection.JSONLibraryTest.JSONLibrary
+    alias Instream.Connection.JSONTest.JSONLibrary
 
     use Instream.Connection,
       otp_app: :instream,
@@ -13,7 +13,7 @@ defmodule Instream.Connection.JSONLibraryTest do
   end
 
   defmodule JSONLibrary do
-    alias Instream.Connection.JSONLibraryTest.JSONLogger
+    alias Instream.Connection.JSONTest.JSONLogger
 
     def encode!(data) do
       JSONLogger.log({:encode, data})

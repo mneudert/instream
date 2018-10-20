@@ -1,6 +1,7 @@
 defmodule Instream.Connection.QueryRunner do
   @moduledoc false
 
+  alias Instream.Connection.JSON
   alias Instream.Log.Metadata
   alias Instream.Log.PingEntry
   alias Instream.Log.QueryEntry
@@ -54,7 +55,7 @@ defmodule Instream.Connection.QueryRunner do
   @spec read(Query.t(), Keyword.t(), map) :: any
   def read(%Query{} = query, opts, %{module: conn}) do
     config = conn.config()
-    json_decoder = Keyword.get(config, :json_decoder, Poison)
+    json_decoder = JSON.decoder(conn)
     opts = Keyword.put(opts, :json_decoder, json_decoder)
 
     headers = Headers.assemble(config, opts)
@@ -152,7 +153,7 @@ defmodule Instream.Connection.QueryRunner do
   @spec write(Query.t(), Keyword.t(), map) :: any
   def write(%Query{} = query, opts, %{module: conn} = state) do
     config = conn.config()
-    json_decoder = Keyword.get(config, :json_decoder, Poison)
+    json_decoder = JSON.decoder(conn)
     opts = Keyword.put(opts, :json_decoder, json_decoder)
 
     {query_time, result} =
