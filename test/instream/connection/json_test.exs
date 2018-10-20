@@ -15,11 +15,6 @@ defmodule Instream.Connection.JSONTest do
   defmodule JSONLibrary do
     alias Instream.Connection.JSONTest.JSONLogger
 
-    def encode!(data) do
-      JSONLogger.log({:encode, data})
-      Poison.encode!(data)
-    end
-
     def decode!(data, options) do
       JSONLogger.log({:decode, data})
       Poison.decode!(data, options)
