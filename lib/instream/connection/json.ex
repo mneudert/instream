@@ -1,11 +1,18 @@
 defmodule Instream.Connection.JSON do
   @moduledoc false
 
+  @default_decoder {Poison, :decode!, [[keys: :atoms]]}
+
   @doc """
   Returns the JSON decoder for a connection.
   """
   @spec decoder(module) :: module
   def decoder(conn) do
-    Keyword.get(conn.config(), :json_decoder, Poison)
+    conn.config()
+    |> Keyword.get(:json_decoder, @default_decoder)
+    |> convert_to_mfa(:decode!)
   end
+
+  defp convert_to_mfa({_, _, _} = mfa, _), do: mfa
+  defp convert_to_mfa(module, function), do: {module, function, []}
 end

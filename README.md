@@ -220,7 +220,15 @@ If you want to use another library you can switch it:
 ```elixir
 config :my_app, MyConnection,
   json_decoder: MyJSONLibrary
+
+config :my_app, MyConnection,
+  json_decoder: {MyJSONLibrary, :decode_it, [[keys: :atoms]]}
 ```
+
+If you configure only a module name it will be called as
+`module.decode!(binary)`. When using a complete
+`{m, f, a}` configuration the data to decode will passed as the
+first argument with your configured extra arguments following.
 
 #### Authentication
 

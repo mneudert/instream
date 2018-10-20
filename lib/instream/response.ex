@@ -68,8 +68,13 @@ defmodule Instream.Response do
 
   defp maybe_decode_json(response, opts) do
     case opts[:result_as] do
-      :raw -> response
-      _ -> opts[:json_decoder].decode!(response, keys: :atoms)
+      :raw ->
+        response
+
+      _ ->
+        {json_mod, json_fun, json_extra_args} = opts[:json_decoder]
+
+        apply(json_mod, json_fun, [response | json_extra_args])
     end
   end
 

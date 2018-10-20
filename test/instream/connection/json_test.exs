@@ -7,6 +7,17 @@ defmodule Instream.Connection.JSONTest do
     use Instream.Connection,
       otp_app: :instream,
       config: [
+        json_decoder: {JSONLibrary, :decode!, [[keys: :atoms]]},
+        loggers: []
+      ]
+  end
+
+  defmodule JSONModuleConnection do
+    alias Instream.Connection.JSONTest.JSONLibrary
+
+    use Instream.Connection,
+      otp_app: :instream,
+      config: [
         json_decoder: JSONLibrary,
         loggers: []
       ]
@@ -15,8 +26,13 @@ defmodule Instream.Connection.JSONTest do
   defmodule JSONLibrary do
     alias Instream.Connection.JSONTest.JSONLogger
 
-    def decode!(data, options) do
+    def decode!(data) do
       JSONLogger.log({:decode, data})
+      Poison.decode!(data, keys: :atoms)
+    end
+
+    def decode!(data, options) do
+      JSONLogger.log({:decode_mfa, data})
       Poison.decode!(data, options)
     end
   end
@@ -31,9 +47,11 @@ defmodule Instream.Connection.JSONTest do
   test "json runtime configuration" do
     {:ok, _} = JSONLogger.start_link()
     {:ok, _} = Supervisor.start_link([JSONConnection], strategy: :one_for_one)
+    {:ok, _} = Supervisor.start_link([JSONModuleConnection], strategy: :one_for_one)
 
     _ = JSONConnection.query("")
+    _ = JSONModuleConnection.query("")
 
-    assert [{:decode, _}] = JSONLogger.get()
+    assert [{:decode, _}, {:decode_mfa, _}] = JSONLogger.get()
   end
 end
