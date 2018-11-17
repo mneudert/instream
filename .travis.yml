@@ -26,7 +26,7 @@ matrix:
       env: PKG_MGMT=dep VER_GO=1.9.2 VER_INFLUXDB=v1.6.4
     - elixir: 1.7.2
       otp_release: 21.0
-      env: PKG_MGMT=dep VER_GO=1.11 VER_INFLUXDB=v1.7.0
+      env: PKG_MGMT=dep VER_GO=1.11 VER_INFLUXDB=v1.7.1
       after_success: mix coveralls.travis
     - elixir: 1.7.2
       otp_release: 21.0
