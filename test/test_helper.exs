@@ -25,9 +25,9 @@ root = String.to_charlist(__DIR__)
 
 httpd_config = [
   document_root: root,
-  modules: [:instream_testhelpers_inets_proxy],
+  modules: [Instream.TestHelpers.Inets.Handler],
   port: 0,
-  server_name: 'instream_testhelpers_inets_proxy',
+  server_name: 'instream_testhelpers_inets_handler',
   server_root: root
 ]
 

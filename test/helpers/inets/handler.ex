@@ -5,7 +5,7 @@ defmodule Instream.TestHelpers.Inets.Handler do
 
   Record.defrecord(:mod, Record.extract(:mod, from_lib: "inets/include/httpd.hrl"))
 
-  def serve(mod_data), do: serve_uri(mod(mod_data, :request_uri), mod_data)
+  def unquote(:do)(mod_data), do: serve_uri(mod(mod_data, :request_uri), mod_data)
 
   defp serve_uri('/ping', _mod_data) do
     head = [
