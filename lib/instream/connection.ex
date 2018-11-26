@@ -160,6 +160,15 @@ defmodule Instream.Connection do
   @callback status(opts :: Keyword.t()) :: :ok | :error
 
   @doc """
+  Determines the version of an InfluxDB host.
+
+  The version will be retrieved using a `:ping` query and extract the returned
+  `X-Influxdb-Version` header. If the header is missing the version will be
+  returned as `"unknown"`.
+  """
+  @callback version(host :: String.t(), opts :: Keyword.t()) :: String.t() | :error
+
+  @doc """
   Executes a writing query.
 
   See `Instream.Connection.execute/2` and `Instream.Data.Write.query/2`
