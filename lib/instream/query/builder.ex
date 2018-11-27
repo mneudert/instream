@@ -6,7 +6,10 @@ defmodule Instream.Query.Builder do
   defstruct command: nil,
             arguments: %{}
 
-  @opaque t :: %__MODULE__{}
+  @type t :: %__MODULE__{
+    command: String.t() | nil,
+    arguments: map
+  }
 
   @what_map [
     database: "DATABASE",
