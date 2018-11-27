@@ -6,7 +6,7 @@ defmodule Instream.Connection.JSON do
   @doc """
   Returns the JSON decoder for a connection.
   """
-  @spec decoder(module) :: module
+  @spec decoder(module) :: {module, atom, [term]}
   def decoder(conn) do
     conn.config()
     |> Keyword.get(:json_decoder, @default_decoder)
