@@ -190,10 +190,13 @@ config :my_app, MyConnection,
   json_decoder: MyJSONLibrary
 
 config :my_app, MyConnection,
+  json_decoder: {MyJSONLibrary, :decode_argless}
+
+config :my_app, MyConnection,
   json_decoder: {MyJSONLibrary, :decode_it, [[keys: :atoms]]}
 ```
 
-If you configure only a module name it will be called as `module.decode!(binary)`. When using a complete `{m, f, a}` configuration the data to decode will passed as the first argument with your configured extra arguments following.
+If you configure only a module name it will be called as `module.decode!(binary)`. When using a more complete `{m, f}` or `{m, f, a}` configuration the data to decode will passed as the first argument with your configured extra arguments following.
 
 #### Authentication
 
