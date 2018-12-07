@@ -4,11 +4,11 @@
 
 - Enhancements
     - Connections can be declared with compile time configuration defaults that are later overwritten by the application environment
-    - The library used for JSON encoding/decoding can be changed by using the `:json_decoder` configuration
+    - The library used for JSON decoding can be changed by using the `:json_decoder` configuration
 
 - Soft deprecations (no warnings)
     - All "administrative query modules" have been removed from the documentation. They will eventually be removed completely after a proper deprecation phase
-    - Support for `{ :system, "ENV_VARIABLE" }` configuration has been removed from the documentation. It will eventually be removed completely after a proper deprecation phase
+    - Support for `{:system, "ENV_VARIABLE"}` configuration has been removed from the documentation. It will eventually be removed completely after a proper deprecation phase
 
 - Backwards incompatible changes
     - Default configuration has been extended with `host: "localhost"`
