@@ -7,9 +7,9 @@ defmodule Instream.Query.Builder do
             arguments: %{}
 
   @type t :: %__MODULE__{
-    command: String.t() | nil,
-    arguments: map
-  }
+          command: String.t() | nil,
+          arguments: map
+        }
 
   @what_map [
     database: "DATABASE",
