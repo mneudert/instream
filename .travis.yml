@@ -20,7 +20,7 @@ matrix:
       env: PKG_MGMT=gdm VER_GO=1.9.2 VER_INFLUXDB=v1.4.3
     - elixir: 1.7.2
       otp_release: 21.0
-      env: PKG_MGMT=gdm VER_GO=1.9.2 VER_INFLUXDB=v1.5.4
+      env: PKG_MGMT=gdm VER_GO=1.9.2 VER_INFLUXDB=v1.5.5
     - elixir: 1.7.2
       otp_release: 21.0
       env: PKG_MGMT=dep VER_GO=1.9.2 VER_INFLUXDB=v1.6.4
