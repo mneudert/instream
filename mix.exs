@@ -35,7 +35,7 @@ defmodule Instream.Mixfile do
       {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
       {:excoveralls, "~> 0.9", only: :test, runtime: false},
       {:hackney, "~> 1.1"},
-      {:influxql, "~> 0.1.0"},
+      {:influxql, "~> 0.2.0"},
       {:poison, "~> 3.0"},
       {:poolboy, "~> 1.5"}
     ]
