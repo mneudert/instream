@@ -28,11 +28,6 @@ matrix:
       otp_release: 21.0
       env: PKG_MGMT=dep VER_GO=1.11 VER_INFLUXDB=v1.7.3
       after_success: mix coveralls.travis
-    - elixir: 1.8.0
-      otp_release: 21.0
-      env: PKG_MGMT=dep VER_GO=1.11 VER_INFLUXDB=master
-  allow_failures:
-    - env: PKG_MGMT=dep VER_GO=1.11 VER_INFLUXDB=master
 
 before_install: |-
   eval "$(gimme ${VER_GO})"
