@@ -12,23 +12,23 @@ matrix:
     - elixir: 1.7.4
       otp_release: 20.3
       env: PKG_MGMT=gdm VER_GO=1.7.4 VER_INFLUXDB=v1.2.4
-    - elixir: 1.7.4
+    - elixir: 1.8.0
       otp_release: 21.0
       env: PKG_MGMT=gdm VER_GO=1.8.3 VER_INFLUXDB=v1.3.9
-    - elixir: 1.7.4
+    - elixir: 1.8.0
       otp_release: 21.0
       env: PKG_MGMT=gdm VER_GO=1.9.2 VER_INFLUXDB=v1.4.3
-    - elixir: 1.7.4
+    - elixir: 1.8.0
       otp_release: 21.0
       env: PKG_MGMT=gdm VER_GO=1.9.2 VER_INFLUXDB=v1.5.5
-    - elixir: 1.7.4
+    - elixir: 1.8.0
       otp_release: 21.0
       env: PKG_MGMT=dep VER_GO=1.9.2 VER_INFLUXDB=v1.6.5
-    - elixir: 1.7.4
+    - elixir: 1.8.0
       otp_release: 21.0
       env: PKG_MGMT=dep VER_GO=1.11 VER_INFLUXDB=v1.7.3
       after_success: mix coveralls.travis
-    - elixir: 1.7.4
+    - elixir: 1.8.0
       otp_release: 21.0
       env: PKG_MGMT=dep VER_GO=1.11 VER_INFLUXDB=master
   allow_failures:
