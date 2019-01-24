@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.19.0-dev
+## v0.19.0 (2019-01-24)
 
 - Enhancements
     - Connections can be declared with compile time configuration defaults that are later overwritten by the application environment

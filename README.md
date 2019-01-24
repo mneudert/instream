@@ -1,7 +1,7 @@
 # Instream
 
-[![Build Status](https://travis-ci.org/mneudert/instream.svg?branch=master)](https://travis-ci.org/mneudert/instream)
-[![Coverage Status](https://coveralls.io/repos/mneudert/instream/badge.svg?branch=master&service=github)](https://coveralls.io/github/mneudert/instream?branch=master)
+[![Build Status](https://travis-ci.org/mneudert/instream.svg?branch=v0.19.0)](https://travis-ci.org/mneudert/instream)
+[![Coverage Status](https://coveralls.io/repos/mneudert/instream/badge.svg?branch=v0.19.0&service=github)](https://coveralls.io/github/mneudert/instream?branch=v0.19.0)
 [![Hex.pm](https://img.shields.io/hexpm/v/instream.svg)](https://hex.pm/packages/instream)
 
 InfluxDB driver for Elixir
@@ -21,7 +21,7 @@ Tested InfluxDB versions:
 - `1.6.5`
 - `1.7.3`
 
-(see [`.travis.yml`](https://github.com/mneudert/instream/blob/master/.travis.yml) to be sure)
+(see [`.travis.yml`](https://github.com/mneudert/instream/blob/v0.19.0/.travis.yml) to be sure)
 
 ## Setup
 
@@ -31,7 +31,7 @@ Add Instream as a dependency to your `mix.exs` file:
 defp deps do
   [
     # ...
-    {:instream, "~> 0.18"},
+    {:instream, "~> 0.19"},
     # ...
   ]
 end
