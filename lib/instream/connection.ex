@@ -149,8 +149,12 @@ defmodule Instream.Connection do
   @doc """
   Executes a reading query.
 
-  See `Instream.Connection.execute/2` and `Instream.Data.Read.query/2`
-  for a complete list of available options.
+  Options:
+
+  - `method`: whether to use a "GET" or "POST" request (as atom)
+  - `precision`: see `Instream.Encoder.Precision` for available values
+
+  See `c:Instream.Connection.execute/2` for additional generic options.
   """
   @callback query(query :: String.t(), opts :: Keyword.t()) :: any
 
@@ -171,8 +175,7 @@ defmodule Instream.Connection do
   @doc """
   Executes a writing query.
 
-  See `Instream.Connection.execute/2` and `Instream.Data.Write.query/2`
-  for a complete list of available options.
+  See `c:Instream.Connection.execute/2` for additional generic options.
   """
   @callback write(payload :: map | [map], opts :: Keyword.t()) :: any
 end
