@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.20.0-dev
+
+- Backwards incompatible changes
+    - Support for the InfluxDB version earlier than `1.4.x` is no longer guaranteed
+
 ## v0.19.0 (2019-01-24)
 
 - Enhancements

@@ -12,10 +12,6 @@ __Note__: If you are reading this on [GitHub](https://github.com/mneudert/instre
 
 Tested InfluxDB versions:
 
-- `1.0.2`
-- `1.1.5`
-- `1.2.4`
-- `1.3.9`
 - `1.4.3`
 - `1.5.5`
 - `1.6.5`
