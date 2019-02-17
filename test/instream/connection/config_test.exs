@@ -3,7 +3,6 @@ defmodule Instream.Connection.ConfigTest do
 
   alias Instream.Connection.Config
   alias Instream.TestHelpers.Connections.DefaultConnection
-  alias Instream.TestHelpers.Connections.EnvConnection
 
   test "runtime configuration changes", %{test: test} do
     conn = Module.concat([__MODULE__, RuntimeChanges])
@@ -44,55 +43,6 @@ defmodule Instream.Connection.ConfigTest do
 
     # not intended to be used this way!
     assert test == Config.runtime(test, nil, [:otp_app])
-  end
-
-  test "system configuration access", %{test: test} do
-    conn = Module.concat([__MODULE__, SystemConfiguration])
-    key = :system_testing_key
-    sys_val = "fetch from system environment"
-    sys_var = "INSTREAM_TEST_CONFIG"
-
-    System.put_env(sys_var, sys_val)
-    Application.put_env(test, conn, [{key, {:system, sys_var}}])
-
-    defmodule conn do
-      use Instream.Connection, otp_app: test
-    end
-
-    assert sys_val == conn.config([key])
-    assert sys_val == conn.config() |> get_in([key])
-
-    System.delete_env(sys_var)
-  end
-
-  test "system configuration access (with default)", %{test: test} do
-    conn = Module.concat([__MODULE__, SystemConfigurationDefault])
-    key = :system_testing_key
-    default = "fetch from system environment"
-    sys_var = "INSTREAM_TEST_CONFIG_DEFAULT"
-
-    System.delete_env(sys_var)
-    Application.put_env(test, conn, [{key, {:system, sys_var, default}}])
-
-    defmodule conn do
-      use Instream.Connection, otp_app: test
-    end
-
-    assert default == conn.config([key])
-    assert default == conn.config() |> get_in([key])
-  end
-
-  test "system configuration connection" do
-    System.put_env("INSTREAM_TEST_ENV_HOST", "remotehost")
-
-    assert "remotehost" == EnvConnection.config([:host])
-
-    System.put_env("INSTREAM_TEST_ENV_HOST", "localhost")
-
-    assert "localhost" == EnvConnection.config([:host])
-    assert :pong == EnvConnection.ping()
-
-    System.delete_env("INSTREAM_TEST_ENV_HOST")
   end
 
   test "inline configuration defaults" do

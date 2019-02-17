@@ -3,6 +3,8 @@ defmodule Instream.Connection.Config do
   Configuration helper module.
   """
 
+  require Logger
+
   @compile_time_keys [:loggers]
   @global_defaults [
     host: "localhost",
@@ -39,6 +41,14 @@ defmodule Instream.Connection.Config do
     |> maybe_use_default(keys)
   end
 
+  defp log_system_config_deprecation do
+    Logger.info(fn ->
+      "Accessing the system environment for configuration via" <>
+        " {:system, \"var\"} has been deprecated. Please switch" <>
+        " to an initializer function to avoid future problems."
+    end)
+  end
+
   defp maybe_fetch_deep(config, nil), do: config
   defp maybe_fetch_deep(config, keys), do: get_in(config, keys)
 
@@ -50,10 +60,15 @@ defmodule Instream.Connection.Config do
   end
 
   defp maybe_fetch_system({:system, var, default}) do
+    _ = log_system_config_deprecation()
     System.get_env(var) || default
   end
 
-  defp maybe_fetch_system({:system, var}), do: System.get_env(var)
+  defp maybe_fetch_system({:system, var}) do
+    _ = log_system_config_deprecation()
+    System.get_env(var)
+  end
+
   defp maybe_fetch_system(config), do: config
 
   defp maybe_use_default(config, nil), do: Keyword.merge(@global_defaults, config)

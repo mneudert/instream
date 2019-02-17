@@ -2,6 +2,9 @@
 
 ## v0.20.0-dev
 
+- Deprecations
+    - Accessing the system environment by configuring `{:system, var}` or `{:system, var, default}` will now result in a `Logger.info/1` message and will stop working in a future release
+
 - Backwards incompatible changes
     - Support for the InfluxDB version earlier than `1.4.x` is no longer guaranteed
 
