@@ -9,10 +9,10 @@ defmodule Instream.Query.BuilderInjectionTest do
     # result if escaping is broken:
     # %{error: "error parsing query: found  FROM injectable, expected FROM at line 1, char 29"}
     assert %{results: [_]} =
-      "injectable"
-      |> Builder.from()
-      |> Builder.select(["some", ~S(broken ';stuff")])
-      |> InfluxQL.encode()
-      |> DefaultConnection.query(database: "test_database")
+             "injectable"
+             |> Builder.from()
+             |> Builder.select(["some", ~S(broken ';stuff")])
+             |> InfluxQL.encode()
+             |> DefaultConnection.query(database: "test_database")
   end
 end
