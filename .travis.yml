@@ -1,103 +1,104 @@
 language: elixir
 sudo: false
 
-matrix:
+jobs:
   include:
-    - elixir: 1.5.3
+    - &test
+      stage: test
+      elixir: 1.5.3
       otp_release: 18.3
       env: PKG_MGMT=gdm VER_GO=1.9.2 VER_INFLUXDB=v1.4.3
-    - elixir: 1.6.6
+      before_install: |-
+        eval "$(gimme ${VER_GO})"
+
+        mkdir "${HOME}/go"
+        export GOPATH="${HOME}/go"
+        export PATH="${GOPATH}/bin:${PATH}"
+
+        if [ 'dep' = "${PKG_MGMT}" ]; then
+          go get github.com/golang/dep/cmd/dep
+        else
+          go get github.com/sparrc/gdm
+        fi
+
+        mkdir -p "${GOPATH}/src/github.com/influxdata"
+
+        pushd "${GOPATH}/src/github.com/influxdata"
+          wget "https://github.com/influxdata/influxdb/archive/${VER_INFLUXDB}.tar.gz" -O influxdb.tar.gz && tar -xf influxdb.tar.gz
+          find . -maxdepth 1 -type d -name 'influxdb*' -exec mv {} influxdb \;
+
+          pushd influxdb
+            git init .
+
+            if [ 'dep' = "${PKG_MGMT}" ]; then
+              dep ensure
+            else
+              gdm restore
+            fi
+
+            go clean ./...
+
+            sed -i -e "s/version = \"unknown\"/version = \"${VER_INFLUXDB//v}\"/g" cmd/influxd/main.go
+
+            go install ./...
+          popd
+        popd
+      before_script: |-
+        influxd config > ./influxdb.conf
+
+        function start_influxdb {
+          nohup "${GOPATH}/bin/influxd" \
+              -pidfile ./influxdb.pid \
+              -config ./influxdb.conf \
+          >>./influxdb.stdout 2>>./influxdb.stderr &
+
+          until curl -s -o /dev/null 'http://localhost:8086' 2>/dev/null; do
+            sleep 1
+          done
+        }
+
+        function stop_influxdb {
+          if [ -f ./influxdb.pid ]; then
+            kill $(cat ./influxdb.pid)
+          fi
+
+          while curl -d -o /dev/null 'http://localhost:8086' 2>/dev/null; do
+            sleep 1
+          done
+
+          rm -f ./influxdb.pid
+        }
+
+        start_influxdb
+
+        curl -XPOST 'http://localhost:8086/query' --data-urlencode "q=CREATE USER instream_test WITH PASSWORD 'instream_test' WITH ALL PRIVILEGES" -s -o /dev/null
+        curl -XPOST 'http://localhost:8086/query' --data-urlencode "q=CREATE USER instream_guest WITH PASSWORD 'instream_guest'" -s -o /dev/null
+        sed -i 's/auth-enabled = false/auth-enabled = true/' ./influxdb.conf
+        echo -e "[[udp]]\n  enabled = true\n  bind-address = \":8089\"\n  database = \"test_database\"\n  batch-size = 1000\n  batch-timeout = \"1s\"\n  batch-pending = 5\n" >> ./influxdb.conf
+
+        stop_influxdb
+        start_influxdb
+      after_failure: |-
+        echo '==> config <=='
+        cat ./influxdb.conf
+        echo '==> stdout <=='
+        cat ./influxdb.stdout
+        echo '==> stderr <=='
+        cat ./influxdb.stderr
+      after_script: |-
+        if [ -f ./influxdb.pid ]; then
+          kill $(cat ./influxdb.pid)
+        fi
+    - <<: *test
+      elixir: 1.6.6
       otp_release: 19.3
       env: PKG_MGMT=gdm VER_GO=1.9.2 VER_INFLUXDB=v1.5.5
-    - elixir: 1.7.4
+    - <<: *test
+      elixir: 1.7.4
       otp_release: 20.3
       env: PKG_MGMT=dep VER_GO=1.9.2 VER_INFLUXDB=v1.6.5
-    - elixir: 1.8.0
+    - <<: *test
+      elixir: 1.8.0
       otp_release: 21.0
       env: PKG_MGMT=dep VER_GO=1.11 VER_INFLUXDB=v1.7.4
       after_success: mix coveralls.travis
-
-before_install: |-
-  eval "$(gimme ${VER_GO})"
-
-  mkdir "${HOME}/go"
-  export GOPATH="${HOME}/go"
-  export PATH="${GOPATH}/bin:${PATH}"
-
-  if [ 'dep' = "${PKG_MGMT}" ]; then
-    go get github.com/golang/dep/cmd/dep
-  else
-    go get github.com/sparrc/gdm
-  fi
-
-  mkdir -p "${GOPATH}/src/github.com/influxdata"
-
-  pushd "${GOPATH}/src/github.com/influxdata"
-    wget "https://github.com/influxdata/influxdb/archive/${VER_INFLUXDB}.tar.gz" -O influxdb.tar.gz && tar -xf influxdb.tar.gz
-    find . -maxdepth 1 -type d -name 'influxdb*' -exec mv {} influxdb \;
-
-    pushd influxdb
-      git init .
-
-      if [ 'dep' = "${PKG_MGMT}" ]; then
-        dep ensure
-      else
-        gdm restore
-      fi
-
-      go clean ./...
-
-      sed -i -e "s/version = \"unknown\"/version = \"${VER_INFLUXDB//v}\"/g" cmd/influxd/main.go
-
-      go install ./...
-    popd
-  popd
-
-before_script: |-
-  influxd config > ./influxdb.conf
-
-  function start_influxdb {
-    nohup "${GOPATH}/bin/influxd" \
-        -pidfile ./influxdb.pid \
-        -config ./influxdb.conf \
-    >>./influxdb.stdout 2>>./influxdb.stderr &
-
-    until curl -s -o /dev/null 'http://localhost:8086' 2>/dev/null; do
-      sleep 1
-    done
-  }
-
-  function stop_influxdb {
-    if [ -f ./influxdb.pid ]; then
-      kill $(cat ./influxdb.pid)
-    fi
-
-    while curl -d -o /dev/null 'http://localhost:8086' 2>/dev/null; do
-      sleep 1
-    done
-
-    rm -f ./influxdb.pid
-  }
-
-  start_influxdb
-
-  curl -XPOST 'http://localhost:8086/query' --data-urlencode "q=CREATE USER instream_test WITH PASSWORD 'instream_test' WITH ALL PRIVILEGES" -s -o /dev/null
-  curl -XPOST 'http://localhost:8086/query' --data-urlencode "q=CREATE USER instream_guest WITH PASSWORD 'instream_guest'" -s -o /dev/null
-  sed -i 's/auth-enabled = false/auth-enabled = true/' ./influxdb.conf
-  echo -e "[[udp]]\n  enabled = true\n  bind-address = \":8089\"\n  database = \"test_database\"\n  batch-size = 1000\n  batch-timeout = \"1s\"\n  batch-pending = 5\n" >> ./influxdb.conf
-
-  stop_influxdb
-  start_influxdb
-
-after_failure: |-
-  echo '==> config <=='
-  cat ./influxdb.conf
-  echo '==> stdout <=='
-  cat ./influxdb.stdout
-  echo '==> stderr <=='
-  cat ./influxdb.stderr
-
-after_script: |-
-  if [ -f ./influxdb.pid ]; then
-    kill $(cat ./influxdb.pid)
-  fi
