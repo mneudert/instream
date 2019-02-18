@@ -38,6 +38,9 @@ defmodule Instream.Series do
   `:timestamp` is expected to be a unix nanosecond timestamp.
   """
 
+  alias Instream.Series.Hydrator
+  alias Instream.Series.Validator
+
   defmacro __using__(_opts) do
     quote do
       @after_compile unquote(__MODULE__)
@@ -48,7 +51,7 @@ defmodule Instream.Series do
 
   defmacro __after_compile__(%{module: module}, _bytecode) do
     quote do
-      Instream.Series.Validator.proper_series?(unquote(module))
+      Validator.proper_series?(unquote(module))
     end
   end
 
@@ -94,11 +97,11 @@ defmodule Instream.Series do
       ])
 
       def from_map(data) do
-        Instream.Series.Hydrator.from_map(__MODULE__, data)
+        Hydrator.from_map(__MODULE__, data)
       end
 
       def from_result(data) do
-        Instream.Series.Hydrator.from_result(__MODULE__, data)
+        Hydrator.from_result(__MODULE__, data)
       end
     end
   end
@@ -209,6 +212,8 @@ defmodule Instream.Series do
   def __struct_fields__(fields) do
     quote do
       defmodule Fields do
+        @moduledoc false
+
         @type t :: %__MODULE__{}
 
         defstruct unquote(Macro.escape(fields))
@@ -220,6 +225,8 @@ defmodule Instream.Series do
   def __struct_tags__(tags) do
     quote do
       defmodule Tags do
+        @moduledoc false
+
         @type t :: %__MODULE__{}
 
         defstruct unquote(Macro.escape(tags))

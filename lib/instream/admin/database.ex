@@ -28,5 +28,5 @@ defmodule Instream.Admin.Database do
   Returns a query to list databases.
   """
   @spec show() :: Builder.t()
-  def show(), do: Builder.show(:databases)
+  def show, do: Builder.show(:databases)
 end

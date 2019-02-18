@@ -33,8 +33,7 @@ defmodule Instream.Series.Hydrator do
       data_fields =
         data.columns
         |> Enum.zip(values)
-        |> Enum.map(fn {k, v} -> {String.to_atom(k), v} end)
-        |> Enum.into(%{})
+        |> Enum.into(%{}, fn {k, v} -> {String.to_atom(k), v} end)
 
       from_map(series, Map.merge(data_tags, data_fields))
     end)

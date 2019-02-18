@@ -18,6 +18,8 @@ defmodule Instream.Database do
   be retrieved using the `__meta__/1` method.
   """
 
+  alias Instream.Database.Validator
+
   defmacro __using__(_opts) do
     quote do
       @after_compile unquote(__MODULE__)
@@ -28,7 +30,7 @@ defmodule Instream.Database do
 
   defmacro __after_compile__(%{module: module}, _bytecode) do
     quote do
-      Instream.Database.Validator.proper_series?(unquote(module))
+      Validator.proper_series?(unquote(module))
     end
   end
 

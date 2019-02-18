@@ -54,10 +54,10 @@ defmodule Instream.Connection.JSONTest do
   end
 
   defmodule JSONLogger do
-    def start_link(), do: Agent.start_link(fn -> [] end, name: __MODULE__)
+    def start_link, do: Agent.start_link(fn -> [] end, name: __MODULE__)
 
     def log(action), do: Agent.update(__MODULE__, fn actions -> [action | actions] end)
-    def flush(), do: Agent.get_and_update(__MODULE__, &{&1, []})
+    def flush, do: Agent.get_and_update(__MODULE__, &{&1, []})
   end
 
   test "json runtime configuration" do

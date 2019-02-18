@@ -238,7 +238,7 @@ defmodule Instream.WriterTest do
 
     # make entry fail
     %{error: error} =
-      %{binary: 12345}
+      %{binary: 12_345}
       |> ErrorsSeries.from_map()
       |> DefaultConnection.write()
 

@@ -18,7 +18,7 @@ defmodule Instream.Admin.RetentionPolicyTest do
       |> RetentionPolicy.create(@database, @rp_duration, @rp_replication)
       |> DefaultConnection.execute()
 
-    listing = RetentionPolicy.show(@database) |> DefaultConnection.execute()
+    listing = @database |> RetentionPolicy.show() |> DefaultConnection.execute()
 
     assert %{results: [%{}]} = creation
     assert %{results: [%{series: [%{values: listing_values}]}]} = listing
@@ -33,7 +33,7 @@ defmodule Instream.Admin.RetentionPolicyTest do
       |> RetentionPolicy.alter(@database, @rp_altered)
       |> DefaultConnection.execute()
 
-    listing = RetentionPolicy.show(@database) |> DefaultConnection.execute()
+    listing = @database |> RetentionPolicy.show() |> DefaultConnection.execute()
 
     assert %{results: [%{}]} = alteration
     assert %{results: [%{series: [%{values: listing_values}]}]} = listing
@@ -43,8 +43,8 @@ defmodule Instream.Admin.RetentionPolicyTest do
            end)
 
     # delete retention policy
-    deletion = RetentionPolicy.drop(@rp_name, @database) |> DefaultConnection.execute()
-    listing = RetentionPolicy.show(@database) |> DefaultConnection.execute()
+    deletion = @rp_name |> RetentionPolicy.drop(@database) |> DefaultConnection.execute()
+    listing = @database |> RetentionPolicy.show() |> DefaultConnection.execute()
 
     assert %{results: [%{}]} = deletion
     assert %{results: [%{series: [listing_rows]}]} = listing

@@ -22,6 +22,7 @@ defmodule Instream.Connection.ConfigTest do
   end
 
   test "default value access", %{test: test} do
+    # credo:disable-for-next-line Credo.Check.Refactor.PipeChainStart
     assert "http" == Config.runtime(test, __MODULE__, nil) |> Keyword.get(:scheme)
     assert nil == Config.runtime(test, __MODULE__, [:auth, :username])
 

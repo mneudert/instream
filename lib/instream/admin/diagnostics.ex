@@ -7,5 +7,5 @@ defmodule Instream.Admin.Diagnostics do
   Returns a query to retrieve server diagnostics.
   """
   @spec show() :: Builder.t()
-  def show(), do: Builder.show(:diagnostics)
+  def show, do: Builder.show(:diagnostics)
 end

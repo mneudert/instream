@@ -20,7 +20,8 @@ defmodule Instream.Encoder.Line do
 
   defp encode([point | points], lines) do
     line =
-      encode_property(point.measurement)
+      point.measurement
+      |> encode_property()
       |> append_tags(point)
       |> append_fields(point)
       |> append_timestamp(point)

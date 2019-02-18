@@ -31,7 +31,7 @@ defmodule Instream.TestHelpers.Inets.Handler do
   end
 
   defp serve_uri('/query?db=timeout_long', _mod_data) do
-    :timer.sleep(10000)
+    :timer.sleep(10_000)
 
     body = '{"results": [{}]}'
 
