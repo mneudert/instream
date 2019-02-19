@@ -6,10 +6,17 @@ defmodule Instream.Encoder.Line do
   to the write endpoint of influxdb.
   """
 
+  @type point_map :: %{
+          required(:fields) => [{term, term}],
+          required(:measurement) => term,
+          optional(:tags) => [{term, term}],
+          optional(:timestamp) => term
+        }
+
   @doc """
   Creates the write string for a list of data points.
   """
-  @spec encode([map]) :: String.t()
+  @spec encode([point_map()]) :: binary
   def encode(points), do: points |> encode([])
 
   defp encode([], lines) do

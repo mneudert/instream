@@ -15,45 +15,49 @@ defmodule Instream.Log.DefaultLogger do
   """
   @spec log(Instream.Connection.log_entry()) :: Instream.Connection.log_entry()
   def log(%PingEntry{} = entry) do
-    Logger.debug(
-      fn ->
-        ["[ping ", entry.host, "] ", to_string(entry.result)]
-      end,
-      metadata(entry)
-    )
+    _ =
+      Logger.debug(
+        fn ->
+          ["[ping ", entry.host, "] ", to_string(entry.result)]
+        end,
+        metadata(entry)
+      )
 
     entry
   end
 
   def log(%QueryEntry{} = entry) do
-    Logger.debug(
-      fn ->
-        ["[query] ", InfluxQL.Sanitize.redact_passwords(entry.query)]
-      end,
-      metadata(entry)
-    )
+    _ =
+      Logger.debug(
+        fn ->
+          ["[query] ", InfluxQL.Sanitize.redact_passwords(entry.query)]
+        end,
+        metadata(entry)
+      )
 
     entry
   end
 
   def log(%StatusEntry{} = entry) do
-    Logger.debug(
-      fn ->
-        ["[status ", entry.host, "] ", to_string(entry.result)]
-      end,
-      metadata(entry)
-    )
+    _ =
+      Logger.debug(
+        fn ->
+          ["[status ", entry.host, "] ", to_string(entry.result)]
+        end,
+        metadata(entry)
+      )
 
     entry
   end
 
   def log(%WriteEntry{} = entry) do
-    Logger.debug(
-      fn ->
-        ["[write] ", to_string(entry.points), " points"]
-      end,
-      metadata(entry)
-    )
+    _ =
+      Logger.debug(
+        fn ->
+          ["[write] ", to_string(entry.points), " points"]
+        end,
+        metadata(entry)
+      )
 
     entry
   end
