@@ -11,6 +11,7 @@ defmodule Instream.Mixfile do
       elixir: "~> 1.5",
       deps: deps(),
       description: "InfluxDB driver for Elixir",
+      dialyzer: dialyzer(),
       docs: docs(),
       elixirc_paths: elixirc_paths(Mix.env()),
       package: package(),
@@ -40,6 +41,17 @@ defmodule Instream.Mixfile do
       {:influxql, "~> 0.2.0"},
       {:poison, "~> 3.0"},
       {:poolboy, "~> 1.5"}
+    ]
+  end
+
+  defp dialyzer do
+    [
+      flags: [
+        :error_handling,
+        :race_conditions,
+        :underspecs,
+        :unmatched_returns
+      ]
     ]
   end
 
