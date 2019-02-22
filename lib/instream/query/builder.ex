@@ -1,7 +1,5 @@
 defmodule Instream.Query.Builder do
-  @moduledoc """
-  Query Builder.
-  """
+  @moduledoc false
 
   defstruct command: nil,
             arguments: %{}

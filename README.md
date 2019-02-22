@@ -370,26 +370,6 @@ config :my_app,
 
 This configuration will be used to wait for an available worker to execute a query and defaults to `5_000`.
 
-### Query Builder
-
-__Experimental definition! Will change often and unexpected! (or may disappear...)__
-
-Using the query builder you can avoid writing your select statements by hand:
-
-```elixir
-import Instream.Query.Builder
-
-# SELECT one, or, more, fields FROM some_measurement
-from(MySeries)
-|> select(["one", "or", "more", "fields"])
-|> MyApp.MyConnection.query()
-
-# SELECT * FROM some_measurement WHERE binary = 'foo' AND numeric = 42
-from("some_measurement")
-|> where(%{binary: "foo", numeric: 42})
-|> MyApp.MyConnection.query()
-```
-
 ## Series Definitions
 
 If you do not want to define the raw maps for writing data you can pre-define a series for later usage:
