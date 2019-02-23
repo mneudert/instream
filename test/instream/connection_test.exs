@@ -56,6 +56,15 @@ defmodule Instream.ConnectionTest do
     assert result_in == result_out
   end
 
+  @tag influxdb_version: "1.7"
+  test "read using flux query" do
+    query = "from(bucket:\"test_database/autogen\") |> range(start: -1h)"
+    result = DefaultConnection.query(query, query_language: :flux)
+
+    assert is_binary(result)
+    assert "#datatype," <> _ = result
+  end
+
   test "write data" do
     measurement = "write_data"
 

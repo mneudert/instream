@@ -60,17 +60,13 @@ defmodule Instream.Connection.QueryRunner do
 
     headers = Headers.assemble(config, opts)
 
-    url =
-      config
-      |> URL.query()
-      |> URL.append_database(opts[:database] || config[:database])
-      |> URL.append_epoch(query.opts[:precision])
-      |> URL.append_query(query.payload)
+    body = read_body(query, opts)
+    method = read_method(query, opts)
+    url = read_url(config, query, opts)
 
     {query_time, response} =
       :timer.tc(fn ->
-        (query.method || opts[:method] || :get)
-        |> :hackney.request(url, headers, "", http_opts(config, opts))
+        :hackney.request(method, url, headers, body, http_opts(config, opts))
       end)
 
     case response do
@@ -189,5 +185,32 @@ defmodule Instream.Connection.QueryRunner do
     special_opts
     |> Keyword.merge(config_opts)
     |> Keyword.merge(call_opts)
+  end
+
+  defp read_body(query, opts) do
+    case opts[:query_language] do
+      :flux -> query.payload
+      _ -> ""
+    end
+  end
+
+  defp read_method(query, opts) do
+    case opts[:query_language] do
+      :flux -> :post
+      _ -> query.method || opts[:method] || :get
+    end
+  end
+
+  defp read_url(config, query, opts) do
+    url =
+      config
+      |> URL.query(opts[:query_language])
+      |> URL.append_database(opts[:database] || config[:database])
+      |> URL.append_epoch(query.opts[:precision])
+
+    case opts[:query_language] do
+      :flux -> url
+      _ -> url |> URL.append_query(query.payload)
+    end
   end
 end

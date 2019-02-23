@@ -85,8 +85,9 @@ defmodule Instream.Query.URL do
   @doc """
   Returns the proper URL for a `:query` request.
   """
-  @spec query(Keyword.t()) :: String.t()
-  def query(config), do: config |> url("query")
+  @spec query(Keyword.t(), atom | nil) :: String.t()
+  def query(config, :flux), do: config |> url("api/v2/query")
+  def query(config, _), do: config |> url("query")
 
   @doc """
   Returns the proper URL for a `:status` request.

@@ -2,6 +2,9 @@
 
 ## v0.20.0-dev
 
+- Enhancements
+    - Queries can be sent as Flux language queries to InfluxDB using `[query_language: :flux]` in the connection or query options
+
 - Soft deprecations (no warnings)
     - The query builder has been removed from documentation and will be eventually removed completely. This will be done because of the current limitations of the builder implementation and the InfluxDB move from InfluxQL to Flux as the query language of choice
 

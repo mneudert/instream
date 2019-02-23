@@ -8,7 +8,9 @@ defmodule Instream.Query.Headers do
   """
   @spec assemble(Keyword.t(), Keyword.t()) :: [{binary, binary}]
   def assemble(config, options \\ []) do
-    assemble_auth(config[:auth]) ++ assemble_encoding(options[:result_as])
+    assemble_auth(config[:auth]) ++
+      assemble_encoding(options[:result_as]) ++
+      assemble_language(options[:query_language])
   end
 
   @doc """
@@ -63,6 +65,23 @@ defmodule Instream.Query.Headers do
   def assemble_encoding(:csv), do: [{"Accept", "application/csv"}]
   def assemble_encoding(:json), do: [{"Accept", "application/json"}]
   def assemble_encoding(:raw), do: []
+
+  @doc """
+  Assembles headers required for query language selection.
+
+  ## Usage
+
+      iex> assemble_language(nil)
+      []
+
+      iex> assemble_language(:flux)
+      [{"Accept", "application/csv"}, {"Content-Type", "application/vnd.flux"}]
+  """
+  @spec assemble_language(nil | :flux) :: [{String.t(), String.t()}]
+  def assemble_language(nil), do: []
+
+  def assemble_language(:flux),
+    do: [{"Accept", "application/csv"}, {"Content-Type", "application/vnd.flux"}]
 
   defp basic_auth_header(nil, _), do: []
   defp basic_auth_header(_, nil), do: []

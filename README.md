@@ -306,6 +306,10 @@ Alternatively you can pass `[result_as: format]` to `MyApp.MyConnection.execute/
 - `:json` - JSON encoded response (implicit default)
 - `:raw`  - Raw server format (JSON string)
 
+#### Query Language Selection
+
+If not otherwise specified all queries will be sent as `InfluxQL`. This can be changed to `Flux` by passing the option `[query_language: :flux]` to `MyApp.MyConnection.execute/2`
+
 #### Data Queries
 
 Please see the point "Series Definitions" on how to write data to your InfluxDB database.

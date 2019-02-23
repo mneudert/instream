@@ -71,7 +71,20 @@ defmodule Instream.Query.URLTest do
       scheme: "http"
     ]
 
-    assert url == URL.query(conn)
+    assert url == URL.query(conn, :influxql)
+  end
+
+  test "query url for flux" do
+    url = "http://localhost:8086/api/v2/query?u=root&p=root"
+
+    conn = [
+      auth: [method: :query, username: "root", password: "root"],
+      host: "localhost",
+      port: 8086,
+      scheme: "http"
+    ]
+
+    assert url == URL.query(conn, :flux)
   end
 
   test "query url with basic authentication" do
@@ -83,7 +96,7 @@ defmodule Instream.Query.URLTest do
       scheme: "http"
     ]
 
-    assert url == URL.query(conn)
+    assert url == URL.query(conn, :influxql)
   end
 
   test "query url with default authentication" do
@@ -95,7 +108,7 @@ defmodule Instream.Query.URLTest do
       scheme: "http"
     ]
 
-    assert url == URL.query(conn)
+    assert url == URL.query(conn, :influxql)
   end
 
   test "query url without credentials" do
@@ -107,7 +120,7 @@ defmodule Instream.Query.URLTest do
       scheme: "http"
     ]
 
-    assert url == URL.query(conn)
+    assert url == URL.query(conn, :influxql)
   end
 
   test "query url without port" do
@@ -119,7 +132,7 @@ defmodule Instream.Query.URLTest do
       scheme: "http"
     ]
 
-    assert url == URL.query(conn)
+    assert url == URL.query(conn, :influxql)
   end
 
   test "query with partial credentials" do
@@ -131,7 +144,7 @@ defmodule Instream.Query.URLTest do
       scheme: "http"
     ]
 
-    assert url == URL.query(conn)
+    assert url == URL.query(conn, :influxql)
   end
 
   test "status url with speicifc host" do

@@ -74,6 +74,7 @@ jobs:
         curl -XPOST 'http://localhost:8086/query' --data-urlencode "q=CREATE USER instream_test WITH PASSWORD 'instream_test' WITH ALL PRIVILEGES" -s -o /dev/null
         curl -XPOST 'http://localhost:8086/query' --data-urlencode "q=CREATE USER instream_guest WITH PASSWORD 'instream_guest'" -s -o /dev/null
         sed -i 's/auth-enabled = false/auth-enabled = true/' ./influxdb.conf
+        sed -i 's/flux-enabled = false/flux-enabled = true/' ./influxdb.conf
         echo -e "[[udp]]\n  enabled = true\n  bind-address = \":8089\"\n  database = \"test_database\"\n  batch-size = 1000\n  batch-timeout = \"1s\"\n  batch-pending = 5\n" >> ./influxdb.conf
 
         stop_influxdb
