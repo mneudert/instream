@@ -7,6 +7,12 @@ defmodule Instream.Writer do
   alias Instream.Response
 
   defmacro __using__(_opts) do
+    IO.warn(
+      "The module '#{__CALLER__.module}' is implemented with the " <>
+        "deprecated 'use Instream.Writer'. Please update your " <>
+        "implementation to directly use '@behaviour Instream.Writer'."
+    )
+
     quote do
       @behaviour unquote(__MODULE__)
     end

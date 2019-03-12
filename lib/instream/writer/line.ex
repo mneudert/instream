@@ -3,7 +3,7 @@ defmodule Instream.Writer.Line do
   Point writer for the line protocol.
   """
 
-  use Instream.Writer
+  @behaviour Instream.Writer
 
   alias Instream.Encoder.Line, as: Encoder
   alias Instream.Query.Headers

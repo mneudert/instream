@@ -10,6 +10,7 @@
 
 - Deprecations
     - Accessing the system environment by configuring `{:system, var}` or `{:system, var, default}` will now result in a `Logger.info/1` message and will stop working in a future release
+    - Implementing `use Instream.Writer` has been deprecated in favor of the more explicit `@behaviour Instream.Writer`. Old implementations will trigger a compile time warning until the old macro is removed
 
 - Backwards incompatible changes
     - Support for the InfluxDB versions earlier than `1.4.x` is no longer guaranteed

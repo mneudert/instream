@@ -3,7 +3,7 @@ defmodule Instream.Writer.UDP do
   Point writer for the line protocol using UDP.
   """
 
-  use Instream.Writer
+  @behaviour Instream.Writer
 
   alias Instream.Encoder.Line, as: Encoder
 
