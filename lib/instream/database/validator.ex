@@ -6,8 +6,8 @@ defmodule Instream.Database.Validator do
   @doc """
   Checks if all mandatory definitions for a database are available.
   """
-  @spec proper_series?(module) :: no_return
-  def proper_series?(database) do
+  @spec proper_database?(module) :: no_return
+  def proper_database?(database) do
     _ =
       database
       |> defined?
