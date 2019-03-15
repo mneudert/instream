@@ -207,4 +207,42 @@ defmodule Instream.Encoder.LineTest do
 
     assert expected == Line.encode(points)
   end
+
+  test "with list of strings in tag value" do
+    expected = ~S|disk_free,items=string_a,string_b value=442221834240i|
+
+    points = [
+      %{
+        measurement: "disk_free",
+        tags: %{
+          items: ["string_a", "string_b"]
+        },
+        fields: %{
+          value: 442_221_834_240
+        },
+        timestamp: nil
+      }
+    ]
+
+    assert expected == Line.encode(points)
+  end
+
+  test "with list of atoms in tag value" do
+    expected = ~S|disk_free,items=atom_a,atom_b value=442221834240i|
+
+    points = [
+      %{
+        measurement: "disk_free",
+        tags: %{
+          items: [:atom_a, :atom_b]
+        },
+        fields: %{
+          value: 442_221_834_240
+        },
+        timestamp: nil
+      }
+    ]
+
+    assert expected == Line.encode(points)
+  end
 end

@@ -77,9 +77,30 @@ defmodule Instream.Encoder.Line do
   defp encode_value(false), do: "false"
   defp encode_value(other), do: inspect(other)
 
+  defp encode_property([a | _] = atoms) when is_atom(a) do
+    atoms
+    |> Enum.map(&Atom.to_string/1)
+    |> escape()
+    |> Enum.join(",")
+  end
+
+  defp encode_property(l) when is_list(l) do
+    l
+    |> Enum.map(&Kernel.to_string/1)
+    |> escape()
+    |> Enum.join(",")
+  end
+
   defp encode_property(s) do
     s
     |> Kernel.to_string()
+    |> escape()
+  end
+
+  defp escape(l) when is_list(l), do: Enum.map(l, &escape/1)
+
+  defp escape(s) when is_binary(s) do
+    s
     |> String.replace(",", "\\,", global: true)
     |> String.replace(" ", "\\ ", global: true)
     |> String.replace("=", "\\=", global: true)
