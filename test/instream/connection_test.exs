@@ -58,11 +58,31 @@ defmodule Instream.ConnectionTest do
 
   @tag influxdb_version: "1.7"
   test "read using flux query" do
-    query = "from(bucket:\"test_database/autogen\") |> range(start: -1h)"
+    :ok =
+      DefaultConnection.write(%{
+        database: @database,
+        points: [
+          %{
+            measurement: "flux",
+            tags: %{foo: "bar"},
+            fields: %{value: 1}
+          }
+        ]
+      })
+
+    query = """
+      from(bucket:"test_database/autogen")
+      |> range(start: -1h)
+      |> filter(fn: (r) => r._measurement == "flux")
+    """
+
     result = DefaultConnection.query(query, query_language: :flux)
 
     assert is_binary(result)
     assert "#datatype," <> _ = result
+
+    assert String.contains?(result, "flux,bar")
+    assert String.contains?(result, "_measurement,foo")
   end
 
   test "write data" do
