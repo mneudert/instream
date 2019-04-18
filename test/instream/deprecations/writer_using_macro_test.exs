@@ -1,4 +1,4 @@
-defmodule UAInspector.Deprecations.WriterUsingMacroTest do
+defmodule Instream.Deprecations.WriterUsingMacroTest do
   use ExUnit.Case, async: false
 
   import ExUnit.CaptureIO

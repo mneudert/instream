@@ -1,4 +1,4 @@
-defmodule UAInspector.Deprecations.SystemConfigTest do
+defmodule Instream.Deprecations.SystemConfigTest do
   use ExUnit.Case, async: false
 
   import ExUnit.CaptureLog
@@ -24,7 +24,7 @@ defmodule UAInspector.Deprecations.SystemConfigTest do
         assert sys_val == conn.config() |> get_in([key])
       end)
 
-    Application.delete_env(:ua_inspector, :test_only)
+    Application.delete_env(:instream, :test_only)
 
     assert log =~ ~r/deprecated/i
 
