@@ -37,7 +37,7 @@ defmodule Instream.Encoder.Precision do
   def encode(:second), do: "s"
   def encode(:millisecond), do: "ms"
   def encode(:microsecond), do: "u"
-  def encode(:nanosecond), do: "n"
+  def encode(:nanosecond), do: "ns"
   def encode(:rfc3339), do: ""
 
   # deprecated time units
