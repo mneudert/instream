@@ -5,6 +5,8 @@ defmodule Instream.Encoder.Precision do
   Converts a __MODULE__.t type precision atom to its binary counterpart.
   """
 
+  require Logger
+
   @type t ::
           :hour
           | :minute
@@ -40,14 +42,19 @@ defmodule Instream.Encoder.Precision do
 
   # deprecated time units
 
-  def encode(:hours), do: "h"
-  def encode(:minutes), do: "m"
-  def encode(:seconds), do: "s"
-  def encode(:milliseconds), do: "ms"
-  def encode(:microseconds), do: "u"
-  def encode(:nanoseconds), do: "n"
+  def encode(:hours), do: warn_and_normalize(:hours, :hour)
+  def encode(:minutes), do: warn_and_normalize(:minutes, :minute)
+  def encode(:seconds), do: warn_and_normalize(:seconds, :second)
+  def encode(:milliseconds), do: warn_and_normalize(:milliseconds, :millisecond)
+  def encode(:microseconds), do: warn_and_normalize(:microseconds, :microsecond)
+  def encode(:nanoseconds), do: warn_and_normalize(:nanoseconds, :nanosecond)
 
-  def encode(:milli_seconds), do: "ms"
-  def encode(:micro_seconds), do: "u"
-  def encode(:nano_seconds), do: "n"
+  def encode(:milli_seconds), do: warn_and_normalize(:milli_seconds, :millisecond)
+  def encode(:micro_seconds), do: warn_and_normalize(:micro_seconds, :microsecond)
+  def encode(:nano_seconds), do: warn_and_normalize(:nano_seconds, :nanosecond)
+
+  defp warn_and_normalize(old, new) do
+    Logger.info(fn -> "Deprecated precision: #{inspect(old)}, please use #{inspect(new)}" end)
+    encode(new)
+  end
 end
