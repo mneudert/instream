@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.20.0-dev
+## v0.20.0 (2019-04-19)
 
 - Enhancements
     - Queries can be sent as Flux language queries to InfluxDB using `[query_language: :flux]` in the connection or query options
