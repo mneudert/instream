@@ -54,7 +54,8 @@ defmodule Instream.Encoder.Precision do
   def encode(:nano_seconds), do: warn_and_normalize(:nano_seconds, :nanosecond)
 
   defp warn_and_normalize(old, new) do
-    Logger.info(fn -> "Deprecated precision: #{inspect(old)}, please use #{inspect(new)}" end)
+    _ = Logger.info(fn -> "Deprecated precision: #{inspect(old)}, please use #{inspect(new)}" end)
+
     encode(new)
   end
 end
