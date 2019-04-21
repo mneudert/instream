@@ -36,9 +36,6 @@ if Mix.env() == :test do
   end)
 
   # connection specific configuration
-  config :instream, TestHelpers.Connections.EnvConnection,
-    host: {:system, "INSTREAM_TEST_ENV_HOST"}
-
   config :instream, TestHelpers.Connections.GuestConnection,
     auth: [username: "instream_guest", password: "instream_guest"]
 
