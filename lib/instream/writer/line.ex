@@ -3,11 +3,11 @@ defmodule Instream.Writer.Line do
   Point writer for the line protocol.
   """
 
-  @behaviour Instream.Writer
-
   alias Instream.Encoder.Line, as: Encoder
   alias Instream.Query.Headers
   alias Instream.Query.URL
+
+  @behaviour Instream.Writer
 
   def write(query, opts, %{module: conn}) do
     config = conn.config()

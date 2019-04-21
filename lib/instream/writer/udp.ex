@@ -3,9 +3,9 @@ defmodule Instream.Writer.UDP do
   Point writer for the line protocol using UDP.
   """
 
-  @behaviour Instream.Writer
-
   alias Instream.Encoder.Line, as: Encoder
+
+  @behaviour Instream.Writer
 
   def write(query, _opts, %{module: conn, udp_socket: udp_socket}) do
     config = conn.config()
