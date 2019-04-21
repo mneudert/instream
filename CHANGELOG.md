@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.21.0-dev
+
+- Beackwards incompatible changes
+    - Support for singular time units has been removed
+
 ## v0.20.0 (2019-04-19)
 
 - Enhancements
