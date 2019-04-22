@@ -6,6 +6,7 @@
     - Support for accessing the system environment for configuration has been removed in favor of initializer functions/modules
     - Support for implementing `use Instream.Writer` has been removed in favor of `@behaviour Instream.Writer`
     - Support for singular time units has been removed
+    - The default JSON decoder has been switched from `:poison` to `:jason`
 
 ## v0.20.0 (2019-04-19)
 

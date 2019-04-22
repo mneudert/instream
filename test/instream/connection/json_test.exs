@@ -39,17 +39,17 @@ defmodule Instream.Connection.JSONTest do
 
     def decode!(data) do
       JSONLogger.log(:decode_module)
-      Poison.decode!(data, keys: :atoms)
+      Jason.decode!(data, keys: :atoms)
     end
 
     def decode_partial(data) do
       JSONLogger.log(:decode_partial)
-      Poison.decode!(data, keys: :atoms)
+      Jason.decode!(data, keys: :atoms)
     end
 
     def decode_full(data, keys: :atoms) do
       JSONLogger.log(:decode_full)
-      Poison.decode!(data, keys: :atoms)
+      Jason.decode!(data, keys: :atoms)
     end
   end
 

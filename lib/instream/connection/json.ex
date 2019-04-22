@@ -1,7 +1,7 @@
 defmodule Instream.Connection.JSON do
   @moduledoc false
 
-  @default_decoder {Poison, :decode!, [[keys: :atoms]]}
+  @default_decoder {Jason, :decode!, [[keys: :atoms]]}
 
   @doc """
   Returns the JSON decoder for a connection.
