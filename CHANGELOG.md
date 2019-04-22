@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.21.0-dev
+## v1.0.0-dev
 
 - Backwards incompatible changes
     - Support for accessing the system environment for configuration has been removed in favor of initializer functions/modules
