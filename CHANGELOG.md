@@ -2,7 +2,7 @@
 
 ## v0.21.0-dev
 
-- Beackwards incompatible changes
+- Backwards incompatible changes
     - Support for singular time units has been removed
 
 ## v0.20.0 (2019-04-19)
