@@ -25,7 +25,7 @@ defmodule Instream.Encoder.PrecisionTest do
       {:millisecond, 13},
       {:microsecond, 16},
       {:nanosecond, 19},
-      {:rfc3339, 30}
+      {:rfc3339, 20}
     ]
     |> Enum.each(fn {precision, timelen} ->
       %{results: [%{series: [%{values: [[time, _]]}]}]} =
@@ -39,7 +39,12 @@ defmodule Instream.Encoder.PrecisionTest do
         |> Kernel.to_string()
         |> String.length()
 
-      assert resultlen == timelen
+      if :rfc3339 == precision do
+        assert resultlen >= timelen
+        assert String.contains?(time, "Z")
+      else
+        assert resultlen == timelen
+      end
     end)
   end
 end
