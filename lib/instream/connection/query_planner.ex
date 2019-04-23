@@ -24,12 +24,14 @@ defmodule Instream.Connection.QueryPlanner do
     |> execute(opts, conn)
   end
 
-  def execute(%Query{} = query, opts, conn) do
+  def execute(%Query{type: :write} = query, opts, conn) do
     case opts[:async] do
       true -> execute_async(query, opts, conn)
       _ -> execute_sync(query, opts, conn)
     end
   end
+
+  def execute(%Query{} = query, opts, conn), do: execute_sync(query, opts, conn)
 
   def execute(query, opts, conn) when is_binary(query) do
     query

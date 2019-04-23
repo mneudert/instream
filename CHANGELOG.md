@@ -2,6 +2,9 @@
 
 ## v1.0.0-dev
 
+-Enhancements
+    - Sending asynchronous queries is now limited to write queries
+
 - Backwards incompatible changes
     - Support for accessing the system environment for configuration has been removed in favor of initializer functions/modules
     - Support for implementing `use Instream.Writer` has been removed in favor of `@behaviour Instream.Writer`

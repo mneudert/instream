@@ -32,7 +32,7 @@ defmodule Instream.Pool.Worker do
     {:reply, execute(query, opts, state), state}
   end
 
-  def handle_cast({:execute, query, opts}, state) do
+  def handle_cast({:execute, %Query{type: :write} = query, opts}, state) do
     execute(query, opts, state)
 
     {:noreply, state}
