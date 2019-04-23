@@ -28,12 +28,14 @@ defmodule Instream.Pool.Worker do
 
   # GenServer callbacks
 
-  def handle_call({:execute, query, opts}, _from, state) do
-    {:reply, execute(query, opts, state), state}
+  def handle_call({:execute, %Query{type: :write} = query, opts}, _from, state) do
+    reply = QueryRunner.write(query, opts, state)
+
+    {:reply, reply, state}
   end
 
   def handle_cast({:execute, %Query{type: :write} = query, opts}, state) do
-    execute(query, opts, state)
+    _ = QueryRunner.write(query, opts, state)
 
     {:noreply, state}
   end
@@ -44,15 +46,5 @@ defmodule Instream.Pool.Worker do
     {:ok, socket} = :gen_udp.open(0, [:binary, {:active, false}])
 
     Map.put(state, :udp_socket, socket)
-  end
-
-  defp execute(%Query{type: type} = query, opts, state) do
-    case type do
-      :ping -> QueryRunner.ping(query, opts, state)
-      :read -> QueryRunner.read(query, opts, state)
-      :status -> QueryRunner.status(query, opts, state)
-      :version -> QueryRunner.version(query, opts, state)
-      :write -> QueryRunner.write(query, opts, state)
-    end
   end
 end

@@ -364,7 +364,7 @@ A passed or connection wide timeout configuration override any `:recv_timeout` o
 
 This does not apply to write requests. They are currently only affected by configured `:recv_timeout` values. Setting a connection timeout enables you to have a different timeout for read and write requests.
 
-For the underlying worker pool you can define a separate timeout:
+For the underlying worker pool (only used for writes) you can define a separate timeout:
 
 ```elixir
 config :my_app,
