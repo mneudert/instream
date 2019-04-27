@@ -32,7 +32,7 @@ if Mix.env() == :test do
   connections
   |> Enum.reject(&(&1 == TestHelpers.Connections.LogConnection))
   |> Enum.each(fn connection ->
-    config :instream, connection, loggers: [{TestHelpers.NilLogger, :log, []}]
+    config :instream, connection, loggers: []
   end)
 
   # connection specific configuration
