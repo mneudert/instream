@@ -2,7 +2,9 @@ defmodule Instream.Connection.SupervisorTest do
   use ExUnit.Case, async: true
 
   defmodule Initializer do
-    def start_link, do: Agent.start_link(fn -> nil end, name: __MODULE__)
+    use Agent
+
+    def start_link(_), do: Agent.start_link(fn -> nil end, name: __MODULE__)
 
     def call_init(conn), do: Agent.update(__MODULE__, fn _ -> conn end)
     def get_init, do: Agent.get(__MODULE__, & &1)
@@ -17,8 +19,8 @@ defmodule Instream.Connection.SupervisorTest do
   end
 
   test "init function called upon connection (re-) start" do
-    {:ok, _} = Initializer.start_link()
-    {:ok, _} = Supervisor.start_link([InitializerConnection], strategy: :one_for_one)
+    {:ok, _} = start_supervised(Initializer)
+    {:ok, _} = start_supervised(InitializerConnection)
 
     assert InitializerConnection == Initializer.get_init()
   end

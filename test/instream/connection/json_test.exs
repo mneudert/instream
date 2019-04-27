@@ -54,17 +54,19 @@ defmodule Instream.Connection.JSONTest do
   end
 
   defmodule JSONLogger do
-    def start_link, do: Agent.start_link(fn -> [] end, name: __MODULE__)
+    use Agent
+
+    def start_link(_), do: Agent.start_link(fn -> [] end, name: __MODULE__)
 
     def log(action), do: Agent.update(__MODULE__, fn actions -> [action | actions] end)
     def flush, do: Agent.get_and_update(__MODULE__, &{&1, []})
   end
 
   test "json runtime configuration" do
-    connections = [JSONConnectionModule, JSONConnectionPartial, JSONConnectionFull]
-
-    {:ok, _} = JSONLogger.start_link()
-    {:ok, _} = Supervisor.start_link(connections, strategy: :one_for_one)
+    {:ok, _} = start_supervised(JSONLogger)
+    {:ok, _} = start_supervised(JSONConnectionFull)
+    {:ok, _} = start_supervised(JSONConnectionModule)
+    {:ok, _} = start_supervised(JSONConnectionPartial)
 
     _ = JSONConnectionModule.query("")
     _ = JSONConnectionPartial.query("")
