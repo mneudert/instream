@@ -1,7 +1,14 @@
 defmodule Instream.Connection.DatabaseTest do
   use ExUnit.Case, async: true
 
-  alias Instream.TestHelpers.Connections.InvalidDbConnection
+  defmodule InvalidDbConnection do
+    use Instream.Connection,
+      config: [
+        auth: [password: "instream_test", username: "instream_test"],
+        database: "invalid_test_database",
+        loggers: []
+      ]
+  end
 
   defmodule DatabaseSeries do
     use Instream.Series
@@ -26,6 +33,11 @@ defmodule Instream.Connection.DatabaseTest do
 
       field :value, default: 100
     end
+  end
+
+  setup do
+    {:ok, _} = start_supervised(InvalidDbConnection)
+    :ok
   end
 
   test "read || default: database from connection" do

@@ -45,8 +45,6 @@ if Mix.env() == :test do
   config :instream, TestHelpers.Connections.InvalidConnection,
     auth: [username: "instream_test", password: "instream_invalid"]
 
-  config :instream, TestHelpers.Connections.InvalidDbConnection, database: "invalid_test_database"
-
   config :instream, TestHelpers.Connections.NotFoundConnection,
     auth: [username: "instream_not_found", password: "instream_not_found"]
 
