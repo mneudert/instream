@@ -1,8 +1,21 @@
 defmodule Instream.Connection.ErrorTest do
   use ExUnit.Case, async: true
 
-  alias Instream.TestHelpers.Connections.OptionsConnection
-  alias Instream.TestHelpers.Connections.UnreachableConnection
+  defmodule OptionsConnection do
+    use Instream.Connection,
+      config: [
+        http_opts: [proxy: "http://invalidproxy"],
+        loggers: []
+      ]
+  end
+
+  defmodule UnreachableConnection do
+    use Instream.Connection,
+      config: [
+        host: "some-really-unreachable-host",
+        loggers: []
+      ]
+  end
 
   defmodule TestSeries do
     use Instream.Series
@@ -17,19 +30,25 @@ defmodule Instream.Connection.ErrorTest do
     end
   end
 
+  setup do
+    {:ok, _} = start_supervised(OptionsConnection)
+    {:ok, _} = start_supervised(UnreachableConnection)
+    :ok
+  end
+
   test "ping connection" do
-    assert :error == UnreachableConnection.ping()
     assert :error == OptionsConnection.ping()
+    assert :error == UnreachableConnection.ping()
   end
 
   test "status connection" do
-    assert :error == UnreachableConnection.status()
     assert :error == OptionsConnection.status()
+    assert :error == UnreachableConnection.status()
   end
 
   test "version connection" do
-    assert :error == UnreachableConnection.version()
     assert :error == OptionsConnection.version()
+    assert :error == UnreachableConnection.version()
   end
 
   test "reading data from an unresolvable host" do
