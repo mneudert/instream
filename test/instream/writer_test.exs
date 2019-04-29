@@ -3,7 +3,6 @@ defmodule Instream.WriterTest do
 
   import Instream.TestHelpers.Retry
 
-  alias Instream.Admin.RetentionPolicy
   alias Instream.TestHelpers.Connections.DefaultConnection
   alias Instream.TestHelpers.Connections.UDPConnection
 
@@ -349,8 +348,10 @@ defmodule Instream.WriterTest do
   end
 
   test "writing with passed retention policy option" do
-    RetentionPolicy.create("one_week", "test_database", "1w", 1)
-    |> DefaultConnection.execute()
+    DefaultConnection.execute(
+      "CREATE RETENTION POLICY one_week ON test_database" <>
+        " DURATION 1w REPLICATION 1"
+    )
 
     assert :ok ==
              %{proto: "ForRp", value: "Line"}

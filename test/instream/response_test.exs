@@ -1,25 +1,24 @@
 defmodule Instream.ResponseTest do
   use ExUnit.Case, async: true
 
-  alias Instream.Admin.Database
   alias Instream.Response
   alias Instream.TestHelpers.Connections.DefaultConnection
 
   test "response format: default (parsed)" do
-    response = Database.show() |> DefaultConnection.execute()
+    response = DefaultConnection.execute("SHOW DATABASES")
 
     assert is_map(response)
   end
 
   test "response format: csv" do
-    response = Database.show() |> DefaultConnection.execute(result_as: :csv)
+    response = DefaultConnection.execute("SHOW DATABASES", result_as: :csv)
 
     assert is_binary(response)
     assert "name," <> _ = response
   end
 
   test "response format: raw" do
-    response = Database.show() |> DefaultConnection.execute(result_as: :raw)
+    response = DefaultConnection.execute("SHOW DATABASES", result_as: :raw)
 
     assert is_binary(response)
     assert "{" <> _ = response

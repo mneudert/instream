@@ -1,4 +1,3 @@
-alias Instream.Admin.Database
 alias Instream.TestHelpers.Connections
 
 # grab ALL helpers and start connections
@@ -17,8 +16,8 @@ end)
 |> Supervisor.start_link(strategy: :one_for_one)
 
 # setup test database
-_ = "test_database" |> Database.drop() |> Connections.DefaultConnection.execute()
-_ = "test_database" |> Database.create() |> Connections.DefaultConnection.execute()
+_ = Connections.DefaultConnection.execute("DROP DATABASE test_database")
+_ = Connections.DefaultConnection.execute("CREATE DATABASE test_database")
 
 # start up inets fake influxdb server
 root = String.to_charlist(__DIR__)

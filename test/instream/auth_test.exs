@@ -1,7 +1,6 @@
 defmodule Instream.AuthTest do
   use ExUnit.Case, async: true
 
-  alias Instream.Admin.Database
   alias Instream.TestHelpers.Connections.AnonConnection
   alias Instream.TestHelpers.Connections.GuestConnection
   alias Instream.TestHelpers.Connections.InvalidConnection
@@ -10,7 +9,7 @@ defmodule Instream.AuthTest do
 
   test "anonymous user connection" do
     assert fn ->
-      Database.show()
+      "SHOW DATABASES"
       |> AnonConnection.execute()
       |> Map.get(:error)
       |> String.contains?("Basic Auth")
@@ -19,7 +18,7 @@ defmodule Instream.AuthTest do
 
   test "query auth connection" do
     refute (fn ->
-              Database.show()
+              "SHOW DATABASES"
               |> QueryAuthConnection.execute()
               |> Map.has_key?(:error)
             end).()
@@ -27,7 +26,7 @@ defmodule Instream.AuthTest do
 
   test "invalid password" do
     assert fn ->
-      Database.show()
+      "SHOW DATABASES"
       |> InvalidConnection.execute()
       |> Map.get(:error)
       |> String.contains?("authentication failed")
@@ -46,7 +45,7 @@ defmodule Instream.AuthTest do
 
   test "user not found" do
     assert fn ->
-      Database.show()
+      "SHOW DATABASES"
       |> NotFoundConnection.execute()
       |> Map.get(:error)
       |> String.contains?("not found")
