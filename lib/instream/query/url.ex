@@ -1,7 +1,5 @@
 defmodule Instream.Query.URL do
-  @moduledoc """
-  URL Utility.
-  """
+  @moduledoc false
 
   alias Instream.Encoder.Precision
 

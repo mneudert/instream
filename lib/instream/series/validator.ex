@@ -1,7 +1,5 @@
 defmodule Instream.Series.Validator do
-  @moduledoc """
-  Performs compile time validations of series definitions.
-  """
+  @moduledoc false
 
   @doc """
   Checks if all mandatory definitions for a series are available.

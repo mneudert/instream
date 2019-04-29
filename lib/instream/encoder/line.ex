@@ -1,10 +1,5 @@
 defmodule Instream.Encoder.Line do
-  @moduledoc """
-  Encoder module for the line protocol.
-
-  Takes a list of points and returns the data string to be passed
-  to the write endpoint of influxdb.
-  """
+  @moduledoc false
 
   @type point_map :: %{
           required(:fields) => [{term, term}],

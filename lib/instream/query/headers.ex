@@ -1,7 +1,5 @@
 defmodule Instream.Query.Headers do
-  @moduledoc """
-  Header Utility.
-  """
+  @moduledoc false
 
   @doc """
   Assembles the headers for a query.

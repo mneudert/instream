@@ -1,7 +1,5 @@
 defmodule Instream.Encoder.InfluxQL do
-  @moduledoc """
-  Encoder module for InfluxQL.
-  """
+  @moduledoc false
 
   alias Instream.Query.Builder
 

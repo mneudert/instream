@@ -1,7 +1,5 @@
 defmodule Instream.Series.Hydrator do
-  @moduledoc """
-  Hydrates series datasets.
-  """
+  @moduledoc false
 
   @doc """
   Converts a plain map into a series definition struct.

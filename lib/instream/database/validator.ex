@@ -1,7 +1,5 @@
 defmodule Instream.Database.Validator do
-  @moduledoc """
-  Performs compile time validations of database definitions.
-  """
+  @moduledoc false
 
   @doc """
   Checks if all mandatory definitions for a database are available.

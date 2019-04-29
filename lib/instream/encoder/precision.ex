@@ -1,9 +1,5 @@
 defmodule Instream.Encoder.Precision do
-  @moduledoc """
-  Encoder module for precision values.
-
-  Converts a __MODULE__.t type precision atom to its binary counterpart.
-  """
+  @moduledoc false
 
   @type t ::
           :hour

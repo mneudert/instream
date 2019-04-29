@@ -1,7 +1,5 @@
 defmodule Instream.Validate do
-  @moduledoc """
-  Validation utility.
-  """
+  @moduledoc false
 
   @doc """
   Validates a database name.
