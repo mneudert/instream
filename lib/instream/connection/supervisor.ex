@@ -7,10 +7,7 @@ defmodule Instream.Connection.Supervisor do
 
   alias Instream.Pool
 
-  @doc """
-  Starts the supervisor.
-  """
-  @spec start_link(atom) :: Supervisor.on_start()
+  @doc false
   def start_link(conn) do
     Supervisor.start_link(__MODULE__, conn, name: Module.concat(conn, Supervisor))
   end
