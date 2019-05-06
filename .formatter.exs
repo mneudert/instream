@@ -9,7 +9,7 @@ export_locals_without_parens = [
 
 [
   inputs: [
-    "{config,lib,test}/**/*.{ex,exs}",
+    "{bench,config,lib,test}/**/*.{ex,exs}",
     "{.credo,.formatter,mix}.exs"
   ],
   locals_without_parens: export_locals_without_parens,

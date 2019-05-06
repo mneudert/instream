@@ -9,6 +9,7 @@ defmodule Instream.Mixfile do
       name: "Instream",
       version: "1.0.0-dev",
       elixir: "~> 1.5",
+      aliases: aliases(),
       deps: deps(),
       description: "InfluxDB driver for Elixir",
       dialyzer: dialyzer(),
@@ -16,6 +17,7 @@ defmodule Instream.Mixfile do
       elixirc_paths: elixirc_paths(Mix.env()),
       package: package(),
       preferred_cli_env: [
+        "bench.line_encoder": :bench,
         coveralls: :test,
         "coveralls.detail": :test,
         "coveralls.travis": :test
@@ -31,8 +33,15 @@ defmodule Instream.Mixfile do
     ]
   end
 
+  defp aliases do
+    [
+      "bench.line_encoder": ["run bench/line_encoder.exs"]
+    ]
+  end
+
   defp deps do
     [
+      {:benchee, "~> 1.0", only: :bench, runtime: false},
       {:credo, "~> 1.0", only: :dev, runtime: false},
       {:dialyxir, "~> 1.0.0-rc", only: :dev, runtime: false},
       {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
