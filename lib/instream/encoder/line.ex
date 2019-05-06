@@ -12,7 +12,7 @@ defmodule Instream.Encoder.Line do
   Creates the write string for a list of data points.
   """
   @spec encode([point_map()]) :: binary
-  def encode(points), do: points |> encode([])
+  def encode(points), do: encode(points, [])
 
   defp encode([], lines) do
     lines

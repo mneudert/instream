@@ -80,26 +80,18 @@ defmodule Instream.Connection do
 
       # public interface for usage
 
-      def execute(query, opts \\ []) do
-        QueryPlanner.execute(query, opts, __MODULE__)
-      end
+      def execute(query, opts \\ []), do: QueryPlanner.execute(query, opts, __MODULE__)
 
-      def ping(host \\ nil, opts \\ []) do
-        %Query{type: :ping, opts: [host: host]}
-        |> execute(opts)
-      end
+      def ping(host \\ nil, opts \\ []),
+        do: execute(%Query{type: :ping, opts: [host: host]}, opts)
 
-      def query(query, opts \\ []), do: query |> execute(opts)
+      def query(query, opts \\ []), do: execute(query, opts)
 
-      def status(host \\ nil, opts \\ []) do
-        %Query{type: :status, opts: [host: host]}
-        |> execute(opts)
-      end
+      def status(host \\ nil, opts \\ []),
+        do: execute(%Query{type: :status, opts: [host: host]}, opts)
 
-      def version(host \\ nil, opts \\ []) do
-        %Query{type: :version, opts: [host: host]}
-        |> execute(opts)
-      end
+      def version(host \\ nil, opts \\ []),
+        do: execute(%Query{type: :version, opts: [host: host]}, opts)
 
       def write(payload, opts \\ []) do
         database = Data.Write.determine_database(payload, opts)

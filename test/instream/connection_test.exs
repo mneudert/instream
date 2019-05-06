@@ -50,8 +50,8 @@ defmodule Instream.ConnectionTest do
     query_in = "SELECT value FROM \"#{@database}\".\"autogen\".\"empty_measurement\""
     query_out = "SELECT value FROM empty_measurement"
 
-    result_in = query_in |> DefaultConnection.query()
-    result_out = query_out |> DefaultConnection.query(database: @database)
+    result_in = DefaultConnection.query(query_in)
+    result_out = DefaultConnection.query(query_out, database: @database)
 
     assert result_in == result_out
   end
@@ -198,7 +198,7 @@ defmodule Instream.ConnectionTest do
       ]
     }
 
-    %{error: error} = data |> GuestConnection.write()
+    %{error: error} = GuestConnection.write(data)
 
     assert String.contains?(error, "not authorized")
   end

@@ -210,7 +210,7 @@ defmodule Instream.Connection.QueryRunner do
 
     case opts[:query_language] do
       :flux -> url
-      _ -> url |> URL.append_query(query.payload)
+      _ -> URL.append_query(url, query.payload)
     end
   end
 end

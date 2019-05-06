@@ -26,7 +26,7 @@ defmodule Instream.Query.URL do
   """
   @spec append_database(String.t(), String.t()) :: String.t()
   def append_database(url, nil), do: url
-  def append_database(url, database), do: url |> append_param("db", database)
+  def append_database(url, database), do: append_param(url, "db", database)
 
   @doc """
   Appends an epoch value to a URL.
@@ -36,9 +36,7 @@ defmodule Instream.Query.URL do
   @spec append_epoch(String.t(), Precision.t()) :: String.t()
   def append_epoch(url, nil), do: url
 
-  def append_epoch(url, epoch) do
-    url |> append_param("epoch", Precision.encode(epoch))
-  end
+  def append_epoch(url, epoch), do: append_param(url, "epoch", Precision.encode(epoch))
 
   @doc """
   Appends a precision value to a URL.
@@ -46,9 +44,8 @@ defmodule Instream.Query.URL do
   @spec append_precision(String.t(), Precision.t()) :: String.t()
   def append_precision(url, nil), do: url
 
-  def append_precision(url, precision) do
-    url |> append_param("precision", Precision.encode(precision))
-  end
+  def append_precision(url, precision),
+    do: append_param(url, "precision", Precision.encode(precision))
 
   @doc """
   Appends a retention policy to a URL.
@@ -56,15 +53,13 @@ defmodule Instream.Query.URL do
   @spec append_retention_policy(String.t(), String.t()) :: String.t()
   def append_retention_policy(url, nil), do: url
 
-  def append_retention_policy(url, policy) do
-    url |> append_param("rp", policy)
-  end
+  def append_retention_policy(url, policy), do: append_param(url, "rp", policy)
 
   @doc """
   Appends a query to a URL.
   """
   @spec append_query(String.t(), String.t()) :: String.t()
-  def append_query(url, query), do: url |> append_param("q", query)
+  def append_query(url, query), do: append_param(url, "q", query)
 
   @doc """
   Returns the proper URL for a `:ping` request.
@@ -72,7 +67,7 @@ defmodule Instream.Query.URL do
   @spec ping(Keyword.t(), String.t() | nil) :: String.t()
   def ping(config, host \\ nil)
 
-  def ping(config, nil), do: config |> url("ping")
+  def ping(config, nil), do: url(config, "ping")
 
   def ping(config, host) do
     config
@@ -84,8 +79,8 @@ defmodule Instream.Query.URL do
   Returns the proper URL for a `:query` request.
   """
   @spec query(Keyword.t(), atom | nil) :: String.t()
-  def query(config, :flux), do: config |> url("api/v2/query")
-  def query(config, _), do: config |> url("query")
+  def query(config, :flux), do: url(config, "api/v2/query")
+  def query(config, _), do: url(config, "query")
 
   @doc """
   Returns the proper URL for a `:status` request.
@@ -93,7 +88,7 @@ defmodule Instream.Query.URL do
   @spec status(Keyword.t(), String.t() | nil) :: String.t()
   def status(config, host \\ nil)
 
-  def status(config, nil), do: config |> url("status")
+  def status(config, nil), do: url(config, "status")
 
   def status(config, host) do
     config
@@ -105,7 +100,7 @@ defmodule Instream.Query.URL do
   Returns the proper URL for a `:write` request.
   """
   @spec write(Keyword.t()) :: String.t()
-  def write(config), do: config |> url("write")
+  def write(config), do: url(config, "write")
 
   defp append_param(url, _, nil), do: url
   defp append_param(url, _, ""), do: url

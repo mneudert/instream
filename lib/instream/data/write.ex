@@ -28,8 +28,8 @@ defmodule Instream.Data.Write do
   """
   @spec query(map | [map], Keyword.t()) :: Query.t()
   def query([point | points], opts) do
-    query = point |> query(opts)
-    add_points = points |> multi_unstruct([])
+    query = query(point, opts)
+    add_points = multi_unstruct(points, [])
 
     joined = [hd(query.payload.points) | add_points]
 
@@ -38,7 +38,7 @@ defmodule Instream.Data.Write do
 
   def query(payload, opts) when is_map(payload) do
     %Query{
-      payload: payload |> maybe_unstruct(),
+      payload: maybe_unstruct(payload),
       opts: opts,
       type: :write
     }
@@ -49,8 +49,8 @@ defmodule Instream.Data.Write do
       points: [
         %{
           measurement: series.__meta__(:measurement),
-          fields: payload.fields |> Map.from_struct(),
-          tags: payload.tags |> Map.from_struct(),
+          fields: Map.from_struct(payload.fields),
+          tags: Map.from_struct(payload.tags),
           timestamp: payload.timestamp
         }
       ]
@@ -59,11 +59,14 @@ defmodule Instream.Data.Write do
 
   defp maybe_unstruct(payload), do: payload
 
-  defp multi_unstruct([], acc), do: acc |> Enum.reverse()
+  defp multi_unstruct([], acc), do: Enum.reverse(acc)
 
   defp multi_unstruct([point | points], acc) do
-    [add_point] = point |> maybe_unstruct() |> Map.get(:points)
+    [add_point] =
+      point
+      |> maybe_unstruct()
+      |> Map.get(:points)
 
-    points |> multi_unstruct([add_point | acc])
+    multi_unstruct(points, [add_point | acc])
   end
 end

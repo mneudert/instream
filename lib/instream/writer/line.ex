@@ -12,7 +12,11 @@ defmodule Instream.Writer.Line do
   def write(query, opts, %{module: conn}) do
     config = conn.config()
     headers = Headers.assemble(config) ++ [{"Content-Type", "text/plain"}]
-    body = query.payload |> to_line()
+
+    body =
+      query.payload
+      |> Map.get(:points, [])
+      |> Encoder.encode()
 
     url =
       config
@@ -28,6 +32,4 @@ defmodule Instream.Writer.Line do
          {:ok, body} <- :hackney.body(client),
          do: {status, headers, body}
   end
-
-  defp to_line(payload), do: payload |> Map.get(:points, []) |> Encoder.encode()
 end

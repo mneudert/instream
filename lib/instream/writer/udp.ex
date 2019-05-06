@@ -9,7 +9,11 @@ defmodule Instream.Writer.UDP do
 
   def write(query, _opts, %{module: conn, udp_socket: udp_socket}) do
     config = conn.config()
-    payload = query.payload |> to_line()
+
+    payload =
+      query.payload
+      |> Map.get(:points, [])
+      |> Encoder.encode()
 
     :ok =
       :gen_udp.send(
@@ -22,6 +26,4 @@ defmodule Instream.Writer.UDP do
     # always ":ok"
     {200, [], ""}
   end
-
-  defp to_line(payload), do: payload |> Map.get(:points, []) |> Encoder.encode()
 end
