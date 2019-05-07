@@ -3,28 +3,12 @@ defmodule Instream.Connection.QueryPlanner do
 
   alias Instream.Connection.QueryRunner
   alias Instream.Data.Read
-  alias Instream.Encoder.InfluxQL
   alias Instream.Query
-  alias Instream.Query.Builder
 
   @doc """
   Executes a query.
   """
-  @spec execute(Builder.t() | Query.t() | String.t(), Keyword.t(), module) :: any
-  def execute(%Builder{} = query, opts, conn) do
-    default_timeout = conn.config([:query_timeout])
-
-    opts =
-      opts
-      |> Keyword.put(:method, opts[:method] || query.arguments[:method])
-      |> Keyword.put(:timeout, opts[:timeout] || default_timeout)
-
-    query
-    |> InfluxQL.encode()
-    |> Read.query(opts)
-    |> execute(opts, conn)
-  end
-
+  @spec execute(Query.t() | String.t(), Keyword.t(), module) :: any
   def execute(%Query{type: :write} = query, opts, conn) do
     default_pool_timeout = conn.config([:pool_timeout]) || 5000
 

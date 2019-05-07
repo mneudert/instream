@@ -3,8 +3,6 @@ defmodule Instream.ConnectionTest do
 
   import Instream.TestHelpers.Retry
 
-  alias Instream.Query.Builder
-
   alias Instream.TestHelpers.Connections.DefaultConnection
   alias Instream.TestHelpers.Connections.GuestConnection
 
@@ -38,10 +36,8 @@ defmodule Instream.ConnectionTest do
   end
 
   test "read from empty measurement" do
-    result =
-      Builder.from("empty_measurement")
-      |> Builder.select("value")
-      |> DefaultConnection.query(database: @database)
+    query = "SELECT value FROM empty_measurement"
+    result = DefaultConnection.query(query, database: @database)
 
     assert %{results: _} = result
   end

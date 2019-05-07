@@ -25,14 +25,13 @@ defmodule Instream.Connection do
 
   alias Instream.Log
   alias Instream.Query
-  alias Instream.Query.Builder
 
   @type log_entry ::
           Log.PingEntry.t()
           | Log.QueryEntry.t()
           | Log.StatusEntry.t()
           | Log.WriteEntry.t()
-  @type query_type :: Builder.t() | Query.t() | String.t()
+  @type query_type :: Query.t() | String.t()
 
   defmacro __using__(opts) do
     quote bind_quoted: [opts: opts] do
