@@ -67,12 +67,7 @@ defmodule Instream.Database do
   """
   defmacro name(dbname) do
     quote do
-      unquote(__MODULE__).__attribute__(__MODULE__, :name, unquote(dbname))
+      @name unquote(dbname)
     end
-  end
-
-  @doc false
-  def __attribute__(mod, name, value) do
-    Module.put_attribute(mod, name, value)
   end
 end

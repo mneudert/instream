@@ -135,7 +135,7 @@ defmodule Instream.Series do
   """
   defmacro database(name) do
     quote do
-      unquote(__MODULE__).__attribute__(__MODULE__, :database, unquote(name))
+      @database unquote(name)
     end
   end
 
@@ -144,14 +144,7 @@ defmodule Instream.Series do
   """
   defmacro field(name, opts \\ []) do
     quote do
-      unquote(__MODULE__).__attribute__(
-        __MODULE__,
-        :fields_raw,
-        {
-          unquote(name),
-          unquote(opts[:default])
-        }
-      )
+      @fields_raw {unquote(name), unquote(opts[:default])}
     end
   end
 
@@ -160,7 +153,7 @@ defmodule Instream.Series do
   """
   defmacro measurement(name) do
     quote do
-      unquote(__MODULE__).__attribute__(__MODULE__, :measurement, unquote(name))
+      @measurement unquote(name)
     end
   end
 
@@ -169,20 +162,8 @@ defmodule Instream.Series do
   """
   defmacro tag(name, opts \\ []) do
     quote do
-      unquote(__MODULE__).__attribute__(
-        __MODULE__,
-        :tags_raw,
-        {
-          unquote(name),
-          unquote(opts[:default])
-        }
-      )
+      @tags_raw {unquote(name), unquote(opts[:default])}
     end
-  end
-
-  @doc false
-  def __attribute__(mod, name, value) do
-    Module.put_attribute(mod, name, value)
   end
 
   @doc false
