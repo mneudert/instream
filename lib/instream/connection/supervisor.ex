@@ -1,7 +1,5 @@
 defmodule Instream.Connection.Supervisor do
-  @moduledoc """
-  Connection Supervisor.
-  """
+  @moduledoc false
 
   use Supervisor
 
