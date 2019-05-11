@@ -1,7 +1,7 @@
 # Instream
 
-[![Build Status](https://travis-ci.org/mneudert/instream.svg?branch=v0.20.0)](https://travis-ci.org/mneudert/instream)
-[![Coverage Status](https://coveralls.io/repos/mneudert/instream/badge.svg?branch=v0.20.0&service=github)](https://coveralls.io/github/mneudert/instream?branch=v0.20.0)
+[![Build Status](https://travis-ci.org/mneudert/instream.svg?branch=v0.21)](https://travis-ci.org/mneudert/instream)
+[![Coverage Status](https://coveralls.io/repos/mneudert/instream/badge.svg?branch=v0.21&service=github)](https://coveralls.io/github/mneudert/instream?branch=v0.21)
 [![Hex.pm](https://img.shields.io/hexpm/v/instream.svg)](https://hex.pm/packages/instream)
 
 InfluxDB driver for Elixir
@@ -17,7 +17,7 @@ Tested InfluxDB versions:
 - `1.6.6`
 - `1.7.6`
 
-(see [`.travis.yml`](https://github.com/mneudert/instream/blob/v0.20.0/.travis.yml) to be sure)
+(see [`.travis.yml`](https://github.com/mneudert/instream/blob/v0.21/.travis.yml) to be sure)
 
 ## Setup
 
