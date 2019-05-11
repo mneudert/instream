@@ -19,9 +19,9 @@ Tested InfluxDB versions:
 
 (see [`.travis.yml`](https://github.com/mneudert/instream/blob/master/.travis.yml) to be sure)
 
-## Setup
+## Package Setup
 
-Add Instream as a dependency to your `mix.exs` file:
+To use Instream with your projects, edit your `mix.exs` file and add the required dependencies:
 
 ```elixir
 defp deps do
