@@ -29,9 +29,7 @@ defmodule Instream.Database do
   end
 
   defmacro __after_compile__(%{module: module}, _bytecode) do
-    quote do
-      Validator.proper_database?(unquote(module))
-    end
+    Validator.proper_database?(module)
   end
 
   @doc """

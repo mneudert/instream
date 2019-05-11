@@ -50,9 +50,7 @@ defmodule Instream.Series do
   end
 
   defmacro __after_compile__(%{module: module}, _bytecode) do
-    quote do
-      Validator.proper_series?(unquote(module))
-    end
+    Validator.proper_series?(module)
   end
 
   @doc """
