@@ -56,6 +56,26 @@ defmodule Instream.ConnectionTest do
     assert result_in == result_out
   end
 
+  test "read using params" do
+    :ok =
+      DefaultConnection.write(%{
+        database: @database,
+        points: [
+          %{
+            measurement: "params",
+            tags: %{foo: "bar"},
+            fields: %{value: 1}
+          }
+        ]
+      })
+
+    query = "SELECT value FROM \"#{@database}\".\"autogen\".\"params\" WHERE foo = $foo_val"
+    params = %{foo_val: "bar"}
+
+    assert %{results: [%{series: [%{name: "params", values: [[_, 1]]}]}]} =
+             DefaultConnection.query(query, params: params)
+  end
+
   @tag influxdb_version: "1.7"
   test "read using flux query" do
     :ok =
