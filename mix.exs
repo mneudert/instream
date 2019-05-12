@@ -1,4 +1,4 @@
-defmodule Instream.Mixfile do
+defmodule Instream.MixProject do
   use Mix.Project
 
   @url_github "https://github.com/mneudert/instream"
