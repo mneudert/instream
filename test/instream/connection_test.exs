@@ -57,22 +57,25 @@ defmodule Instream.ConnectionTest do
   end
 
   test "read using params" do
+    test_field = ~S|string field value, only " need be quoted|
+    test_tag = ~S|tag,value,with"commas"|
+
     :ok =
       DefaultConnection.write(%{
         database: @database,
         points: [
           %{
             measurement: "params",
-            tags: %{foo: "bar"},
-            fields: %{value: 1}
+            tags: %{foo: test_tag},
+            fields: %{value: test_field}
           }
         ]
       })
 
     query = "SELECT value FROM \"#{@database}\".\"autogen\".\"params\" WHERE foo = $foo_val"
-    params = %{foo_val: "bar"}
+    params = %{foo_val: test_tag}
 
-    assert %{results: [%{series: [%{name: "params", values: [[_, 1]]}]}]} =
+    assert %{results: [%{series: [%{name: "params", values: [[_, test_val]]}]}]} =
              DefaultConnection.query(query, params: params)
   end
 
