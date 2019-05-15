@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.21.0-dev
+## v0.21.0 (2019-05-15)
 
 - Enhancements
     - Read queries can now use parameter binding
