@@ -8,6 +8,7 @@ defmodule Instream.Connection.JSONTest do
       otp_app: :instream,
       config: [
         json_decoder: JSONLibrary,
+        json_encoder: JSONLibrary,
         loggers: []
       ]
   end
@@ -19,6 +20,7 @@ defmodule Instream.Connection.JSONTest do
       otp_app: :instream,
       config: [
         json_decoder: {JSONLibrary, :decode_partial},
+        json_encoder: {JSONLibrary, :encode_partial},
         loggers: []
       ]
   end
@@ -30,6 +32,7 @@ defmodule Instream.Connection.JSONTest do
       otp_app: :instream,
       config: [
         json_decoder: {JSONLibrary, :decode_full, [[keys: :atoms]]},
+        json_encoder: {JSONLibrary, :encode_full, [[foo: :bar]]},
         loggers: []
       ]
   end
@@ -51,6 +54,21 @@ defmodule Instream.Connection.JSONTest do
       JSONLogger.log(:decode_full)
       Jason.decode!(data, keys: :atoms)
     end
+
+    def encode!(data) do
+      JSONLogger.log(:encode_module)
+      Jason.encode!(data)
+    end
+
+    def encode_partial(data) do
+      JSONLogger.log(:encode_partial)
+      Jason.encode!(data)
+    end
+
+    def encode_full(data, foo: :bar) do
+      JSONLogger.log(:encode_full)
+      Jason.encode!(data)
+    end
   end
 
   defmodule JSONLogger do
@@ -68,10 +86,17 @@ defmodule Instream.Connection.JSONTest do
     {:ok, _} = start_supervised(JSONConnectionModule)
     {:ok, _} = start_supervised(JSONConnectionPartial)
 
-    _ = JSONConnectionModule.query("")
-    _ = JSONConnectionPartial.query("")
-    _ = JSONConnectionFull.query("")
+    _ = JSONConnectionModule.query("", params: %{})
+    _ = JSONConnectionPartial.query("", params: %{})
+    _ = JSONConnectionFull.query("", params: %{})
 
-    assert [:decode_full, :decode_partial, :decode_module] = JSONLogger.flush()
+    assert [
+             :decode_full,
+             :encode_full,
+             :decode_partial,
+             :encode_partial,
+             :decode_module,
+             :encode_module
+           ] = JSONLogger.flush()
   end
 end

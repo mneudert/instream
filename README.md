@@ -27,7 +27,7 @@ To use Instream with your projects, edit your `mix.exs` file and add the require
 defp deps do
   [
     # ...
-    {:instream, "~> 0.20"},
+    {:instream, "~> 0.21"},
     # ...
   ]
 end
@@ -160,7 +160,8 @@ config :my_app, MyApp.MyConnection,
   port: 8086,
   scheme: "http",
   writer: Instream.Writer.Line,
-  json_decoder: Poison
+  json_decoder: Poison,
+  json_encoder: Poison
 ```
 
 This also means that per default the connection uses no authentication.
@@ -183,16 +184,19 @@ If you want to use another library you can switch it:
 
 ```elixir
 config :my_app, MyConnection,
-  json_decoder: MyJSONLibrary
+  json_decoder: MyJSONLibrary,
+  json_encoder: MyJSONLibrary
 
 config :my_app, MyConnection,
-  json_decoder: {MyJSONLibrary, :decode_argless}
+  json_decoder: {MyJSONLibrary, :decode_argless},
+  json_encoder: {MyJSONLibrary, :decode_argless}
 
 config :my_app, MyConnection,
-  json_decoder: {MyJSONLibrary, :decode_it, [[keys: :atoms]]}
+  json_decoder: {MyJSONLibrary, :decode_it, [[keys: :atoms]]},
+  json_encoder: {MyJSONLibrary, :decode_it, []}
 ```
 
-If you configure only a module name it will be called as `module.decode!(binary)`. When using a more complete `{m, f}` or `{m, f, a}` configuration the data to decode will passed as the first argument with your configured extra arguments following.
+If you configure only a module name it will be called as `module.decode!(binary)` and `module.encode(map)`. When using a more complete `{m, f}` or `{m, f, a}` configuration the data to decode/encode will passed as the first argument with your configured extra arguments following.
 
 #### Authentication
 
@@ -328,6 +332,10 @@ Reading data:
 # passing precision (= epoch) for query results
 "SELECT * FROM some_measurement"
 |> MyApp.MyConnection.query(precision: :minutes)
+
+# using parameter binding
+"SELECT * FROM some_measurement WHERE field = $field_param"
+|> MyApp.MyConnection.query(params: %{field_param: "some_value"})
 ```
 
 #### POST Queries

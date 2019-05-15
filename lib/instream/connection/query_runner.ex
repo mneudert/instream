@@ -56,7 +56,9 @@ defmodule Instream.Connection.QueryRunner do
   def read(%Query{} = query, opts, %{module: conn}) do
     config = conn.config()
     json_decoder = JSON.decoder(conn)
+    json_encoder = JSON.encoder(conn)
     opts = Keyword.put(opts, :json_decoder, json_decoder)
+    opts = Keyword.put(opts, :json_encoder, json_encoder)
 
     headers = Headers.assemble(config, opts)
 
@@ -207,6 +209,19 @@ defmodule Instream.Connection.QueryRunner do
       |> URL.query(opts[:query_language])
       |> URL.append_database(opts[:database] || config[:database])
       |> URL.append_epoch(query.opts[:precision])
+
+    url =
+      case opts[:params] do
+        params when is_map(params) ->
+          {json_mod, json_fun, json_extra_args} = opts[:json_encoder]
+
+          json_params = apply(json_mod, json_fun, [params | json_extra_args])
+
+          URL.append_json_params(url, json_params)
+
+        _ ->
+          url
+      end
 
     case opts[:query_language] do
       :flux -> url

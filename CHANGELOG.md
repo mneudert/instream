@@ -14,6 +14,12 @@
     - The default JSON decoder has been switched from `:poison` to `:jason`
     - The query builder has been removed
 
+## v0.21.0 (2019-05-15)
+
+- Enhancements
+    - Read queries can now use parameter binding
+    - The configuration option `:json_encoder` for the library used for JSON encoding has been added
+
 ## v0.20.0 (2019-04-19)
 
 - Enhancements
