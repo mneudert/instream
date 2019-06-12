@@ -6,7 +6,7 @@ jobs:
     - &test
       stage: test
       elixir: 1.5.3
-      otp_release: 18.3
+      otp_release: 19.3
       env: PKG_MGMT=gdm VER_GO=1.9.2 VER_INFLUXDB=v1.4.3
       before_install: |-
         eval "$(gimme ${VER_GO})"
@@ -92,21 +92,21 @@ jobs:
         fi
     - <<: *test
       elixir: 1.6.6
-      otp_release: 19.3
+      otp_release: 20.3
       env: PKG_MGMT=gdm VER_GO=1.9.2 VER_INFLUXDB=v1.5.5
     - <<: *test
       elixir: 1.7.4
-      otp_release: 20.3
+      otp_release: 21.3
       env: PKG_MGMT=dep VER_GO=1.9.2 VER_INFLUXDB=v1.6.6
     - <<: *test
       elixir: 1.8.1
-      otp_release: 21.0
+      otp_release: 22.0
       env: PKG_MGMT=dep VER_GO=1.11 VER_INFLUXDB=v1.7.6
       after_success: mix coveralls.travis
 
     - stage: code quality
       elixir: 1.8.1
-      otp_release: 21.0
+      otp_release: 22.0
       script:
         - mix format --check-formatted
         - mix credo --strict
