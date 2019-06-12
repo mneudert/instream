@@ -71,7 +71,7 @@ defmodule Instream.ConnectionTest do
     query = "SELECT value FROM \"#{@database}\".\"autogen\".\"params\" WHERE foo = $foo_val"
     params = %{foo_val: test_tag}
 
-    assert %{results: [%{series: [%{name: "params", values: [[_, test_val]]}]}]} =
+    assert %{results: [%{series: [%{name: "params", values: [[_, ^test_field]]}]}]} =
              DefaultConnection.query(query, params: params)
   end
 
