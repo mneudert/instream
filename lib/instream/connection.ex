@@ -14,13 +14,13 @@ defmodule Instream.Connection do
   ## Example Configuration
 
       config :my_application, MyConnection,
-        auth:      [ method: :basic, username: "root", password: "root" ]
-        host:      "influxdb.example.com",
-        http_opts: [ insecure: true, proxy: "http://company.proxy" ],
-        loggers:   [{ LogModule, :log_fun, [ :additional, :args ] }],
-        pool:      [ max_overflow: 10, size: 5 ],
-        port:      8086,
-        scheme:    "http"
+        auth: [method: :basic, username: "root", password: "root"]
+        host: "influxdb.example.com",
+        http_opts: [insecure: true, proxy: "http://company.proxy"],
+        loggers: [{LogModule, :log_fun, [:additional, :args]}],
+        pool: [max_overflow: 10, size: 5],
+        port: 8086,
+        scheme: "http"
   """
 
   alias Instream.Log
@@ -71,23 +71,21 @@ defmodule Instream.Connection do
         Connection.Config.runtime(@otp_app, __MODULE__, keys, @config)
       end
 
-      # alias/convenience interface
+      def execute(query, opts \\ []), do: QueryPlanner.execute(query, opts, __MODULE__)
 
       def ping(opts) when is_list(opts), do: ping(nil, opts)
-      def status(opts) when is_list(opts), do: status(nil, opts)
-      def version(opts) when is_list(opts), do: version(nil, opts)
-
-      # public interface for usage
-
-      def execute(query, opts \\ []), do: QueryPlanner.execute(query, opts, __MODULE__)
 
       def ping(host \\ nil, opts \\ []),
         do: execute(%Query{type: :ping, opts: [host: host]}, opts)
 
       def query(query, opts \\ []), do: execute(query, opts)
 
+      def status(opts) when is_list(opts), do: status(nil, opts)
+
       def status(host \\ nil, opts \\ []),
         do: execute(%Query{type: :status, opts: [host: host]}, opts)
+
+      def version(opts) when is_list(opts), do: version(nil, opts)
 
       def version(host \\ nil, opts \\ []),
         do: execute(%Query{type: :version, opts: [host: host]}, opts)

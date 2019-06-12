@@ -54,8 +54,6 @@ defmodule Instream.Response do
   def parse_status({:ok, 204, _}), do: :ok
   def parse_status(_), do: :error
 
-  # Internal methods
-
   defp is_json?([]), do: false
 
   defp is_json?([{header, val} | headers]) do

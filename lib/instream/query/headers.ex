@@ -19,15 +19,15 @@ defmodule Instream.Query.Headers do
 
   ## Usage
 
-      iex> assemble_auth([ method: :query ])
+      iex> assemble_auth(method: :query)
       []
 
-      iex> assemble_auth([ username: "user" ])
+      iex> assemble_auth(username: "user")
       []
-      iex> assemble_auth([ password: "pass" ])
+      iex> assemble_auth(password: "pass")
       []
 
-      iex> assemble_auth([ username: "user", password: "pass" ])
+      iex> assemble_auth(username: "user", password: "pass")
       [{"Authorization", "Basic dXNlcjpwYXNz"}]
   """
   @spec assemble_auth(Keyword.t()) :: [{binary, binary}]

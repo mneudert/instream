@@ -8,7 +8,7 @@ defmodule Instream.Series do
         use Instream.Series
 
         series do
-          database    "my_database_optional"
+          database "my_database_optional"
           measurement "cpu_load"
 
           tag :host, default: "www"
@@ -30,8 +30,8 @@ defmodule Instream.Series do
   Following the above usage example you will get the following struct:
 
       %MySeries{
-        fields:    %MySeries.Fields{ value: 100, value_desc: nil },
-        tags:      %MySeries.Tags{ host: "www", core: nil },
+        fields: %MySeries.Fields{value: 100, value_desc: nil},
+        tags: %MySeries.Tags{host: "www", core: nil},
         timestamp: nil
       }
 

@@ -62,8 +62,6 @@ defmodule Instream.Log.DefaultLogger do
     entry
   end
 
-  # Utility methods
-
   @doc false
   def metadata(%{metadata: metadata}) do
     # method is public to avoid compiler notices about this method

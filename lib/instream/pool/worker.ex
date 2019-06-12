@@ -19,15 +19,6 @@ defmodule Instream.Pool.Worker do
     end
   end
 
-  def terminate(_reason, state) do
-    case Map.get(state, :udp_socket) do
-      nil -> :ok
-      socket -> :gen_udp.close(socket)
-    end
-  end
-
-  # GenServer callbacks
-
   def handle_call({:execute, %Query{type: :write} = query, opts}, _from, state) do
     reply = QueryRunner.write(query, opts, state)
 
@@ -40,7 +31,12 @@ defmodule Instream.Pool.Worker do
     {:noreply, state}
   end
 
-  # Utility methods
+  def terminate(_reason, state) do
+    case Map.get(state, :udp_socket) do
+      nil -> :ok
+      socket -> :gen_udp.close(socket)
+    end
+  end
 
   defp connect_udp(state) do
     {:ok, socket} = :gen_udp.open(0, [:binary, {:active, false}])
