@@ -109,10 +109,10 @@ defmodule Instream.Series do
 
   ## Available information
 
-  - `:database`    - the database where the series is stored (optional)
-  - `:fields`      - the fields in the series
+  - `:database` - the database where the series is stored (optional)
+  - `:fields` - the fields in the series
   - `:measurement` - the measurement of the series
-  - `:tags`        - the available tags defining the series
+  - `:tags` - the available tags defining the series
   """
   @callback __meta__(atom) :: any
 
