@@ -3,29 +3,26 @@ defmodule Instream.Encoder.PrecisionTest do
 
   alias Instream.TestHelpers.Connections.DefaultConnection
 
-  test "available precisions are valid" do
-    assert :ok ==
-             %{
-               database: "test_database",
-               points: [
-                 %{
-                   measurement: "precision_test",
-                   fields: %{foo: "bar"}
-                 }
-               ]
-             }
-             |> DefaultConnection.write()
+  setup_all do
+    DefaultConnection.write(%{
+      database: "test_database",
+      points: [
+        %{
+          measurement: "precision_test",
+          fields: %{foo: "bar"}
+        }
+      ]
+    })
+  end
 
-    :timer.sleep(250)
-
+  test "integer precisions" do
     [
       {:hour, 6},
       {:minute, 8},
       {:second, 10},
       {:millisecond, 13},
       {:microsecond, 16},
-      {:nanosecond, 19},
-      {:rfc3339, 20}
+      {:nanosecond, 19}
     ]
     |> Enum.each(fn {precision, timelen} ->
       %{results: [%{series: [%{values: [[time, _]]}]}]} =
@@ -39,12 +36,23 @@ defmodule Instream.Encoder.PrecisionTest do
         |> Kernel.to_string()
         |> String.length()
 
-      if :rfc3339 == precision do
-        assert resultlen >= timelen
-        assert String.contains?(time, "Z")
-      else
-        assert resultlen == timelen
-      end
+      assert resultlen == timelen
     end)
+  end
+
+  test "rfc3339 precision" do
+    %{results: [%{series: [%{values: [[time, _]]}]}]} =
+      DefaultConnection.query("SELECT * FROM precision_test",
+        database: "test_database",
+        precision: :rfc3339
+      )
+
+    resultlen =
+      time
+      |> Kernel.to_string()
+      |> String.length()
+
+    assert resultlen >= 20
+    assert String.contains?(time, "Z")
   end
 end
