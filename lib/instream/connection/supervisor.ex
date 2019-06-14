@@ -6,8 +6,8 @@ defmodule Instream.Connection.Supervisor do
   alias Instream.Pool
 
   @doc false
-  def start_link(conn) do
-    Supervisor.start_link(__MODULE__, conn, name: Module.concat(conn, Supervisor))
+  def start_link(conn, name) do
+    Supervisor.start_link(__MODULE__, conn, name: name)
   end
 
   @doc false

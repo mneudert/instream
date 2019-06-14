@@ -37,6 +37,7 @@ defmodule Instream.Connection do
     quote bind_quoted: [opts: opts] do
       alias Instream.Connection
       alias Instream.Connection.QueryPlanner
+      alias Instream.Connection.Supervisor
       alias Instream.Data
       alias Instream.Query
 
@@ -60,11 +61,10 @@ defmodule Instream.Connection do
       def __log__(entry), do: unquote(loggers)
 
       def child_spec(_ \\ []) do
-        Supervisor.Spec.supervisor(
-          Instream.Connection.Supervisor,
-          [__MODULE__],
-          id: __MODULE__.Supervisor
-        )
+        %{
+          id: __MODULE__.Supervisor,
+          start: {Supervisor, :start_link, [__MODULE__, __MODULE__.Supervisor]}
+        }
       end
 
       def config(keys \\ nil) do
@@ -109,7 +109,7 @@ defmodule Instream.Connection do
   @doc """
   Returns a supervisable connection child_spec.
   """
-  @callback child_spec(_ignored :: term) :: Supervisor.Spec.spec()
+  @callback child_spec(_ignored :: term) :: Supervisor.child_spec()
 
   @doc """
   Returns the connection configuration.
