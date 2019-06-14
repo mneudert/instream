@@ -221,4 +221,10 @@ defmodule Instream.ConnectionTest do
 
     assert String.contains?(error, "not authorized")
   end
+
+  test "privilege missing" do
+    %{error: error} = GuestConnection.execute("DROP DATABASE ignore")
+
+    assert String.contains?(error, "requires admin privilege")
+  end
 end

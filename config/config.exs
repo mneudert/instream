@@ -22,9 +22,7 @@ if Mix.env() == :test do
     end)
 
   # setup authentication defaults
-  connections
-  |> Enum.reject(&(&1 == TestHelpers.Connections.AnonConnection))
-  |> Enum.each(fn connection ->
+  Enum.each(connections, fn connection ->
     config :instream, connection, auth: [username: "instream_test", password: "instream_test"]
   end)
 
@@ -42,15 +40,6 @@ if Mix.env() == :test do
   # port will be set properly during test setup
   # credo:disable-for-next-line Credo.Check.Readability.LargeNumbers
   config :instream, TestHelpers.Connections.InetsConnection, port: 99999
-
-  config :instream, TestHelpers.Connections.InvalidConnection,
-    auth: [username: "instream_test", password: "instream_invalid"]
-
-  config :instream, TestHelpers.Connections.NotFoundConnection,
-    auth: [username: "instream_not_found", password: "instream_not_found"]
-
-  config :instream, TestHelpers.Connections.QueryAuthConnection,
-    auth: [method: :query, username: "instream_test", password: "instream_test"]
 
   config :instream, TestHelpers.Connections.UDPConnection,
     port_udp: 8089,

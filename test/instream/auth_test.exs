@@ -1,22 +1,31 @@
 defmodule Instream.AuthTest do
   use ExUnit.Case, async: true
 
-  alias Instream.TestHelpers.Connections.AnonConnection
-  alias Instream.TestHelpers.Connections.GuestConnection
-  alias Instream.TestHelpers.Connections.InvalidConnection
-  alias Instream.TestHelpers.Connections.NotFoundConnection
-  alias Instream.TestHelpers.Connections.QueryAuthConnection
-
   test "anonymous user connection" do
+    defmodule AnonymousConnection do
+      use Instream.Connection,
+        config: [
+          loggers: []
+        ]
+    end
+
     assert fn ->
       "SHOW DATABASES"
-      |> AnonConnection.execute()
+      |> AnonymousConnection.execute()
       |> Map.get(:error)
       |> String.contains?("Basic Auth")
     end
   end
 
   test "query auth connection" do
+    defmodule QueryAuthConnection do
+      use Instream.Connection,
+        config: [
+          auth: [method: :query, username: "instream_test", password: "instream_test"],
+          loggers: []
+        ]
+    end
+
     refute (fn ->
               "SHOW DATABASES"
               |> QueryAuthConnection.execute()
@@ -25,6 +34,14 @@ defmodule Instream.AuthTest do
   end
 
   test "invalid password" do
+    defmodule AuthenticationFailedConnection do
+      use Instream.Connection,
+        config: [
+          auth: [password: "instream_test", username: "instream_invalid"],
+          loggers: []
+        ]
+    end
+
     assert fn ->
       "SHOW DATABASES"
       |> InvalidConnection.execute()
@@ -33,17 +50,15 @@ defmodule Instream.AuthTest do
     end
   end
 
-  test "privilege missing" do
-    assert fn ->
-      "ignore"
-      |> Database.drop()
-      |> GuestConnection.execute()
-      |> Map.get(:error)
-      |> String.contains?("requires admin privilege")
-    end
-  end
-
   test "user not found" do
+    defmodule NotFoundConnection do
+      use Instream.Connection,
+        config: [
+          auth: [username: "instream_not_found", password: "instream_not_found"],
+          loggers: []
+        ]
+    end
+
     assert fn ->
       "SHOW DATABASES"
       |> NotFoundConnection.execute()
