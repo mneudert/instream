@@ -7,15 +7,6 @@ defmodule Instream.TestHelpers.Inets.Handler do
 
   def unquote(:do)(mod_data), do: serve_uri(mod(mod_data, :request_uri), mod_data)
 
-  defp serve_uri('/ping', _mod_data) do
-    head = [
-      code: 204,
-      content_type: 'application/json'
-    ]
-
-    {:proceed, [{:response, {:response, head, ''}}]}
-  end
-
   defp serve_uri('/query?db=timeout', _mod_data) do
     :timer.sleep(100)
 
