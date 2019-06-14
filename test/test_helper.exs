@@ -19,26 +19,6 @@ end)
 _ = Connections.DefaultConnection.execute("DROP DATABASE test_database")
 _ = Connections.DefaultConnection.execute("CREATE DATABASE test_database")
 
-# start up inets fake influxdb server
-root = String.to_charlist(__DIR__)
-
-httpd_config = [
-  document_root: root,
-  modules: [Instream.TestHelpers.Inets.Handler],
-  port: 0,
-  server_name: 'instream_testhelpers_inets_handler',
-  server_root: root
-]
-
-{:ok, httpd_pid} = :inets.start(:httpd, httpd_config)
-
-inets_env =
-  :instream
-  |> Application.get_env(Connections.InetsConnection)
-  |> Keyword.put(:port, :httpd.info(httpd_pid)[:port])
-
-Application.put_env(:instream, Connections.InetsConnection, inets_env)
-
 # configure InfluxDB test exclusion
 config = ExUnit.configuration()
 version = to_string(Connections.DefaultConnection.version())
