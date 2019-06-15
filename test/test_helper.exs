@@ -3,7 +3,6 @@ alias Instream.TestHelpers.Connections
 # grab ALL helpers and start connections
 File.ls!("test/helpers/connections")
 |> Enum.filter(&String.contains?(&1, "connection"))
-|> Enum.reject(&(&1 == "init_connection.ex"))
 |> Enum.map(fn helper ->
   conn =
     helper
