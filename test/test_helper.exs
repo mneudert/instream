@@ -8,7 +8,6 @@ File.ls!("test/helpers/connections")
   conn =
     helper
     |> String.replace(".ex", "")
-    |> String.replace("udp", "UDP")
     |> Macro.camelize()
 
   Module.concat(Connections, conn)

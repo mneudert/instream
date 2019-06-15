@@ -15,7 +15,6 @@ if Mix.env() == :test do
       conn =
         helper
         |> String.replace(".ex", "")
-        |> String.replace("udp", "UDP")
         |> Macro.camelize()
 
       Module.concat([TestHelpers.Connections, conn])
@@ -40,8 +39,4 @@ if Mix.env() == :test do
   # port will be set properly during test setup
   # credo:disable-for-next-line Credo.Check.Readability.LargeNumbers
   config :instream, TestHelpers.Connections.InetsConnection, port: 99999
-
-  config :instream, TestHelpers.Connections.UDPConnection,
-    port_udp: 8089,
-    writer: Instream.Writer.UDP
 end

@@ -4,7 +4,6 @@ defmodule Instream.WriterTest do
   import Instream.TestHelpers.Retry
 
   alias Instream.TestHelpers.Connections.DefaultConnection
-  alias Instream.TestHelpers.Connections.UDPConnection
 
   defmodule ProtocolsSeries do
     use Instream.Series
@@ -19,8 +18,19 @@ defmodule Instream.WriterTest do
     end
   end
 
+  defmodule UDPConnection do
+    use Instream.Connection,
+      config: [
+        loggers: [],
+        port_udp: 8089,
+        writer: Instream.Writer.UDP
+      ]
+  end
+
   @tag :udp
   test "writer protocol: UDP" do
+    start_supervised(UDPConnection)
+
     assert :ok ==
              %{
                timestamp: 1_439_587_927_000_000_000,
