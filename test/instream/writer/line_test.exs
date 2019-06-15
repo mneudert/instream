@@ -1,10 +1,9 @@
-defmodule Instream.WriterTest do
+defmodule Instream.Writer.LineTest do
   use ExUnit.Case, async: true
 
   import Instream.TestHelpers.Retry
 
   alias Instream.TestHelpers.Connections.DefaultConnection
-  alias Instream.TestHelpers.Connections.UDPConnection
 
   defmodule BatchSeries do
     use Instream.Series
@@ -110,47 +109,6 @@ defmodule Instream.WriterTest do
                      series: [
                        %{
                          values: [[1_439_587_926_000_000_000, "Line", "Line"]]
-                       }
-                     ]
-                   }
-                 ]
-               } ->
-                 true
-
-               _ ->
-                 false
-             end
-           )
-  end
-
-  @tag :udp
-  test "writer protocol: UDP" do
-    assert :ok ==
-             %{
-               timestamp: 1_439_587_927_000_000_000,
-               proto: "UDP",
-               value: "UDP"
-             }
-             |> ProtocolsSeries.from_map()
-             |> UDPConnection.write()
-
-    assert retry(
-             2500,
-             50,
-             fn ->
-               DefaultConnection.query(
-                 "SELECT * FROM #{ProtocolsSeries.__meta__(:measurement)} WHERE proto='UDP'",
-                 database: ProtocolsSeries.__meta__(:database),
-                 precision: :nanosecond
-               )
-             end,
-             fn
-               %{
-                 results: [
-                   %{
-                     series: [
-                       %{
-                         values: [[1_439_587_927_000_000_000, "UDP", "UDP"]]
                        }
                      ]
                    }
