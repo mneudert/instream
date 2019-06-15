@@ -35,8 +35,4 @@ if Mix.env() == :test do
   # connection specific configuration
   config :instream, TestHelpers.Connections.GuestConnection,
     auth: [username: "instream_guest", password: "instream_guest"]
-
-  # port will be set properly during test setup
-  # credo:disable-for-next-line Credo.Check.Readability.LargeNumbers
-  config :instream, TestHelpers.Connections.InetsConnection, port: 99999
 end

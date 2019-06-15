@@ -1,7 +1,13 @@
 defmodule Instream.Connection.TimeoutTest do
   use ExUnit.Case, async: true
 
-  alias Instream.TestHelpers.Connections.InetsConnection
+  defmodule InetsConnection do
+    use Instream.Connection,
+      otp_app: :instream,
+      config: [
+        loggers: []
+      ]
+  end
 
   setup_all do
     root = String.to_charlist(__DIR__)
@@ -16,12 +22,7 @@ defmodule Instream.Connection.TimeoutTest do
 
     {:ok, httpd_pid} = :inets.start(:httpd, httpd_config)
 
-    inets_env =
-      :instream
-      |> Application.get_env(InetsConnection)
-      |> Keyword.put(:port, :httpd.info(httpd_pid)[:port])
-
-    Application.put_env(:instream, InetsConnection, inets_env)
+    Application.put_env(:instream, InetsConnection, port: :httpd.info(httpd_pid)[:port])
 
     on_exit(fn ->
       :inets.stop(:httpd, httpd_pid)
