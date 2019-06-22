@@ -27,13 +27,10 @@ defmodule Instream.Data.Write do
   Creates a writing query object from a single or a list of points.
   """
   @spec query(map | [map], Keyword.t()) :: Query.t()
-  def query([point | points], opts) do
-    query = query(point, opts)
-    add_points = multi_unstruct(points, [])
+  def query(points, opts) when is_list(points) do
+    point_data = multi_unstruct(points, [])
 
-    joined = [hd(query.payload.points) | add_points]
-
-    %{query | payload: %{query.payload | points: joined}}
+    query(%{points: point_data}, opts)
   end
 
   def query(payload, opts) when is_map(payload) do
