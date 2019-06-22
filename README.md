@@ -402,21 +402,7 @@ defmodule MySeries do
 end
 ```
 
-### Default Values
-
-You can include a default value for tags and fields in your series definition:
-
-```elixir
-series do
-  measurement "my_measurement"
-
-  tag :host, default: "www"
-
-  field :value, default: 100
-end
-```
-
-These values will be pre-assigned when using the data struct. All fields or tags without a default value will be set to `nil`.
+More information about series definitions can be found in the module documentation of `Instream.Series`.
 
 ### Series Hydration (Experimental)
 

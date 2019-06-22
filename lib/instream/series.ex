@@ -2,7 +2,10 @@ defmodule Instream.Series do
   @moduledoc """
   Defines a series.
 
-  ## Usage
+  ## Series Definition
+
+  If you do not want to define the raw maps for writing data you can
+  pre-define a series module for later usage:
 
       defmodule MySeries do
         use Instream.Series
@@ -18,6 +21,10 @@ defmodule Instream.Series do
           field :value_desc
         end
       end
+
+  The macros `tag/2` and `field/2` both accept a keyword tuple with a
+  `:default` entry. This value will be pre-assigned when using the data
+  struct with all other fields or tags being set to `nil`.
 
   ## Metadata
 
