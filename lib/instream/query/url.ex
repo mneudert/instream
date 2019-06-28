@@ -115,9 +115,10 @@ defmodule Instream.Query.URL do
 
   defp append_param(url, key, value) do
     glue =
-      case String.contains?(url, "?") do
-        true -> "&"
-        false -> "?"
+      if String.contains?(url, "?") do
+        "&"
+      else
+        "?"
       end
 
     param = URI.encode_query([{key, value}])

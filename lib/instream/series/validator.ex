@@ -17,10 +17,11 @@ defmodule Instream.Series.Validator do
   end
 
   defp defined?(series) do
-    case Module.defines?(series, {:__meta__, 1}, :def) do
-      false -> raise ArgumentError, "missing series definition in module #{series}"
-      _ -> series
+    unless Module.defines?(series, {:__meta__, 1}, :def) do
+      raise ArgumentError, "missing series definition in module #{series}"
     end
+
+    series
   end
 
   defp field_tag_conflict?(series) do
@@ -37,30 +38,34 @@ defmodule Instream.Series.Validator do
   end
 
   defp fields?(series) do
-    case length(series.__meta__(:fields)) do
-      0 -> raise ArgumentError, "series #{series} has no fields"
-      _ -> series
+    if Enum.empty?(series.__meta__(:fields)) do
+      raise ArgumentError, "series #{series} has no fields"
     end
+
+    series
   end
 
   defp forbidden_fields?(series) do
-    case Enum.any?(series.__meta__(:fields), &(&1 == :time)) do
-      true -> raise ArgumentError, "forbidden field :time defined in series #{series}"
-      _ -> series
+    if Enum.any?(series.__meta__(:fields), &(&1 == :time)) do
+      raise ArgumentError, "forbidden field :time defined in series #{series}"
     end
+
+    series
   end
 
   defp forbidden_tags?(series) do
-    case Enum.any?(series.__meta__(:tags), &(&1 == :time)) do
-      true -> raise ArgumentError, "forbidden tag :time defined in series #{series}"
-      _ -> series
+    if Enum.any?(series.__meta__(:tags), &(&1 == :time)) do
+      raise ArgumentError, "forbidden tag :time defined in series #{series}"
     end
+
+    series
   end
 
   defp measurement?(series) do
-    case series.__meta__(:measurement) do
-      nil -> raise ArgumentError, "missing measurement for series #{series}"
-      _ -> series
+    unless series.__meta__(:measurement) do
+      raise ArgumentError, "missing measurement for series #{series}"
     end
+
+    series
   end
 end

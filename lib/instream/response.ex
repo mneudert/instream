@@ -12,16 +12,18 @@ defmodule Instream.Response do
 
   def maybe_parse({status, headers, body}, opts)
       when 300 <= status do
-    case is_json?(headers) do
-      true -> maybe_decode_json(body, opts)
-      false -> maybe_wrap_error(body, opts)
+    if is_json?(headers) do
+      maybe_decode_json(body, opts)
+    else
+      maybe_wrap_error(body, opts)
     end
   end
 
   def maybe_parse({_, headers, body}, opts) do
-    case is_json?(headers) do
-      true -> maybe_decode_json(body, opts)
-      false -> body
+    if is_json?(headers) do
+      maybe_decode_json(body, opts)
+    else
+      body
     end
   end
 

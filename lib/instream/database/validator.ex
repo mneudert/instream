@@ -13,16 +13,18 @@ defmodule Instream.Database.Validator do
   end
 
   defp defined?(database) do
-    case Module.defines?(database, {:__meta__, 1}, :def) do
-      false -> raise ArgumentError, "missing database definition in module #{database}"
-      _ -> database
+    unless Module.defines?(database, {:__meta__, 1}, :def) do
+      raise ArgumentError, "missing database definition in module #{database}"
     end
+
+    database
   end
 
   defp name?(database) do
-    case database.__meta__(:name) do
-      nil -> raise ArgumentError, "missing name for database #{database}"
-      _ -> database
+    unless database.__meta__(:name) do
+      raise ArgumentError, "missing name for database #{database}"
     end
+
+    database
   end
 end
