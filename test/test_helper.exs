@@ -41,21 +41,5 @@ config =
 
 IO.puts("Running tests for InfluxDB version: #{version}")
 
-# configure OTP test exclusion
-release = System.otp_release()
-{:ok, version} = Version.parse("#{release}.0.0")
-versions = ["19.0", "20.0"]
-
-config =
-  Enum.reduce(versions, config, fn ver, acc ->
-    if Version.match?(version, ">= #{ver}.0") do
-      acc
-    else
-      Keyword.put(acc, :exclude, [{:otp_release, ver} | acc[:exclude]])
-    end
-  end)
-
-IO.puts("Running tests for OTP release: #{release}")
-
 # start ExUnit
 ExUnit.start(config)
