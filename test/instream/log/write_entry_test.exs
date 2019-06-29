@@ -3,7 +3,12 @@ defmodule Instream.Log.WriteEntryTest do
 
   import ExUnit.CaptureLog
 
-  alias Instream.TestHelpers.Connections.LogConnection
+  defmodule LogConnection do
+    use Instream.Connection,
+      config: [
+        auth: [method: :query, username: "instream_test", password: "instream_test"]
+      ]
+  end
 
   defmodule TestSeries do
     use Instream.Series
@@ -16,6 +21,11 @@ defmodule Instream.Log.WriteEntryTest do
 
       field :f
     end
+  end
+
+  setup do
+    {:ok, _} = start_supervised(LogConnection)
+    :ok
   end
 
   test "logging write requests" do

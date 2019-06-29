@@ -3,7 +3,17 @@ defmodule Instream.Log.OptionFalse do
 
   import ExUnit.CaptureLog
 
-  alias Instream.TestHelpers.Connections.LogConnection
+  defmodule LogConnection do
+    use Instream.Connection,
+      config: [
+        auth: [method: :query, username: "instream_test", password: "instream_test"]
+      ]
+  end
+
+  setup do
+    {:ok, _} = start_supervised(LogConnection)
+    :ok
+  end
 
   test "not logging ping requests" do
     assert "" ==
