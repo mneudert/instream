@@ -18,21 +18,15 @@ defmodule Instream.Connection.TimeoutTest do
 
     defp serve_uri('/query?db=timeout', _mod_data) do
       :timer.sleep(100)
-
-      body = '{"results": [{}]}'
-
-      head = [
-        code: 200,
-        content_length: body |> length() |> String.to_charlist(),
-        content_type: 'application/json'
-      ]
-
-      {:proceed, [{:response, {:response, head, body}}]}
+      serve_dummy()
     end
 
     defp serve_uri('/query?db=timeout_long', _mod_data) do
       :timer.sleep(10_000)
+      serve_dummy()
+    end
 
+    defp serve_dummy do
       body = '{"results": [{}]}'
 
       head = [
