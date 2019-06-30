@@ -1,26 +1,29 @@
 defmodule Instream.Connection do
   @moduledoc """
-  Connection (pool) definition.
+  Defines a connection to an InfluxDB instance.
 
-  All database connections will be made using a user-defined
-  extension of this module.
+  ## Connection Definition
 
-  ## Example Module
-
-      defmodule MyConnection do
+      defmodule MyConnection
         use Instream.Connection, otp_app: :my_application
       end
 
-  ## Example Configuration
+  This connection will fetch it's configuration from the application environment
+  as defined by `:otp_app`. As an alternative you can define the configuration
+  in the module definition itself:
 
-      config :my_application, MyConnection,
-        auth: [method: :basic, username: "root", password: "root"]
-        host: "influxdb.example.com",
-        http_opts: [insecure: true, proxy: "http://company.proxy"],
-        loggers: [{LogModule, :log_fun, [:additional, :args]}],
-        pool: [max_overflow: 10, size: 5],
-        port: 8086,
-        scheme: "http"
+      defmodule MyConnection
+        use Instream.Connection,
+          config: [
+            host: "influxdb.example.com",
+            scheme: "http"
+          ]
+
+  Both inline and `:otp_app` configuration can be mixed. In this case the
+  application configuration will overwrite any inline values.
+
+  For more information on how to configure your connection please refer to
+  the documentation of `Instream.Connection.Config`.
   """
 
   alias Instream.Log
