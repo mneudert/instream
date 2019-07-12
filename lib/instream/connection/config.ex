@@ -21,7 +21,7 @@ defmodule Instream.Connection.Config do
   def compile_time(otp_app, conn, defaults \\ []) do
     @global_defaults
     |> Keyword.merge(defaults)
-    |> Keyword.merge(Application.get_env(otp_app, conn, []))
+    |> maybe_merge_app_env(otp_app, conn)
     |> Keyword.take(@compile_time_keys)
   end
 
@@ -35,13 +35,19 @@ defmodule Instream.Connection.Config do
 
   def runtime(otp_app, conn, keys, defaults) do
     defaults
-    |> Keyword.merge(Application.get_env(otp_app, conn, []))
+    |> maybe_merge_app_env(otp_app, conn)
     |> maybe_fetch_deep(keys)
     |> maybe_use_default(keys)
   end
 
   defp maybe_fetch_deep(config, nil), do: config
   defp maybe_fetch_deep(config, keys), do: get_in(config, keys)
+
+  defp maybe_merge_app_env(config, nil, _), do: config
+
+  defp maybe_merge_app_env(config, otp_app, conn) do
+    Keyword.merge(config, Application.get_env(otp_app, conn, []))
+  end
 
   defp maybe_use_default(config, nil), do: Keyword.merge(@global_defaults, config)
   defp maybe_use_default(nil, keys), do: get_in(@global_defaults, keys)
