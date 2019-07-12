@@ -99,13 +99,18 @@ jobs:
       otp_release: 21.3
       env: PKG_MGMT=dep VER_GO=1.9.2 VER_INFLUXDB=v1.6.6
     - <<: *test
-      elixir: 1.8.1
+      elixir: 1.8.2
+      otp_release: 22.0
+      env: PKG_MGMT=dep VER_GO=1.11 VER_INFLUXDB=v1.7.7
+      after_success: mix coveralls.travis
+    - <<: *test
+      elixir: 1.9.0
       otp_release: 22.0
       env: PKG_MGMT=dep VER_GO=1.11 VER_INFLUXDB=v1.7.7
       after_success: mix coveralls.travis
 
     - stage: code quality
-      elixir: 1.8.1
+      elixir: 1.9.0
       otp_release: 22.0
       script:
         - mix format --check-formatted
