@@ -160,8 +160,8 @@ config :my_app, MyApp.MyConnection,
   port: 8086,
   scheme: "http",
   writer: Instream.Writer.Line,
-  json_decoder: Poison,
-  json_encoder: Poison
+  json_decoder: {Jason, :decode!, [[keys: :atoms]]},
+  json_encoder: {Jason, :encode!, []}
 ```
 
 This also means that per default the connection uses no authentication.
