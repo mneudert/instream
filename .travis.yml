@@ -104,13 +104,13 @@ jobs:
       env: PKG_MGMT=dep VER_GO=1.11 VER_INFLUXDB=v1.7.7
       after_success: mix coveralls.travis
     - <<: *test
-      elixir: 1.9.0
+      elixir: 1.9.1
       otp_release: 22.0
       env: PKG_MGMT=dep VER_GO=1.11 VER_INFLUXDB=v1.7.7
       after_success: mix coveralls.travis
 
     - stage: code quality
-      elixir: 1.9.0
+      elixir: 1.9.1
       otp_release: 22.0
       script:
         - mix format --check-formatted
