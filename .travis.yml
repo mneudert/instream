@@ -101,12 +101,12 @@ jobs:
     - <<: *test
       elixir: 1.8.2
       otp_release: 22.0
-      env: PKG_MGMT=dep VER_GO=1.11 VER_INFLUXDB=v1.7.9
+      env: PKG_MGMT=dep VER_GO=1.12 VER_INFLUXDB=v1.7.9
       after_success: mix coveralls.travis
     - <<: *test
       elixir: 1.9.2
       otp_release: 22.0
-      env: PKG_MGMT=dep VER_GO=1.11 VER_INFLUXDB=v1.7.9
+      env: PKG_MGMT=dep VER_GO=1.12 VER_INFLUXDB=v1.7.9
       after_success: mix coveralls.travis
 
     - stage: code quality
