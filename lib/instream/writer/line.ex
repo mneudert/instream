@@ -25,8 +25,11 @@ defmodule Instream.Writer.Line do
       Keyword.merge(Keyword.get(config, :http_opts, []), Keyword.get(opts, :http_opts, []))
 
     with {:ok, status, headers, client} <- :hackney.post(url, headers, body, http_opts),
-         {:ok, body} <- :hackney.body(client),
-         do: {status, headers, body}
+         {:ok, body} <- :hackney.body(client) do
+      {status, headers, body}
+    else
+      {:error, _} = error -> error
+    end
   end
 
   defp to_line(payload), do: payload |> Map.get(:points, []) |> Encoder.encode()
