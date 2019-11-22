@@ -2,7 +2,7 @@
 
 ## v1.0.0-dev
 
--Enhancements
+- Enhancements
     - Read queries (everything except writes) are now executed directly in the calling process
     - Sending asynchronous queries is now limited to write queries
 
