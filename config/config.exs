@@ -63,6 +63,10 @@ if Mix.env() == :test do
     port_udp: 8089,
     writer: Instream.Writer.UDP
 
+  config :instream, TestHelpers.Connections.UnixSocketConnection,
+    port: 0,
+    scheme: "http+unix"
+
   config :instream, TestHelpers.Connections.UnreachableConnection,
     host: "some-really-unreachable-host"
 end

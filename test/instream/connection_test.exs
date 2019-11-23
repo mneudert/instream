@@ -7,6 +7,7 @@ defmodule Instream.ConnectionTest do
 
   alias Instream.TestHelpers.Connections.DefaultConnection
   alias Instream.TestHelpers.Connections.GuestConnection
+  alias Instream.TestHelpers.Connections.UnixSocketConnection
 
   @database "test_database"
   @tags %{foo: "foo", bar: "bar"}
@@ -27,14 +28,17 @@ defmodule Instream.ConnectionTest do
 
   test "ping connection" do
     assert :pong == DefaultConnection.ping()
+    assert :pong == UnixSocketConnection.ping()
   end
 
   test "status connection" do
     assert :ok == DefaultConnection.status()
+    assert :ok == UnixSocketConnection.status()
   end
 
   test "version connection" do
     assert is_binary(DefaultConnection.version())
+    assert is_binary(UnixSocketConnection.version())
   end
 
   test "read from empty measurement" do
@@ -52,8 +56,10 @@ defmodule Instream.ConnectionTest do
 
     result_in = query_in |> DefaultConnection.query()
     result_out = query_out |> DefaultConnection.query(database: @database)
+    result_sock = query_in |> UnixSocketConnection.query()
 
     assert result_in == result_out
+    assert result_in == result_sock
   end
 
   test "read using params" do

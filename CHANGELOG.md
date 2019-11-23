@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.22.0-dev
+
+- Enhancements
+    - Unix socket usage has been documented
+
 ## v0.21.0 (2019-05-15)
 
 - Enhancements

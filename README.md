@@ -91,6 +91,13 @@ config :my_app, MyApp.MyConnection,
   writer: Instream.Writer.Line
 ```
 
+Please be aware that if you are using the scheme `"http+unix"` you need to encode the socket path yourself:
+
+```
+config :my_app, MyApp.MyConnection,
+  host: URI.encode_www_form("/path/to/influxdb.sock")
+```
+
 #### Configuration (dynamic)
 
 If you cannot, for whatever reason, use a static application config you can configure an initializer module that will be called every time your connection is started (or restarted) in your supervision tree:

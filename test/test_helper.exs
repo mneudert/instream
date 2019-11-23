@@ -40,6 +40,14 @@ inets_env =
 
 Application.put_env(:instream, Connections.InetsConnection, inets_env)
 
+# configure unix socket connection
+socket_env =
+  :instream
+  |> Application.get_env(Connections.UnixSocketConnection)
+  |> Keyword.put(:host, URI.encode_www_form(System.get_env("INFLUXDB_SOCKET")))
+
+Application.put_env(:instream, Connections.UnixSocketConnection, socket_env)
+
 # configure InfluxDB test exclusion
 config = ExUnit.configuration()
 version = to_string(Connections.DefaultConnection.version())
