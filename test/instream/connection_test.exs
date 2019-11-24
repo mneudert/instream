@@ -28,17 +28,14 @@ defmodule Instream.ConnectionTest do
 
   test "ping connection" do
     assert :pong == DefaultConnection.ping()
-    assert :pong == UnixSocketConnection.ping()
   end
 
   test "status connection" do
     assert :ok == DefaultConnection.status()
-    assert :ok == UnixSocketConnection.status()
   end
 
   test "version connection" do
     assert is_binary(DefaultConnection.version())
-    assert is_binary(UnixSocketConnection.version())
   end
 
   test "read from empty measurement" do
@@ -56,10 +53,8 @@ defmodule Instream.ConnectionTest do
 
     result_in = query_in |> DefaultConnection.query()
     result_out = query_out |> DefaultConnection.query(database: @database)
-    result_sock = query_in |> UnixSocketConnection.query()
 
     assert result_in == result_out
-    assert result_in == result_sock
   end
 
   test "read using params" do
@@ -230,5 +225,31 @@ defmodule Instream.ConnectionTest do
     %{error: error} = data |> GuestConnection.write()
 
     assert String.contains?(error, "not authorized")
+  end
+
+  @tag otp_release: "19.0"
+  test "unix socket: ping connection" do
+    assert :pong == UnixSocketConnection.ping()
+  end
+
+  @tag otp_release: "19.0"
+  test "unix socket: status connection" do
+    assert :ok == UnixSocketConnection.status()
+  end
+
+  @tag otp_release: "19.0"
+  test "unix socket: version connection" do
+    assert is_binary(UnixSocketConnection.version())
+  end
+
+  @tag otp_release: "19.0"
+  test "unix socket: read using database in query string" do
+    query_in = "SELECT value FROM \"#{@database}\".\"autogen\".\"empty_measurement\""
+    query_out = "SELECT value FROM empty_measurement"
+
+    result_in = query_in |> UnixSocketConnection.query()
+    result_out = query_out |> UnixSocketConnection.query(database: @database)
+
+    assert result_in == result_out
   end
 end
