@@ -228,21 +228,25 @@ defmodule Instream.ConnectionTest do
   end
 
   @tag otp_release: "19.0"
+  @tag :unix_socket
   test "unix socket: ping connection" do
     assert :pong == UnixSocketConnection.ping()
   end
 
   @tag otp_release: "19.0"
+  @tag :unix_socket
   test "unix socket: status connection" do
     assert :ok == UnixSocketConnection.status()
   end
 
   @tag otp_release: "19.0"
+  @tag :unix_socket
   test "unix socket: version connection" do
     assert is_binary(UnixSocketConnection.version())
   end
 
   @tag otp_release: "19.0"
+  @tag :unix_socket
   test "unix socket: read using database in query string" do
     query_in = "SELECT value FROM \"#{@database}\".\"autogen\".\"empty_measurement\""
     query_out = "SELECT value FROM empty_measurement"
