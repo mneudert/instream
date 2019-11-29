@@ -5,6 +5,7 @@ defmodule Instream.ConnectionTest do
 
   alias Instream.TestHelpers.Connections.DefaultConnection
   alias Instream.TestHelpers.Connections.GuestConnection
+  alias Instream.TestHelpers.Connections.UnixSocketConnection
 
   @database "test_database"
   @tags %{foo: "foo", bar: "bar"}
@@ -226,5 +227,31 @@ defmodule Instream.ConnectionTest do
     %{error: error} = GuestConnection.execute("DROP DATABASE ignore")
 
     assert String.contains?(error, "requires admin privilege")
+  end
+
+  @tag :unix_socket
+  test "unix socket: ping connection" do
+    assert :pong == UnixSocketConnection.ping()
+  end
+
+  @tag :unix_socket
+  test "unix socket: status connection" do
+    assert :ok == UnixSocketConnection.status()
+  end
+
+  @tag :unix_socket
+  test "unix socket: version connection" do
+    assert is_binary(UnixSocketConnection.version())
+  end
+
+  @tag :unix_socket
+  test "unix socket: read using database in query string" do
+    query_in = "SELECT value FROM \"#{@database}\".\"autogen\".\"empty_measurement\""
+    query_out = "SELECT value FROM empty_measurement"
+
+    result_in = query_in |> UnixSocketConnection.query()
+    result_out = query_out |> UnixSocketConnection.query(database: @database)
+
+    assert result_in == result_out
   end
 end

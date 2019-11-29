@@ -44,6 +44,8 @@ jobs:
           popd
         popd
       before_script: |-
+        export INFLUXDB_SOCKET="$(pwd)/influxdb.sock"
+
         influxd config > ./influxdb.conf
 
         function start_influxdb {
@@ -73,8 +75,13 @@ jobs:
 
         curl -XPOST 'http://localhost:8086/query' --data-urlencode "q=CREATE USER instream_test WITH PASSWORD 'instream_test' WITH ALL PRIVILEGES" -s -o /dev/null
         curl -XPOST 'http://localhost:8086/query' --data-urlencode "q=CREATE USER instream_guest WITH PASSWORD 'instream_guest'" -s -o /dev/null
+
         sed -i 's/auth-enabled = false/auth-enabled = true/' ./influxdb.conf
         sed -i 's/flux-enabled = false/flux-enabled = true/' ./influxdb.conf
+        sed -i 's/unix-socket-enabled = false/unix-socket-enabled = true/' ./influxdb.conf
+
+        sed -i "s|/var/run/influxdb.sock|${INFLUXDB_SOCKET}|g" ./influxdb.conf
+
         echo -e "[[udp]]\n  enabled = true\n  bind-address = \":8089\"\n  database = \"test_database\"\n  batch-size = 1000\n  batch-timeout = \"1s\"\n  batch-pending = 5\n" >> ./influxdb.conf
 
         stop_influxdb

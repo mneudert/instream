@@ -14,6 +14,12 @@
     - The default JSON decoder has been switched from `:poison` to `:jason`
     - The query builder has been removed
 
+## v0.22.0 (2019-11-29)
+
+- Enhancements
+    - Errors from `:hackney.body/1` are now passed to the caller instead of raising a `MatchError`
+    - Unix socket usage has been documented
+
 ## v0.21.0 (2019-05-15)
 
 - Enhancements

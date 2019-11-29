@@ -49,7 +49,8 @@ defmodule Instream.MixProject do
       {:hackney, "~> 1.1"},
       {:influxql, "~> 0.2.0"},
       {:jason, "~> 1.0"},
-      {:poolboy, "~> 1.5"}
+      {:poolboy, "~> 1.5"},
+      {:ranch, "~> 1.6.0", only: :test}
     ]
   end
 

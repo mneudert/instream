@@ -27,7 +27,7 @@ To use Instream with your projects, edit your `mix.exs` file and add the require
 defp deps do
   [
     # ...
-    {:instream, "~> 0.21"},
+    {:instream, "~> 0.22"},
     # ...
   ]
 end
@@ -89,6 +89,13 @@ config :my_app, MyApp.MyConnection,
   port: 8086,
   scheme: "http",
   writer: Instream.Writer.Line
+```
+
+Please be aware that if you are using the scheme `"http+unix"` you need to encode the socket path yourself:
+
+```
+config :my_app, MyApp.MyConnection,
+  host: URI.encode_www_form("/path/to/influxdb.sock")
 ```
 
 #### Configuration (dynamic)
