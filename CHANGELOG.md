@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.22.0-dev
+## v0.22.0 (2019-11-29)
 
 - Enhancements
     - Errors from `:hackney.body/1` are now passed to the caller instead of raising a `MatchError`
