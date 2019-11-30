@@ -8,6 +8,7 @@
 
 - Backwards incompatible changes
     - All "administrative query modules" have been removed
+    - Minimum required elixir version is now `~> 1.7`
     - Support for accessing the system environment for configuration has been removed in favor of initializer functions/modules
     - Support for implementing `use Instream.Writer` has been removed in favor of `@behaviour Instream.Writer`
     - Support for singular time units has been removed
