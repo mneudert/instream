@@ -34,7 +34,6 @@ defmodule Instream.Connection.BodyReadErrorTest do
     end
   end
 
-  @tag otp_release: "19.0"
   test "body read error" do
     socket = Path.expand("../../tmp/body_read.sock", __DIR__)
 
