@@ -54,7 +54,7 @@ config =
         if Version.match?(version, "~> #{ver}") do
           acc
         else
-          Keyword.put(acc, :exclude, [{:influxdb_version, ver} | acc[:exclude]])
+          Keyword.put(acc, :exclude, [:"influxdb_exclude_#{ver}" | acc[:exclude]])
         end
       end)
   end
