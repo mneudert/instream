@@ -93,11 +93,11 @@ defmodule Instream.ConnectionTest do
         ]
       })
 
-    query = """
+    query = ~S[
       from(bucket:"test_database/autogen")
       |> range(start: -1h)
       |> filter(fn: (r) => r._measurement == "flux")
-    """
+    ]
 
     result = DefaultConnection.query(query, query_language: :flux)
 
