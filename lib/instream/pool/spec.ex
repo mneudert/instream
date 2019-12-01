@@ -16,6 +16,6 @@ defmodule Instream.Pool.Spec do
       |> Keyword.put(:name, {:local, pool_name})
       |> Keyword.put(:worker_module, Worker)
 
-    :poolboy.child_spec(conn, pool_opts, %{module: conn})
+    :poolboy.child_spec(conn, pool_opts, module: conn)
   end
 end

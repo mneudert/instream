@@ -12,10 +12,12 @@ defmodule Instream.Pool.Worker do
     GenServer.start_link(__MODULE__, default)
   end
 
-  def init(%{module: conn} = default) do
+  def init(module: conn) do
+    state = %{module: conn}
+
     case conn.config([:writer]) do
-      Instream.Writer.UDP -> {:ok, connect_udp(default)}
-      _ -> {:ok, default}
+      Instream.Writer.UDP -> {:ok, connect_udp(state)}
+      _ -> {:ok, state}
     end
   end
 
