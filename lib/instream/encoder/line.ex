@@ -20,9 +20,9 @@ defmodule Instream.Encoder.Line do
     |> Enum.join("\n")
   end
 
-  defp encode([point | points], lines) do
+  defp encode([%{measurement: measurement} = point | points], lines) do
     line =
-      [encode_property(point.measurement)]
+      [encode_property(measurement)]
       |> append_tags(point)
       |> append_fields(point)
       |> append_timestamp(point)
