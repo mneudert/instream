@@ -9,21 +9,18 @@ defmodule Instream.Writer.Line do
 
   @behaviour Instream.Writer
 
-  def write(query, opts, %{module: conn}) do
+  def write(%{payload: %{points: points}, opts: query_opts}, opts, %{module: conn})
+      when is_list(points) and 0 < length(points) do
     config = conn.config()
     headers = Headers.assemble(config) ++ [{"Content-Type", "text/plain"}]
-
-    body =
-      query.payload
-      |> Map.get(:points, [])
-      |> Encoder.encode()
+    body = Encoder.encode(points)
 
     url =
       config
       |> URL.write()
       |> URL.append_database(opts[:database] || config[:database])
-      |> URL.append_precision(query.opts[:precision])
-      |> URL.append_retention_policy(query.opts[:retention_policy])
+      |> URL.append_precision(query_opts[:precision])
+      |> URL.append_retention_policy(query_opts[:retention_policy])
 
     http_opts =
       Keyword.merge(Keyword.get(config, :http_opts, []), Keyword.get(opts, :http_opts, []))
@@ -35,4 +32,6 @@ defmodule Instream.Writer.Line do
       {:error, _} = error -> error
     end
   end
+
+  def write(_, _, _), do: {200, [], ""}
 end

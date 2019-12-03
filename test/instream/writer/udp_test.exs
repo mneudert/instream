@@ -28,6 +28,13 @@ defmodule Instream.WriterTest do
   end
 
   @tag :udp
+  test "writing no points alway succeeds" do
+    start_supervised(UDPConnection)
+
+    assert :ok == UDPConnection.write(%{points: []})
+  end
+
+  @tag :udp
   test "writer protocol: UDP" do
     start_supervised(UDPConnection)
 

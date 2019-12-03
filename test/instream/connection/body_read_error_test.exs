@@ -58,12 +58,18 @@ defmodule Instream.Connection.BodyReadErrorTest do
       []
     )
 
+    point = %{
+      measurement: "body_read_error",
+      tags: %{tag: :test},
+      fields: %{field: :test}
+    }
+
     assert :error = RanchSocketConnection.ping()
     assert :error = RanchSocketConnection.status()
     assert {:error, :bad_request} = RanchSocketConnection.query("")
 
     assert {:error, :bad_request} =
-             RanchSocketConnection.write(%{database: "ignored", points: []})
+             RanchSocketConnection.write(%{database: "ignored", points: [point]})
 
     :ranch.stop_listener(:caylir_body_read_test)
   end
