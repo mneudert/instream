@@ -16,14 +16,14 @@ defmodule Instream.Connection.QueryRunner do
   Executes `:ping` queries.
   """
   @spec ping(Query.t(), Keyword.t(), map) :: :pong | :error
-  def ping(%Query{} = query, opts, %{module: conn}) do
+  def ping(%Query{opts: query_opts}, opts, %{module: conn}) do
     config = conn.config()
     headers = Headers.assemble(config)
 
     {query_time, response} =
       :timer.tc(fn ->
         config
-        |> URL.ping(query.opts[:host])
+        |> URL.ping(query_opts[:host])
         |> :hackney.head(headers, "", http_opts(config, opts))
       end)
 
@@ -37,7 +37,7 @@ defmodule Instream.Connection.QueryRunner do
 
     if false != opts[:log] do
       conn.__log__(%PingEntry{
-        host: query.opts[:host] || config[:host],
+        host: query_opts[:host] || config[:host],
         result: result,
         metadata: %Metadata{
           query_time: query_time,
@@ -53,7 +53,7 @@ defmodule Instream.Connection.QueryRunner do
   Executes `:read` queries.
   """
   @spec read(Query.t(), Keyword.t(), map) :: any
-  def read(%Query{} = query, opts, %{module: conn}) do
+  def read(%Query{payload: query_payload} = query, opts, %{module: conn}) do
     config = conn.config()
     json_decoder = JSON.decoder(conn)
     json_encoder = JSON.encoder(conn)
@@ -77,7 +77,7 @@ defmodule Instream.Connection.QueryRunner do
 
       if false != opts[:log] do
         conn.__log__(%QueryEntry{
-          query: query.payload,
+          query: query_payload,
           metadata: %Metadata{
             query_time: query_time,
             response_status: status
@@ -95,14 +95,14 @@ defmodule Instream.Connection.QueryRunner do
   Execute `:status` queries.
   """
   @spec status(Query.t(), Keyword.t(), map) :: :ok | :error
-  def status(%Query{} = query, opts, %{module: conn}) do
+  def status(%Query{opts: query_opts}, opts, %{module: conn}) do
     config = conn.config()
     headers = Headers.assemble(config)
 
     {query_time, response} =
       :timer.tc(fn ->
         config
-        |> URL.status(query.opts[:host])
+        |> URL.status(query_opts[:host])
         |> :hackney.head(headers, "", http_opts(config, opts))
       end)
 
@@ -116,7 +116,7 @@ defmodule Instream.Connection.QueryRunner do
 
     if false != opts[:log] do
       conn.__log__(%StatusEntry{
-        host: query.opts[:host] || config[:host],
+        host: query_opts[:host] || config[:host],
         result: result,
         metadata: %Metadata{
           query_time: query_time,
@@ -132,12 +132,12 @@ defmodule Instream.Connection.QueryRunner do
   Executes `:version` queries.
   """
   @spec version(Query.t(), Keyword.t(), map) :: any
-  def version(%Query{} = query, opts, %{module: conn}) do
+  def version(%Query{opts: query_opts}, opts, %{module: conn}) do
     config = conn.config()
     headers = Headers.assemble(config)
 
     config
-    |> URL.ping(query.opts[:host])
+    |> URL.ping(query_opts[:host])
     |> :hackney.head(headers, "", http_opts(config, opts))
     |> Response.parse_version()
   end
@@ -146,7 +146,7 @@ defmodule Instream.Connection.QueryRunner do
   Executes `:write` queries.
   """
   @spec write(Query.t(), Keyword.t(), map) :: any
-  def write(%Query{} = query, opts, %{module: conn} = state) do
+  def write(%Query{payload: %{points: points}} = query, opts, %{module: conn} = state) do
     config = conn.config()
     json_decoder = JSON.decoder(conn)
     opts = Keyword.put(opts, :json_decoder, json_decoder)
@@ -160,7 +160,7 @@ defmodule Instream.Connection.QueryRunner do
 
     if false != opts[:log] do
       conn.__log__(%WriteEntry{
-        points: length(query.payload[:points]),
+        points: length(points),
         metadata: %Metadata{
           query_time: query_time,
           response_status: 0
@@ -186,26 +186,26 @@ defmodule Instream.Connection.QueryRunner do
     |> Keyword.merge(call_opts)
   end
 
-  defp read_body(query, opts) do
+  defp read_body(%{payload: query_payload}, opts) do
     case opts[:query_language] do
-      :flux -> query.payload
+      :flux -> query_payload
       _ -> ""
     end
   end
 
-  defp read_method(query, opts) do
+  defp read_method(%{method: query_method}, opts) do
     case opts[:query_language] do
       :flux -> :post
-      _ -> query.method || opts[:method] || :get
+      _ -> query_method || opts[:method] || :get
     end
   end
 
-  defp read_url(config, query, opts) do
+  defp read_url(config, %{opts: query_opts, payload: query_payload}, opts) do
     url =
       config
       |> URL.query(opts[:query_language])
       |> URL.append_database(opts[:database] || config[:database])
-      |> URL.append_epoch(query.opts[:precision])
+      |> URL.append_epoch(query_opts[:precision])
 
     url =
       case opts[:params] do
@@ -222,7 +222,7 @@ defmodule Instream.Connection.QueryRunner do
 
     case opts[:query_language] do
       :flux -> url
-      _ -> URL.append_query(url, query.payload)
+      _ -> URL.append_query(url, query_payload)
     end
   end
 end

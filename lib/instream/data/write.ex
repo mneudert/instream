@@ -41,14 +41,14 @@ defmodule Instream.Data.Write do
     }
   end
 
-  defp maybe_unstruct(%{__struct__: series} = payload) do
+  defp maybe_unstruct(%{__struct__: series, fields: fields, tags: tags, timestamp: timestamp}) do
     %{
       points: [
         %{
           measurement: series.__meta__(:measurement),
-          fields: Map.from_struct(payload.fields),
-          tags: Map.from_struct(payload.tags),
-          timestamp: payload.timestamp
+          fields: Map.from_struct(fields),
+          tags: Map.from_struct(tags),
+          timestamp: timestamp
         }
       ]
     }
