@@ -4,7 +4,7 @@ defmodule Instream.Database do
 
   ## Usage
 
-      defmodule MyDatabase
+      defmodule MyDatabase do
         use Instream.Database
 
         database do

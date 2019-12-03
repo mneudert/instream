@@ -4,7 +4,7 @@ defmodule Instream.Connection do
 
   ## Connection Definition
 
-      defmodule MyConnection
+      defmodule MyConnection do
         use Instream.Connection, otp_app: :my_application
       end
 
@@ -12,12 +12,13 @@ defmodule Instream.Connection do
   as defined by `:otp_app`. As an alternative you can define the configuration
   in the module definition itself:
 
-      defmodule MyConnection
+      defmodule MyConnection do
         use Instream.Connection,
           config: [
             host: "influxdb.example.com",
             scheme: "http"
           ]
+      end
 
   Both inline and `:otp_app` configuration can be mixed. In this case the
   application configuration will overwrite any inline values.
