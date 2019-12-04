@@ -15,6 +15,9 @@
     - The default JSON decoder has been switched from `:poison` to `:jason`
     - The query builder has been removed
 
+- Bug fixes
+    - `:influxql` has been moved from `:included_applications` to `:applications` to avoid potential problems with release tooling ([#53](https://github.com/mneudert/instream/issues/53))
+
 ## v0.22.0 (2019-11-29)
 
 - Enhancements

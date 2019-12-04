@@ -28,8 +28,7 @@ defmodule Instream.MixProject do
 
   def application do
     [
-      extra_applications: [:logger],
-      included_applications: [:influxql]
+      extra_applications: [:logger]
     ]
   end
 
