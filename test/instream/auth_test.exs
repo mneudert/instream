@@ -44,7 +44,7 @@ defmodule Instream.AuthTest do
 
     assert fn ->
       "SHOW DATABASES"
-      |> InvalidConnection.execute()
+      |> AuthenticationFailedConnection.execute()
       |> Map.get(:error)
       |> String.contains?("authentication failed")
     end
