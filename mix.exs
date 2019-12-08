@@ -60,8 +60,7 @@ defmodule Instream.MixProject do
         :race_conditions,
         :underspecs,
         :unmatched_returns
-      ],
-      plt_add_apps: [:influxql]
+      ]
     ]
   end
 
