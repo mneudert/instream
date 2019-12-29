@@ -29,13 +29,13 @@ defmodule Instream.Connection.QueryRunner do
 
     result = Response.parse_ping(response)
 
-    status =
-      case response do
-        {:ok, status, _} -> status
-        _ -> 0
-      end
-
     if false != opts[:log] do
+      status =
+        case response do
+          {:ok, status, _} -> status
+          _ -> 0
+        end
+
       conn.__log__(%PingEntry{
         host: query_opts[:host] || config[:host],
         result: result,
@@ -108,13 +108,13 @@ defmodule Instream.Connection.QueryRunner do
 
     result = Response.parse_status(response)
 
-    status =
-      case response do
-        {:ok, status, _} -> status
-        _ -> 0
-      end
-
     if false != opts[:log] do
+      status =
+        case response do
+          {:ok, status, _} -> status
+          _ -> 0
+        end
+
       conn.__log__(%StatusEntry{
         host: query_opts[:host] || config[:host],
         result: result,
