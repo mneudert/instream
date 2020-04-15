@@ -30,7 +30,9 @@ jobs:
           pushd influxdb
             git init .
 
-            if [ 'dep' = "${PKG_MGMT}" ]; then
+            if [ 'mod' = "${PKG_MGMT}" ]; then
+              go mod vendor
+            elif [ 'dep' = "${PKG_MGMT}" ]; then
               dep ensure
             else
               gdm restore
@@ -109,6 +111,10 @@ jobs:
       elixir: 1.10.2
       otp_release: 22.0
       env: PKG_MGMT=dep VER_GO=1.12 VER_INFLUXDB=v1.7.10
+    - <<: *test
+      elixir: 1.10.2
+      otp_release: 22.0
+      env: PKG_MGMT=mod VER_GO=1.13 VER_INFLUXDB=v1.8.0
       after_success: mix coveralls.travis
 
     - stage: code quality
