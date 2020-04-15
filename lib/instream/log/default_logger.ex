@@ -17,9 +17,7 @@ defmodule Instream.Log.DefaultLogger do
   def log(%PingEntry{} = entry) do
     _ =
       Logger.debug(
-        fn ->
-          ["[ping ", entry.host, "] ", to_string(entry.result)]
-        end,
+        ["[ping ", entry.host, "] ", to_string(entry.result)],
         metadata(entry)
       )
 
@@ -29,9 +27,7 @@ defmodule Instream.Log.DefaultLogger do
   def log(%QueryEntry{} = entry) do
     _ =
       Logger.debug(
-        fn ->
-          ["[query] ", InfluxQL.Sanitize.redact_passwords(entry.query)]
-        end,
+        ["[query] ", InfluxQL.Sanitize.redact_passwords(entry.query)],
         metadata(entry)
       )
 
@@ -41,9 +37,7 @@ defmodule Instream.Log.DefaultLogger do
   def log(%StatusEntry{} = entry) do
     _ =
       Logger.debug(
-        fn ->
-          ["[status ", entry.host, "] ", to_string(entry.result)]
-        end,
+        ["[status ", entry.host, "] ", to_string(entry.result)],
         metadata(entry)
       )
 
@@ -53,9 +47,7 @@ defmodule Instream.Log.DefaultLogger do
   def log(%WriteEntry{} = entry) do
     _ =
       Logger.debug(
-        fn ->
-          ["[write] ", to_string(entry.points), " points"]
-        end,
+        ["[write] ", to_string(entry.points), " points"],
         metadata(entry)
       )
 
