@@ -108,18 +108,18 @@ jobs:
       otp_release: 21.3
       env: PKG_MGMT=dep VER_GO=1.9.2 VER_INFLUXDB=v1.6.6
     - <<: *test
-      elixir: 1.10.2
-      otp_release: 22.0
+      elixir: 1.10.4
+      otp_release: 22.3
       env: PKG_MGMT=dep VER_GO=1.12 VER_INFLUXDB=v1.7.10
     - <<: *test
-      elixir: 1.10.2
-      otp_release: 22.0
-      env: PKG_MGMT=mod VER_GO=1.13 VER_INFLUXDB=v1.8.0
+      elixir: 1.10.4
+      otp_release: 22.3
+      env: PKG_MGMT=mod VER_GO=1.13 VER_INFLUXDB=v1.8.1
       after_success: mix coveralls.travis
 
     - stage: code quality
-      elixir: 1.10.2
-      otp_release: 22.0
+      elixir: 1.10.4
+      otp_release: 22.3
       script:
         - mix format --check-formatted
         - mix credo --strict
