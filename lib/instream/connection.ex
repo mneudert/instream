@@ -122,9 +122,6 @@ defmodule Instream.Connection do
 
   @doc """
   Executes a query.
-
-  Passing `[async: true]` in the options always returns :ok.
-  The command will be executed asynchronously.
   """
   @callback execute(query :: query_type, opts :: Keyword.t()) :: any
 
@@ -146,8 +143,6 @@ defmodule Instream.Connection do
 
   - `method`: whether to use a "GET" or "POST" request (as atom)
   - `precision`: see `Instream.Encoder.Precision` for available values
-
-  See `c:Instream.Connection.execute/2` for additional generic options.
   """
   @callback query(query :: String.t(), opts :: Keyword.t()) :: any
 
@@ -168,7 +163,8 @@ defmodule Instream.Connection do
   @doc """
   Executes a writing query.
 
-  See `c:Instream.Connection.execute/2` for additional generic options.
+  Passing `[async: true]` in the options always returns :ok
+  and execute the write in a background process.
   """
   @callback write(payload :: map | [map], opts :: Keyword.t()) :: any
 end
