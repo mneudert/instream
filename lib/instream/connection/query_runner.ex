@@ -78,6 +78,7 @@ defmodule Instream.Connection.QueryRunner do
       if false != opts[:log] do
         conn.__log__(%QueryEntry{
           query: query_payload,
+          result: result,
           metadata: %Metadata{
             query_time: query_time,
             response_status: status
@@ -161,6 +162,7 @@ defmodule Instream.Connection.QueryRunner do
     if false != opts[:log] do
       conn.__log__(%WriteEntry{
         points: length(points),
+        result: result,
         metadata: %Metadata{
           query_time: query_time,
           response_status: 0
