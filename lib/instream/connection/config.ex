@@ -3,8 +3,6 @@ defmodule Instream.Connection.Config do
   Configuration helper module.
   """
 
-  require Logger
-
   @compile_time_keys [:loggers]
   @global_defaults [
     host: "localhost",
