@@ -37,29 +37,29 @@ defmodule Instream.Connection.ErrorTest do
   end
 
   test "ping connection" do
-    assert :error == OptionsConnection.ping()
-    assert :error == UnreachableConnection.ping()
+    assert :error = OptionsConnection.ping()
+    assert :error = UnreachableConnection.ping()
   end
 
   test "status connection" do
-    assert :error == OptionsConnection.status()
-    assert :error == UnreachableConnection.status()
+    assert :error = OptionsConnection.status()
+    assert :error = UnreachableConnection.status()
   end
 
   test "version connection" do
-    assert :error == OptionsConnection.version()
-    assert :error == UnreachableConnection.version()
+    assert :error = OptionsConnection.version()
+    assert :error = UnreachableConnection.version()
   end
 
   test "reading data from an unresolvable host" do
     query = "SELECT * FROM connection_error_tests"
 
-    assert {:error, :nxdomain} == UnreachableConnection.query(query)
+    assert {:error, :nxdomain} = UnreachableConnection.query(query)
   end
 
   test "writing data to an unresolvable host" do
     data = %TestSeries{}
 
-    assert {:error, :nxdomain} == UnreachableConnection.write(data)
+    assert {:error, :nxdomain} = UnreachableConnection.write(data)
   end
 end

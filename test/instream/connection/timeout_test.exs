@@ -67,7 +67,7 @@ defmodule Instream.Connection.TimeoutTest do
       timeout: timeout
     ]
 
-    assert {:error, :timeout} == InetsConnection.query("", opts)
+    assert {:error, :timeout} = InetsConnection.query("", opts)
   end
 
   test "timeout above GenServer defaults" do
@@ -78,6 +78,6 @@ defmodule Instream.Connection.TimeoutTest do
       timeout: timeout
     ]
 
-    assert {:error, :timeout} == InetsConnection.query("", opts)
+    assert {:error, :timeout} = InetsConnection.query("", opts)
   end
 end

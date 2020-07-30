@@ -10,6 +10,6 @@ defmodule Instream.DatabaseTest do
   end
 
   test "database metadata" do
-    assert TestDatabase.__meta__(:name) == "test_database"
+    assert "test_database" = TestDatabase.__meta__(:name)
   end
 end

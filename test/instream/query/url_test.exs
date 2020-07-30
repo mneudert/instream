@@ -8,12 +8,12 @@ defmodule Instream.Query.URLTest do
     url = "http://localhost/query"
     expected = "#{url}?epoch=ms"
 
-    assert expected == URL.append_epoch(url, precision)
+    assert ^expected = URL.append_epoch(url, precision)
 
     url = "#{url}?foo=bar"
     expected = "#{url}&epoch=ms"
 
-    assert expected == URL.append_epoch(url, precision)
+    assert ^expected = URL.append_epoch(url, precision)
   end
 
   test "append precision" do
@@ -21,19 +21,19 @@ defmodule Instream.Query.URLTest do
     url = "http://localhost/query"
     expected = "#{url}?precision=ms"
 
-    assert expected == URL.append_precision(url, precision)
+    assert ^expected = URL.append_precision(url, precision)
 
     url = "#{url}?foo=bar"
     expected = "#{url}&precision=ms"
 
-    assert expected == URL.append_precision(url, precision)
+    assert ^expected = URL.append_precision(url, precision)
   end
 
   test "rfc3339 == default precision (not in url)" do
     precision = :rfc3339
     url = "http://localhost/query"
 
-    assert url == URL.append_precision(url, precision)
+    assert ^url = URL.append_precision(url, precision)
   end
 
   test "append query" do
@@ -41,12 +41,12 @@ defmodule Instream.Query.URLTest do
     url = "http://localhost/query"
     expected = "#{url}?q=SELECT+%22value%22+FROM+%22foo%26bar%3Fbaz%22"
 
-    assert expected == URL.append_query(url, query)
+    assert ^expected = URL.append_query(url, query)
 
     url = "#{url}?foo=bar"
     expected = "#{url}&q=SELECT+%22value%22+FROM+%22foo%26bar%3Fbaz%22"
 
-    assert expected == URL.append_query(url, query)
+    assert ^expected = URL.append_query(url, query)
   end
 
   test "ping url with specific host" do
@@ -71,7 +71,7 @@ defmodule Instream.Query.URLTest do
       scheme: "http"
     ]
 
-    assert url == URL.query(conn, :influxql)
+    assert ^url = URL.query(conn, :influxql)
   end
 
   test "query url for flux" do
@@ -84,7 +84,7 @@ defmodule Instream.Query.URLTest do
       scheme: "http"
     ]
 
-    assert url == URL.query(conn, :flux)
+    assert ^url = URL.query(conn, :flux)
   end
 
   test "query url with basic authentication" do
@@ -96,7 +96,7 @@ defmodule Instream.Query.URLTest do
       scheme: "http"
     ]
 
-    assert url == URL.query(conn, :influxql)
+    assert ^url = URL.query(conn, :influxql)
   end
 
   test "query url with default authentication" do
@@ -108,7 +108,7 @@ defmodule Instream.Query.URLTest do
       scheme: "http"
     ]
 
-    assert url == URL.query(conn, :influxql)
+    assert ^url = URL.query(conn, :influxql)
   end
 
   test "query url without credentials" do
@@ -120,7 +120,7 @@ defmodule Instream.Query.URLTest do
       scheme: "http"
     ]
 
-    assert url == URL.query(conn, :influxql)
+    assert ^url = URL.query(conn, :influxql)
   end
 
   test "query url without port" do
@@ -132,7 +132,7 @@ defmodule Instream.Query.URLTest do
       scheme: "http"
     ]
 
-    assert url == URL.query(conn, :influxql)
+    assert ^url = URL.query(conn, :influxql)
   end
 
   test "query with partial credentials" do
@@ -144,7 +144,7 @@ defmodule Instream.Query.URLTest do
       scheme: "http"
     ]
 
-    assert url == URL.query(conn, :influxql)
+    assert ^url = URL.query(conn, :influxql)
   end
 
   test "status url with speicifc host" do

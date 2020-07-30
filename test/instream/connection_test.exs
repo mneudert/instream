@@ -25,11 +25,11 @@ defmodule Instream.ConnectionTest do
   end
 
   test "ping connection" do
-    assert :pong == DefaultConnection.ping()
+    assert :pong = DefaultConnection.ping()
   end
 
   test "status connection" do
-    assert :ok == DefaultConnection.status()
+    assert :ok = DefaultConnection.status()
   end
 
   test "version connection" do
@@ -50,7 +50,7 @@ defmodule Instream.ConnectionTest do
     result_in = DefaultConnection.query(query_in)
     result_out = DefaultConnection.query(query_out, database: @database)
 
-    assert result_in == result_out
+    assert ^result_in = result_out
   end
 
   test "read using params" do
@@ -111,7 +111,7 @@ defmodule Instream.ConnectionTest do
   test "write data" do
     measurement = "write_data"
 
-    assert :ok ==
+    assert :ok =
              %{
                database: @database,
                points: [
@@ -147,7 +147,7 @@ defmodule Instream.ConnectionTest do
   test "write data async" do
     measurement = "write_data_async"
 
-    assert :ok ==
+    assert :ok =
              %{
                database: @database,
                points: [
@@ -181,7 +181,7 @@ defmodule Instream.ConnectionTest do
   end
 
   test "writing series struct" do
-    assert :ok ==
+    assert :ok =
              %{
                bar: "bar",
                foo: "foo",
@@ -234,12 +234,12 @@ defmodule Instream.ConnectionTest do
 
   @tag :unix_socket
   test "unix socket: ping connection" do
-    assert :pong == UnixSocketConnection.ping()
+    assert :pong = UnixSocketConnection.ping()
   end
 
   @tag :unix_socket
   test "unix socket: status connection" do
-    assert :ok == UnixSocketConnection.status()
+    assert :ok = UnixSocketConnection.status()
   end
 
   @tag :unix_socket
@@ -255,6 +255,6 @@ defmodule Instream.ConnectionTest do
     result_in = query_in |> UnixSocketConnection.query()
     result_out = query_out |> UnixSocketConnection.query(database: @database)
 
-    assert result_in == result_out
+    assert ^result_in = result_out
   end
 end

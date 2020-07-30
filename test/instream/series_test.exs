@@ -31,14 +31,8 @@ defmodule Instream.SeriesTest do
   end
 
   test "series default values" do
-    default = %DefaultValueSeries{}
-
-    assert default.tags.host == "www"
-    assert default.tags.host_id == 1
-    assert default.tags.cpu == nil
-
-    assert default.fields.high == nil
-    assert default.fields.low == 25
+    assert %{tags: %{host: "www", host_id: 1, cpu: nil}, fields: %{high: nil, low: 25}} =
+             %DefaultValueSeries{}
   end
 
   test "series metadata" do
@@ -57,12 +51,12 @@ defmodule Instream.SeriesTest do
     fields = struct.fields |> Map.from_struct() |> Map.keys()
     tags = struct.tags |> Map.from_struct() |> Map.keys()
 
-    assert mod == struct.__struct__
-    assert mod_fields == struct.fields.__struct__
-    assert mod_tags == struct.tags.__struct__
+    assert ^mod = struct.__struct__
+    assert ^mod_fields = struct.fields.__struct__
+    assert ^mod_tags = struct.tags.__struct__
 
-    assert fields == TestSeries.__meta__(:fields)
-    assert tags == TestSeries.__meta__(:tags)
+    assert ^fields = TestSeries.__meta__(:fields)
+    assert ^tags = TestSeries.__meta__(:tags)
   end
 
   test "extended series definition" do
@@ -110,12 +104,12 @@ defmodule Instream.SeriesTest do
       end
     end
 
-    assert database == ClosureDefinition.__meta__(:database)
-    assert database == ExternalDefinition.__meta__(:database)
-    assert database == InterpolatedDefinition.__meta__(:database)
+    assert ^database = ClosureDefinition.__meta__(:database)
+    assert ^database = ExternalDefinition.__meta__(:database)
+    assert ^database = InterpolatedDefinition.__meta__(:database)
 
-    assert measurement == ClosureDefinition.__meta__(:measurement)
-    assert measurement == ExternalDefinition.__meta__(:measurement)
-    assert measurement == InterpolatedDefinition.__meta__(:measurement)
+    assert ^measurement = ClosureDefinition.__meta__(:measurement)
+    assert ^measurement = ExternalDefinition.__meta__(:measurement)
+    assert ^measurement = InterpolatedDefinition.__meta__(:measurement)
   end
 end

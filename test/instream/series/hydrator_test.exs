@@ -21,17 +21,17 @@ defmodule Instream.Series.HydratorTest do
         timestamp: 1_439_587_926_000_000_000
       })
 
-    assert hydrated.fields.value == 666
-    assert hydrated.tags.foo == "hydrate_foo"
-    assert hydrated.timestamp == 1_439_587_926_000_000_000
+    assert %{
+             fields: %{value: 666},
+             tags: %{foo: "hydrate_foo"},
+             timestamp: 1_439_587_926_000_000_000
+           } = hydrated
   end
 
   test "hydrating from map (defaults)" do
     hydrated = TestSeries.from_map(%{})
 
-    assert hydrated.fields.value == 100
-    assert hydrated.tags.foo == "bar"
-    assert hydrated.timestamp == nil
+    assert %{fields: %{value: 100}, tags: %{foo: "bar"}, timestamp: nil} = hydrated
   end
 
   test "hydrating from map (unknown keys)" do
@@ -59,14 +59,17 @@ defmodule Instream.Series.HydratorTest do
         ]
       })
 
-    [first, second] = hydrated
-
-    assert first.fields.value == 200
-    assert first.tags.foo == "bar"
-    assert first.timestamp == 1_439_587_926_000_000_000
-
-    assert second.fields.value == 300
-    assert second.tags.foo == "bar"
-    assert second.timestamp == 1_439_587_927_000_000_000
+    assert [
+             %{
+               fields: %{value: 200},
+               tags: %{foo: "bar"},
+               timestamp: 1_439_587_926_000_000_000
+             },
+             %{
+               fields: %{value: 300},
+               tags: %{foo: "bar"},
+               timestamp: 1_439_587_927_000_000_000
+             }
+           ] = hydrated
   end
 end

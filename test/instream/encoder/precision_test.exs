@@ -31,12 +31,10 @@ defmodule Instream.Encoder.PrecisionTest do
           precision: precision
         )
 
-      resultlen =
-        time
-        |> Kernel.to_string()
-        |> String.length()
-
-      assert resultlen == timelen
+      assert ^timelen =
+               time
+               |> Kernel.to_string()
+               |> String.length()
     end)
   end
 
@@ -47,12 +45,11 @@ defmodule Instream.Encoder.PrecisionTest do
         precision: :rfc3339
       )
 
-    resultlen =
-      time
-      |> Kernel.to_string()
-      |> String.length()
+    assert 20 <=
+             time
+             |> Kernel.to_string()
+             |> String.length()
 
-    assert resultlen >= 20
     assert String.contains?(time, "Z")
   end
 end

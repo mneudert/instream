@@ -121,7 +121,7 @@ defmodule Instream.Log.DefaultLoggerTest do
 
   describe "passing [log: false]" do
     test "not logging ping requests" do
-      assert "" ==
+      assert "" =
                capture_log(fn ->
                  :pong = LogConnection.ping(log: false)
 
@@ -130,7 +130,7 @@ defmodule Instream.Log.DefaultLoggerTest do
     end
 
     test "not logging read request" do
-      assert "" ==
+      assert "" =
                capture_log(fn ->
                  query = "SELECT value FROM empty_measurement"
                  _ = LogConnection.query(query, log: false)

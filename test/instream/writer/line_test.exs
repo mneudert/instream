@@ -83,11 +83,11 @@ defmodule Instream.Writer.LineTest do
   end
 
   test "writing no points alway succeeds" do
-    assert :ok == DefaultConnection.write(%{points: []})
+    assert :ok = DefaultConnection.write(%{points: []})
   end
 
   test "writer protocol: Line" do
-    assert :ok ==
+    assert :ok =
              %{
                timestamp: 1_439_587_926,
                proto: "Line",
@@ -127,7 +127,7 @@ defmodule Instream.Writer.LineTest do
   end
 
   test "line protocol data encoding" do
-    assert :ok ==
+    assert :ok =
              %{
                binary: "binary",
                boolean: false,
@@ -167,7 +167,7 @@ defmodule Instream.Writer.LineTest do
   end
 
   test "protocol error decoding" do
-    assert :ok ==
+    assert :ok =
              %{binary: "binary"}
              |> ErrorsSeries.from_map()
              |> DefaultConnection.write()
@@ -207,7 +207,7 @@ defmodule Instream.Writer.LineTest do
   end
 
   test "line protocol batch series" do
-    assert :ok ==
+    assert :ok =
              [
                %{
                  timestamp: 1_439_587_926,
@@ -257,7 +257,7 @@ defmodule Instream.Writer.LineTest do
   end
 
   test "writing without all tags present" do
-    assert :ok ==
+    assert :ok =
              %{
                filled: "filled_tag",
                value: 100
@@ -288,7 +288,7 @@ defmodule Instream.Writer.LineTest do
   test "writing with passed database option" do
     database = "test_database"
 
-    assert :ok ==
+    assert :ok =
              %{value: 100}
              |> CustomDatabaseSeries.from_map()
              |> DefaultConnection.write(database: database)
@@ -315,7 +315,7 @@ defmodule Instream.Writer.LineTest do
         " DURATION 1w REPLICATION 1"
     )
 
-    assert :ok ==
+    assert :ok =
              %{proto: "ForRp", value: "Line"}
              |> ProtocolsSeries.from_map()
              |> DefaultConnection.write(retention_policy: "one_week")

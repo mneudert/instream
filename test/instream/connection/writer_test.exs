@@ -58,6 +58,6 @@ defmodule Instream.Connection.WriterTest do
       |> WriterSeries.from_map()
       |> WriterConnection.write()
 
-    assert "error has changed!" == error
+    assert "error has changed!" = error
   end
 end

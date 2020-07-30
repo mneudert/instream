@@ -19,7 +19,7 @@ defmodule Instream.Encoder.LineTest do
       }
     ]
 
-    assert expected == Line.encode(points)
+    assert ^expected = Line.encode(points)
   end
 
   test "with timestamp" do
@@ -35,7 +35,7 @@ defmodule Instream.Encoder.LineTest do
       }
     ]
 
-    assert expected == Line.encode(points)
+    assert ^expected = Line.encode(points)
   end
 
   test "with tags" do
@@ -55,7 +55,7 @@ defmodule Instream.Encoder.LineTest do
       }
     ]
 
-    assert expected == Line.encode(points)
+    assert ^expected = Line.encode(points)
   end
 
   test "with tags and timestamp" do
@@ -75,7 +75,7 @@ defmodule Instream.Encoder.LineTest do
       }
     ]
 
-    assert expected == Line.encode(points)
+    assert ^expected = Line.encode(points)
   end
 
   test "multiple fields" do
@@ -92,7 +92,7 @@ defmodule Instream.Encoder.LineTest do
       }
     ]
 
-    assert expected == Line.encode(points)
+    assert ^expected = Line.encode(points)
   end
 
   test "escaping commas and spaces" do
@@ -112,7 +112,7 @@ defmodule Instream.Encoder.LineTest do
       }
     ]
 
-    assert expected == Line.encode(points)
+    assert ^expected = Line.encode(points)
   end
 
   test "escaping equals signs" do
@@ -131,7 +131,7 @@ defmodule Instream.Encoder.LineTest do
       }
     ]
 
-    assert expected == Line.encode(points)
+    assert ^expected = Line.encode(points)
   end
 
   test "with backslash in tag value" do
@@ -150,7 +150,7 @@ defmodule Instream.Encoder.LineTest do
       }
     ]
 
-    assert expected == Line.encode(points)
+    assert ^expected = Line.encode(points)
   end
 
   test "escaping field key" do
@@ -168,7 +168,7 @@ defmodule Instream.Encoder.LineTest do
       }
     ]
 
-    assert expected == Line.encode(points)
+    assert ^expected = Line.encode(points)
   end
 
   test "showing all escaping and quoting together" do
@@ -188,7 +188,7 @@ defmodule Instream.Encoder.LineTest do
       }
     ]
 
-    assert expected == Line.encode(points)
+    assert ^expected = Line.encode(points)
   end
 
   test "multiple points" do
@@ -205,6 +205,6 @@ defmodule Instream.Encoder.LineTest do
       }
     ]
 
-    assert expected == Line.encode(points)
+    assert ^expected = Line.encode(points)
   end
 end

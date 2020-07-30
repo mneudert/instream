@@ -22,6 +22,6 @@ defmodule Instream.Connection.SupervisorTest do
     {:ok, _} = start_supervised(Initializer)
     {:ok, _} = start_supervised(InitializerConnection)
 
-    assert InitializerConnection == Initializer.get_init()
+    assert InitializerConnection = Initializer.get_init()
   end
 end
