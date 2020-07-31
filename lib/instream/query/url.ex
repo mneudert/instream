@@ -35,16 +35,13 @@ defmodule Instream.Query.URL do
   """
   @spec append_epoch(String.t(), Precision.t()) :: String.t()
   def append_epoch(url, nil), do: url
-
   def append_epoch(url, epoch), do: append_param(url, "epoch", Precision.encode(epoch))
 
   @doc """
   Appends a (json encoded) parameter map to a URL.
   """
   @spec append_json_params(String.t(), String.t()) :: String.t()
-  def append_json_params(url, json_params) do
-    url |> append_param("params", json_params)
-  end
+  def append_json_params(url, json_params), do: append_param(url, "params", json_params)
 
   @doc """
   Appends a precision value to a URL.
@@ -60,7 +57,6 @@ defmodule Instream.Query.URL do
   """
   @spec append_retention_policy(String.t(), String.t()) :: String.t()
   def append_retention_policy(url, nil), do: url
-
   def append_retention_policy(url, policy), do: append_param(url, "rp", policy)
 
   @doc """

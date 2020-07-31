@@ -101,13 +101,8 @@ defmodule Instream.Series do
         unquote(__MODULE__).__struct__(__MODULE__)
       ])
 
-      def from_map(data) do
-        Hydrator.from_map(__MODULE__, data)
-      end
-
-      def from_result(data) do
-        Hydrator.from_result(__MODULE__, data)
-      end
+      def from_map(data), do: Hydrator.from_map(__MODULE__, data)
+      def from_result(data), do: Hydrator.from_result(__MODULE__, data)
     end
   end
 
