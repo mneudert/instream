@@ -17,7 +17,8 @@ defmodule Instream.Encoder.Line do
   defp encode([], lines) do
     lines
     |> Enum.reverse()
-    |> Enum.join("\n")
+    |> Enum.intersperse("\n")
+    |> IO.iodata_to_binary()
   end
 
   defp encode([%{measurement: measurement} = point | points], lines) do
@@ -26,7 +27,6 @@ defmodule Instream.Encoder.Line do
       |> append_tags(point)
       |> append_fields(point)
       |> append_timestamp(point)
-      |> Enum.join()
 
     encode(points, [line | lines])
   end
@@ -58,7 +58,7 @@ defmodule Instream.Encoder.Line do
   defp append_tags(line, _), do: line
 
   defp append_timestamp(line, %{timestamp: nil}), do: line
-  defp append_timestamp(line, %{timestamp: ts}), do: [line, " ", ts]
+  defp append_timestamp(line, %{timestamp: ts}), do: [line, " ", Kernel.to_string(ts)]
   defp append_timestamp(line, _), do: line
 
   defp encode_value(i) when is_integer(i), do: [Integer.to_string(i), "i"]
@@ -67,11 +67,12 @@ defmodule Instream.Encoder.Line do
   defp encode_value(false), do: "false"
   defp encode_value(other), do: inspect(other)
 
-  defp encode_property(s) do
+  defp encode_property(s) when is_binary(s) do
     s
-    |> Kernel.to_string()
     |> String.replace(",", "\\,", global: true)
     |> String.replace(" ", "\\ ", global: true)
     |> String.replace("=", "\\=", global: true)
   end
+
+  defp encode_property(s), do: Kernel.to_string(s)
 end
