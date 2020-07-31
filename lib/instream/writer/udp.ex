@@ -7,8 +7,10 @@ defmodule Instream.Writer.UDP do
 
   @behaviour Instream.Writer
 
-  def write(%{payload: %{points: points}}, _opts, %{module: conn, udp_socket: udp_socket})
-      when is_list(points) and 0 < length(points) do
+  def write(%{payload: %{points: [_ | _] = points}}, _opts, %{
+        module: conn,
+        udp_socket: udp_socket
+      }) do
     config = conn.config()
     payload = Encoder.encode(points)
 
