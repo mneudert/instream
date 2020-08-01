@@ -39,5 +39,12 @@ defmodule Instream.Series.Hydrator do
 
   defp convert_to_timestamp(time) when is_integer(time), do: time
 
+  defp convert_to_timestamp(time) when is_binary(time) do
+    case DateTime.from_iso8601(time) do
+      {:ok, datetime, 0} -> DateTime.to_unix(datetime, :nanosecond)
+      _ -> nil
+    end
+  end
+
   defp convert_to_timestamp(_), do: nil
 end
