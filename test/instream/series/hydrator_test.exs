@@ -13,25 +13,29 @@ defmodule Instream.Series.HydratorTest do
     end
   end
 
-  test "hydrating from map" do
-    hydrated =
-      TestSeries.from_map(%{
-        foo: "hydrate_foo",
-        value: 666,
-        timestamp: 1_439_587_926_000_000_000
-      })
+  test "hydrating from map", %{test: test} do
+    val_field = System.unique_integer()
+    val_tag = Atom.to_string(test)
+    val_timestamp = System.unique_integer([:positive])
 
-    assert %{
-             fields: %{value: 666},
-             tags: %{foo: "hydrate_foo"},
-             timestamp: 1_439_587_926_000_000_000
-           } = hydrated
+    assert %TestSeries{
+             fields: %{value: ^val_field},
+             tags: %{foo: ^val_tag},
+             timestamp: ^val_timestamp
+           } =
+             TestSeries.from_map(%{
+               foo: val_tag,
+               value: val_field,
+               timestamp: val_timestamp
+             })
   end
 
   test "hydrating from map (defaults)" do
-    hydrated = TestSeries.from_map(%{})
-
-    assert %{fields: %{value: 100}, tags: %{foo: "bar"}, timestamp: nil} = hydrated
+    assert %TestSeries{
+             fields: %{value: 100},
+             tags: %{foo: "bar"},
+             timestamp: nil
+           } = TestSeries.from_map(%{})
   end
 
   test "hydrating from map (unknown keys)" do
@@ -42,34 +46,38 @@ defmodule Instream.Series.HydratorTest do
     refute Map.has_key?(hydrated.tags, :unknown)
   end
 
-  test "hydrating from query result" do
-    hydrated =
-      TestSeries.from_result(%{
-        results: [
-          %{
-            series: [
-              %{
-                columns: ["time", "value"],
-                name: "write_data_async",
-                tags: %{foo: "bar"},
-                values: [[1_439_587_926_000_000_000, 200], [1_439_587_927_000_000_000, 300]]
-              }
-            ]
-          }
-        ]
-      })
+  test "hydrating from query result", %{test: test} do
+    val_field_1 = System.unique_integer()
+    val_field_2 = System.unique_integer()
+    val_tag = Atom.to_string(test)
+    val_timestamp_1 = System.unique_integer([:positive])
+    val_timestamp_2 = System.unique_integer([:positive])
 
     assert [
-             %{
-               fields: %{value: 200},
-               tags: %{foo: "bar"},
-               timestamp: 1_439_587_926_000_000_000
+             %TestSeries{
+               fields: %{value: ^val_field_1},
+               tags: %{foo: ^val_tag},
+               timestamp: ^val_timestamp_1
              },
-             %{
-               fields: %{value: 300},
-               tags: %{foo: "bar"},
-               timestamp: 1_439_587_927_000_000_000
+             %TestSeries{
+               fields: %{value: ^val_field_2},
+               tags: %{foo: ^val_tag},
+               timestamp: ^val_timestamp_2
              }
-           ] = hydrated
+           ] =
+             TestSeries.from_result(%{
+               results: [
+                 %{
+                   series: [
+                     %{
+                       columns: ["time", "value"],
+                       name: "hydrator_test",
+                       tags: %{foo: val_tag},
+                       values: [[val_timestamp_1, val_field_1], [val_timestamp_2, val_field_2]]
+                     }
+                   ]
+                 }
+               ]
+             })
   end
 end
