@@ -3,7 +3,7 @@
 ## v1.0.0-dev
 
 - Enhancements
-    - Hydrating query results into series structs now parses RFC3339 times into `:nanosecond` timestamps. This looses precision down to the `:microsecond` level supported by `DateTime`!
+    - Hydrating query results into series structs now parses RFC3339 times into `:nanosecond` timestamps. If you are using `OTP 21.0` or later you will get the full precision, earlier versions are truncated to the `:microsecond` precision supported by `DateTime`!
     - Read queries (everything except writes) are now executed directly in the calling process
     - Sending asynchronous queries is now limited to write queries
 

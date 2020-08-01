@@ -17,9 +17,7 @@ defmodule Instream.Series.HydratorTest do
     val_field = System.unique_integer()
     val_tag = Atom.to_string(test)
 
-    # `DateTime` only supports :microsecond level precisions
-    val_timestamp = System.unique_integer([:positive]) * 10_000
-    val_datetime = val_timestamp |> DateTime.from_unix!(:nanosecond) |> DateTime.to_iso8601()
+    {val_timestamp, val_datetime} = create_test_time()
 
     expected = %TestSeries{
       fields: %TestSeries.Fields{value: val_field},
@@ -63,11 +61,8 @@ defmodule Instream.Series.HydratorTest do
     val_field_2 = System.unique_integer()
     val_tag = Atom.to_string(test)
 
-    # `DateTime` only supports :microsecond level precisions
-    val_timestamp_1 = System.unique_integer([:positive]) * 10_000
-    val_timestamp_2 = System.unique_integer([:positive]) * 10_000
-    val_datetime_1 = val_timestamp_1 |> DateTime.from_unix!(:nanosecond) |> DateTime.to_iso8601()
-    val_datetime_2 = val_timestamp_2 |> DateTime.from_unix!(:nanosecond) |> DateTime.to_iso8601()
+    {val_timestamp_1, val_datetime_1} = create_test_time()
+    {val_timestamp_2, val_datetime_2} = create_test_time()
 
     expected = [
       %TestSeries{
@@ -113,5 +108,27 @@ defmodule Instream.Series.HydratorTest do
                  }
                ]
              })
+  end
+
+  # `DateTime` only supports :microsecond level precisions
+  # OTP 21.0 is required for full precision
+  if Code.ensure_loaded?(:calendar) && function_exported?(:calendar, :system_time_to_rfc3339, 2) do
+    defp create_test_time do
+      timestamp = System.unique_integer([:positive])
+
+      {
+        timestamp,
+        timestamp |> :calendar.system_time_to_rfc3339(unit: :nanosecond) |> Kernel.to_string()
+      }
+    end
+  else
+    defp create_test_time do
+      timestamp = System.unique_integer([:positive]) * 10_000
+
+      {
+        timestamp,
+        timestamp |> DateTime.from_unix!(:nanosecond) |> DateTime.to_iso8601()
+      }
+    end
   end
 end
