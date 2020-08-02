@@ -25,6 +25,18 @@ defmodule Instream.AuthTest do
     assert %{results: _} = BasicAuthConnection.execute("SHOW DATABASES")
   end
 
+  test "default auth connection" do
+    defmodule DefaultAuthConnection do
+      use Instream.Connection,
+        config: [
+          auth: [username: "instream_test", password: "instream_test"],
+          loggers: []
+        ]
+    end
+
+    assert %{results: _} = DefaultAuthConnection.execute("SHOW DATABASES")
+  end
+
   test "query auth connection" do
     defmodule QueryAuthConnection do
       use Instream.Connection,
