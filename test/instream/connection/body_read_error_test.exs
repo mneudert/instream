@@ -51,7 +51,7 @@ defmodule Instream.Connection.BodyReadErrorTest do
     Application.put_env(:instream, RanchSocketConnection, socket_env)
 
     :ranch.start_listener(
-      :caylir_body_read_test,
+      :instream_body_read_test,
       :ranch_tcp,
       [port: 0, ip: {:local, socket}],
       SocketProtocol,
@@ -71,6 +71,6 @@ defmodule Instream.Connection.BodyReadErrorTest do
     assert {:error, :bad_request} =
              RanchSocketConnection.write(%{database: "ignored", points: [point]})
 
-    :ranch.stop_listener(:caylir_body_read_test)
+    :ranch.stop_listener(:instream_body_read_test)
   end
 end
