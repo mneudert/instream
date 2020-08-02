@@ -9,12 +9,8 @@ defmodule Instream.AuthTest do
         ]
     end
 
-    assert fn ->
-      "SHOW DATABASES"
-      |> AnonymousConnection.execute()
-      |> Map.get(:error)
-      |> String.contains?("Basic Auth")
-    end
+    assert %{error: "unable to parse authentication credentials"} =
+             AnonymousConnection.execute("SHOW DATABASES")
   end
 
   test "query auth connection" do
@@ -26,11 +22,7 @@ defmodule Instream.AuthTest do
         ]
     end
 
-    refute (fn ->
-              "SHOW DATABASES"
-              |> QueryAuthConnection.execute()
-              |> Map.has_key?(:error)
-            end).()
+    assert %{results: _} = QueryAuthConnection.execute("SHOW DATABASES")
   end
 
   test "invalid password" do
@@ -42,12 +34,8 @@ defmodule Instream.AuthTest do
         ]
     end
 
-    assert fn ->
-      "SHOW DATABASES"
-      |> AuthenticationFailedConnection.execute()
-      |> Map.get(:error)
-      |> String.contains?("authentication failed")
-    end
+    assert %{error: "authorization failed"} =
+             AuthenticationFailedConnection.execute("SHOW DATABASES")
   end
 
   test "user not found" do
@@ -59,11 +47,6 @@ defmodule Instream.AuthTest do
         ]
     end
 
-    assert fn ->
-      "SHOW DATABASES"
-      |> NotFoundConnection.execute()
-      |> Map.get(:error)
-      |> String.contains?("not found")
-    end
+    assert %{error: "authorization failed"} = NotFoundConnection.execute("SHOW DATABASES")
   end
 end
