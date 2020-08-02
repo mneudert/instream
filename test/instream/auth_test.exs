@@ -13,6 +13,18 @@ defmodule Instream.AuthTest do
              AnonymousConnection.execute("SHOW DATABASES")
   end
 
+  test "basic auth connection" do
+    defmodule BasicAuthConnection do
+      use Instream.Connection,
+        config: [
+          auth: [method: :basic, username: "instream_test", password: "instream_test"],
+          loggers: []
+        ]
+    end
+
+    assert %{results: _} = BasicAuthConnection.execute("SHOW DATABASES")
+  end
+
   test "query auth connection" do
     defmodule QueryAuthConnection do
       use Instream.Connection,
