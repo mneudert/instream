@@ -1,8 +1,6 @@
 defmodule Instream.Writer.LineTest do
   use ExUnit.Case, async: true
 
-  import Instream.TestHelpers.Retry
-
   alias Instream.TestHelpers.Connections.DefaultConnection
 
   defmodule BatchSeries do
@@ -87,115 +85,78 @@ defmodule Instream.Writer.LineTest do
   end
 
   test "writer protocol: Line" do
-    assert :ok =
-             %{
-               timestamp: 1_439_587_926,
-               proto: "Line",
-               value: "Line"
-             }
-             |> ProtocolsSeries.from_map()
-             |> DefaultConnection.write(precision: :second)
+    :ok =
+      %{
+        timestamp: 1_439_587_926,
+        proto: "Line",
+        value: "Line"
+      }
+      |> ProtocolsSeries.from_map()
+      |> DefaultConnection.write(precision: :second)
 
-    assert retry(
-             250,
-             25,
-             fn ->
-               DefaultConnection.query(
-                 "SELECT * FROM #{ProtocolsSeries.__meta__(:measurement)} WHERE proto='Line'",
-                 database: ProtocolsSeries.__meta__(:database),
-                 precision: :nanosecond
-               )
-             end,
-             fn
+    assert %{
+             results: [
                %{
-                 results: [
+                 series: [
                    %{
-                     series: [
-                       %{
-                         values: [[1_439_587_926_000_000_000, "Line", "Line"]]
-                       }
-                     ]
+                     values: [[1_439_587_926_000_000_000, "Line", "Line"]]
                    }
                  ]
-               } ->
-                 true
-
-               _ ->
-                 false
-             end
-           )
+               }
+             ]
+           } =
+             DefaultConnection.query(
+               "SELECT * FROM #{ProtocolsSeries.__meta__(:measurement)} WHERE proto='Line'",
+               database: ProtocolsSeries.__meta__(:database),
+               precision: :nanosecond
+             )
   end
 
   test "line protocol data encoding" do
-    assert :ok =
-             %{
-               binary: "binary",
-               boolean: false,
-               float: 1.1,
-               integer: 100
-             }
-             |> LineEncodingSeries.from_map()
-             |> DefaultConnection.write()
+    :ok =
+      %{
+        binary: "binary",
+        boolean: false,
+        float: 1.1,
+        integer: 100
+      }
+      |> LineEncodingSeries.from_map()
+      |> DefaultConnection.write()
 
-    assert retry(
-             1000,
-             25,
-             fn ->
-               DefaultConnection.query(
-                 "SELECT * FROM #{LineEncodingSeries.__meta__(:measurement)} GROUP BY *",
-                 database: LineEncodingSeries.__meta__(:database)
-               )
-             end,
-             fn
+    assert %{
+             results: [
                %{
-                 results: [
+                 series: [
                    %{
-                     series: [
-                       %{
-                         values: [[_, "binary", false, 1.1, 100]]
-                       }
-                     ]
+                     values: [[_, "binary", false, 1.1, 100]]
                    }
                  ]
-               } ->
-                 true
-
-               _ ->
-                 false
-             end
-           )
+               }
+             ]
+           } =
+             DefaultConnection.query(
+               "SELECT * FROM #{LineEncodingSeries.__meta__(:measurement)} GROUP BY *",
+               database: LineEncodingSeries.__meta__(:database)
+             )
   end
 
   test "protocol error decoding" do
-    assert :ok =
-             %{binary: "binary"}
-             |> ErrorsSeries.from_map()
-             |> DefaultConnection.write()
+    :ok =
+      %{binary: "binary"}
+      |> ErrorsSeries.from_map()
+      |> DefaultConnection.write()
 
-    # wait to ensure data was written
-    assert retry(
-             250,
-             25,
-             fn ->
-               DefaultConnection.query(
-                 "SELECT * FROM #{ErrorsSeries.__meta__(:measurement)}",
-                 database: ErrorsSeries.__meta__(:database)
-               )
-             end,
-             fn
+    assert %{
+             results: [
                %{
-                 results: [
-                   %{
-                     series: [_]
-                   }
-                 ]
-               } ->
-                 true
-
-               _ ->
-                 false
-             end
-           )
+                 series: [_]
+               }
+             ]
+           } =
+             DefaultConnection.query(
+               "SELECT * FROM #{ErrorsSeries.__meta__(:measurement)}",
+               database: ErrorsSeries.__meta__(:database)
+             )
 
     # make entry fail
     %{error: error} =
@@ -207,144 +168,105 @@ defmodule Instream.Writer.LineTest do
   end
 
   test "line protocol batch series" do
-    assert :ok =
-             [
-               %{
-                 timestamp: 1_439_587_926,
-                 scope: "inside",
-                 value: 1.23456
-               },
-               %{
-                 timestamp: 1_439_587_927,
-                 scope: "outside",
-                 value: 9.87654
-               }
-             ]
-             |> Enum.map(&BatchSeries.from_map/1)
-             |> DefaultConnection.write(precision: :second)
+    :ok =
+      [
+        %{
+          timestamp: 1_439_587_926,
+          scope: "inside",
+          value: 1.23456
+        },
+        %{
+          timestamp: 1_439_587_927,
+          scope: "outside",
+          value: 9.87654
+        }
+      ]
+      |> Enum.map(&BatchSeries.from_map/1)
+      |> DefaultConnection.write(precision: :second)
 
-    assert retry(
-             250,
-             25,
-             fn ->
-               DefaultConnection.query(
-                 "SELECT * FROM #{BatchSeries.__meta__(:measurement)}",
-                 database: BatchSeries.__meta__(:database)
-               )
-             end,
-             fn
+    assert %{
+             results: [
                %{
-                 results: [
+                 series: [
                    %{
-                     series: [
-                       %{
-                         columns: ["time", "scope", "value"],
-                         values: [
-                           ["2015-08-14T21:32:06Z", "inside", 1.23456],
-                           ["2015-08-14T21:32:07Z", "outside", 9.87654]
-                         ]
-                       }
+                     columns: ["time", "scope", "value"],
+                     values: [
+                       ["2015-08-14T21:32:06Z", "inside", 1.23456],
+                       ["2015-08-14T21:32:07Z", "outside", 9.87654]
                      ]
                    }
                  ]
-               } ->
-                 true
-
-               _ ->
-                 false
-             end
-           )
+               }
+             ]
+           } =
+             DefaultConnection.query(
+               "SELECT * FROM #{BatchSeries.__meta__(:measurement)}",
+               database: BatchSeries.__meta__(:database)
+             )
   end
 
   test "writing without all tags present" do
-    assert :ok =
-             %{
-               filled: "filled_tag",
-               value: 100
-             }
-             |> EmptyTagSeries.from_map()
-             |> DefaultConnection.write()
+    :ok =
+      %{
+        filled: "filled_tag",
+        value: 100
+      }
+      |> EmptyTagSeries.from_map()
+      |> DefaultConnection.write()
 
-    assert retry(
-             250,
-             25,
-             fn ->
-               DefaultConnection.query(
-                 "SELECT * FROM #{EmptyTagSeries.__meta__(:measurement)}",
-                 database: EmptyTagSeries.__meta__(:database)
-               )
-             end,
-             fn
-               %{results: [%{series: [%{columns: columns}]}]} ->
-                 Enum.member?(columns, "filled") && Enum.member?(columns, "defaulting") &&
-                   Enum.member?(columns, "value") && !Enum.member?(columns, "empty")
+    assert %{results: [%{series: [%{columns: columns}]}]} =
+             DefaultConnection.query(
+               "SELECT * FROM #{EmptyTagSeries.__meta__(:measurement)}",
+               database: EmptyTagSeries.__meta__(:database)
+             )
 
-               _ ->
-                 false
-             end
-           )
+    assert Enum.member?(columns, "filled")
+    assert Enum.member?(columns, "defaulting")
+    assert Enum.member?(columns, "value")
+    refute Enum.member?(columns, "empty")
   end
 
   test "writing with passed database option" do
     database = "test_database"
 
-    assert :ok =
-             %{value: 100}
-             |> CustomDatabaseSeries.from_map()
-             |> DefaultConnection.write(database: database)
+    :ok =
+      %{value: 100}
+      |> CustomDatabaseSeries.from_map()
+      |> DefaultConnection.write(database: database)
 
-    assert retry(
-             250,
-             25,
-             fn ->
-               DefaultConnection.query(
-                 "SELECT * FROM #{CustomDatabaseSeries.__meta__(:measurement)}",
-                 database: database
-               )
-             end,
-             fn
-               %{results: [%{series: [%{columns: columns}]}]} -> Enum.member?(columns, "value")
-               _ -> false
-             end
-           )
+    assert %{results: [%{series: [%{columns: columns}]}]} =
+             DefaultConnection.query(
+               "SELECT * FROM #{CustomDatabaseSeries.__meta__(:measurement)}",
+               database: database
+             )
+
+    assert Enum.member?(columns, "value")
   end
 
   test "writing with passed retention policy option" do
-    DefaultConnection.execute(
-      "CREATE RETENTION POLICY one_week ON test_database" <>
-        " DURATION 1w REPLICATION 1"
-    )
+    _ =
+      DefaultConnection.execute(
+        "CREATE RETENTION POLICY one_week ON test_database" <>
+          " DURATION 1w REPLICATION 1"
+      )
 
-    assert :ok =
-             %{proto: "ForRp", value: "Line"}
-             |> ProtocolsSeries.from_map()
-             |> DefaultConnection.write(retention_policy: "one_week")
+    :ok =
+      %{proto: "ForRp", value: "Line"}
+      |> ProtocolsSeries.from_map()
+      |> DefaultConnection.write(retention_policy: "one_week")
 
-    assert retry(
-             250,
-             25,
-             fn ->
-               [
-                 DefaultConnection.query(
-                   "SELECT * FROM writer_protocols WHERE proto='ForRp'",
-                   database: "test_database"
-                 ),
-                 DefaultConnection.query(
-                   ~s[SELECT * FROM "one_week"."writer_protocols" WHERE proto='ForRp'],
-                   database: "test_database"
-                 )
-               ]
-             end,
-             fn
-               [
-                 %{results: [should_not_be_in_default_rp]},
-                 %{results: [%{series: [%{values: [[_, "ForRp", "Line"]]}]}]}
-               ] ->
-                 !Map.has_key?(should_not_be_in_default_rp, :series)
+    assert %{results: [%{series: [%{values: [[_, "ForRp", "Line"]]}]}]} =
+             DefaultConnection.query(
+               ~s[SELECT * FROM "one_week"."writer_protocols" WHERE proto='ForRp'],
+               database: "test_database"
+             )
 
-               _ ->
-                 false
-             end
-           )
+    assert %{results: [should_not_be_in_default_rp]} =
+             DefaultConnection.query(
+               "SELECT * FROM writer_protocols WHERE proto='ForRp'",
+               database: "test_database"
+             )
+
+    refute Map.has_key?(should_not_be_in_default_rp, :series)
   end
 end

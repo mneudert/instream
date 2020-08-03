@@ -110,37 +110,27 @@ defmodule Instream.ConnectionTest do
   test "write data" do
     measurement = "write_data"
 
-    assert :ok =
-             %{
-               database: @database,
-               points: [
-                 %{
-                   measurement: measurement,
-                   tags: @tags,
-                   fields: %{value: 0.66}
-                 }
-               ]
-             }
-             |> DefaultConnection.write()
+    :ok =
+      %{
+        database: @database,
+        points: [
+          %{
+            measurement: measurement,
+            tags: @tags,
+            fields: %{value: 0.66}
+          }
+        ]
+      }
+      |> DefaultConnection.write()
 
-    assert retry(
-             250,
-             25,
-             fn ->
-               DefaultConnection.query(
-                 "SELECT * FROM #{measurement} GROUP BY *",
-                 database: @database
-               )
-             end,
-             fn
-               %{results: [%{series: [%{tags: values_tags, values: value_rows}]}]} ->
-                 assert @tags == values_tags
-                 assert 0 < length(value_rows)
+    assert %{results: [%{series: [%{tags: values_tags, values: value_rows}]}]} =
+             DefaultConnection.query(
+               "SELECT * FROM #{measurement} GROUP BY *",
+               database: @database
+             )
 
-               _ ->
-                 false
-             end
-           )
+    assert @tags == values_tags
+    assert 0 < length(value_rows)
   end
 
   test "write data async" do
@@ -180,33 +170,23 @@ defmodule Instream.ConnectionTest do
   end
 
   test "writing series struct" do
-    assert :ok =
-             %{
-               bar: "bar",
-               foo: "foo",
-               value: 17
-             }
-             |> TestSeries.from_map()
-             |> DefaultConnection.write()
+    :ok =
+      %{
+        bar: "bar",
+        foo: "foo",
+        value: 17
+      }
+      |> TestSeries.from_map()
+      |> DefaultConnection.write()
 
-    assert retry(
-             250,
-             25,
-             fn ->
-               DefaultConnection.query(
-                 "SELECT * FROM data_write_struct GROUP BY *",
-                 database: @database
-               )
-             end,
-             fn
-               %{results: [%{series: [%{tags: values_tags, values: value_rows}]}]} ->
-                 assert @tags == values_tags
-                 assert 0 < length(value_rows)
+    assert %{results: [%{series: [%{tags: values_tags, values: value_rows}]}]} =
+             DefaultConnection.query(
+               "SELECT * FROM data_write_struct GROUP BY *",
+               database: @database
+             )
 
-               _ ->
-                 false
-             end
-           )
+    assert @tags == values_tags
+    assert 0 < length(value_rows)
   end
 
   test "write data with missing privileges" do
