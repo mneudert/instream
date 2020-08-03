@@ -5,23 +5,15 @@ defmodule Instream.ResponseTest do
   alias Instream.TestHelpers.Connections.DefaultConnection
 
   test "response format: default (parsed)" do
-    response = DefaultConnection.execute("SHOW DATABASES")
-
-    assert is_map(response)
+    assert %{} = DefaultConnection.execute("SHOW DATABASES")
   end
 
   test "response format: csv" do
-    response = DefaultConnection.execute("SHOW DATABASES", result_as: :csv)
-
-    assert is_binary(response)
-    assert "name," <> _ = response
+    assert "name," <> _ = DefaultConnection.execute("SHOW DATABASES", result_as: :csv)
   end
 
   test "response format: raw" do
-    response = DefaultConnection.execute("SHOW DATABASES", result_as: :raw)
-
-    assert is_binary(response)
-    assert "{" <> _ = response
+    assert "{" <> _ = DefaultConnection.execute("SHOW DATABASES", result_as: :raw)
   end
 
   test "raw json error response" do

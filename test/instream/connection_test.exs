@@ -101,7 +101,6 @@ defmodule Instream.ConnectionTest do
 
     result = DefaultConnection.query(query, query_language: :flux)
 
-    assert is_binary(result)
     assert "#datatype," <> _ = result
 
     assert String.contains?(result, "flux,bar")
