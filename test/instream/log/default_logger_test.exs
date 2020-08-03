@@ -67,7 +67,7 @@ defmodule Instream.Log.DefaultLoggerTest do
 
     log =
       capture_log(fn ->
-        _ = LogConnection.query(query)
+        _ = LogConnection.query(query, method: :post)
 
         :timer.sleep(10)
       end)

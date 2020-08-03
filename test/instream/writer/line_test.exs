@@ -245,9 +245,9 @@ defmodule Instream.Writer.LineTest do
 
   test "writing with passed retention policy option" do
     _ =
-      DefaultConnection.execute(
-        "CREATE RETENTION POLICY one_week ON test_database" <>
-          " DURATION 1w REPLICATION 1"
+      DefaultConnection.query(
+        "CREATE RETENTION POLICY one_week ON test_database DURATION 1w REPLICATION 1",
+        method: :post
       )
 
     :ok =

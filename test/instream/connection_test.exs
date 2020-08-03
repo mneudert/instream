@@ -206,7 +206,7 @@ defmodule Instream.ConnectionTest do
   end
 
   test "privilege missing" do
-    %{error: error} = GuestConnection.execute("DROP DATABASE ignore")
+    %{error: error} = GuestConnection.query("DROP DATABASE ignore", method: :post)
 
     assert String.contains?(error, "requires admin privilege")
   end
