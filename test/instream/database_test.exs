@@ -5,7 +5,7 @@ defmodule Instream.DatabaseTest do
     use Instream.Database
 
     database do
-      name("test_database")
+      name "test_database"
     end
   end
 

@@ -3,6 +3,7 @@ export_locals_without_parens = [
   field: 1,
   field: 2,
   measurement: 1,
+  name: 1,
   tag: 1,
   tag: 2
 ]
