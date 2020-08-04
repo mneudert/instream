@@ -164,7 +164,7 @@ defmodule Instream.Connection do
   Executes a writing query.
 
   Passing `[async: true]` in the options always returns :ok
-  and execute the write in a background process.
+  and executes the write in a background process.
   """
   @callback write(payload :: map | [map], opts :: Keyword.t()) :: any
 end
