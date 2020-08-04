@@ -3,7 +3,7 @@ defmodule Instream.Connection.Supervisor do
 
   use Supervisor
 
-  alias Instream.Pool
+  alias Instream.Pool.Worker
 
   @doc false
   def start_link(conn, name) do
@@ -18,6 +18,18 @@ defmodule Instream.Connection.Supervisor do
         {mod, fun} -> apply(mod, fun, [conn])
       end
 
-    Supervisor.init([Pool.Spec.spec(conn)], strategy: :one_for_one)
+    Supervisor.init([pool_spec(conn)], strategy: :one_for_one)
+  end
+
+  defp pool_spec(conn) do
+    pool_name = Module.concat(conn, Pool)
+
+    pool_opts =
+      (conn.config([:pool]) || [])
+      |> Keyword.take([:size, :max_overflow])
+      |> Keyword.put(:name, {:local, pool_name})
+      |> Keyword.put(:worker_module, Worker)
+
+    :poolboy.child_spec(conn, pool_opts, module: conn)
   end
 end
