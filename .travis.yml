@@ -1,5 +1,6 @@
+os: linux
+dist: xenial
 language: elixir
-sudo: false
 
 cache:
   directories:
