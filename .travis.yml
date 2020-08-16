@@ -6,6 +6,7 @@ cache:
   directories:
     - _build
     - deps
+    - "${HOME}/go"
 
 jobs:
   include:
@@ -15,11 +16,14 @@ jobs:
       otp_release: 19.3
       env: PKG_MGMT=gdm VER_GO=1.9.2 VER_INFLUXDB=v1.4.3
       before_install: |-
+        export GOPATH="${HOME}/go"
+        export PATH="${GOPATH}/bin:${PATH}"
+
+        [ -x "${GOPATH}/bin/influxd" ] && exit 0
+
         eval "$(gimme ${VER_GO})"
 
         mkdir "${HOME}/go"
-        export GOPATH="${HOME}/go"
-        export PATH="${GOPATH}/bin:${PATH}"
 
         if [ 'dep' = "${PKG_MGMT}" ]; then
           go get github.com/golang/dep/cmd/dep
