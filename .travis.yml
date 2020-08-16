@@ -120,7 +120,7 @@ jobs:
     - <<: *test
       elixir: 1.10.4
       otp_release: 23.0
-      env: PKG_MGMT=mod VER_GO=1.13 VER_INFLUXDB=v1.8.1
+      env: PKG_MGMT=mod VER_GO=1.13 VER_INFLUXDB=v1.8.2
       after_success: mix coveralls.travis
 
     - stage: code quality
