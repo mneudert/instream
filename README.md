@@ -50,13 +50,6 @@ mix test --exclude udp
 
 ## Usage
 
-_Note:_ Most queries require a database to operate on. The following places will be searched (in order from top to bottom) for a configured database:
-
-1. `opts[:database]` parameter
-2. Series struct (if used)
-3. Connection configuration
-4. No database used!
-
 ### Connections
 
 Defining a connection requires defining a module:
@@ -307,6 +300,13 @@ MyApp.MyConnection.version("some.host.name")
 If the version if undetectable (no header returned) it will be reported as `"unknown"`. If the host is unreachable or an error occurred the response will be `:error`.
 
 ### Queries
+
+_Note:_ Most queries require a database to operate on. The following places will be searched (in order from top to bottom) for a configured database:
+
+1. `opts[:database]` parameter
+2. `Instream.Series` struct (if used)
+3. `Instream.Connection` configuration
+4. No database used!
 
 Write queries can be executed asynchronously by passing `[async: true]` to `MyApp.MyConnection.execute()`. The result will then always be an immediate `:ok` without waiting for the query to be actually executed.
 
