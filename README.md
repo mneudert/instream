@@ -52,7 +52,7 @@ mix test --exclude udp
 
 ### Connections
 
-Defining a connection requires defining a module:
+To connect to an InfluxDB server you need a connection module:
 
 ```elixir
 defmodule MyApp.MyConnection do
@@ -70,234 +70,16 @@ children = [
 ]
 ```
 
-#### Configuration (static)
+Example of the matching configuration entry:
 
-The most simple way is to use a completely static configuration:
-
-```elixir
+```
 config :my_app, MyApp.MyConnection,
   database:  "my_default_database",
   host: "localhost",
-  http_opts: [insecure: true, proxy: "http://company.proxy"],
-  pool: [max_overflow: 10, size: 50],
-  port: 8086,
-  scheme: "http",
-  writer: Instream.Writer.Line
+  port: 8086
 ```
 
-Please be aware that if you are using the scheme `"http+unix"` you need to encode the socket path yourself:
-
-```
-config :my_app, MyApp.MyConnection,
-  host: URI.encode_www_form("/path/to/influxdb.sock")
-```
-
-#### Configuration (dynamic)
-
-If you cannot, for whatever reason, use a static application config you can configure an initializer module that will be called every time your connection is started (or restarted) in your supervision tree:
-
-```elixir
-config :my_app, MyApp.MyConnection,
-  init: {MyInitModule, :my_init_fun}
-
-defmodule MyInitModule do
-  @spec my_init_fun(module) :: :ok
-  def my_init_fun(conn) do
-    config =
-      Keyword.merge(
-        conn.config(),
-        host: "localhost",
-        port: 64210
-      )
-
-    Application.put_env(:my_app, conn, config)
-  end
-end
-```
-
-When the connection is started the function will be called with the connection module as the first (and only) parameter. This will be done before the connection is available for use.
-
-The function is expected to always return `:ok`.
-
-#### Configuration (inline defaults)
-
-For some use cases (e.g. testing) it may be sufficient to define hardcoded configuration defaults outside of your application environment:
-
-```elixir
-defmodule MyApp.MyConnection do
-  use Instream.Connection,
-    otp_app: :my_app,
-    config: [
-      host: "localhost",
-      port: 8086
-    ]
-end
-```
-
-These values will be overwritten by and/or merged with the application environment values when the configuration is accessed.
-
-#### Runtime and Compile Time Configuration
-
-The full connection configuration is split into two parts, compile time and runtime configuration.
-
-Compile time configuration are, as the name implies, used during compilation for the connection module. Currently the only key in this category is `:loggers`.
-
-All other values are runtime configuration values that are directly accessed from the application environment using `Application.get_env(connection_otp_app, connection_module)` and therefore can be changed without recompilation:
-
-```elixir
-old_config = MyConnection.config()
-new_config = Keyword.put(old_config, :host, "changed.host")
-:ok = Application.put_env(:my_otp_app, MyConnection, new_config)
-```
-
-#### Default Connection Values
-
-The following values will be used as defaults if no other value is set:
-
-```elixir
-config :my_app, MyApp.MyConnection,
-  host: "localhost",
-  pool: [max_overflow: 10, size: 5],
-  port: 8086,
-  scheme: "http",
-  writer: Instream.Writer.Line,
-  json_decoder: {Jason, :decode!, [[keys: :atoms]]},
-  json_encoder: {Jason, :encode!, []}
-```
-
-This also means that per default the connection uses no authentication.
-
-#### HTTP Client Configuration
-
-Internally all requests are done using [`:hackney`](https://github.com/benoitc/hackney).
-
-The configuration key `:http_opts` is directly passed to the client process. Parts of it are also used internally by `:hackney` to control more generic behaviour (request pool to be used and it's configuration).
-
-Please see [`:hackney.request/5`](https://hexdocs.pm/hackney/hackney.html#request-5) for a complete list of available options.
-
-Setting the `:http_opts` key when calling a connection method allows usage of per-call options. The options are merged with the connection options and then passed on.
-
-#### JSON Configuration
-
-By default the library used for encoding/decoding JSON is `:poison`. For the time `:instream` directly depends on it to ensure it is available.
-
-If you want to use another library you can switch it:
-
-```elixir
-config :my_app, MyConnection,
-  json_decoder: MyJSONLibrary,
-  json_encoder: MyJSONLibrary
-
-config :my_app, MyConnection,
-  json_decoder: {MyJSONLibrary, :decode_argless},
-  json_encoder: {MyJSONLibrary, :decode_argless}
-
-config :my_app, MyConnection,
-  json_decoder: {MyJSONLibrary, :decode_it, [[keys: :atoms]]},
-  json_encoder: {MyJSONLibrary, :decode_it, []}
-```
-
-If you configure only a module name it will be called as `module.decode!(binary)` and `module.encode(map)`. When using a more complete `{m, f}` or `{m, f, a}` configuration the data to decode/encode will passed as the first argument with your configured extra arguments following.
-
-#### Authentication
-
-To connect to an InfluxDB instance with http authentication enabled you have to configure your credentials:
-
-```elixir
-config :my_app, MyApp.MyConnection,
-  auth: [method: :basic, username: "root", password: "root"]
-```
-
-For `method` you can choose between header authentication (basic auth) using `:basic` or query parameters using `:query`. If nothing or an invalid value is given the connection will be made using `:basic` authentication.
-
-#### Writer Configuration
-
-If you are using the regular line protocol writer `Instream.Writer.Line` you are done without having anything to configure. It is used by default and connects to the port you have configured for connection.
-
-To write points over UDP you can adjust your configuration:
-
-```elixir
-config :my_app, MyApp.MyConnection,
-  host: "localhost",
-  port_udp: 8089,
-  writer: Instream.Writer.UDP
-```
-
-The connection will then write using UDP and connecting to the port `:port_udp`. All non-write queries will be send to the regular `:port` you have configured.
-
-#### Logging
-
-All queries are (by default) logged using `Logger.debug/1` via the default logging module `Instream.Log.DefaultLogger`. To customize logging you have to alter the configuration of your connection:
-
-```elixir
-config :my_app, MyApp.MyConnection,
-  loggers: [
-    {FirstLogger, :log_fun, []},
-    {SecondLogger, :log_fun, [:additional, :args]}
-  ]
-```
-
-This configuration replaces the default logging module.
-
-Configuration is given as a tuple of `{module, function, arguments}`. The log entry will be inserted as the first argument of the method call. It will be one of `Instream.Log.PingEntry`, `Instream.Log.QueryEntry`, `Instream.Log.StatusEntry` or `Instream.Log.WriteEntry`, depending on what type of request should be logged.
-
-Please be aware that every logger has to return the entry it received in order to allow combining multiple loggers.
-
-In addition to query specific information every entry carries metadata around:
-
-- `:query_time`: milliseconds it took to send request and receive the response
-- `response_status`: status code or `0` if not applicable/available
-
-When using the default logger you have to re-configure `:logger` to be able to get them printed:
-
-```
-config :logger, :console,
-  format: "\n$time $metadata[$level] $levelpad$message\n",
-  metadata: [:application, :pid, :query_time, :response_status]
-```
-
-To prevent a query from logging you can pass an option to the execute call:
-
-```elixir
-MyApp.MyConnection.execute(query, log: false)
-
-# also works with convenience methods
-MyApp.MyConnection.ping(log: false)
-```
-
-#### Ping / Status / Version
-
-To validate a connection you can send ping requests to the server:
-
-```elixir
-MyApp.MyConnection.ping()
-```
-
-The response will be `:pong` on success or `:error` on any failure.
-
-To ping "a host other than the first in your configuration" you can pass it explicitly:
-
-```elixir
-MyApp.MyConnection.ping("some.host.name")
-```
-
-All values necessary to ping the host (scheme, port, ...) will be taken from the connection used. It does not matter whether the host is configured in that connection or not.
-
-To get InfluxDB to verify the status of your server you can send a status call:
-
-```elixir
-MyApp.MyConnection.status()
-MyApp.MyConnection.status("some.host.name")
-```
-
-If you are interested in the version of InfluxDB your server is reporting you can request it:
-
-```elixir
-MyApp.MyConnection.version()
-MyApp.MyConnection.version("some.host.name")
-```
-
-If the version if undetectable (no header returned) it will be reported as `"unknown"`. If the host is unreachable or an error occurred the response will be `:error`.
+More details on connections and configuration options can be found with the `Instream.Connection` module.
 
 ### Queries
 
