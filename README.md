@@ -83,33 +83,6 @@ More details on connections and configuration options can be found with the `Ins
 
 ### Queries
 
-_Note:_ Most queries require a database to operate on. The following places will be searched (in order from top to bottom) for a configured database:
-
-1. `opts[:database]` parameter
-2. `Instream.Series` struct (if used)
-3. `Instream.Connection` configuration
-4. No database used!
-
-Write queries can be executed asynchronously by passing `[async: true]` to `MyApp.MyConnection.execute()`. The result will then always be an immediate `:ok` without waiting for the query to be actually executed.
-
-By default the response of a query will be a map decoded from your server's JSON response.
-
-Alternatively you can pass `[result_as: format]` to `MyApp.MyConnection.execute/2` to change the result format to one of the following:
-
-- `:csv`  - CSV encoded response
-- `:json` - JSON encoded response (implicit default)
-- `:raw`  - Raw server format (JSON string)
-
-#### Query Language Selection
-
-If not otherwise specified all queries will be sent as `InfluxQL`. This can be changed to `Flux` by passing the option `[query_language: :flux]` to `MyApp.MyConnection.execute/2`
-
-#### Data Queries
-
-Please see the point "Series Definitions" on how to write data to your InfluxDB database.
-
-Reading data:
-
 ```elixir
 # passing database to execute/1
 "SELECT * FROM some_measurement"
@@ -128,49 +101,7 @@ Reading data:
 |> MyApp.MyConnection.query(params: %{field_param: "some_value"})
 ```
 
-#### POST Queries
-
-Some queries require you to switch from the regular `read only context` (all GET requets) to a `write context` (all POST requests).
-
-When not using the query build you have to pass that information manually to `execute/2`:
-
-```elixir
-"CREATE DATABASE create_in_write_mode"
-|> MyApp.MyConnection.execute(method: :post)
-```
-
-#### Query Timeout Configuration
-
-Using all default values and no specific parameters each query is allowed to take up to 5000 milliseconds (`GenServer.call/2` timeout) to complete. That may be too long or not long enough in some cases.
-
-To change that timeout you can configure your connection:
-
-```elixir
-# lowering timeout to 500 ms
-config :my_app,
-  MyApp.MyConnection,
-    query_timeout: 500
-```
-
-or pass an individual timeout for a single query:
-
-```elixir
-MyApp.MyConnection.execute(query, timeout: 250)
-```
-
-A passed or connection wide timeout configuration override any `:recv_timeout` of your `:hackney` (HTTP client) configuration.
-
-This does not apply to write requests. They are currently only affected by configured `:recv_timeout` values. Setting a connection timeout enables you to have a different timeout for read and write requests.
-
-For the underlying worker pool (only used for writes) you can define a separate timeout:
-
-```elixir
-config :my_app,
-  MyApp.MyConnection,
-    pool_timeout: 500
-```
-
-This configuration will be used to wait for an available worker to execute a query and defaults to `5_000`.
+A more detailed documentation on queries (reading/writing/options) is available in the main `Instream` module documentation.
 
 ## Series Definitions
 
