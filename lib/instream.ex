@@ -23,7 +23,7 @@ defmodule Instream do
   Example of the matching configuration entry:
 
       config :my_app, MyApp.MyConnection,
-        database:  "my_default_database",
+        database: "my_default_database",
         host: "localhost",
         port: 8086
 
@@ -63,21 +63,28 @@ defmodule Instream do
 
   ### Reading Data
 
-      # passing database to execute/1
-      "SELECT * FROM some_measurement"
-      |> MyApp.MyConnection.query(database: "my_database")
+      # passing database to query/2
+      MyApp.MyConnection.query(
+        "SELECT * FROM some_measurement",
+        database: "my_database"
+      )
 
       # defining database in the query
-      "SELECT * FROM \"my_database\".\"default\".\"some_measurement\""
-      |> MyApp.MyConnection.query()
+      MyApp.MyConnection.query(
+        "SELECT * FROM \"my_database\".\"default\".\"some_measurement\""
+      )
 
       # passing precision (= epoch) for query results
-      "SELECT * FROM some_measurement"
-      |> MyApp.MyConnection.query(precision: :minutes)
+      MyApp.MyConnection.query(
+        "SELECT * FROM some_measurement",
+        precision: :minutes
+      )
 
       # using parameter binding
-      "SELECT * FROM some_measurement WHERE field = $field_param"
-      |> MyApp.MyConnection.query(params: %{field_param: "some_value"})
+      MyApp.MyConnection.query(
+        "SELECT * FROM some_measurement WHERE field = $field_param",
+        params: %{field_param: "some_value"}
+      )
 
   ### POST Queries
 
@@ -87,8 +94,10 @@ defmodule Instream do
   When not using the query build you have to pass that information
   manually to `execute/2`:
 
-      "CREATE DATABASE create_in_write_mode"
-      |> MyApp.MyConnection.execute(method: :post)
+      MyApp.MyConnection.execute(
+        "CREATE DATABASE create_in_write_mode",
+        method: :post
+      )
 
   ### Query Timeout Configuration
 
@@ -102,13 +111,13 @@ defmodule Instream do
   A passed configuration will take precedence over the connection configuration.
 
   This does not apply to write requests. They are currently only affected by
-  configured `:recv_timeout` values. Setting a connection timeout enables you to have a different timeout for read and write requests.
+  configured `:recv_timeout` values. Setting a connection timeout enables you
+  to have a different timeout for read and write requests.
 
   Write queries are run through a process pool having an additional timeout:
 
-      config :my_app,
-        MyApp.MyConnection,
-          pool_timeout: 500
+      config :my_app, MyApp.MyConnection,
+        pool_timeout: 500
 
   This configuration will be used to wait for an available worker
   to execute a query and defaults to `5_000`.

@@ -9,7 +9,7 @@ defmodule Instream.Connection.Config do
   One way to configure your connection is using the application environment:
 
       config :my_app, MyApp.MyConnection,
-        database:  "my_default_database",
+        database: "my_default_database",
         host: "localhost",
         port: 8086
 

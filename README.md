@@ -74,7 +74,7 @@ Example of the matching configuration entry:
 
 ```
 config :my_app, MyApp.MyConnection,
-  database:  "my_default_database",
+  database: "my_default_database",
   host: "localhost",
   port: 8086
 ```
@@ -84,21 +84,28 @@ More details on connections and configuration options can be found with the `Ins
 ### Queries
 
 ```elixir
-# passing database to execute/1
-"SELECT * FROM some_measurement"
-|> MyApp.MyConnection.query(database: "my_database")
+# passing database to execute/2
+MyApp.MyConnection.query(
+  "SELECT * FROM some_measurement",
+  database: "my_database"
+)
 
 # defining database in the query
-"SELECT * FROM \"my_database\".\"default\".\"some_measurement\""
-|> MyApp.MyConnection.query()
+MyApp.MyConnection.query(
+  "SELECT * FROM \"my_database\".\"default\".\"some_measurement\""
+)
 
 # passing precision (= epoch) for query results
-"SELECT * FROM some_measurement"
-|> MyApp.MyConnection.query(precision: :minutes)
+MyApp.MyConnection.query(
+  "SELECT * FROM some_measurement",
+  precision: :minutes
+)
 
 # using parameter binding
-"SELECT * FROM some_measurement WHERE field = $field_param"
-|> MyApp.MyConnection.query(params: %{field_param: "some_value"})
+MyApp.MyConnection.query(
+  "SELECT * FROM some_measurement WHERE field = $field_param",
+  params: %{field_param: "some_value"}
+)
 ```
 
 A more detailed documentation on queries (reading/writing/options) is available in the main `Instream` module documentation.
@@ -112,7 +119,7 @@ defmodule MySeries do
   use Instream.Series
 
   series do
-    database    "my_database"
+    database "my_database"
     measurement "my_measurement"
 
     tag :bar
@@ -212,24 +219,23 @@ _Note:_ While it is possible to write multiple points a once it is currently not
 When not using Series Definitions raw points can be written using a map like this:
 
 ```elixir
-%{
+MyApp.MyConnection.write(%{
   points: [
     %{
-      database: "my_database", # Can be omitted, so default is used.
+      database: "my_database",
       measurement: "my_measurement",
       fields: %{answer: 42, value: 1},
       tags: %{foo: "bar"},
-      timestamp: 1439587926000000000 # Nanosecond unix timestamp with default precision, can be omitted.
+      timestamp: 1439587926000000000
     },
     # more points possible ...
   ],
-  database: "my_database", # Can be omitted, so default is used.
-}
-|> MyApp.MyConnection.write()
+  database: "my_database"
+})
 ```
 
 * The field `timestamp` can be omitted, so InfluxDB will use the receive time.
-* The field `database` can be used to write to a custom database. 
+* The field `database` can be used to write to a custom database.
 
 Please be aware that only the database from the first point will be used when writing multiple points.
 
