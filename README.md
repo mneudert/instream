@@ -143,7 +143,9 @@ MySeries.from_map(%{
 |> MySeries.from_result()
 ```
 
-The timestamp itself is kept "as is". There is (at the moment) no automatic conversion done between to ensure a consistent precisions. This should be done beforehand or kept in mind when writing a hydrated point.
+The timestamp itself is kept "as is" for integer values, timestamps in RFC3339 format (e.g. `"1970-01-01T01:00:00.000+01:00"`) will be converted to `:nanosecond` integer values.
+
+Please be aware that when using an `OTP` release prior to `21.0` the time will be truncated to `:microsecond` precision due to `:calendar.rfc3339_to_system_time/2` not being available and `DateTime.from_iso8601/1` only supporting microseconds.
 
 ### Writing Series Points
 
