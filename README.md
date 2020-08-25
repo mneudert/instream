@@ -125,7 +125,7 @@ end
 
 More information about series definitions can be found in the module documentation of `Instream.Series`.
 
-### Series Hydration (Experimental)
+### Series Hydration
 
 Whenever you want to convert a plain map or a query result into a specific series you can use the builtin hydration methods:
 
