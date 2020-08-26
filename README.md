@@ -132,28 +132,6 @@ end
 
 More information about series definitions can be found in the module documentation of `Instream.Series`.
 
-### Series Hydration
-
-Whenever you want to convert a plain map or a query result into a specific series you can use the builtin hydration methods:
-
-```elixir
-# plain map
-MySeries.from_map(%{
-  timestamp: 1234567890,
-  some_tag: "hydrate",
-  some_field: 123
-})
-
-# query result
-"SELECT * FROM \"my_measurement\""
-|> MyConnection.query()
-|> MySeries.from_result()
-```
-
-The timestamp itself is kept "as is" for integer values, timestamps in RFC3339 format (e.g. `"1970-01-01T01:00:00.000+01:00"`) will be converted to `:nanosecond` integer values.
-
-Please be aware that when using an `OTP` release prior to `21.0` the time will be truncated to `:microsecond` precision due to `:calendar.rfc3339_to_system_time/2` not being available and `DateTime.from_iso8601/1` only supporting microseconds.
-
 ### Writing Series Points
 
 You can then use this module to assemble a data point (one at a time) for writing:

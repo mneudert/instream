@@ -43,6 +43,30 @@ defmodule Instream.Series do
       }
 
   `:timestamp` is expected to be a unix nanosecond timestamp.
+
+  ## Series Hydration
+
+  Whenever you want to convert a plain map or a query result into a specific
+  series you can use the built-in hydration methods:
+
+      MySeries.from_map(%{
+        timestamp: 1234567890,
+        some_tag: "hydrate",
+        some_field: 123
+      })
+
+      "SELECT * FROM \"my_measurement\""
+      |> MyConnection.query()
+      |> MySeries.from_result()
+
+  The timestamp itself is kept "as is" for integer values, timestamps in
+  RFC3339 format (e.g. `"1970-01-01T01:00:00.000+01:00"`) will be converted
+  to `:nanosecond` integer values.
+
+  Please be aware that when using an `OTP` release prior to `21.0` the time
+  will be truncated to `:microsecond` precision due to
+  `:calendar.rfc3339_to_system_time/2` not being available and
+  `DateTime.from_iso8601/1` only supporting microseconds.
   """
 
   alias Instream.Series.Hydrator
