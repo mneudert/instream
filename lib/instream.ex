@@ -121,5 +121,63 @@ defmodule Instream do
 
   This configuration will be used to wait for an available worker
   to execute a query and defaults to `5_000`.
+
+  ## Writing Points
+
+  Writing data to your InfluxDB server can be done via
+  `Instream.Series` modules or using raw maps.
+
+  ### Writing Points using Series
+
+  Each series in your database is represented by a definition module:
+
+      defmodule MySeries do
+        use Instream.Series
+
+        series do
+          database "my_database"
+          measurement "my_measurement"
+
+          tag :bar
+          tag :foo
+
+          field :value
+        end
+      end
+
+  Using this definition you can use the generated struct to create
+  a data point and write it to your database:
+
+      MyConnection.write(%MySeries{
+        fields: %MySeries.Fields{value: 17},
+        tags: %MySeries.Tags{bar: "bar", foo: "foo"}
+      })
+
+  More information about series definitions can be found in the
+  module documentation of `Instream.Series`.
+
+  ### Writing Points using Plain Maps
+
+  As an alternative you can use a non-struct map to write points to a database:
+
+      MyConnection.write(%{
+        points: [
+          %{
+            database: "my_database",
+            measurement: "my_measurement",
+            fields: %{answer: 42, value: 1},
+            tags: %{foo: "bar"},
+            timestamp: 1439587926000000000
+          },
+          # more points possible ...
+        ],
+        database: "my_database"
+      })
+
+  * The field `timestamp` can be omitted, so InfluxDB will use the receive time.
+  * The field `database` can be used to write to a custom database.
+
+  Please be aware that only the database from the first point
+  will be used when writing multiple points.
   """
 end
