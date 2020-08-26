@@ -8,7 +8,7 @@ defmodule Instream.Connection.Config do
 
   One way to configure your connection is using the application environment:
 
-      config :my_app, MyApp.MyConnection,
+      config :my_app, MyConnection,
         database: "my_default_database",
         host: "localhost",
         port: 8086
@@ -16,7 +16,7 @@ defmodule Instream.Connection.Config do
   Please be aware that if you are using the scheme `"http+unix"` you need to
   encode the socket path yourself:
 
-      config :my_app, MyApp.MyConnection,
+      config :my_app, MyConnection,
         host: URI.encode_www_form("/path/to/influxdb.sock")
 
   ### Dynamic Configuration
@@ -25,7 +25,7 @@ defmodule Instream.Connection.Config do
   can configure an initializer module that will be called every time your
   connection is started (or restarted) in your supervision tree:
 
-      config :my_app, MyApp.MyConnection,
+      config :my_app, MyConnection,
         init: {MyInitModule, :my_init_fun}
 
       defmodule MyInitModule do
@@ -53,7 +53,7 @@ defmodule Instream.Connection.Config do
   For some use cases (e.g. testing) it may be sufficient to define hardcoded
   configuration defaults outside of your application environment:
 
-      defmodule MyApp.MyConnection do
+      defmodule MyConnection do
         use Instream.Connection,
           otp_app: :my_app,
           config: [
@@ -86,7 +86,7 @@ defmodule Instream.Connection.Config do
 
   The following values will be used as defaults if no other value is set:
 
-      config :my_app, MyApp.MyConnection,
+      config :my_app, MyConnection,
         host: "localhost",
         pool: [max_overflow: 10, size: 5],
         port: 8086,
@@ -140,7 +140,7 @@ defmodule Instream.Connection.Config do
   To connect to an InfluxDB instance with http authentication enabled you
   have to configure your credentials:
 
-      config :my_app, MyApp.MyConnection,
+      config :my_app, MyConnection,
         auth: [method: :basic, username: "root", password: "root"]
 
   For `method` you can choose between header authentication (basic auth) using
@@ -155,7 +155,7 @@ defmodule Instream.Connection.Config do
 
   To write points over UDP you can adjust your configuration:
 
-      config :my_app, MyApp.MyConnection,
+      config :my_app, MyConnection,
         host: "localhost",
         port_udp: 8089,
         writer: Instream.Writer.UDP
@@ -170,7 +170,7 @@ defmodule Instream.Connection.Config do
   logging module `Instream.Log.DefaultLogger`. To customize logging you have
   to alter the configuration of your connection:
 
-      config :my_app, MyApp.MyConnection,
+      config :my_app, MyConnection,
         loggers: [
           {FirstLogger, :log_fun, []},
           {SecondLogger, :log_fun, [:additional, :args]}
@@ -201,10 +201,10 @@ defmodule Instream.Connection.Config do
 
   To prevent a query from logging you can pass an option to the execute call:
 
-      MyApp.MyConnection.execute(query, log: false)
+      MyConnection.execute(query, log: false)
 
       # also works with convenience methods
-      MyApp.MyConnection.ping(log: false)
+      MyConnection.ping(log: false)
   """
 
   @compile_time_keys [:loggers]

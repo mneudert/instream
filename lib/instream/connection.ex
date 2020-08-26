@@ -30,14 +30,14 @@ defmodule Instream.Connection do
 
   To validate a connection you can send ping requests to the server:
 
-      MyApp.MyConnection.ping()
+      MyConnection.ping()
 
   The response will be `:pong` on success or `:error` on any failure.
 
   To ping "a host other than the first in your configuration"
   you can pass it explicitly:
 
-      MyApp.MyConnection.ping("some.host.name")
+      MyConnection.ping("some.host.name")
 
   All values necessary to ping the host (scheme, port, ...) will be
   taken from the connection used. It does not matter whether the host
@@ -45,14 +45,14 @@ defmodule Instream.Connection do
 
   To get InfluxDB to verify the status of your server you can send a status call:
 
-      MyApp.MyConnection.status()
-      MyApp.MyConnection.status("some.host.name")
+      MyConnection.status()
+      MyConnection.status("some.host.name")
 
   If you are interested in the version of InfluxDB your server is
   reporting you can request it:
 
-      MyApp.MyConnection.version()
-      MyApp.MyConnection.version("some.host.name")
+      MyConnection.version()
+      MyConnection.version("some.host.name")
 
   If the version if undetectable (no header returned) it will be
   reported as `"unknown"`. If the host is unreachable or an error occurred

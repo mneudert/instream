@@ -55,7 +55,7 @@ mix test --exclude udp
 To connect to an InfluxDB server you need a connection module:
 
 ```elixir
-defmodule MyApp.MyConnection do
+defmodule MyConnection do
   use Instream.Connection, otp_app: :my_app
 end
 ```
@@ -65,7 +65,7 @@ The `:otp_app` name and the name of the module can be freely chosen but have to 
 ```elixir
 children = [
   # ...
-  MyApp.Connection,
+  MyConnection,
   # ...
 ]
 ```
@@ -73,7 +73,7 @@ children = [
 Example of the matching configuration entry:
 
 ```
-config :my_app, MyApp.MyConnection,
+config :my_app, MyConnection,
   database: "my_default_database",
   host: "localhost",
   port: 8086
@@ -85,24 +85,24 @@ More details on connections and configuration options can be found with the `Ins
 
 ```elixir
 # passing database to execute/2
-MyApp.MyConnection.query(
+MyConnection.query(
   "SELECT * FROM some_measurement",
   database: "my_database"
 )
 
 # defining database in the query
-MyApp.MyConnection.query(
+MyConnection.query(
   "SELECT * FROM \"my_database\".\"default\".\"some_measurement\""
 )
 
 # passing precision (= epoch) for query results
-MyApp.MyConnection.query(
+MyConnection.query(
   "SELECT * FROM some_measurement",
   precision: :minutes
 )
 
 # using parameter binding
-MyApp.MyConnection.query(
+MyConnection.query(
   "SELECT * FROM some_measurement WHERE field = $field_param",
   params: %{field_param: "some_value"}
 )
@@ -167,16 +167,16 @@ data = %{data | tags: %{data.tags | bar: "bar", foo: "foo"}}
 And then write one or many at once:
 
 ```elixir
-MyApp.MyConnection.write(data)
+MyConnection.write(data)
 
 # write the point asynchronously
-MyApp.MyConnection.write(data, async: true)
+MyConnection.write(data, async: true)
 
 # write to a specific database
-MyApp.MyConnection.write(data, database: "my_database")
+MyConnection.write(data, database: "my_database")
 
 # write multiple points at once
-MyApp.MyConnection.write([point_1, point_2, point_3])
+MyConnection.write([point_1, point_2, point_3])
 ```
 
 If you want to pass an explicit timestamp to the database you can use the key `:timestamp`:
@@ -192,13 +192,13 @@ The timestamp is (by default) expected to be a nanosecond unix timestamp. To use
 data = %MySeries{}
 data = %{data | timestamp: 1439587926}
 
-MyApp.MyConnection.write(data, async: true, precision: :second)
+MyConnection.write(data, async: true, precision: :second)
 ```
 
 If you want to specify the target retention policy name for the write, you can do so like this (line protocol only!):
 
 ```elixir
-MyApp.MyConnection.write(data, retention_policy: "two_weeks")
+MyConnection.write(data, retention_policy: "two_weeks")
 ```
 
 Supported precision types are:
@@ -219,7 +219,7 @@ _Note:_ While it is possible to write multiple points a once it is currently not
 When not using Series Definitions raw points can be written using a map like this:
 
 ```elixir
-MyApp.MyConnection.write(%{
+MyConnection.write(%{
   points: [
     %{
       database: "my_database",
