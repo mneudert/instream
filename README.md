@@ -165,12 +165,6 @@ data = %{data | timestamp: 1439587926}
 MyConnection.write(data, precision: :second)
 ```
 
-If you want to specify the target retention policy name for the write, you can do so like this (line protocol only!):
-
-```elixir
-MyConnection.write(data, retention_policy: "two_weeks")
-```
-
 Supported precision types are:
 
 - `:hour`
