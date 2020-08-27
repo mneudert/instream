@@ -145,15 +145,7 @@ data = %{data | tags: %{data.tags | bar: "bar", foo: "foo"}}
 And then write one or many at once:
 
 ```elixir
-MyConnection.write(data)
-
-# write the point asynchronously
-MyConnection.write(data, async: true)
-
-# write to a specific database
-MyConnection.write(data, database: "my_database")
-
-# write multiple points at once
+MyConnection.write(point)
 MyConnection.write([point_1, point_2, point_3])
 ```
 
@@ -170,7 +162,7 @@ The timestamp is (by default) expected to be a nanosecond unix timestamp. To use
 data = %MySeries{}
 data = %{data | timestamp: 1439587926}
 
-MyConnection.write(data, async: true, precision: :second)
+MyConnection.write(data, precision: :second)
 ```
 
 If you want to specify the target retention policy name for the write, you can do so like this (line protocol only!):

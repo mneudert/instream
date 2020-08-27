@@ -127,6 +127,9 @@ defmodule Instream do
   Writing data to your InfluxDB server can be done via
   `Instream.Series` modules or using raw maps.
 
+  Please also refer to `Instream.Connection.write/2` for an overview
+  of additional options you can use when writing data.
+
   ### Writing Points using Series
 
   Each series in your database is represented by a definition module:

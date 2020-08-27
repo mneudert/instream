@@ -195,8 +195,10 @@ defmodule Instream.Connection do
   @doc """
   Executes a writing query.
 
-  Passing `[async: true]` in the options always returns :ok
-  and executes the write in a background process.
+  Options:
+
+  - `async`: pass `true` to execute the write asynchronously
+  - `database`: write data to a database differing from the point database
   """
   @callback write(payload :: map | [map], opts :: Keyword.t()) :: any
 end
