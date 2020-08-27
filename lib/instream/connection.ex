@@ -67,6 +67,8 @@ defmodule Instream.Connection do
           | Log.QueryEntry.t()
           | Log.StatusEntry.t()
           | Log.WriteEntry.t()
+  @type precision ::
+          :hour | :minute | :second | :millisecond | :microsecond | :nanosecond | :rfc3339
   @type query_type :: Query.t() | String.t()
 
   defmacro __using__(opts) do
@@ -174,7 +176,7 @@ defmodule Instream.Connection do
   Options:
 
   - `method`: whether to use a "GET" or "POST" request (as atom)
-  - `precision`: see `Instream.Encoder.Precision` for available values
+  - `precision`: return data with a "precision" other than `:rfc3339`
   """
   @callback query(query :: String.t(), opts :: Keyword.t()) :: any
 

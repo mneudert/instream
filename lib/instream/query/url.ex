@@ -1,7 +1,7 @@
 defmodule Instream.Query.URL do
   @moduledoc false
 
-  alias Instream.Encoder.Precision
+  alias Instream.Connection
 
   @doc """
   Appends authentication credentials to a URL.
@@ -33,9 +33,9 @@ defmodule Instream.Query.URL do
 
   The allowed values are identical to the precision parameters of write queries.
   """
-  @spec append_epoch(String.t(), Precision.t()) :: String.t()
+  @spec append_epoch(String.t(), Connection.precision()) :: String.t()
   def append_epoch(url, nil), do: url
-  def append_epoch(url, epoch), do: append_param(url, "epoch", Precision.encode(epoch))
+  def append_epoch(url, epoch), do: append_param(url, "epoch", encode_precision(epoch))
 
   @doc """
   Appends a (json encoded) parameter map to a URL.
@@ -46,11 +46,11 @@ defmodule Instream.Query.URL do
   @doc """
   Appends a precision value to a URL.
   """
-  @spec append_precision(String.t(), Precision.t()) :: String.t()
+  @spec append_precision(String.t(), Connection.precision()) :: String.t()
   def append_precision(url, nil), do: url
 
   def append_precision(url, precision),
-    do: append_param(url, "precision", Precision.encode(precision))
+    do: append_param(url, "precision", encode_precision(precision))
 
   @doc """
   Appends a retention policy to a URL.
@@ -121,6 +121,14 @@ defmodule Instream.Query.URL do
 
     "#{url}#{glue}#{param}"
   end
+
+  defp encode_precision(:hour), do: "h"
+  defp encode_precision(:minute), do: "m"
+  defp encode_precision(:second), do: "s"
+  defp encode_precision(:millisecond), do: "ms"
+  defp encode_precision(:microsecond), do: "u"
+  defp encode_precision(:nanosecond), do: "ns"
+  defp encode_precision(:rfc3339), do: ""
 
   defp url(config, endpoint) do
     [
