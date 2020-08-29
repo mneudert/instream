@@ -149,35 +149,6 @@ MyConnection.write(point)
 MyConnection.write([point_1, point_2, point_3])
 ```
 
-If you want to pass an explicit timestamp to the database you can use the key `:timestamp`:
-
-```elixir
-data = %MySeries{}
-data = %{data | timestamp: 1439587926000000000}
-```
-
-The timestamp is (by default) expected to be a nanosecond unix timestamp. To use different precision (for all points in this write operation!) you can change this value by modifying your write call:
-
-```elixir
-data = %MySeries{}
-data = %{data | timestamp: 1439587926}
-
-MyConnection.write(data, precision: :second)
-```
-
-Supported precision types are:
-
-- `:hour`
-- `:minute`
-- `:second`
-- `:millisecond`
-- `:microsecond`
-- `:nanosecond`
-
-Please be aware that the UDP protocol writer does not support custom timestamp precisions. All UDP timestamps are implicitly expected to already be at nanosecond precision.
-
-_Note:_ While it is possible to write multiple points a once it is currently not supported to write them to individual databases. The first point written defines the database, other values are silently ignored!
-
 ## License
 
 [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0)
