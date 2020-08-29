@@ -55,7 +55,7 @@ defmodule Instream.Series do
         some_field: 123
       })
 
-      "SELECT * FROM \"my_measurement\""
+      ~S("SELECT * FROM "my_measurement")
       |> MyConnection.query()
       |> MySeries.from_result()
 

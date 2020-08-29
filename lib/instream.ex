@@ -70,9 +70,9 @@ defmodule Instream do
       )
 
       # defining database in the query
-      MyApp.MyConnection.query(
-        "SELECT * FROM \"my_database\".\"default\".\"some_measurement\""
-      )
+      MyApp.MyConnection.query(~S(
+        SELECT * FROM "my_database"."default"."some_measurement"
+      ))
 
       # passing precision (= epoch) for query results
       MyApp.MyConnection.query(

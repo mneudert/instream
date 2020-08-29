@@ -91,9 +91,9 @@ MyConnection.query(
 )
 
 # defining database in the query
-MyConnection.query(
-  "SELECT * FROM \"my_database\".\"default\".\"some_measurement\""
-)
+MyConnection.query(~S(
+  SELECT * FROM "my_database"."default"."some_measurement"
+))
 
 # passing precision (= epoch) for query results
 MyConnection.query(
