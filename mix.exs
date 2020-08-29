@@ -66,8 +66,7 @@ defmodule Instream.MixProject do
 
   defp docs do
     [
-      extras: ["CHANGELOG.md", "README.md"],
-      main: "readme",
+      main: "Instream",
       source_ref: "master",
       source_url: @url_github
     ]
