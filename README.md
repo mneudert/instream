@@ -6,8 +6,6 @@
 
 InfluxDB driver for Elixir
 
-__Note__: If you are reading this on [GitHub](https://github.com/mneudert/instream) then the information in this file may be out of sync with the [Hex package](https://hex.pm/packages/instream). If you are using this library through Hex please refer to the appropriate documentation on [HexDocs](https://hexdocs.pm/instream).
-
 ## InfluxDB Support
 
 Tested InfluxDB versions:
