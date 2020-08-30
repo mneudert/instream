@@ -82,7 +82,7 @@ More details on connections and configuration options can be found with the `Ins
 ### Queries
 
 ```elixir
-# passing database to execute/2
+# passing database to query/2
 MyConnection.query(
   "SELECT * FROM some_measurement",
   database: "my_database"

@@ -190,7 +190,7 @@ defmodule Instream.Connection.Config do
   In addition to query specific information every entry carries metadata around:
 
   - `:query_time`: milliseconds it took to send request and receive the response
-  - `response_status`: status code or `0` if not applicable/available
+  - `:response_status`: status code or `0` if not applicable/available
 
   When using the default logger you have to re-configure `:logger` to be
   able to get them printed:
