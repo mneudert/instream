@@ -59,20 +59,27 @@ defmodule Instream.Encoder.Line do
   defp append_tags(line, _), do: line
 
   defp append_timestamp(line, %{timestamp: nil}), do: line
-  defp append_timestamp(line, %{timestamp: ts}), do: [line, " ", Kernel.to_string(ts)]
+
+  defp append_timestamp(line, %{timestamp: ts}) when is_integer(ts),
+    do: [line, " ", Integer.to_string(ts)]
+
+  defp append_timestamp(line, %{timestamp: ts}) when is_binary(ts), do: [line, " ", ts]
   defp append_timestamp(line, _), do: line
 
   defp encode_value(i) when is_integer(i), do: [Integer.to_string(i), "i"]
-  defp encode_value(s) when is_binary(s), do: ["\"", String.replace(s, "\"", "\\\""), "\""]
+
+  defp encode_value(s) when is_binary(s),
+    do: ["\"", :binary.replace(s, "\"", "\\\"", [:global]), "\""]
+
   defp encode_value(true), do: "true"
   defp encode_value(false), do: "false"
   defp encode_value(other), do: inspect(other)
 
   defp encode_property(s) when is_binary(s) do
     s
-    |> String.replace(",", "\\,", global: true)
-    |> String.replace(" ", "\\ ", global: true)
-    |> String.replace("=", "\\=", global: true)
+    |> :binary.replace(",", "\\,", [:global])
+    |> :binary.replace(" ", "\\ ", [:global])
+    |> :binary.replace("=", "\\=", [:global])
   end
 
   defp encode_property(s), do: Kernel.to_string(s)
