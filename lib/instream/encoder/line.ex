@@ -14,13 +14,6 @@ defmodule Instream.Encoder.Line do
   @spec encode([point_map()]) :: binary
   def encode(points), do: encode(points, [])
 
-  defp encode([], lines) do
-    lines
-    |> Enum.reverse()
-    |> Enum.intersperse("\n")
-    |> IO.iodata_to_binary()
-  end
-
   defp encode([%{measurement: measurement} = point | points], lines) do
     line =
       [encode_property(measurement)]
@@ -28,8 +21,16 @@ defmodule Instream.Encoder.Line do
       |> append_fields(point)
       |> append_timestamp(point)
 
-    encode(points, [line | lines])
+    encode(points, ["\n", line | lines])
   end
+
+  defp encode([], ["\n" | lines]) do
+    lines
+    |> Enum.reverse()
+    |> IO.iodata_to_binary()
+  end
+
+  defp encode([], []), do: ""
 
   defp append_fields(line, %{fields: fields}) do
     fields
