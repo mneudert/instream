@@ -199,12 +199,10 @@ defmodule Instream.Connection.Config do
         format: "\n$time $metadata[$level] $levelpad$message\n",
         metadata: [:application, :pid, :query_time, :response_status]
 
-  To prevent a query from logging you can pass an option to the execute call:
+  To prevent a query from logging you can pass an option:
 
-      MyConnection.execute(query, log: false)
-
-      # also works with convenience methods
       MyConnection.ping(log: false)
+      MyConnection.query(query, log: false)
   """
 
   @compile_time_keys [:loggers]
