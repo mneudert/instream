@@ -6,6 +6,7 @@
     - Hydrating query results into series structs now parses RFC3339 times into `:nanosecond` timestamps. If you are using `OTP 21.0` or later you will get the full precision, earlier versions are truncated to the `:microsecond` precision supported by `DateTime`!
     - Read queries (everything except writes) are now executed directly in the calling process
     - Sending asynchronous queries is now limited to write queries
+    - Writers can modify the worker state during `init` and `terminate` by implementing the callbacks `init_worker/1` and `terminate_worker/1`
 
 - Backwards incompatible changes
     - All "administrative query modules" have been removed

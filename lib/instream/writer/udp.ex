@@ -7,6 +7,14 @@ defmodule Instream.Writer.UDP do
 
   @behaviour Instream.Writer
 
+  def init_worker(state) do
+    {:ok, socket} = :gen_udp.open(0, [:binary, {:active, false}])
+
+    Map.put(state, :udp_socket, socket)
+  end
+
+  def terminate_worker(%{udp_socket: socket}), do: :gen_udp.close(socket)
+
   def write(%{payload: %{points: [_ | _] = points}}, _opts, %{
         module: conn,
         udp_socket: udp_socket

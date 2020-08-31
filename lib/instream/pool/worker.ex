@@ -13,12 +13,16 @@ defmodule Instream.Pool.Worker do
   end
 
   def init(module: conn) do
-    state = %{module: conn}
+    writer = conn.config([:writer])
 
-    case conn.config([:writer]) do
-      Instream.Writer.UDP -> {:ok, connect_udp(state)}
-      _ -> {:ok, state}
-    end
+    state =
+      if Code.ensure_loaded?(writer) and function_exported?(writer, :init_worker, 1) do
+        writer.init_worker(%{module: conn})
+      else
+        %{module: conn}
+      end
+
+    {:ok, state}
   end
 
   def handle_call({:execute, %Query{type: :write} = query, opts}, _from, state) do
@@ -33,16 +37,13 @@ defmodule Instream.Pool.Worker do
     {:noreply, state}
   end
 
-  def terminate(_reason, state) do
-    case Map.get(state, :udp_socket) do
-      nil -> :ok
-      socket -> :gen_udp.close(socket)
+  def terminate(_reason, %{module: conn} = state) do
+    writer = conn.config([:writer])
+
+    if Code.ensure_loaded?(writer) and function_exported?(writer, :init_worker, 1) do
+      writer.terminate_worker(state)
+    else
+      :ok
     end
-  end
-
-  defp connect_udp(state) do
-    {:ok, socket} = :gen_udp.open(0, [:binary, {:active, false}])
-
-    Map.put(state, :udp_socket, socket)
   end
 end
