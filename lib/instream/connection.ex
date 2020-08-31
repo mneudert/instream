@@ -5,7 +5,7 @@ defmodule Instream.Connection do
   ## Connection Definition
 
       defmodule MyConnection do
-        use Instream.Connection, otp_app: :my_application
+        use Instream.Connection, otp_app: :my_app
       end
 
   This connection will fetch it's configuration from the application environment
