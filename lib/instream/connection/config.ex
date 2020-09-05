@@ -80,7 +80,7 @@ defmodule Instream.Connection.Config do
 
       old_config = MyConnection.config()
       new_config = Keyword.put(old_config, :host, "changed.host")
-      :ok = Application.put_env(:my_otp_app, MyConnection, new_config)
+      :ok = Application.put_env(:my_app, MyConnection, new_config)
 
   ## Configuration Defaults
 
