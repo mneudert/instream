@@ -1,6 +1,6 @@
 # Changelog
 
-## v1.0.0-dev
+## v1.0.0 (2020-09-06)
 
 - Enhancements
     - Documentation is now available inline (`@moduledoc`, ...) with the `README.md` file targeting the repository (development) instead of releases

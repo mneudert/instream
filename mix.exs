@@ -7,7 +7,7 @@ defmodule Instream.MixProject do
     [
       app: :instream,
       name: "Instream",
-      version: "1.0.0-dev",
+      version: "1.0.0",
       elixir: "~> 1.7",
       aliases: aliases(),
       deps: deps(),
@@ -67,7 +67,7 @@ defmodule Instream.MixProject do
   defp docs do
     [
       main: "Instream",
-      source_ref: "master",
+      source_ref: "v1.0.0",
       source_url: @url_github
     ]
   end
