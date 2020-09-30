@@ -16,13 +16,13 @@ jobs:
       otp_release: 19.3
       env: VER_INFLUXDB=1.4.3
       before_install: |-
-        [ -x "${HOME}/bin/influxd" ] && exit 0
+        if [ ! -x "${HOME}/bin/influxd" ]; then
+          mkdir -p "${HOME}/bin"
 
-        mkdir -p "${HOME}/bin"
-
-        wget "https://dl.influxdata.com/influxdb/releases/influxdb-${VER_INFLUXDB}_linux_amd64.tar.gz"
-        tar -xzf  "influxdb-${VER_INFLUXDB}_linux_amd64.tar.gz"
-        find influxdb-* -name influxd -type f -exec mv {} "${HOME}/bin" \;
+          wget "https://dl.influxdata.com/influxdb/releases/influxdb-${VER_INFLUXDB}_linux_amd64.tar.gz"
+          tar -xzf  "influxdb-${VER_INFLUXDB}_linux_amd64.tar.gz"
+          find influxdb-* -name influxd -type f -exec mv {} "${HOME}/bin" \;
+        fi
       before_script: |-
         export INFLUXDB_SOCKET="$(pwd)/influxdb.sock"
 
