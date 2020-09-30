@@ -6,7 +6,7 @@ cache:
   directories:
     - _build
     - deps
-    - "${HOME}/go"
+    - "${HOME}/bin"
 
 jobs:
   include:
@@ -14,54 +14,22 @@ jobs:
       stage: test
       elixir: 1.7.4
       otp_release: 19.3
-      env: PKG_MGMT=gdm VER_GO=1.9.2 VER_INFLUXDB=v1.4.3
+      env: VER_INFLUXDB=1.4.3
       before_install: |-
-        export GOPATH="${HOME}/go"
-        export PATH="${GOPATH}/bin:${PATH}"
+        [ -x "${HOME}/bin/influxd" ] && exit 0
 
-        [ -x "${GOPATH}/bin/influxd" ] && exit 0
+        mkdir -p "${HOME}/bin"
 
-        eval "$(gimme ${VER_GO})"
-
-        mkdir "${HOME}/go"
-
-        if [ 'dep' = "${PKG_MGMT}" ]; then
-          go get github.com/golang/dep/cmd/dep
-        else
-          go get github.com/sparrc/gdm
-        fi
-
-        mkdir -p "${GOPATH}/src/github.com/influxdata"
-
-        pushd "${GOPATH}/src/github.com/influxdata"
-          wget "https://github.com/influxdata/influxdb/archive/${VER_INFLUXDB}.tar.gz" -O influxdb.tar.gz && tar -xf influxdb.tar.gz
-          find . -maxdepth 1 -type d -name 'influxdb*' -exec mv {} influxdb \;
-
-          pushd influxdb
-            git init .
-
-            if [ 'mod' = "${PKG_MGMT}" ]; then
-              go mod vendor
-            elif [ 'dep' = "${PKG_MGMT}" ]; then
-              dep ensure
-            else
-              gdm restore
-            fi
-
-            go clean ./...
-
-            sed -i -e "s/version = \"unknown\"/version = \"${VER_INFLUXDB//v}\"/g" cmd/influxd/main.go
-
-            go install ./...
-          popd
-        popd
+        wget "https://dl.influxdata.com/influxdb/releases/influxdb-${VER_INFLUXDB}_linux_amd64.tar.gz"
+        tar -xzf  "influxdb-${VER_INFLUXDB}_linux_amd64.tar.gz"
+        find influxdb-* -name influxd -type f -exec mv {} "${HOME}/bin" \;
       before_script: |-
         export INFLUXDB_SOCKET="$(pwd)/influxdb.sock"
 
         influxd config > ./influxdb.conf
 
         function start_influxdb {
-          nohup "${GOPATH}/bin/influxd" \
+          nohup "${HOME}/bin/influxd" \
               -pidfile ./influxdb.pid \
               -config ./influxdb.conf \
           >>./influxdb.stdout 2>>./influxdb.stderr &
@@ -112,19 +80,19 @@ jobs:
     - <<: *test
       elixir: 1.8.2
       otp_release: 20.3
-      env: PKG_MGMT=gdm VER_GO=1.9.2 VER_INFLUXDB=v1.5.5
+      env: VER_INFLUXDB=1.5.5
     - <<: *test
       elixir: 1.9.4
       otp_release: 21.3
-      env: PKG_MGMT=dep VER_GO=1.9.2 VER_INFLUXDB=v1.6.6
+      env: VER_INFLUXDB=1.6.6
     - <<: *test
       elixir: 1.10.4
       otp_release: 22.3
-      env: PKG_MGMT=dep VER_GO=1.12 VER_INFLUXDB=v1.7.10
+      env: VER_INFLUXDB=1.7.10
     - <<: *test
       elixir: 1.10.4
       otp_release: 23.0
-      env: PKG_MGMT=mod VER_GO=1.13 VER_INFLUXDB=v1.8.2
+      env: VER_INFLUXDB=1.8.2
       after_success: mix coveralls.travis
 
     - stage: code quality
