@@ -92,7 +92,7 @@ jobs:
     - <<: *test
       elixir: 1.10.4
       otp_release: 23.0
-      env: VER_INFLUXDB=1.8.2
+      env: VER_INFLUXDB=1.8.3
       after_success: mix coveralls.travis
 
     - stage: code quality

@@ -14,7 +14,7 @@ Tested InfluxDB versions:
 - `1.5.5`
 - `1.6.6`
 - `1.7.10`
-- `1.8.2`
+- `1.8.3`
 
 (see [`.travis.yml`](https://github.com/mneudert/instream/blob/master/.travis.yml) to be sure)
 
