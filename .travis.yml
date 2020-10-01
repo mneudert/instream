@@ -8,13 +8,22 @@ cache:
     - deps
     - "${HOME}/bin"
 
+env:
+  - CAN_FAIL=false
+
 jobs:
+  allow_failures:
+    env:
+      - CAN_FAIL=true
+      - VER_INFLUXDB=2.0.0-rc.0
+
   include:
     - &test
       stage: test
       elixir: 1.7.4
       otp_release: 19.3
-      env: VER_INFLUXDB=1.4.3
+      env:
+        - VER_INFLUXDB=1.4.3
       before_install: |-
         if [ ! -x "${HOME}/bin/influxd" ]; then
           mkdir -p "${HOME}/bin"
@@ -80,19 +89,23 @@ jobs:
     - <<: *test
       elixir: 1.8.2
       otp_release: 20.3
-      env: VER_INFLUXDB=1.5.5
+      env:
+        - VER_INFLUXDB=1.5.5
     - <<: *test
       elixir: 1.9.4
       otp_release: 21.3
-      env: VER_INFLUXDB=1.6.6
+      env:
+        - VER_INFLUXDB=1.6.6
     - <<: *test
       elixir: 1.10.4
       otp_release: 22.3
-      env: VER_INFLUXDB=1.7.10
+      env:
+        - VER_INFLUXDB=1.7.10
     - <<: *test
       elixir: 1.10.4
       otp_release: 23.0
-      env: VER_INFLUXDB=1.8.3
+      env:
+        - VER_INFLUXDB=1.8.3
       after_success: mix coveralls.travis
 
     - stage: code quality
@@ -101,3 +114,29 @@ jobs:
       script:
         - mix format --check-formatted
         - mix credo --strict
+
+    - <<: *test
+      stage: influxdb2
+      elixir: 1.10.4
+      otp_release: 23.0
+      env:
+        - CAN_FAIL=true
+        - VER_INFLUXDB=2.0.0-rc.0
+      before_script: |-
+        function start_influxdb {
+          nohup "${HOME}/bin/influxd" \
+          >>./influxdb.stdout 2>>./influxdb.stderr &
+
+          until curl -s -o /dev/null 'http://localhost:8086' 2>/dev/null; do
+            sleep 1
+          done
+        }
+
+        start_influxdb
+      script: mix test --trace
+      after_failure: |-
+        echo '==> stdout <=='
+        cat ./influxdb.stdout
+        echo '==> stderr <=='
+        cat ./influxdb.stderr
+      after_script: ps | grep 'influxd' | grep -v 'grep' | awk '{ print $1 }' | xargs kill
