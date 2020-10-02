@@ -133,7 +133,7 @@ jobs:
         }
 
         start_influxdb
-      script: mix test --trace
+      script: mix test --trace --exclude udp
       after_failure: |-
         echo '==> stdout <=='
         cat ./influxdb.stdout
