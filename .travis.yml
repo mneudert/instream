@@ -15,7 +15,7 @@ jobs:
   allow_failures:
     env:
       - CAN_FAIL=true
-      - VER_INFLUXDB=2.0.0-rc.1
+      - VER_INFLUXDB=2.0.0-rc.2
 
   include:
     - &test
@@ -121,7 +121,7 @@ jobs:
       otp_release: 23.0
       env:
         - CAN_FAIL=true
-        - VER_INFLUXDB=2.0.0-rc.1
+        - VER_INFLUXDB=2.0.0-rc.2
       before_script: |-
         function start_influxdb {
           nohup "${HOME}/bin/influxd" \
