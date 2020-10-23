@@ -102,14 +102,14 @@ jobs:
       env:
         - VER_INFLUXDB=1.7.10
     - <<: *test
-      elixir: 1.11.0
+      elixir: 1.11.1
       otp_release: 23.0
       env:
         - VER_INFLUXDB=1.8.3
       after_success: mix coveralls.travis
 
     - stage: code quality
-      elixir: 1.11.0
+      elixir: 1.11.1
       otp_release: 23.0
       script:
         - mix format --check-formatted
@@ -117,7 +117,7 @@ jobs:
 
     - <<: *test
       stage: influxdb2
-      elixir: 1.11.0
+      elixir: 1.11.1
       otp_release: 23.0
       env:
         - CAN_FAIL=true
