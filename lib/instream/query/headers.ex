@@ -22,6 +22,9 @@ defmodule Instream.Query.Headers do
       iex> assemble_auth(method: :query)
       []
 
+      iex> assemble_auth(method: :token, token: "my-token")
+      [{"Authorization", "Token my-token"}]
+
       iex> assemble_auth(username: "user")
       []
       iex> assemble_auth(password: "pass")
@@ -36,6 +39,7 @@ defmodule Instream.Query.Headers do
   def assemble_auth(auth) do
     case auth[:method] do
       :query -> []
+      :token -> [{"Authorization", "Token #{auth[:token]}"}]
       _ -> basic_auth_header(auth[:username], auth[:password])
     end
   end
