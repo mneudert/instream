@@ -16,6 +16,7 @@ jobs:
     env:
       - CAN_FAIL=true
       - VER_INFLUXDB=2.0.0-rc.2
+      - INFLUX_TOKEN=instream_test
 
   include:
     - &test
@@ -122,6 +123,7 @@ jobs:
       env:
         - CAN_FAIL=true
         - VER_INFLUXDB=2.0.0-rc.2
+        - INFLUX_TOKEN=instream_test
       before_script: |-
         function start_influxdb {
           nohup "${HOME}/bin/influxd" \
@@ -133,6 +135,7 @@ jobs:
         }
 
         start_influxdb
+        curl -XPOST http://localhost:8086/api/v2/setup -H 'accept: application/json' -d "{\"username\": \"instream_test\", \"password\": \"instream_test\", \"org\": \"instream_test\", \"bucket\": \"instream_test\", \"token\": \"${INFLUX_TOKEN}\"}" -s -o /dev/null
       script: mix test --trace --exclude udp
       after_failure: |-
         echo '==> stdout <=='
