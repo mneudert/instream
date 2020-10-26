@@ -41,9 +41,12 @@ config =
 # configure InfluxDB v2 authorization token
 :ok =
   case System.get_env("INFLUX_TOKEN") do
-    nil -> :ok
+    nil ->
+      :ok
+
     token ->
-      token_env = :instream
+      token_env =
+        :instream
         |> Application.get_env(Connections.DefaultConnection)
         |> Keyword.put(:auth, method: :token, token: token)
 
