@@ -96,6 +96,7 @@ defmodule Instream.Connection do
           end
         end)
 
+      @doc false
       def __log__(entry), do: unquote(loggers)
 
       def child_spec(_ \\ []) do
@@ -138,11 +139,6 @@ defmodule Instream.Connection do
       end
     end
   end
-
-  @doc """
-  Sends a log entry to all configured loggers.
-  """
-  @callback __log__(log_entry) :: log_entry
 
   @doc """
   Returns a supervisable connection child_spec.
