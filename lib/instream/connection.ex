@@ -15,6 +15,7 @@ defmodule Instream.Connection do
       defmodule MyConnection do
         use Instream.Connection,
           config: [
+            version: :v1,
             host: "influxdb.example.com",
             scheme: "http"
           ]
@@ -25,6 +26,12 @@ defmodule Instream.Connection do
 
   For more information on how to configure your connection please refer to
   the documentation of `Instream.Connection.Config`.
+
+  ### InfluxDB version
+
+  By default a connection module will expect to communicate with an
+  `InfluxDB 1.x` server (`version: :v1`). Configure `version: :v2` if you
+  are running an `InfluxDB 2.x` server.
 
   ## Ping / Status / Version
 
@@ -70,6 +77,8 @@ defmodule Instream.Connection do
   @type precision ::
           :hour | :minute | :second | :millisecond | :microsecond | :nanosecond | :rfc3339
   @type query_type :: Query.t() | String.t()
+
+  @type e_version_mismatch :: {:error, :version_mismatch}
 
   defmacro __using__(opts) do
     quote bind_quoted: [opts: opts] do
@@ -164,7 +173,7 @@ defmodule Instream.Connection do
   Only the connection details (scheme, port, ...) will be used to determine
   the exact url to send the ping request to.
   """
-  @callback ping(host :: String.t(), opts :: Keyword.t()) :: :pong | :error
+  @callback ping(host :: String.t(), opts :: Keyword.t()) :: :pong | :error | e_version_mismatch
 
   @doc """
   Executes a reading query.
@@ -179,7 +188,7 @@ defmodule Instream.Connection do
   @doc """
   Checks the status of a connection.
   """
-  @callback status(opts :: Keyword.t()) :: :ok | :error
+  @callback status(opts :: Keyword.t()) :: :ok | :error | e_version_mismatch
 
   @doc """
   Determines the version of an InfluxDB host.
@@ -188,7 +197,8 @@ defmodule Instream.Connection do
   `X-Influxdb-Version` header. If the header is missing the version will be
   returned as `"unknown"`.
   """
-  @callback version(host :: String.t(), opts :: Keyword.t()) :: String.t() | :error
+  @callback version(host :: String.t(), opts :: Keyword.t()) ::
+              String.t() | :error | e_version_mismatch
 
   @doc """
   Executes a writing query.

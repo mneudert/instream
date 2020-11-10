@@ -87,6 +87,7 @@ defmodule Instream.Connection.Config do
   The following values will be used as defaults if no other value is set:
 
       config :my_app, MyConnection,
+        version: :v1,
         host: "localhost",
         pool: [max_overflow: 10, size: 5],
         port: 8086,
@@ -96,6 +97,15 @@ defmodule Instream.Connection.Config do
         json_encoder: {Jason, :encode!, []}
 
   This also means that per default the connection uses no authentication.
+
+  ## InfluxDB Version Configuration
+
+  By default (`version: :v1`) the communication will be done with the
+  expectation of an `InfluxDB 1.x` server responding. If you are communicating
+  with an `InfluxDB 2.x` server please configure `version: :v2`.
+
+  Any methods not supported by your configured version will respond with a
+  special error tuple `{:error, :version_mismatch}` when called.
 
   ## HTTP Client Configuration
 
