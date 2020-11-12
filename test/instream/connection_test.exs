@@ -4,6 +4,7 @@ defmodule Instream.ConnectionTest do
   import Instream.TestHelpers.Retry
 
   alias Instream.TestHelpers.Connections.DefaultConnection
+  alias Instream.TestHelpers.Connections.DefaultConnectionV2
   alias Instream.TestHelpers.Connections.GuestConnection
   alias Instream.TestHelpers.Connections.UnixSocketConnection
 
@@ -34,6 +35,12 @@ defmodule Instream.ConnectionTest do
 
   test "version connection" do
     assert is_binary(DefaultConnection.version())
+  end
+
+  test "mismatched InfluxDB version" do
+    assert {:error, :version_mismatch} = DefaultConnectionV2.ping()
+    assert {:error, :version_mismatch} = DefaultConnectionV2.status()
+    assert {:error, :version_mismatch} = DefaultConnectionV2.version()
   end
 
   test "read from empty measurement" do

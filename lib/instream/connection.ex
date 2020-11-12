@@ -123,20 +123,32 @@ defmodule Instream.Connection do
 
       def ping(opts) when is_list(opts), do: ping(nil, opts)
 
-      def ping(host \\ nil, opts \\ []),
-        do: execute(%Query{type: :ping, opts: [host: host]}, opts)
+      def ping(host \\ nil, opts \\ []) do
+        case config([:version]) do
+          :v2 -> {:error, :version_mismatch}
+          _ -> execute(%Query{type: :ping, opts: [host: host]}, opts)
+        end
+      end
 
       def query(query, opts \\ []), do: execute(query, opts)
 
       def status(opts) when is_list(opts), do: status(nil, opts)
 
-      def status(host \\ nil, opts \\ []),
-        do: execute(%Query{type: :status, opts: [host: host]}, opts)
+      def status(host \\ nil, opts \\ []) do
+        case config([:version]) do
+          :v2 -> {:error, :version_mismatch}
+          _ -> execute(%Query{type: :status, opts: [host: host]}, opts)
+        end
+      end
 
       def version(opts) when is_list(opts), do: version(nil, opts)
 
-      def version(host \\ nil, opts \\ []),
-        do: execute(%Query{type: :version, opts: [host: host]}, opts)
+      def version(host \\ nil, opts \\ []) do
+        case config([:version]) do
+          :v2 -> {:error, :version_mismatch}
+          _ -> execute(%Query{type: :version, opts: [host: host]}, opts)
+        end
+      end
 
       def write(payload, opts \\ []) do
         database = Data.Write.determine_database(payload, opts)

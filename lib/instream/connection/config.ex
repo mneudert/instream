@@ -221,6 +221,7 @@ defmodule Instream.Connection.Config do
     loggers: [{Instream.Log.DefaultLogger, :log, []}],
     port: 8086,
     scheme: "http",
+    version: :v1,
     writer: Instream.Writer.Line
   ]
 
