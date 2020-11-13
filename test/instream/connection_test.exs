@@ -25,18 +25,22 @@ defmodule Instream.ConnectionTest do
     end
   end
 
+  @tag :"influxdb_exclude_1.8"
   test "ping connection" do
     assert :pong = DefaultConnection.ping()
   end
 
+  @tag :"influxdb_exclude_1.8"
   test "status connection" do
     assert :ok = DefaultConnection.status()
   end
 
+  @tag :"influxdb_exclude_1.8"
   test "version connection" do
     assert is_binary(DefaultConnection.version())
   end
 
+  @tag :"influxdb_exclude_1.8"
   test "mismatched InfluxDB version" do
     assert {:error, :version_mismatch} = DefaultConnectionV2.ping()
     assert {:error, :version_mismatch} = DefaultConnectionV2.status()
@@ -218,16 +222,19 @@ defmodule Instream.ConnectionTest do
     assert String.contains?(error, "requires admin privilege")
   end
 
+  @tag :"influxdb_exclude_1.8"
   @tag :unix_socket
   test "unix socket: ping connection" do
     assert :pong = UnixSocketConnection.ping()
   end
 
+  @tag :"influxdb_exclude_1.8"
   @tag :unix_socket
   test "unix socket: status connection" do
     assert :ok = UnixSocketConnection.status()
   end
 
+  @tag :"influxdb_exclude_1.8"
   @tag :unix_socket
   test "unix socket: version connection" do
     assert is_binary(UnixSocketConnection.version())
