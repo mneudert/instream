@@ -136,7 +136,7 @@ jobs:
 
         start_influxdb
         curl -XPOST http://localhost:8086/api/v2/setup -H 'accept: application/json' -d "{\"username\": \"instream_test\", \"password\": \"instream_test\", \"org\": \"instream_test\", \"bucket\": \"instream_test\", \"token\": \"${INFLUX_TOKEN}\"}" -s -o /dev/null
-      script: mix test --trace --exclude udp
+      script: mix test --trace
       after_failure: |-
         echo '==> stdout <=='
         cat ./influxdb.stdout
