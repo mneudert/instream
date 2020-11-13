@@ -54,25 +54,32 @@ config =
   end
 
 # configure InfluxDB test exclusion
-version = to_string(Connections.DefaultConnection.version())
+conn_version =
+  Connections.DefaultConnection.version()
+  |> Kernel.to_string()
+  |> Version.parse()
 
-config =
-  case Version.parse(version) do
+skip_versions =
+  case conn_version do
     :error ->
-      config
+      ["1.4", "1.5", "1.6", "1.7", "1.8"]
 
     {:ok, version} ->
-      versions = ["1.4", "1.5", "1.6", "1.7"]
-      config = Keyword.put(config, :exclude, config[:exclude] || [])
-
-      Enum.reduce(versions, config, fn ver, acc ->
-        if Version.match?(version, "~> #{ver}") do
-          acc
-        else
-          Keyword.put(acc, :exclude, [:"influxdb_exclude_#{ver}" | acc[:exclude]])
-        end
-      end)
+      ["2.0" | Enum.filter(["1.4", "1.5", "1.6", "1.7"], &Version.match?(version, "~> #{&1}"))]
   end
+
+version =
+  case conn_version do
+    :error -> "2.0"
+    {:ok, ver} -> "#{ver.major}.#{ver.minor}"
+  end
+
+config = Keyword.put(config, :exclude, config[:exclude] || [])
+
+config =
+  Enum.reduce(skip_versions, config, fn skip_version, acc ->
+    Keyword.put(acc, :exclude, [:"influxdb_exclude_#{skip_version}" | acc[:exclude]])
+  end)
 
 IO.puts("Running tests for InfluxDB version: #{version}")
 
