@@ -83,5 +83,16 @@ config =
 
 IO.puts("Running tests for InfluxDB version: #{version}")
 
+# Configure DefaultConnection for :v2
+if version == "2.0" do
+  Application.put_env(
+    :instream,
+    Connections.DefaultConnection,
+    :instream
+    |> Application.get_env(Connections.DefaultConnection)
+    |> Keyword.put(:version, :v2)
+  )
+end
+
 # start ExUnit
 ExUnit.start(config)
