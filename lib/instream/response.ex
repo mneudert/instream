@@ -8,21 +8,21 @@ defmodule Instream.Response do
   @doc """
   Maybe parses a response based on the requested result type.
   """
-  @spec maybe_parse(t, Keyword.t()) :: any
-  def maybe_parse({:error, _} = error, _), do: error
-  def maybe_parse({_, _, ""}, _), do: :ok
+  @spec maybe_parse(t, module, Keyword.t()) :: any
+  def maybe_parse({:error, _} = error, _, _), do: error
+  def maybe_parse({_, _, ""}, _, _), do: :ok
 
-  def maybe_parse({status, headers, body}, opts)
+  def maybe_parse({status, headers, body}, conn, opts)
       when 300 <= status do
-    if is_json?(headers) do
+    if :v2 === conn.config([:version]) || is_json?(headers) do
       maybe_decode_json(body, opts)
     else
       maybe_wrap_error(body, opts)
     end
   end
 
-  def maybe_parse({_, headers, body}, opts) do
-    if is_json?(headers) do
+  def maybe_parse({_, headers, body}, conn, opts) do
+    if :v2 === conn.config([:version]) || is_json?(headers) do
       maybe_decode_json(body, opts)
     else
       body

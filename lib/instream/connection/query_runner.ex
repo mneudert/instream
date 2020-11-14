@@ -73,7 +73,7 @@ defmodule Instream.Connection.QueryRunner do
 
     with {:ok, status, headers, client} <- response,
          {:ok, body} <- :hackney.body(client) do
-      result = Response.maybe_parse({status, headers, body}, opts)
+      result = Response.maybe_parse({status, headers, body}, conn, opts)
 
       if false != opts[:log] do
         conn.__log__(%QueryEntry{
@@ -156,7 +156,7 @@ defmodule Instream.Connection.QueryRunner do
       :timer.tc(fn ->
         query
         |> config[:writer].write(opts, state)
-        |> Response.maybe_parse(opts)
+        |> Response.maybe_parse(conn, opts)
       end)
 
     if false != opts[:log] do
