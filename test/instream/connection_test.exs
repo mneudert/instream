@@ -200,6 +200,22 @@ defmodule Instream.ConnectionTest do
     assert 0 < length(value_rows)
   end
 
+  @tag :"influxdb_exclude_2.0"
+  test "write data without authorization" do
+    data = %{
+      database: @database,
+      points: [
+        %{
+          measurement: "write_data_privileges",
+          fields: %{value: 0.66}
+        }
+      ]
+    }
+
+    assert %{code: "unauthorized", message: "Unauthorized"} = GuestConnection.write(data)
+  end
+
+  @tag :"influxdb_exclude_1.8"
   test "write data with missing privileges" do
     data = %{
       database: @database,
@@ -216,6 +232,7 @@ defmodule Instream.ConnectionTest do
     assert String.contains?(error, "not authorized")
   end
 
+  @tag :"influxdb_exclude_1.8"
   test "privilege missing" do
     %{error: error} = GuestConnection.query("DROP DATABASE ignore", method: :post)
 
