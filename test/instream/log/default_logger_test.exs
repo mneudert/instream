@@ -3,11 +3,10 @@ defmodule Instream.Log.DefaultLoggerTest do
 
   import ExUnit.CaptureLog
 
+  alias Instream.TestHelpers.Connections.DefaultConnection
+
   defmodule LogConnection do
-    use Instream.Connection,
-      config: [
-        auth: [method: :query, username: "instream_test", password: "instream_test"]
-      ]
+    use Instream.Connection, otp_app: :instream
   end
 
   defmodule TestSeries do
@@ -21,6 +20,16 @@ defmodule Instream.Log.DefaultLoggerTest do
 
       field :f
     end
+  end
+
+  setup_all do
+    auth =
+      case DefaultConnection.config([:auth, :token]) do
+        nil -> DefaultConnection.config([:auth])
+        token -> [method: :token, token: token]
+      end
+
+    Application.put_env(:instream, LogConnection, auth: auth)
   end
 
   setup do

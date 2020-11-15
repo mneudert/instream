@@ -1,10 +1,12 @@
 defmodule Instream.Connection.DatabaseTest do
   use ExUnit.Case, async: true
 
+  alias Instream.TestHelpers.Connections.DefaultConnection
+
   defmodule InvalidDbConnection do
     use Instream.Connection,
+      otp_app: :instream,
       config: [
-        auth: [password: "instream_test", username: "instream_test"],
         database: "invalid_test_database",
         loggers: []
       ]
@@ -33,6 +35,16 @@ defmodule Instream.Connection.DatabaseTest do
 
       field :value, default: 100
     end
+  end
+
+  setup_all do
+    auth =
+      case DefaultConnection.config([:auth, :token]) do
+        nil -> DefaultConnection.config([:auth])
+        token -> [method: :token, token: token]
+      end
+
+    Application.put_env(:instream, InvalidDbConnection, auth: auth)
   end
 
   setup do
