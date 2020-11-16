@@ -54,6 +54,8 @@ defmodule Instream.Connection.WriterTest do
       end
 
     Application.put_env(:instream, WriterConnection, auth: auth)
+
+    Application.put_env(:instream, WriterConnection, version: DefaultConnection.config([:version]))
   end
 
   test "json runtime configuration" do

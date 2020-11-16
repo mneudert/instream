@@ -45,6 +45,10 @@ defmodule Instream.Connection.DatabaseTest do
       end
 
     Application.put_env(:instream, InvalidDbConnection, auth: auth)
+
+    Application.put_env(:instream, InvalidDbConnection,
+      version: DefaultConnection.config([:version])
+    )
   end
 
   setup do

@@ -30,6 +30,7 @@ defmodule Instream.Log.DefaultLoggerTest do
       end
 
     Application.put_env(:instream, LogConnection, auth: auth)
+    Application.put_env(:instream, LogConnection, version: DefaultConnection.config([:version]))
   end
 
   setup do
