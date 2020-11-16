@@ -70,6 +70,9 @@ defmodule Instream.Response do
 
   defp maybe_decode_json(response, opts) do
     case opts[:result_as] do
+      :csv ->
+        response
+
       :raw ->
         response
 
