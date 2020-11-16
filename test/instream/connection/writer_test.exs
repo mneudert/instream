@@ -1,13 +1,14 @@
 defmodule Instream.Connection.WriterTest do
   use ExUnit.Case, async: true
 
+  alias Instream.TestHelpers.Connections.DefaultConnection
+
   defmodule WriterConnection do
     alias Instream.Connection.WriterTest.TestWriter
 
     use Instream.Connection,
       otp_app: :instream,
       config: [
-        auth: [username: "instream_test", password: "instream_test"],
         loggers: [],
         writer: TestWriter
       ]
@@ -43,6 +44,16 @@ defmodule Instream.Connection.WriterTest do
     end
 
     defp maybe_modify_error(response), do: response
+  end
+
+  setup_all do
+    auth =
+      case DefaultConnection.config([:auth, :token]) do
+        nil -> DefaultConnection.config([:auth])
+        token -> [method: :token, token: token]
+      end
+
+    Application.put_env(:instream, WriterConnection, auth: auth)
   end
 
   test "json runtime configuration" do
