@@ -32,6 +32,7 @@ defmodule Instream.ResponseTest do
     assert ^error = Response.maybe_parse(response, DefaultConnection, parse_opts)
   end
 
+  @tag :"influxdb_exclude_1.8"
   test "regular non-json response" do
     response = "text"
     parse_opts = [json_decoder: Jason]
