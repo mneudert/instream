@@ -53,9 +53,17 @@ defmodule Instream.Connection.WriterTest do
         token -> [method: :token, token: token]
       end
 
-    Application.put_env(:instream, WriterConnection, auth: auth)
+    conn_env = Application.get_env(:instream, WriterConnection, [])
 
-    Application.put_env(:instream, WriterConnection, version: DefaultConnection.config([:version]))
+    Application.put_env(
+      :instream,
+      WriterConnection,
+      Keyword.merge(
+        conn_env,
+        auth: auth,
+        version: DefaultConnection.config([:version])
+      )
+    )
   end
 
   test "json runtime configuration" do

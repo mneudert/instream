@@ -44,10 +44,16 @@ defmodule Instream.Connection.DatabaseTest do
         token -> [method: :token, token: token]
       end
 
-    Application.put_env(:instream, InvalidDbConnection, auth: auth)
+    conn_env = Application.get_env(:instream, InvalidDbConnection, [])
 
-    Application.put_env(:instream, InvalidDbConnection,
-      version: DefaultConnection.config([:version])
+    Application.put_env(
+      :instream,
+      InvalidDbConnection,
+      Keyword.merge(
+        conn_env,
+        auth: auth,
+        version: DefaultConnection.config([:version])
+      )
     )
   end
 
