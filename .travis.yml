@@ -15,7 +15,7 @@ jobs:
   allow_failures:
     env:
       - CAN_FAIL=true
-      - VER_INFLUXDB=2.0.1
+      - VER_INFLUXDB=2.0.2
       - INFLUX_TOKEN=instream_test
 
   include:
@@ -122,7 +122,7 @@ jobs:
       otp_release: 23.0
       env:
         - CAN_FAIL=true
-        - VER_INFLUXDB=2.0.1
+        - VER_INFLUXDB=2.0.2
         - INFLUX_TOKEN=instream_test
       before_script: |-
         function start_influxdb {
