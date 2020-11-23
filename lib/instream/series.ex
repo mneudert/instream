@@ -7,11 +7,29 @@ defmodule Instream.Series do
   If you do not want to define the raw maps for writing data you can
   pre-define a series module for later usage:
 
-      defmodule MySeries do
+      defmodule MySeries.InfluxDBv1 do
         use Instream.Series
 
         series do
           database "my_database_optional"
+
+          measurement "cpu_load"
+
+          tag :host, default: "www"
+          tag :core
+
+          field :value, default: 100
+          field :value_desc
+        end
+      end
+
+      defmodule MySeries.InfluxDBv2 do
+        use Instream.Series
+
+        series do
+          bucket "my_bucket_optional"
+          org "my_org_optional"
+
           measurement "cpu_load"
 
           tag :host, default: "www"
@@ -82,8 +100,7 @@ defmodule Instream.Series do
       MyConnection.write(point)
       MyConnection.write([point_1, point_2, point_3])
 
-  If you want to pass an explicit timestamp to the database you can use the
-  key `:timestamp`:
+  If you want to pass an explicit timestamp you can use the key `:timestamp`:
 
       data = %MySeries{}
       data = %{data | timestamp: 1439587926000000000}
@@ -111,8 +128,8 @@ defmodule Instream.Series do
   be at nanosecond precision.
 
   _Note:_ While it is possible to write multiple points a once it is currently
-  not supported to write them to individual databases. The first point written
-  defines the database, other values are silently ignored!
+  not supported to write them to individual databases/buckets. The first point
+  written defines the database/bucket, other values are silently ignored!
   """
 
   alias Instream.Series.Hydrator
@@ -133,11 +150,15 @@ defmodule Instream.Series do
   @doc """
   Defines the series.
   """
+  # credo:disable-for-next-line Credo.Check.Refactor.CyclomaticComplexity
   defmacro series(do: block) do
     quote do
       @behaviour unquote(__MODULE__)
 
+      @bucket nil
       @database nil
+      @org nil
+
       @measurement nil
 
       Module.register_attribute(__MODULE__, :fields_raw, accumulate: true)
@@ -157,7 +178,10 @@ defmodule Instream.Series do
       @tags_names @tags_raw |> Keyword.keys() |> Enum.sort()
       @tags_struct @tags_raw |> Enum.sort(&unquote(__MODULE__).__sort_tags__/2)
 
+      def __meta__(:bucket), do: @bucket
       def __meta__(:database), do: @database
+      def __meta__(:org), do: @org
+
       def __meta__(:fields), do: @fields_names
       def __meta__(:measurement), do: @measurement
       def __meta__(:tags), do: @tags_names
@@ -181,9 +205,11 @@ defmodule Instream.Series do
 
   ## Available information
 
+  - `:bucket` - the bucket where the series is stored (optional)
   - `:database` - the database where the series is stored (optional)
   - `:fields` - the fields in the series
   - `:measurement` - the measurement of the series
+  - `:org` - the organization the `:bucket` belongs to (optional)
   - `:tags` - the available tags defining the series
   """
   @callback __meta__(atom) :: any
@@ -201,6 +227,15 @@ defmodule Instream.Series do
   Keys not defined in the series are silently dropped.
   """
   @callback from_result(map) :: [struct]
+
+  @doc """
+  Defines the bucket for the series.
+  """
+  defmacro bucket(name) do
+    quote do
+      @bucket unquote(name)
+    end
+  end
 
   @doc """
   Defines the database for the series.
@@ -226,6 +261,15 @@ defmodule Instream.Series do
   defmacro measurement(name) do
     quote do
       @measurement unquote(name)
+    end
+  end
+
+  @doc """
+  Defines the organization for the series.
+  """
+  defmacro org(name) do
+    quote do
+      @org unquote(name)
     end
   end
 

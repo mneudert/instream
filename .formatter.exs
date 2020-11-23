@@ -1,9 +1,11 @@
 export_locals_without_parens = [
+  bucket: 1,
   database: 1,
   field: 1,
   field: 2,
   measurement: 1,
   name: 1,
+  org: 1,
   tag: 1,
   tag: 2
 ]
