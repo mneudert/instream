@@ -15,8 +15,8 @@ defmodule Instream.Connection.QueryRunner do
   @doc """
   Executes `:ping` queries.
   """
-  @spec ping(Query.t(), Keyword.t(), map) :: :pong | :error
-  def ping(%Query{opts: query_opts}, opts, %{module: conn}) do
+  @spec ping(Query.t(), Keyword.t(), module) :: :pong | :error
+  def ping(%Query{opts: query_opts}, opts, conn) do
     config = conn.config()
     headers = Headers.assemble(config)
 
@@ -52,8 +52,8 @@ defmodule Instream.Connection.QueryRunner do
   @doc """
   Executes `:read` queries.
   """
-  @spec read(Query.t(), Keyword.t(), map) :: any
-  def read(%Query{payload: query_payload} = query, opts, %{module: conn}) do
+  @spec read(Query.t(), Keyword.t(), module) :: any
+  def read(%Query{payload: query_payload} = query, opts, conn) do
     config = conn.config()
     json_decoder = JSON.decoder(conn)
     json_encoder = JSON.encoder(conn)
@@ -95,8 +95,8 @@ defmodule Instream.Connection.QueryRunner do
   @doc """
   Execute `:status` queries.
   """
-  @spec status(Query.t(), Keyword.t(), map) :: :ok | :error
-  def status(%Query{opts: query_opts}, opts, %{module: conn}) do
+  @spec status(Query.t(), Keyword.t(), module) :: :ok | :error
+  def status(%Query{opts: query_opts}, opts, conn) do
     config = conn.config()
     headers = Headers.assemble(config)
 
@@ -132,8 +132,8 @@ defmodule Instream.Connection.QueryRunner do
   @doc """
   Executes `:version` queries.
   """
-  @spec version(Query.t(), Keyword.t(), map) :: any
-  def version(%Query{opts: query_opts}, opts, %{module: conn}) do
+  @spec version(Query.t(), Keyword.t(), module) :: any
+  def version(%Query{opts: query_opts}, opts, conn) do
     config = conn.config()
     headers = Headers.assemble(config)
 
