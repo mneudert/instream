@@ -1,5 +1,10 @@
 # Changelog
 
+## v2.0.0-dev
+
+- Backwards incompatible changes
+    - Passing a host to `ping/1,2`, `status/1,2`, `version/1,2` is now longer supported. Only the hostname configured in the connection module will be used.
+
 ## v1.0.0 (2020-09-06)
 
 - Enhancements

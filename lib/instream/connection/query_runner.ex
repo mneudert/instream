@@ -16,14 +16,14 @@ defmodule Instream.Connection.QueryRunner do
   Executes `:ping` queries.
   """
   @spec ping(Query.t(), Keyword.t(), module) :: :pong | :error
-  def ping(%Query{opts: query_opts}, opts, conn) do
+  def ping(%Query{}, opts, conn) do
     config = conn.config()
     headers = Headers.assemble(config)
 
     {query_time, response} =
       :timer.tc(fn ->
         config
-        |> URL.ping(query_opts[:host])
+        |> URL.ping()
         |> :hackney.head(headers, "", http_opts(config, opts))
       end)
 
@@ -37,7 +37,7 @@ defmodule Instream.Connection.QueryRunner do
         end
 
       conn.__log__(%PingEntry{
-        host: query_opts[:host] || config[:host],
+        host: config[:host],
         result: result,
         metadata: %Metadata{
           query_time: query_time,
@@ -96,14 +96,14 @@ defmodule Instream.Connection.QueryRunner do
   Execute `:status` queries.
   """
   @spec status(Query.t(), Keyword.t(), module) :: :ok | :error
-  def status(%Query{opts: query_opts}, opts, conn) do
+  def status(%Query{}, opts, conn) do
     config = conn.config()
     headers = Headers.assemble(config)
 
     {query_time, response} =
       :timer.tc(fn ->
         config
-        |> URL.status(query_opts[:host])
+        |> URL.status()
         |> :hackney.head(headers, "", http_opts(config, opts))
       end)
 
@@ -117,7 +117,7 @@ defmodule Instream.Connection.QueryRunner do
         end
 
       conn.__log__(%StatusEntry{
-        host: query_opts[:host] || config[:host],
+        host: config[:host],
         result: result,
         metadata: %Metadata{
           query_time: query_time,
@@ -133,12 +133,12 @@ defmodule Instream.Connection.QueryRunner do
   Executes `:version` queries.
   """
   @spec version(Query.t(), Keyword.t(), module) :: any
-  def version(%Query{opts: query_opts}, opts, conn) do
+  def version(%Query{}, opts, conn) do
     config = conn.config()
     headers = Headers.assemble(config)
 
     config
-    |> URL.ping(query_opts[:host])
+    |> URL.ping()
     |> :hackney.head(headers, "", http_opts(config, opts))
     |> Response.parse_version()
   end

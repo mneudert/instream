@@ -49,18 +49,6 @@ defmodule Instream.Query.URLTest do
     assert ^expected = URL.append_query(url, query)
   end
 
-  test "ping url with specific host" do
-    url = "http://specific.host/ping"
-
-    conn = [
-      host: "localhost",
-      scheme: "http"
-    ]
-
-    refute url == URL.ping(conn)
-    assert url == URL.ping(conn, "specific.host")
-  end
-
   test "query url" do
     url = "http://localhost:8086/query?u=root&p=root"
 
@@ -145,17 +133,5 @@ defmodule Instream.Query.URLTest do
     ]
 
     assert ^url = URL.query(conn, :influxql)
-  end
-
-  test "status url with speicifc host" do
-    url = "http://specific.host/status"
-
-    conn = [
-      host: "localhost",
-      scheme: "http"
-    ]
-
-    refute url == URL.status(conn)
-    assert url == URL.status(conn, "specific.host")
   end
 end

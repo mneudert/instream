@@ -121,32 +121,26 @@ defmodule Instream.Connection do
 
       def execute(query, opts \\ []), do: QueryPlanner.execute(query, opts, __MODULE__)
 
-      def ping(opts) when is_list(opts), do: ping(nil, opts)
-
-      def ping(host \\ nil, opts \\ []) do
+      def ping(opts \\ []) do
         case config([:version]) do
           :v2 -> {:error, :version_mismatch}
-          _ -> execute(%Query{type: :ping, opts: [host: host]}, opts)
+          _ -> execute(%Query{type: :ping}, opts)
         end
       end
 
       def query(query, opts \\ []), do: execute(query, opts)
 
-      def status(opts) when is_list(opts), do: status(nil, opts)
-
-      def status(host \\ nil, opts \\ []) do
+      def status(opts \\ []) do
         case config([:version]) do
           :v2 -> {:error, :version_mismatch}
-          _ -> execute(%Query{type: :status, opts: [host: host]}, opts)
+          _ -> execute(%Query{type: :status}, opts)
         end
       end
 
-      def version(opts) when is_list(opts), do: version(nil, opts)
-
-      def version(host \\ nil, opts \\ []) do
+      def version(opts \\ []) do
         case config([:version]) do
           :v2 -> {:error, :version_mismatch}
-          _ -> execute(%Query{type: :version, opts: [host: host]}, opts)
+          _ -> execute(%Query{type: :version}, opts)
         end
       end
 
@@ -177,15 +171,9 @@ defmodule Instream.Connection do
   @callback execute(query :: query_type, opts :: Keyword.t()) :: any
 
   @doc """
-  Pings a server.
-
-  By default the first server in your connection configuration will be pinged.
-
-  The server passed does not necessarily need to belong to your connection.
-  Only the connection details (scheme, port, ...) will be used to determine
-  the exact url to send the ping request to.
+  Pings the connection server.
   """
-  @callback ping(host :: String.t(), opts :: Keyword.t()) :: :pong | :error | e_version_mismatch
+  @callback ping(opts :: Keyword.t()) :: :pong | :error | e_version_mismatch
 
   @doc """
   Executes a reading query.
@@ -198,19 +186,14 @@ defmodule Instream.Connection do
   @callback query(query :: String.t(), opts :: Keyword.t()) :: any
 
   @doc """
-  Checks the status of a connection.
+  Checks the status of the connection server.
   """
   @callback status(opts :: Keyword.t()) :: :ok | :error | e_version_mismatch
 
   @doc """
-  Determines the version of an InfluxDB host.
-
-  The version will be retrieved using a `:ping` query and extract the returned
-  `X-Influxdb-Version` header. If the header is missing the version will be
-  returned as `"unknown"`.
+  Determines the version of the connection server.
   """
-  @callback version(host :: String.t(), opts :: Keyword.t()) ::
-              String.t() | :error | e_version_mismatch
+  @callback version(opts :: Keyword.t()) :: String.t() | :error | e_version_mismatch
 
   @doc """
   Executes a writing query.

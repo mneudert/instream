@@ -68,16 +68,8 @@ defmodule Instream.Query.URL do
   @doc """
   Returns the proper URL for a `:ping` request.
   """
-  @spec ping(Keyword.t(), String.t() | nil) :: String.t()
-  def ping(config, host \\ nil)
-
-  def ping(config, nil), do: url(config, "ping")
-
-  def ping(config, host) do
-    config
-    |> Keyword.put(:host, host)
-    |> url("ping")
-  end
+  @spec ping(Keyword.t()) :: String.t()
+  def ping(config), do: url(config, "ping")
 
   @doc """
   Returns the proper URL for a `:query` request.
@@ -89,16 +81,8 @@ defmodule Instream.Query.URL do
   @doc """
   Returns the proper URL for a `:status` request.
   """
-  @spec status(Keyword.t(), String.t() | nil) :: String.t()
-  def status(config, host \\ nil)
-
-  def status(config, nil), do: url(config, "status")
-
-  def status(config, host) do
-    config
-    |> Keyword.put(:host, host)
-    |> url("status")
-  end
+  @spec status(Keyword.t()) :: String.t()
+  def status(config), do: url(config, "status")
 
   @doc """
   Returns the proper URL for a `:write` request.
