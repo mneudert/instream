@@ -56,15 +56,13 @@ defmodule Instream.Connection.QueryRunner do
   def read(%Query{payload: query_payload} = query, opts, conn) do
     config = conn.config()
     json_decoder = JSON.decoder(conn)
-    json_encoder = JSON.encoder(conn)
     opts = Keyword.put(opts, :json_decoder, json_decoder)
-    opts = Keyword.put(opts, :json_encoder, json_encoder)
 
     headers = Headers.assemble(config, opts)
 
     body = read_body(query, opts)
     method = read_method(query, opts)
-    url = read_url(config, query, opts)
+    url = read_url(conn, query, opts)
 
     {query_time, response} =
       :timer.tc(fn ->
@@ -202,7 +200,9 @@ defmodule Instream.Connection.QueryRunner do
     end
   end
 
-  defp read_url(config, %{opts: query_opts, payload: query_payload}, opts) do
+  defp read_url(conn, %{opts: query_opts, payload: query_payload}, opts) do
+    config = conn.config()
+
     url =
       config
       |> URL.query(opts[:query_language])
@@ -212,7 +212,7 @@ defmodule Instream.Connection.QueryRunner do
     url =
       case opts[:params] do
         params when is_map(params) ->
-          {json_mod, json_fun, json_extra_args} = opts[:json_encoder]
+          {json_mod, json_fun, json_extra_args} = JSON.encoder(conn)
 
           json_params = apply(json_mod, json_fun, [params | json_extra_args])
 
