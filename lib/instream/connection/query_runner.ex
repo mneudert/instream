@@ -27,7 +27,11 @@ defmodule Instream.Connection.QueryRunner do
         |> :hackney.head(headers, "", http_opts(config, opts))
       end)
 
-    result = Response.parse_ping(response)
+    result =
+      case response do
+        {:ok, 204, _} -> :pong
+        _ -> :error
+      end
 
     if false != opts[:log] do
       status =
@@ -105,7 +109,11 @@ defmodule Instream.Connection.QueryRunner do
         |> :hackney.head(headers, "", http_opts(config, opts))
       end)
 
-    result = Response.parse_status(response)
+    result =
+      case response do
+        {:ok, 204, _} -> :ok
+        _ -> :error
+      end
 
     if false != opts[:log] do
       status =
@@ -135,10 +143,21 @@ defmodule Instream.Connection.QueryRunner do
     config = conn.config()
     headers = Headers.assemble(config)
 
-    config
-    |> URL.ping()
-    |> :hackney.head(headers, "", http_opts(config, opts))
-    |> Response.parse_version()
+    response =
+      config
+      |> URL.ping()
+      |> :hackney.head(headers, "", http_opts(config, opts))
+
+    case response do
+      {:ok, 204, headers} ->
+        case List.keyfind(headers, "X-Influxdb-Version", 0) do
+          {"X-Influxdb-Version", version} -> version
+          _ -> "unknown"
+        end
+
+      _ ->
+        :error
+    end
   end
 
   @doc """
