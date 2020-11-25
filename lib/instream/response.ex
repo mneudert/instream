@@ -3,6 +3,8 @@ defmodule Instream.Response do
   Response parser.
   """
 
+  alias Instream.Connection.JSON
+
   @type t :: {:error, term} | {status :: pos_integer, headers :: list, body :: String.t()}
 
   @doc """
@@ -15,7 +17,7 @@ defmodule Instream.Response do
   def maybe_parse({status, headers, body}, conn, opts)
       when 300 <= status do
     if :v2 === conn.config([:version]) || is_json?(headers) do
-      maybe_decode_json(body, opts)
+      maybe_decode_json(body, conn, opts)
     else
       maybe_wrap_error(body, opts)
     end
@@ -23,7 +25,7 @@ defmodule Instream.Response do
 
   def maybe_parse({_, headers, body}, conn, opts) do
     if :v2 === conn.config([:version]) || is_json?(headers) do
-      maybe_decode_json(body, opts)
+      maybe_decode_json(body, conn, opts)
     else
       body
     end
@@ -39,7 +41,7 @@ defmodule Instream.Response do
     end
   end
 
-  defp maybe_decode_json(response, opts) do
+  defp maybe_decode_json(response, conn, opts) do
     case opts[:result_as] do
       :csv ->
         response
@@ -48,7 +50,7 @@ defmodule Instream.Response do
         response
 
       _ ->
-        {json_mod, json_fun, json_extra_args} = opts[:json_decoder]
+        {json_mod, json_fun, json_extra_args} = JSON.decoder(conn)
 
         apply(json_mod, json_fun, [response | json_extra_args])
     end

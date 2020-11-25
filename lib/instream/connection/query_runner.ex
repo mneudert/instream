@@ -59,9 +59,6 @@ defmodule Instream.Connection.QueryRunner do
   @spec read(Query.t(), Keyword.t(), module) :: any
   def read(%Query{payload: query_payload} = query, opts, conn) do
     config = conn.config()
-    json_decoder = JSON.decoder(conn)
-    opts = Keyword.put(opts, :json_decoder, json_decoder)
-
     headers = Headers.assemble(config, opts)
 
     body = read_body(query, opts)
@@ -166,8 +163,6 @@ defmodule Instream.Connection.QueryRunner do
   @spec write(Query.t(), Keyword.t(), map) :: any
   def write(%Query{payload: %{points: points}} = query, opts, %{module: conn} = state) do
     config = conn.config()
-    json_decoder = JSON.decoder(conn)
-    opts = Keyword.put(opts, :json_decoder, json_decoder)
 
     {query_time, result} =
       :timer.tc(fn ->
