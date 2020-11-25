@@ -43,16 +43,9 @@ defmodule Instream.Response do
 
   defp maybe_decode_json(response, conn, opts) do
     case opts[:result_as] do
-      :csv ->
-        response
-
-      :raw ->
-        response
-
-      _ ->
-        {json_mod, json_fun, json_extra_args} = JSON.decoder(conn)
-
-        apply(json_mod, json_fun, [response | json_extra_args])
+      :csv -> response
+      :raw -> response
+      _ -> JSON.decode(response, conn)
     end
   end
 

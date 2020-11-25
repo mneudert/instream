@@ -41,7 +41,7 @@ defmodule Instream.Query.URL do
   Appends a (json encoded) parameter map to a URL.
   """
   @spec append_json_params(String.t(), String.t()) :: String.t()
-  def append_json_params(url, json_params), do: append_param(url, "params", json_params)
+  def append_json_params(json_params, url), do: append_param(url, "params", json_params)
 
   @doc """
   Appends a precision value to a URL.

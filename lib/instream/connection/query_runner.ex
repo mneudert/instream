@@ -226,11 +226,9 @@ defmodule Instream.Connection.QueryRunner do
     url =
       case opts[:params] do
         params when is_map(params) ->
-          {json_mod, json_fun, json_extra_args} = JSON.encoder(conn)
-
-          json_params = apply(json_mod, json_fun, [params | json_extra_args])
-
-          URL.append_json_params(url, json_params)
+          params
+          |> JSON.encode(conn)
+          |> URL.append_json_params(url)
 
         _ ->
           url
