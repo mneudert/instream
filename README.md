@@ -1,9 +1,5 @@
 # Instream
 
-[![Build Status](https://travis-ci.org/mneudert/instream.svg?branch=master)](https://travis-ci.org/mneudert/instream)
-[![Coverage Status](https://coveralls.io/repos/mneudert/instream/badge.svg?branch=master&service=github)](https://coveralls.io/github/mneudert/instream?branch=master)
-[![Hex.pm](https://img.shields.io/hexpm/v/instream.svg)](https://hex.pm/packages/instream)
-
 InfluxDB driver for Elixir
 
 ## InfluxDB Support
@@ -12,8 +8,6 @@ Tested InfluxDB versions:
 
 - `1.7.10`
 - `1.8.3`
-
-(see [`.travis.yml`](https://github.com/mneudert/instream/blob/master/.travis.yml) to be sure)
 
 ## Package Setup
 
@@ -35,7 +29,7 @@ To run the tests you need to have the http-authentication enabled.
 
 Using the statements from the `.travis.yml` you can generate all necessary users for the tests with their proper privileges.
 
-The test suite will automatically exclude tests not working for your current environment. This includes checking the available InfluxDB version and OTP release.
+The test suite will automatically try to exclude tests not expected to work for your InfluxDB version.
 
 If you have not configured your InfluxDB testing instance to provide an UDP endpoint to the "test\_database", you can exclude these tests manually:
 
