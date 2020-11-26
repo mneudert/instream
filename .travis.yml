@@ -24,7 +24,7 @@ jobs:
       elixir: 1.7.4
       otp_release: 19.3
       env:
-        - VER_INFLUXDB=1.4.3
+        - VER_INFLUXDB=1.7.10
       before_install: |-
         if [ ! -x "${HOME}/bin/influxd" ]; then
           mkdir -p "${HOME}/bin"
@@ -91,17 +91,17 @@ jobs:
       elixir: 1.8.2
       otp_release: 20.3
       env:
-        - VER_INFLUXDB=1.5.5
+        - VER_INFLUXDB=1.8.3
     - <<: *test
       elixir: 1.9.4
       otp_release: 21.3
       env:
-        - VER_INFLUXDB=1.6.6
+        - VER_INFLUXDB=1.8.3
     - <<: *test
       elixir: 1.10.4
       otp_release: 22.3
       env:
-        - VER_INFLUXDB=1.7.10
+        - VER_INFLUXDB=1.8.3
     - <<: *test
       elixir: 1.11.2
       otp_release: 23.0

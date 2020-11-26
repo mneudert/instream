@@ -88,9 +88,6 @@ defmodule Instream.ConnectionTest do
   end
 
   @tag :"influxdb_exclude_1.7"
-  @tag :"influxdb_exclude_1.6"
-  @tag :"influxdb_exclude_1.5"
-  @tag :"influxdb_exclude_1.4"
   test "read using flux query" do
     :ok =
       DefaultConnection.write(%{

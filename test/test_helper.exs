@@ -61,11 +61,8 @@ conn_version =
 
 skip_versions =
   case conn_version do
-    :error ->
-      ["1.4", "1.5", "1.6", "1.7", "1.8"]
-
-    {:ok, version} ->
-      ["2.0" | Enum.filter(["1.4", "1.5", "1.6", "1.7"], &Version.match?(version, "~> #{&1}"))]
+    :error -> ["1.8", "1.7"]
+    {:ok, version} -> ["2.0" | Enum.filter(["1.7"], &Version.match?(version, "~> #{&1}"))]
   end
 
 version =
