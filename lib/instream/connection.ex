@@ -93,20 +93,18 @@ defmodule Instream.Connection do
       @otp_app opts[:otp_app]
       @config opts[:config] || []
 
-      loggers =
-        @otp_app
-        |> Connection.Config.compile_time(__MODULE__, @config)
-        |> Keyword.get(:loggers, [])
-        |> Enum.reduce(quote(do: entry), fn logger, acc ->
-          {mod, fun, args} = logger
-
-          quote do
-            unquote(mod).unquote(fun)(unquote(acc), unquote_splicing(args))
-          end
-        end)
-
       @doc false
-      def __log__(entry), do: unquote(loggers)
+      def __log__(entry) do
+        case config([:loggers]) do
+          [_ | _] = loggers ->
+            Enum.reduce(loggers, entry, fn {mod, fun, extra_args}, acc ->
+              apply(mod, fun, [acc | extra_args])
+            end)
+
+          _ ->
+            entry
+        end
+      end
 
       def child_spec(_ \\ []) do
         %{

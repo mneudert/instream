@@ -65,23 +65,6 @@ defmodule Instream.Connection.Config do
   These values will be overwritten by and/or merged with the application
   environment values when the configuration is accessed.
 
-  ## Runtime and Compile Time Configuration
-
-  The full connection configuration is split into two parts, compile time and
-  runtime configuration.
-
-  Compile time configuration values are, as the name implies, used during
-  compilation for the connection module. Currently the only key in this
-  category is `:loggers`.
-
-  All other values are directly accessed from the application environment
-  using `Application.get_env(connection_otp_app, connection_module)` and
-  therefore can be changed without recompilation:
-
-      old_config = MyConnection.config()
-      new_config = Keyword.put(old_config, :host, "changed.host")
-      :ok = Application.put_env(:my_app, MyConnection, new_config)
-
   ## Configuration Defaults
 
   The following values will be used as defaults if no other value is set:
@@ -215,7 +198,6 @@ defmodule Instream.Connection.Config do
       MyConnection.query(query, log: false)
   """
 
-  @compile_time_keys [:loggers]
   @global_defaults [
     host: "localhost",
     loggers: [{Instream.Log.DefaultLogger, :log, []}],
@@ -224,17 +206,6 @@ defmodule Instream.Connection.Config do
     version: :v1,
     writer: Instream.Writer.Line
   ]
-
-  @doc """
-  Retrieves the compile time part of the connection configuration.
-  """
-  @spec compile_time(atom, module, Keyword.t()) :: Keyword.t()
-  def compile_time(otp_app, conn, defaults \\ []) do
-    @global_defaults
-    |> Keyword.merge(defaults)
-    |> maybe_merge_app_env(otp_app, conn)
-    |> Keyword.take(@compile_time_keys)
-  end
 
   @doc """
   Retrieves the runtime connection configuration for `conn` in `otp_app`.
