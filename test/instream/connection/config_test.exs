@@ -4,7 +4,7 @@ defmodule Instream.Connection.ConfigTest do
   alias Instream.Connection.Config
   alias Instream.TestHelpers.Connections.DefaultConnection
 
-  test "runtime configuration changes", %{test: test} do
+  test "configuration changes", %{test: test} do
     conn = Module.concat([__MODULE__, RuntimeChanges])
     key = :runtime_testing_key
 
@@ -24,8 +24,8 @@ defmodule Instream.Connection.ConfigTest do
   @tag :"influxdb_exclude_2.0"
   test "default value access 1.x", %{test: test} do
     # credo:disable-for-next-line Credo.Check.Refactor.PipeChainStart
-    assert "http" = Config.runtime(test, __MODULE__, nil) |> Keyword.get(:scheme)
-    refute Config.runtime(test, __MODULE__, [:auth, :token])
+    assert "http" = Config.get(test, __MODULE__, nil) |> Keyword.get(:scheme)
+    refute Config.get(test, __MODULE__, [:auth, :token])
 
     assert "http" = DefaultConnection.config() |> Keyword.get(:scheme)
     assert "instream_test" = DefaultConnection.config([:auth, :token])
@@ -34,8 +34,8 @@ defmodule Instream.Connection.ConfigTest do
   @tag :"influxdb_exclude_1.8"
   test "default value access 2.x", %{test: test} do
     # credo:disable-for-next-line Credo.Check.Refactor.PipeChainStart
-    assert "http" = Config.runtime(test, __MODULE__, nil) |> Keyword.get(:scheme)
-    refute Config.runtime(test, __MODULE__, [:auth, :username])
+    assert "http" = Config.get(test, __MODULE__, nil) |> Keyword.get(:scheme)
+    refute Config.get(test, __MODULE__, [:auth, :username])
 
     assert "http" = DefaultConnection.config() |> Keyword.get(:scheme)
     assert "instream_test" = DefaultConnection.config([:auth, :username])
@@ -65,7 +65,7 @@ defmodule Instream.Connection.ConfigTest do
     assert :instream = DefaultConnection.config([:otp_app])
 
     # not intended to be used this way!
-    assert ^test = Config.runtime(test, nil, [:otp_app])
+    assert ^test = Config.get(test, nil, [:otp_app])
   end
 
   test "inline configuration defaults" do

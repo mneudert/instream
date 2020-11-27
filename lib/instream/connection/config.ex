@@ -208,14 +208,14 @@ defmodule Instream.Connection.Config do
   ]
 
   @doc """
-  Retrieves the runtime connection configuration for `conn` in `otp_app`.
+  Retrieves the connection configuration for `conn` in `otp_app`.
   """
-  @spec runtime(atom, module, nil | nonempty_list(term), Keyword.t()) :: Keyword.t()
-  def runtime(otp_app, conn, keys, defaults \\ [])
+  @spec get(atom, module, nil | nonempty_list(term), Keyword.t()) :: Keyword.t()
+  def get(otp_app, conn, keys, defaults \\ [])
 
-  def runtime(otp_app, _, [:otp_app], _), do: otp_app
+  def get(otp_app, _, [:otp_app], _), do: otp_app
 
-  def runtime(otp_app, conn, keys, defaults) do
+  def get(otp_app, conn, keys, defaults) do
     defaults
     |> maybe_merge_app_env(otp_app, conn)
     |> maybe_fetch_deep(keys)

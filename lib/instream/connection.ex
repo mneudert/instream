@@ -113,7 +113,7 @@ defmodule Instream.Connection do
       end
 
       def config(keys \\ nil) do
-        Connection.Config.runtime(@otp_app, __MODULE__, keys, @config)
+        Connection.Config.get(@otp_app, __MODULE__, keys, @config)
       end
 
       def ping(opts \\ []) do
