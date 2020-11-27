@@ -64,7 +64,7 @@ defmodule Instream.Connection.DatabaseTest do
 
   test "read || default: database from connection" do
     %{results: [%{error: message}]} =
-      InvalidDbConnection.execute("SELECT * FROM database_config_test")
+      InvalidDbConnection.query("SELECT * FROM database_config_test")
 
     assert String.contains?(message, "database not found")
     assert String.contains?(message, InvalidDbConnection.config([:database]))
@@ -74,7 +74,7 @@ defmodule Instream.Connection.DatabaseTest do
     opts = [database: "database_config_optsdb_test"]
 
     %{results: [%{error: message}]} =
-      InvalidDbConnection.execute("SELECT * FROM database_config_test", opts)
+      InvalidDbConnection.query("SELECT * FROM database_config_test", opts)
 
     assert String.contains?(message, "database not found")
     assert String.contains?(message, opts[:database])

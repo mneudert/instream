@@ -11,7 +11,7 @@ defmodule Instream.AuthTest do
     end
 
     assert %{error: "unable to parse authentication credentials"} =
-             AnonymousConnection.execute("SHOW DATABASES")
+             AnonymousConnection.query("SHOW DATABASES")
   end
 
   @tag :"influxdb_exclude_1.8"
@@ -24,7 +24,7 @@ defmodule Instream.AuthTest do
         ]
     end
 
-    assert %{results: _} = BasicAuthConnection.execute("SHOW DATABASES")
+    assert %{results: _} = BasicAuthConnection.query("SHOW DATABASES")
   end
 
   @tag :"influxdb_exclude_1.8"
@@ -37,7 +37,7 @@ defmodule Instream.AuthTest do
         ]
     end
 
-    assert %{results: _} = DefaultAuthConnection.execute("SHOW DATABASES")
+    assert %{results: _} = DefaultAuthConnection.query("SHOW DATABASES")
   end
 
   @tag :"influxdb_exclude_1.8"
@@ -50,7 +50,7 @@ defmodule Instream.AuthTest do
         ]
     end
 
-    assert %{results: _} = QueryAuthConnection.execute("SHOW DATABASES")
+    assert %{results: _} = QueryAuthConnection.query("SHOW DATABASES")
   end
 
   @tag :"influxdb_exclude_1.8"
@@ -64,7 +64,7 @@ defmodule Instream.AuthTest do
     end
 
     assert %{error: "authorization failed"} =
-             AuthenticationFailedConnection.execute("SHOW DATABASES")
+             AuthenticationFailedConnection.query("SHOW DATABASES")
   end
 
   @tag :"influxdb_exclude_1.8"
@@ -77,6 +77,6 @@ defmodule Instream.AuthTest do
         ]
     end
 
-    assert %{error: "authorization failed"} = NotFoundConnection.execute("SHOW DATABASES")
+    assert %{error: "authorization failed"} = NotFoundConnection.query("SHOW DATABASES")
   end
 end

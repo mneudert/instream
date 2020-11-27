@@ -76,7 +76,6 @@ defmodule Instream.Connection do
           | Log.WriteEntry.t()
   @type precision ::
           :hour | :minute | :second | :millisecond | :microsecond | :nanosecond | :rfc3339
-  @type query_type :: Query.t() | String.t()
 
   @type e_version_mismatch :: {:error, :version_mismatch}
 
@@ -117,28 +116,26 @@ defmodule Instream.Connection do
         Connection.Config.runtime(@otp_app, __MODULE__, keys, @config)
       end
 
-      def execute(query, opts \\ []), do: QueryPlanner.execute(query, opts, __MODULE__)
-
       def ping(opts \\ []) do
         case config([:version]) do
           :v2 -> {:error, :version_mismatch}
-          _ -> execute(%Query{type: :ping}, opts)
+          _ -> QueryPlanner.execute(%Query{type: :ping}, opts, __MODULE__)
         end
       end
 
-      def query(query, opts \\ []), do: execute(query, opts)
+      def query(query, opts \\ []), do: QueryPlanner.execute(query, opts, __MODULE__)
 
       def status(opts \\ []) do
         case config([:version]) do
           :v2 -> {:error, :version_mismatch}
-          _ -> execute(%Query{type: :status}, opts)
+          _ -> QueryPlanner.execute(%Query{type: :status}, opts, __MODULE__)
         end
       end
 
       def version(opts \\ []) do
         case config([:version]) do
           :v2 -> {:error, :version_mismatch}
-          _ -> execute(%Query{type: :version}, opts)
+          _ -> QueryPlanner.execute(%Query{type: :version}, opts, __MODULE__)
         end
       end
 
@@ -148,7 +145,7 @@ defmodule Instream.Connection do
 
         payload
         |> Data.Write.query(opts)
-        |> execute(opts)
+        |> QueryPlanner.execute(opts, __MODULE__)
       end
     end
   end
@@ -162,11 +159,6 @@ defmodule Instream.Connection do
   Returns the connection configuration.
   """
   @callback config(keys :: nil | nonempty_list(term)) :: Keyword.t()
-
-  @doc """
-  Executes a query.
-  """
-  @callback execute(query :: query_type, opts :: Keyword.t()) :: any
 
   @doc """
   Pings the connection server.
