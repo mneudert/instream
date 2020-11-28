@@ -1,6 +1,17 @@
 defmodule Instream.Writer.UDP do
   @moduledoc """
   Point writer for the line protocol using UDP.
+
+  ## Configuration
+
+  Write queries are run through a process pool having an additional timeout:
+
+      config :my_app, MyApp.MyConnection,
+        pool: [max_overflow: 10, size: 5],
+        pool_timeout: 500
+
+  This configuration will be used to wait for an available worker
+  to execute a query and defaults to `5_000`.
   """
 
   alias Instream.Encoder.Line, as: Encoder

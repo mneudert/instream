@@ -72,7 +72,6 @@ defmodule Instream.Connection.Config do
       config :my_app, MyConnection,
         version: :v1,
         host: "localhost",
-        pool: [max_overflow: 10, size: 5],
         port: 8086,
         scheme: "http",
         writer: Instream.Writer.Line,

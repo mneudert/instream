@@ -114,14 +114,6 @@ defmodule Instream do
   configured `:recv_timeout` values. Setting a connection timeout enables you
   to have a different timeout for read and write requests.
 
-  Write queries are run through a process pool having an additional timeout:
-
-      config :my_app, MyApp.MyConnection,
-        pool_timeout: 500
-
-  This configuration will be used to wait for an available worker
-  to execute a query and defaults to `5_000`.
-
   ## Writing Points
 
   Writing data to your InfluxDB server can be done via
