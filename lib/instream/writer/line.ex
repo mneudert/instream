@@ -9,7 +9,7 @@ defmodule Instream.Writer.Line do
 
   @behaviour Instream.Writer
 
-  def write(%{payload: %{points: [_ | _] = points}, opts: query_opts}, opts, %{module: conn}) do
+  def write(%{payload: %{points: [_ | _] = points}, opts: query_opts}, opts, conn) do
     config = conn.config()
     headers = Headers.assemble(config) ++ [{"Content-Type", "text/plain"}]
     body = Encoder.encode(points)

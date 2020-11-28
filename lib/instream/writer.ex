@@ -7,32 +7,16 @@ defmodule Instream.Writer do
   alias Instream.Response
 
   @optional_callbacks [
-    init_worker: 1,
-    terminate_worker: 1
+    writer_workers: 1
   ]
 
-  @type worker_state :: %{
-          required(:module) => module,
-          optional(term) => term
-        }
-
   @doc """
-  Called during worker initialization.
-
-  This will be called for every process in the worker pool individually.
+  Optional list of workers to be supervised by the connection.
   """
-  @callback init_worker(worker_state) :: worker_state
-
-  @doc """
-  Called during worker termination.
-
-  This will be called for every process in the worker pool individually.
-  """
-  @callback terminate_worker(worker_state) :: :ok
+  @callback writer_workers(conn :: module) :: [:supervisor.child_spec() | {module, term} | module]
 
   @doc """
   Writes a point.
   """
-  @callback write(payload :: Query.t(), opts :: Keyword.t(), worker_state) ::
-              Response.t()
+  @callback write(payload :: Query.t(), opts :: Keyword.t(), conn :: module) :: Response.t()
 end
