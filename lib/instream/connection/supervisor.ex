@@ -4,7 +4,7 @@ defmodule Instream.Connection.Supervisor do
   use Supervisor
 
   @doc false
-  def start_link(conn, name), do: Supervisor.start_link(__MODULE__, conn, name: name)
+  def start_link(conn), do: Supervisor.start_link(__MODULE__, conn, name: conn)
 
   @doc false
   def init(conn) do

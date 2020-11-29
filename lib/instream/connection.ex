@@ -107,8 +107,8 @@ defmodule Instream.Connection do
 
       def child_spec(_) do
         %{
-          id: __MODULE__.Supervisor,
-          start: {Supervisor, :start_link, [__MODULE__, __MODULE__.Supervisor]}
+          id: __MODULE__,
+          start: {Supervisor, :start_link, [__MODULE__]}
         }
       end
 
