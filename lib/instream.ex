@@ -40,10 +40,6 @@ defmodule Instream do
   3. `Instream.Connection` configuration
   4. No database used!
 
-  Write queries can be executed asynchronously by passing `[async: true]` to
-  `MyApp.MyConnection.write()`. The result will then always be an immediate
-  `:ok` without waiting for the query to be actually executed.
-
   By default the response of a query will be a map decoded from your
   server's JSON response.
 

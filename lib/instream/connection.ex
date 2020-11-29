@@ -190,7 +190,6 @@ defmodule Instream.Connection do
 
   Options:
 
-  - `async`: pass `true` to execute the write asynchronously
   - `database`: write data to a database differing from the point database
   - `precision`: write points with a "precision" other than `:nanosecond`
   - `retention_policy`: write data to your database with a specific

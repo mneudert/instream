@@ -1,8 +1,6 @@
 defmodule Instream.ConnectionTest do
   use ExUnit.Case, async: true
 
-  import Instream.TestHelpers.Retry
-
   alias Instream.TestHelpers.Connections.DefaultConnection
   alias Instream.TestHelpers.Connections.DefaultConnectionV2
   alias Instream.TestHelpers.Connections.GuestConnection
@@ -139,42 +137,6 @@ defmodule Instream.ConnectionTest do
 
     assert @tags == values_tags
     assert 0 < length(value_rows)
-  end
-
-  test "write data async" do
-    measurement = "write_data_async"
-
-    assert :ok =
-             %{
-               database: @database,
-               points: [
-                 %{
-                   measurement: measurement,
-                   tags: @tags,
-                   fields: %{value: 0.99}
-                 }
-               ]
-             }
-             |> DefaultConnection.write(async: true)
-
-    assert retry(
-             250,
-             25,
-             fn ->
-               DefaultConnection.query(
-                 "SELECT * FROM #{measurement} GROUP BY *",
-                 database: @database
-               )
-             end,
-             fn
-               %{results: [%{series: [%{tags: values_tags, values: value_rows}]}]} ->
-                 assert @tags == values_tags
-                 assert 0 < length(value_rows)
-
-               _ ->
-                 false
-             end
-           )
   end
 
   test "writing series struct" do

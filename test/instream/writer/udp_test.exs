@@ -37,13 +37,13 @@ defmodule Instream.WriterTest do
 
   @tag :"influxdb_exclude_2.0"
   @tag :udp
-  test "writer protocol: UDP" do
+  test "writer protocol: UDP (async: false)" do
     start_supervised(UDPConnection)
 
     assert :ok =
              %{
                timestamp: 1_439_587_927_000_000_000,
-               proto: "UDP",
+               proto: "UDP-sync",
                value: "UDP"
              }
              |> ProtocolsSeries.from_map()
@@ -54,7 +54,7 @@ defmodule Instream.WriterTest do
              50,
              fn ->
                DefaultConnection.query(
-                 "SELECT * FROM #{ProtocolsSeries.__meta__(:measurement)} WHERE proto='UDP'",
+                 "SELECT * FROM #{ProtocolsSeries.__meta__(:measurement)} WHERE proto='UDP-sync'",
                  database: ProtocolsSeries.__meta__(:database),
                  precision: :nanosecond
                )
@@ -65,7 +65,51 @@ defmodule Instream.WriterTest do
                    %{
                      series: [
                        %{
-                         values: [[1_439_587_927_000_000_000, "UDP", "UDP"]]
+                         values: [[1_439_587_927_000_000_000, "UDP-sync", "UDP"]]
+                       }
+                     ]
+                   }
+                 ]
+               } ->
+                 true
+
+               _ ->
+                 false
+             end
+           )
+  end
+
+  @tag :"influxdb_exclude_2.0"
+  @tag :udp
+  test "writer protocol: UDP (async: true)" do
+    start_supervised(UDPConnection)
+
+    assert :ok =
+             %{
+               timestamp: 1_439_587_927_000_000_000,
+               proto: "UDP-async",
+               value: "UDP"
+             }
+             |> ProtocolsSeries.from_map()
+             |> UDPConnection.write(async: true)
+
+    assert retry(
+             2500,
+             50,
+             fn ->
+               DefaultConnection.query(
+                 "SELECT * FROM #{ProtocolsSeries.__meta__(:measurement)} WHERE proto='UDP-async'",
+                 database: ProtocolsSeries.__meta__(:database),
+                 precision: :nanosecond
+               )
+             end,
+             fn
+               %{
+                 results: [
+                   %{
+                     series: [
+                       %{
+                         values: [[1_439_587_927_000_000_000, "UDP-async", "UDP"]]
                        }
                      ]
                    }

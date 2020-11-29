@@ -2,6 +2,10 @@ defmodule Instream.Writer.UDP do
   @moduledoc """
   Point writer for the line protocol using UDP.
 
+  Write queries can be executed asynchronously by passing `[async: true]` to
+  `MyApp.MyConnection.write()`. The result will then always be an immediate
+  `:ok` without waiting for the query to be actually executed.
+
   ## Configuration
 
   Write queries are run through a process pool having an additional timeout:
@@ -18,6 +22,8 @@ defmodule Instream.Writer.UDP do
 
   @behaviour :poolboy_worker
   @behaviour Instream.Writer
+
+  @response {200, [], ""}
 
   def writer_workers(conn) do
     pool_name = Module.concat(conn, UDPWriterPool)
@@ -52,16 +58,15 @@ defmodule Instream.Writer.UDP do
 
     worker = :poolboy.checkout(pool_name, pool_timeout)
 
-    result =
-      if opts[:async] do
-        GenServer.cast(worker, {:execute, query, opts})
-      else
-        GenServer.call(worker, {:execute, query, opts}, :infinity)
-      end
+    if opts[:async] do
+      :ok = GenServer.cast(worker, {:execute, query, opts})
+    else
+      _ = GenServer.call(worker, {:execute, query, opts}, :infinity)
+    end
 
     :ok = :poolboy.checkin(pool_name, worker)
 
-    result
+    @response
   end
 
   def handle_call({:execute, query, _opts}, _from, state) do
@@ -86,9 +91,8 @@ defmodule Instream.Writer.UDP do
         String.to_charlist(payload)
       )
 
-    # always ":ok"
-    {200, [], ""}
+    @response
   end
 
-  defp do_write(_, _), do: {200, [], ""}
+  defp do_write(_, _), do: @response
 end
