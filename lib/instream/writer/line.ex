@@ -1,6 +1,10 @@
 defmodule Instream.Writer.Line do
   @moduledoc """
   Point writer for the line protocol.
+
+  ## Additional Write Options
+
+  - `retention_policy`: write data with a specific retention policy
   """
 
   alias Instream.Encoder.Line, as: Encoder

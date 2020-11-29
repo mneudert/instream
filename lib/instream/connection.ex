@@ -192,9 +192,8 @@ defmodule Instream.Connection do
 
   - `database`: write data to a database differing from the point database
   - `precision`: write points with a "precision" other than `:nanosecond`
-  - `retention_policy`: write data to your database with a specific
-    retention policy, only affects writes using the line protocol
-    (`Instream.Writer.Line`, default if unconfigured)
+
+  Additional options depend on the writer module configured.
   """
   @callback write(payload :: map | [map], opts :: Keyword.t()) :: any
 end

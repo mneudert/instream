@@ -2,10 +2,6 @@ defmodule Instream.Writer.UDP do
   @moduledoc """
   Point writer for the line protocol using UDP.
 
-  Write queries can be executed asynchronously by passing `[async: true]` to
-  `MyApp.MyConnection.write()`. The result will then always be an immediate
-  `:ok` without waiting for the query to be actually executed.
-
   ## Configuration
 
   Write queries are run through a process pool having an additional timeout:
@@ -16,6 +12,10 @@ defmodule Instream.Writer.UDP do
 
   This configuration will be used to wait for an available worker
   to execute a query and defaults to `5_000`.
+
+  ## Additional Write Options
+
+  - `async: true`: execute writes asynchronously
   """
 
   alias Instream.Encoder.Line, as: Encoder
