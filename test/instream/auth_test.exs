@@ -1,7 +1,7 @@
 defmodule Instream.AuthTest do
   use ExUnit.Case, async: true
 
-  @tag :"influxdb_exclude_1.8"
+  @tag :"influxdb_exclude_2.0"
   test "anonymous user connection" do
     defmodule AnonymousConnection do
       use Instream.Connection,
@@ -14,7 +14,7 @@ defmodule Instream.AuthTest do
              AnonymousConnection.query("SHOW DATABASES")
   end
 
-  @tag :"influxdb_exclude_1.8"
+  @tag :"influxdb_exclude_2.0"
   test "basic auth connection" do
     defmodule BasicAuthConnection do
       use Instream.Connection,
@@ -27,7 +27,7 @@ defmodule Instream.AuthTest do
     assert %{results: _} = BasicAuthConnection.query("SHOW DATABASES")
   end
 
-  @tag :"influxdb_exclude_1.8"
+  @tag :"influxdb_exclude_2.0"
   test "default auth connection" do
     defmodule DefaultAuthConnection do
       use Instream.Connection,
@@ -40,7 +40,7 @@ defmodule Instream.AuthTest do
     assert %{results: _} = DefaultAuthConnection.query("SHOW DATABASES")
   end
 
-  @tag :"influxdb_exclude_1.8"
+  @tag :"influxdb_exclude_2.0"
   test "query auth connection" do
     defmodule QueryAuthConnection do
       use Instream.Connection,
@@ -53,7 +53,7 @@ defmodule Instream.AuthTest do
     assert %{results: _} = QueryAuthConnection.query("SHOW DATABASES")
   end
 
-  @tag :"influxdb_exclude_1.8"
+  @tag :"influxdb_exclude_2.0"
   test "invalid password" do
     defmodule AuthenticationFailedConnection do
       use Instream.Connection,
@@ -67,7 +67,7 @@ defmodule Instream.AuthTest do
              AuthenticationFailedConnection.query("SHOW DATABASES")
   end
 
-  @tag :"influxdb_exclude_1.8"
+  @tag :"influxdb_exclude_2.0"
   test "user not found" do
     defmodule NotFoundConnection do
       use Instream.Connection,

@@ -21,8 +21,8 @@ defmodule Instream.Connection.ConfigTest do
     assert :exists = Keyword.get(conn.config(), key)
   end
 
-  @tag :"influxdb_exclude_2.0"
-  test "default value access 1.x", %{test: test} do
+  @tag :"influxdb_include_2.0"
+  test "default value access 2.x", %{test: test} do
     # credo:disable-for-next-line Credo.Check.Refactor.PipeChainStart
     assert "http" = Config.get(test, __MODULE__, nil) |> Keyword.get(:scheme)
     refute Config.get(test, __MODULE__, [:auth, :token])
@@ -31,8 +31,8 @@ defmodule Instream.Connection.ConfigTest do
     assert "instream_test" = DefaultConnection.config([:auth, :token])
   end
 
-  @tag :"influxdb_exclude_1.8"
-  test "default value access 2.x", %{test: test} do
+  @tag :"influxdb_exclude_2.0"
+  test "default value access 1.x", %{test: test} do
     # credo:disable-for-next-line Credo.Check.Refactor.PipeChainStart
     assert "http" = Config.get(test, __MODULE__, nil) |> Keyword.get(:scheme)
     refute Config.get(test, __MODULE__, [:auth, :username])
@@ -41,8 +41,8 @@ defmodule Instream.Connection.ConfigTest do
     assert "instream_test" = DefaultConnection.config([:auth, :username])
   end
 
-  @tag :"influxdb_exclude_2.0"
-  test "deep configuration access 1.x" do
+  @tag :"influxdb_include_2.0"
+  test "deep configuration access 2.x" do
     assert is_list(DefaultConnection.config())
 
     assert :instream = DefaultConnection.config([:otp_app])
@@ -51,8 +51,8 @@ defmodule Instream.Connection.ConfigTest do
     refute DefaultConnection.config([:key_without_value])
   end
 
-  @tag :"influxdb_exclude_1.8"
-  test "deep configuration access 2.x" do
+  @tag :"influxdb_exclude_2.0"
+  test "deep configuration access 1.x" do
     assert is_list(DefaultConnection.config())
 
     assert :instream = DefaultConnection.config([:otp_app])

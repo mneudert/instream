@@ -47,7 +47,7 @@ defmodule Instream.Log.DefaultLoggerTest do
     :ok
   end
 
-  @tag :"influxdb_exclude_1.8"
+  @tag :"influxdb_exclude_2.0"
   test "logging ping request" do
     log =
       capture_log(fn ->
@@ -96,7 +96,7 @@ defmodule Instream.Log.DefaultLoggerTest do
     refute String.contains?(log, ~s(PASSWORD "instream_test"))
   end
 
-  @tag :"influxdb_exclude_1.8"
+  @tag :"influxdb_exclude_2.0"
   test "logging status request" do
     log =
       capture_log(fn ->
@@ -141,7 +141,7 @@ defmodule Instream.Log.DefaultLoggerTest do
   end
 
   describe "passing [log: false]" do
-    @tag :"influxdb_exclude_1.8"
+    @tag :"influxdb_exclude_2.0"
     test "not logging ping requests" do
       assert "" =
                capture_log(fn ->

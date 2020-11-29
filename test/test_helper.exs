@@ -59,10 +59,16 @@ conn_version =
   |> Kernel.to_string()
   |> Version.parse()
 
-skip_versions =
+excludes =
   case conn_version do
-    :error -> ["1.8", "1.7"]
-    {:ok, version} -> ["2.0" | Enum.filter(["1.7"], &Version.match?(version, "~> #{&1}"))]
+    :error ->
+      [:"influxdb_exclude_2.0", :"influxdb_include_1.8", :"influxdb_include_1.7"]
+
+    {:ok, %{major: 1, minor: 8}} ->
+      [:"influxdb_exclude_1.8", :"influxdb_include_2.0", :"influxdb_include_1.7"]
+
+    {:ok, %{major: 1, minor: 7}} ->
+      [:"influxdb_exclude_1.7", :"influxdb_include_2.0", :"influxdb_include_1.8"]
   end
 
 version =
@@ -71,12 +77,7 @@ version =
     {:ok, ver} -> "#{ver.major}.#{ver.minor}"
   end
 
-config = Keyword.put(config, :exclude, config[:exclude] || [])
-
-config =
-  Enum.reduce(skip_versions, config, fn skip_version, acc ->
-    Keyword.put(acc, :exclude, [:"influxdb_exclude_#{skip_version}" | acc[:exclude]])
-  end)
+config = Keyword.put(config, :exclude, excludes ++ (config[:exclude] || []))
 
 IO.puts("Running tests for InfluxDB version: #{version}")
 
