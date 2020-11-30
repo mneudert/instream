@@ -3,6 +3,25 @@ defmodule Instream.Encoder.LineTest do
 
   alias Instream.Encoder.Line
 
+  test "empty point (no effective fields/tags)" do
+    measurement = "test_empty"
+
+    points = [
+      %{
+        measurement: measurement,
+        fields: %{
+          value: nil
+        },
+        tags: %{
+          value: nil
+        },
+        timestamp: nil
+      }
+    ]
+
+    assert ^measurement = Line.encode(points)
+  end
+
   # This test suite is a direct port of:
   # https://influxdb.com/docs/v0.9/write_protocols/write_syntax.html
 
