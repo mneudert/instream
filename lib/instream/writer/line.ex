@@ -15,7 +15,7 @@ defmodule Instream.Writer.Line do
 
   def write(%{payload: %{points: [_ | _] = points}, opts: query_opts}, opts, conn) do
     config = conn.config()
-    headers = Headers.assemble(config) ++ [{"Content-Type", "text/plain"}]
+    headers = Headers.assemble(config, opts) ++ [{"Content-Type", "text/plain"}]
     body = Encoder.encode(points)
 
     url =
