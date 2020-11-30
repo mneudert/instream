@@ -23,9 +23,11 @@ defmodule Instream.Log.DefaultLoggerTest do
   end
 
   setup_all do
+    default_auth = DefaultConnection.config(:auth)
+
     auth =
-      case DefaultConnection.config([:auth, :token]) do
-        nil -> DefaultConnection.config([:auth])
+      case Keyword.get(default_auth, :token) do
+        nil -> default_auth
         token -> [method: :token, token: token]
       end
 
@@ -37,7 +39,7 @@ defmodule Instream.Log.DefaultLoggerTest do
       Keyword.merge(
         conn_env,
         auth: auth,
-        version: DefaultConnection.config([:version])
+        version: DefaultConnection.config(:version)
       )
     )
   end
@@ -59,7 +61,7 @@ defmodule Instream.Log.DefaultLoggerTest do
     assert String.contains?(log, "ping")
     assert String.contains?(log, "pong")
 
-    assert String.contains?(log, LogConnection.config([:host]))
+    assert String.contains?(log, LogConnection.config(:host))
 
     assert String.contains?(log, "query_time=")
     assert String.contains?(log, "response_status=204")
@@ -108,7 +110,7 @@ defmodule Instream.Log.DefaultLoggerTest do
     assert String.contains?(log, "status")
     assert String.contains?(log, "ok")
 
-    assert String.contains?(log, LogConnection.config([:host]))
+    assert String.contains?(log, LogConnection.config(:host))
 
     assert String.contains?(log, "query_time=")
     assert String.contains?(log, "response_status=204")

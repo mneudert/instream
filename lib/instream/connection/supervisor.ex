@@ -9,12 +9,12 @@ defmodule Instream.Connection.Supervisor do
   @doc false
   def init(conn) do
     :ok =
-      case conn.config([:init]) do
+      case conn.config(:init) do
         nil -> :ok
         {mod, fun} -> apply(mod, fun, [conn])
       end
 
-    writer = conn.config([:writer])
+    writer = conn.config(:writer)
 
     workers =
       if Code.ensure_loaded?(writer) and function_exported?(writer, :writer_workers, 1) do

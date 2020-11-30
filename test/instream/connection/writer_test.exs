@@ -47,9 +47,11 @@ defmodule Instream.Connection.WriterTest do
   end
 
   setup_all do
+    default_auth = DefaultConnection.config(:auth)
+
     auth =
-      case DefaultConnection.config([:auth, :token]) do
-        nil -> DefaultConnection.config([:auth])
+      case Keyword.get(default_auth, :token) do
+        nil -> default_auth
         token -> [method: :token, token: token]
       end
 
@@ -61,7 +63,7 @@ defmodule Instream.Connection.WriterTest do
       Keyword.merge(
         conn_env,
         auth: auth,
-        version: DefaultConnection.config([:version])
+        version: DefaultConnection.config(:version)
       )
     )
   end

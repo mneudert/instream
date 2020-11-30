@@ -29,7 +29,7 @@ defmodule Instream.Writer.UDP do
     pool_name = Module.concat(conn, UDPWriterPool)
 
     pool_opts =
-      (conn.config([:pool]) || [])
+      (conn.config(:pool) || [])
       |> Keyword.take([:size, :max_overflow])
       |> Keyword.put(:name, {:local, pool_name})
       |> Keyword.put(:worker_module, __MODULE__)
@@ -51,7 +51,7 @@ defmodule Instream.Writer.UDP do
   def terminate(_reason, %{udp_socket: socket}), do: :gen_udp.close(socket)
 
   def write(query, opts, conn) do
-    default_pool_timeout = conn.config([:pool_timeout]) || 5000
+    default_pool_timeout = conn.config(:pool_timeout) || 5000
 
     pool_name = Module.concat(conn, UDPWriterPool)
     pool_timeout = opts[:pool_timeout] || default_pool_timeout

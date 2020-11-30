@@ -38,9 +38,11 @@ defmodule Instream.Connection.DatabaseTest do
   end
 
   setup_all do
+    default_auth = DefaultConnection.config(:auth)
+
     auth =
-      case DefaultConnection.config([:auth, :token]) do
-        nil -> DefaultConnection.config([:auth])
+      case Keyword.get(default_auth, :token) do
+        nil -> default_auth
         token -> [method: :token, token: token]
       end
 
@@ -52,7 +54,7 @@ defmodule Instream.Connection.DatabaseTest do
       Keyword.merge(
         conn_env,
         auth: auth,
-        version: DefaultConnection.config([:version])
+        version: DefaultConnection.config(:version)
       )
     )
   end
@@ -67,7 +69,7 @@ defmodule Instream.Connection.DatabaseTest do
       InvalidDbConnection.query("SELECT * FROM database_config_test")
 
     assert String.contains?(message, "database not found")
-    assert String.contains?(message, InvalidDbConnection.config([:database]))
+    assert String.contains?(message, InvalidDbConnection.config(:database))
   end
 
   test "read || opts database has priority over connection database" do
@@ -78,14 +80,14 @@ defmodule Instream.Connection.DatabaseTest do
 
     assert String.contains?(message, "database not found")
     assert String.contains?(message, opts[:database])
-    refute String.contains?(message, InvalidDbConnection.config([:database]))
+    refute String.contains?(message, InvalidDbConnection.config(:database))
   end
 
   test "write || default: database from connection" do
     %{error: message} = InvalidDbConnection.write(%NoDatabaseSeries{})
 
     assert String.contains?(message, "database not found")
-    assert String.contains?(message, InvalidDbConnection.config([:database]))
+    assert String.contains?(message, InvalidDbConnection.config(:database))
   end
 
   test "write || series database has priority over connection database" do
@@ -93,7 +95,7 @@ defmodule Instream.Connection.DatabaseTest do
 
     assert String.contains?(message, "database not found")
     assert String.contains?(message, DatabaseSeries.__meta__(:database))
-    refute String.contains?(message, InvalidDbConnection.config([:database]))
+    refute String.contains?(message, InvalidDbConnection.config(:database))
   end
 
   test "write || opts database has priority over series database" do

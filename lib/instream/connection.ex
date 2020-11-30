@@ -94,7 +94,7 @@ defmodule Instream.Connection do
 
       @doc false
       def __log__(entry) do
-        case config([:loggers]) do
+        case config(:loggers) do
           [_ | _] = loggers ->
             Enum.reduce(loggers, entry, fn {mod, fun, extra_args}, acc ->
               apply(mod, fun, [acc | extra_args])
@@ -112,12 +112,12 @@ defmodule Instream.Connection do
         }
       end
 
-      def config(keys \\ nil) do
-        Connection.Config.get(@otp_app, __MODULE__, keys, @config)
+      def config(key \\ nil) do
+        Connection.Config.get(@otp_app, __MODULE__, key, @config)
       end
 
       def ping(opts \\ []) do
-        case config([:version]) do
+        case config(:version) do
           :v2 -> {:error, :version_mismatch}
           _ -> QueryPlanner.execute(%Query{type: :ping}, opts, __MODULE__)
         end
@@ -126,14 +126,14 @@ defmodule Instream.Connection do
       def query(query, opts \\ []), do: QueryPlanner.execute(query, opts, __MODULE__)
 
       def status(opts \\ []) do
-        case config([:version]) do
+        case config(:version) do
           :v2 -> {:error, :version_mismatch}
           _ -> QueryPlanner.execute(%Query{type: :status}, opts, __MODULE__)
         end
       end
 
       def version(opts \\ []) do
-        case config([:version]) do
+        case config(:version) do
           :v2 -> {:error, :version_mismatch}
           _ -> QueryPlanner.execute(%Query{type: :version}, opts, __MODULE__)
         end

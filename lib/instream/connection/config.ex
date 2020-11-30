@@ -209,28 +209,27 @@ defmodule Instream.Connection.Config do
   @doc """
   Retrieves the connection configuration for `conn` in `otp_app`.
   """
-  @spec get(atom, module, nil | nonempty_list(term), Keyword.t()) :: Keyword.t()
-  def get(otp_app, conn, keys, defaults \\ [])
+  @spec get(atom, module, nil | atom, Keyword.t()) :: Keyword.t()
+  def get(otp_app, _, :otp_app, _), do: otp_app
+  def get(nil, _, nil, defaults), do: Keyword.merge(@global_defaults, defaults)
 
-  def get(otp_app, _, [:otp_app], _), do: otp_app
-
-  def get(otp_app, conn, keys, defaults) do
-    defaults
-    |> maybe_merge_app_env(otp_app, conn)
-    |> maybe_fetch_deep(keys)
-    |> maybe_use_default(keys)
+  def get(nil, _, key, defaults) do
+    @global_defaults
+    |> Keyword.merge(defaults)
+    |> Keyword.get(key)
   end
 
-  defp maybe_fetch_deep(config, nil), do: config
-  defp maybe_fetch_deep(config, keys), do: get_in(config, keys)
+  def get(otp_app, conn, key, defaults) do
+    app_env = Application.get_env(otp_app, conn, [])
 
-  defp maybe_merge_app_env(config, nil, _), do: config
+    config =
+      @global_defaults
+      |> Keyword.merge(defaults)
+      |> Keyword.merge(app_env)
 
-  defp maybe_merge_app_env(config, otp_app, conn) do
-    Keyword.merge(config, Application.get_env(otp_app, conn, []))
+    case key do
+      nil -> config
+      _ -> Keyword.get(config, key)
+    end
   end
-
-  defp maybe_use_default(config, nil), do: Keyword.merge(@global_defaults, config)
-  defp maybe_use_default(nil, keys), do: get_in(@global_defaults, keys)
-  defp maybe_use_default(config, _), do: config
 end
