@@ -82,7 +82,7 @@ defmodule Instream.Connection do
   defmacro __using__(opts) do
     quote bind_quoted: [opts: opts] do
       alias Instream.Connection
-      alias Instream.Connection.QueryPlanner
+      alias Instream.Connection.QueryRunner
       alias Instream.Connection.Supervisor
       alias Instream.Data
       alias Instream.Query
@@ -119,23 +119,27 @@ defmodule Instream.Connection do
       def ping(opts \\ []) do
         case config(:version) do
           :v2 -> {:error, :version_mismatch}
-          _ -> QueryPlanner.execute(%Query{type: :ping}, opts, __MODULE__)
+          _ -> QueryRunner.ping(%Query{type: :ping}, opts, __MODULE__)
         end
       end
 
-      def query(query, opts \\ []), do: QueryPlanner.execute(query, opts, __MODULE__)
+      def query(query, opts \\ []) do
+        query
+        |> Data.Read.query(opts)
+        |> QueryRunner.read(opts, __MODULE__)
+      end
 
       def status(opts \\ []) do
         case config(:version) do
           :v2 -> {:error, :version_mismatch}
-          _ -> QueryPlanner.execute(%Query{type: :status}, opts, __MODULE__)
+          _ -> QueryRunner.status(%Query{type: :status}, opts, __MODULE__)
         end
       end
 
       def version(opts \\ []) do
         case config(:version) do
           :v2 -> {:error, :version_mismatch}
-          _ -> QueryPlanner.execute(%Query{type: :version}, opts, __MODULE__)
+          _ -> QueryRunner.version(%Query{type: :version}, opts, __MODULE__)
         end
       end
 
@@ -145,7 +149,7 @@ defmodule Instream.Connection do
 
         payload
         |> Data.Write.query(opts)
-        |> QueryPlanner.execute(opts, __MODULE__)
+        |> QueryRunner.write(opts, __MODULE__)
       end
     end
   end
