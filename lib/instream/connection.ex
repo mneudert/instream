@@ -172,7 +172,7 @@ defmodule Instream.Connection do
 
   Options:
 
-  - `method`: whether to use a "GET" or "POST" request (as atom)
+  - `method`: whether to use a `:get` or `:post` request
   - `precision`: return data with a "precision" other than `:rfc3339`
   """
   @callback query(query :: String.t(), opts :: Keyword.t()) :: any
