@@ -67,7 +67,6 @@ defmodule Instream.Connection do
   """
 
   alias Instream.Log
-  alias Instream.Query
 
   @type log_entry ::
           Log.PingEntry.t()
@@ -85,7 +84,6 @@ defmodule Instream.Connection do
       alias Instream.Connection.QueryRunner
       alias Instream.Connection.Supervisor
       alias Instream.Data
-      alias Instream.Query
 
       @behaviour Connection
 
@@ -119,7 +117,7 @@ defmodule Instream.Connection do
       def ping(opts \\ []) do
         case config(:version) do
           :v2 -> {:error, :version_mismatch}
-          _ -> QueryRunner.ping(%Query{type: :ping}, opts, __MODULE__)
+          _ -> QueryRunner.ping(opts, __MODULE__)
         end
       end
 
@@ -132,14 +130,14 @@ defmodule Instream.Connection do
       def status(opts \\ []) do
         case config(:version) do
           :v2 -> {:error, :version_mismatch}
-          _ -> QueryRunner.status(%Query{type: :status}, opts, __MODULE__)
+          _ -> QueryRunner.status(opts, __MODULE__)
         end
       end
 
       def version(opts \\ []) do
         case config(:version) do
           :v2 -> {:error, :version_mismatch}
-          _ -> QueryRunner.version(%Query{type: :version}, opts, __MODULE__)
+          _ -> QueryRunner.version(opts, __MODULE__)
         end
       end
 

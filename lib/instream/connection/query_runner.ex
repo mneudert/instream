@@ -15,8 +15,8 @@ defmodule Instream.Connection.QueryRunner do
   @doc """
   Executes `:ping` queries.
   """
-  @spec ping(Query.t(), Keyword.t(), module) :: :pong | :error
-  def ping(%Query{}, opts, conn) do
+  @spec ping(Keyword.t(), module) :: :pong | :error
+  def ping(opts, conn) do
     config = conn.config()
     headers = Headers.assemble(config, opts)
 
@@ -94,8 +94,8 @@ defmodule Instream.Connection.QueryRunner do
   @doc """
   Execute `:status` queries.
   """
-  @spec status(Query.t(), Keyword.t(), module) :: :ok | :error
-  def status(%Query{}, opts, conn) do
+  @spec status(Keyword.t(), module) :: :ok | :error
+  def status(opts, conn) do
     config = conn.config()
     headers = Headers.assemble(config, opts)
 
@@ -135,8 +135,8 @@ defmodule Instream.Connection.QueryRunner do
   @doc """
   Executes `:version` queries.
   """
-  @spec version(Query.t(), Keyword.t(), module) :: any
-  def version(%Query{}, opts, conn) do
+  @spec version(Keyword.t(), module) :: any
+  def version(opts, conn) do
     config = conn.config()
     headers = Headers.assemble(config, opts)
 
