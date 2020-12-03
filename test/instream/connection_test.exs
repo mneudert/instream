@@ -46,7 +46,7 @@ defmodule Instream.ConnectionTest do
 
   test "read from empty measurement" do
     query = "SELECT value FROM empty_measurement"
-    result = DefaultConnection.query(query, database: @database)
+    result = DefaultConnection.query(query)
 
     assert %{results: _} = result
   end
@@ -56,7 +56,7 @@ defmodule Instream.ConnectionTest do
     query_out = "SELECT value FROM empty_measurement"
 
     result_in = DefaultConnection.query(query_in)
-    result_out = DefaultConnection.query(query_out, database: @database)
+    result_out = DefaultConnection.query(query_out)
 
     assert ^result_in = result_out
   end
@@ -129,10 +129,7 @@ defmodule Instream.ConnectionTest do
       |> DefaultConnection.write()
 
     assert %{results: [%{series: [%{tags: values_tags, values: value_rows}]}]} =
-             DefaultConnection.query(
-               "SELECT * FROM #{measurement} GROUP BY *",
-               database: @database
-             )
+             DefaultConnection.query("SELECT * FROM #{measurement} GROUP BY *")
 
     assert @tags == values_tags
     assert 0 < length(value_rows)
@@ -146,13 +143,10 @@ defmodule Instream.ConnectionTest do
         value: 17
       }
       |> TestSeries.from_map()
-      |> DefaultConnection.write(database: @database)
+      |> DefaultConnection.write()
 
     assert %{results: [%{series: [%{tags: values_tags, values: value_rows}]}]} =
-             DefaultConnection.query(
-               "SELECT * FROM data_write_struct GROUP BY *",
-               database: @database
-             )
+             DefaultConnection.query("SELECT * FROM data_write_struct GROUP BY *")
 
     assert @tags == values_tags
     assert 0 < length(value_rows)
@@ -221,7 +215,7 @@ defmodule Instream.ConnectionTest do
     query_out = "SELECT value FROM empty_measurement"
 
     result_in = query_in |> UnixSocketConnection.query()
-    result_out = query_out |> UnixSocketConnection.query(database: @database)
+    result_out = query_out |> UnixSocketConnection.query()
 
     assert ^result_in = result_out
   end

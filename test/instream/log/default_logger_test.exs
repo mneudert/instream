@@ -38,6 +38,7 @@ defmodule Instream.Log.DefaultLoggerTest do
       Keyword.merge(
         conn_env,
         auth: auth,
+        database: DefaultConnection.config(:database),
         version: DefaultConnection.config(:version)
       )
     )
@@ -129,7 +130,7 @@ defmodule Instream.Log.DefaultLoggerTest do
 
     log =
       capture_log(fn ->
-        :ok = LogConnection.write(points, database: "test_database")
+        :ok = LogConnection.write(points)
 
         :timer.sleep(10)
       end)

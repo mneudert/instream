@@ -208,7 +208,7 @@ defmodule Instream.Writer.LineTest do
   end
 
   test "writing with passed database option" do
-    database = "test_database"
+    database = DefaultConnection.config(:database)
 
     :ok =
       %{value: 100}
@@ -217,8 +217,7 @@ defmodule Instream.Writer.LineTest do
 
     assert %{results: [%{series: [%{columns: columns}]}]} =
              DefaultConnection.query(
-               "SELECT * FROM #{CustomDatabaseSeries.__meta__(:measurement)}",
-               database: database
+               "SELECT * FROM #{CustomDatabaseSeries.__meta__(:measurement)}"
              )
 
     assert Enum.member?(columns, "value")
@@ -243,10 +242,7 @@ defmodule Instream.Writer.LineTest do
              )
 
     assert %{results: [should_not_be_in_default_rp]} =
-             DefaultConnection.query(
-               "SELECT * FROM writer_protocols WHERE proto='ForRp'",
-               database: "test_database"
-             )
+             DefaultConnection.query("SELECT * FROM writer_protocols WHERE proto='ForRp'")
 
     refute Map.has_key?(should_not_be_in_default_rp, :series)
   end

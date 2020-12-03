@@ -62,6 +62,7 @@ defmodule Instream.Connection.WriterTest do
       Keyword.merge(
         conn_env,
         auth: auth,
+        database: DefaultConnection.config(:database),
         version: DefaultConnection.config(:version)
       )
     )
@@ -73,12 +74,12 @@ defmodule Instream.Connection.WriterTest do
     :ok =
       %{binary: "binary"}
       |> WriterSeries.from_map()
-      |> WriterConnection.write(database: "test_database")
+      |> WriterConnection.write()
 
     %{error: error} =
       %{binary: 12_345}
       |> WriterSeries.from_map()
-      |> WriterConnection.write(database: "test_database")
+      |> WriterConnection.write()
 
     assert "error has changed!" = error
   end

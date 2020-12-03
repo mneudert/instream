@@ -26,10 +26,7 @@ defmodule Instream.Encoder.PrecisionTest do
     ]
     |> Enum.each(fn {precision, timelen} ->
       %{results: [%{series: [%{values: [[time, _]]}]}]} =
-        DefaultConnection.query("SELECT * FROM precision_test",
-          database: "test_database",
-          precision: precision
-        )
+        DefaultConnection.query("SELECT * FROM precision_test", precision: precision)
 
       assert ^timelen =
                time
@@ -40,10 +37,7 @@ defmodule Instream.Encoder.PrecisionTest do
 
   test "rfc3339 precision" do
     %{results: [%{series: [%{values: [[time, _]]}]}]} =
-      DefaultConnection.query("SELECT * FROM precision_test",
-        database: "test_database",
-        precision: :rfc3339
-      )
+      DefaultConnection.query("SELECT * FROM precision_test", precision: :rfc3339)
 
     assert 20 <=
              time
