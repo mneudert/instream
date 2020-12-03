@@ -192,7 +192,7 @@ defmodule Instream.Connection do
 
   Options:
 
-  - `database`: write data to a database differing from the point database
+  - `database`: write data to a database differing from the connection database
   - `precision`: write points with a "precision" other than `:nanosecond`
 
   Additional options depend on the writer module configured.

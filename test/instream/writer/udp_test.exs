@@ -9,7 +9,6 @@ defmodule Instream.WriterTest do
     use Instream.Series
 
     series do
-      database "test_database"
       measurement "writer_protocols"
 
       tag :proto
@@ -55,7 +54,6 @@ defmodule Instream.WriterTest do
              fn ->
                DefaultConnection.query(
                  "SELECT * FROM #{ProtocolsSeries.__meta__(:measurement)} WHERE proto='UDP-sync'",
-                 database: ProtocolsSeries.__meta__(:database),
                  precision: :nanosecond
                )
              end,
@@ -99,7 +97,6 @@ defmodule Instream.WriterTest do
              fn ->
                DefaultConnection.query(
                  "SELECT * FROM #{ProtocolsSeries.__meta__(:measurement)} WHERE proto='UDP-async'",
-                 database: ProtocolsSeries.__meta__(:database),
                  precision: :nanosecond
                )
              end,

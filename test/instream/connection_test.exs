@@ -13,7 +13,6 @@ defmodule Instream.ConnectionTest do
     use Instream.Series
 
     series do
-      database "test_database"
       measurement "data_write_struct"
 
       tag :bar
@@ -147,7 +146,7 @@ defmodule Instream.ConnectionTest do
         value: 17
       }
       |> TestSeries.from_map()
-      |> DefaultConnection.write()
+      |> DefaultConnection.write(database: @database)
 
     assert %{results: [%{series: [%{tags: values_tags, values: value_rows}]}]} =
              DefaultConnection.query(

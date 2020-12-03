@@ -108,7 +108,6 @@ defmodule MySeries do
   use Instream.Series
 
   series do
-    database "my_database"
     measurement "my_measurement"
 
     tag :bar

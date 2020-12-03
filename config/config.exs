@@ -9,6 +9,7 @@ if Mix.env() == :test do
 
   config :instream, TestHelpers.Connections.DefaultConnection,
     auth: [username: "instream_test", password: "instream_test"],
+    database: "test_database",
     loggers: []
 
   config :instream, TestHelpers.Connections.DefaultConnectionV2,

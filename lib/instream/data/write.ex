@@ -13,10 +13,6 @@ defmodule Instream.Data.Write do
     determine_database(point, opts)
   end
 
-  def determine_database(%{__struct__: series}, opts) do
-    opts[:database] || series.__meta__(:database)
-  end
-
   def determine_database(%{database: database}, opts) do
     opts[:database] || database
   end

@@ -7,7 +7,6 @@ defmodule Instream.Writer.LineTest do
     use Instream.Series
 
     series do
-      database "test_database"
       measurement "location"
 
       tag :scope
@@ -20,7 +19,6 @@ defmodule Instream.Writer.LineTest do
     use Instream.Series
 
     series do
-      database "test_database"
       measurement "empty_tags"
 
       tag :filled
@@ -35,7 +33,6 @@ defmodule Instream.Writer.LineTest do
     use Instream.Series
 
     series do
-      database "test_database"
       measurement "writer_errors"
 
       field :binary
@@ -46,7 +43,6 @@ defmodule Instream.Writer.LineTest do
     use Instream.Series
 
     series do
-      database "test_database"
       measurement "writer_line_encoding"
 
       field :binary
@@ -60,7 +56,6 @@ defmodule Instream.Writer.LineTest do
     use Instream.Series
 
     series do
-      database "invalid_test_database"
       measurement "writer_database_option"
 
       field :value
@@ -71,7 +66,6 @@ defmodule Instream.Writer.LineTest do
     use Instream.Series
 
     series do
-      database "test_database"
       measurement "writer_protocols"
 
       tag :proto
@@ -107,7 +101,6 @@ defmodule Instream.Writer.LineTest do
            } =
              DefaultConnection.query(
                "SELECT * FROM #{ProtocolsSeries.__meta__(:measurement)} WHERE proto='Line'",
-               database: ProtocolsSeries.__meta__(:database),
                precision: :nanosecond
              )
   end
@@ -135,8 +128,7 @@ defmodule Instream.Writer.LineTest do
              ]
            } =
              DefaultConnection.query(
-               "SELECT * FROM #{LineEncodingSeries.__meta__(:measurement)} GROUP BY *",
-               database: LineEncodingSeries.__meta__(:database)
+               "SELECT * FROM #{LineEncodingSeries.__meta__(:measurement)} GROUP BY *"
              )
   end
 
@@ -152,11 +144,7 @@ defmodule Instream.Writer.LineTest do
                  series: [_]
                }
              ]
-           } =
-             DefaultConnection.query(
-               "SELECT * FROM #{ErrorsSeries.__meta__(:measurement)}",
-               database: ErrorsSeries.__meta__(:database)
-             )
+           } = DefaultConnection.query("SELECT * FROM #{ErrorsSeries.__meta__(:measurement)}")
 
     # make entry fail
     %{error: error} =
@@ -198,11 +186,7 @@ defmodule Instream.Writer.LineTest do
                  ]
                }
              ]
-           } =
-             DefaultConnection.query(
-               "SELECT * FROM #{BatchSeries.__meta__(:measurement)}",
-               database: BatchSeries.__meta__(:database)
-             )
+           } = DefaultConnection.query("SELECT * FROM #{BatchSeries.__meta__(:measurement)}")
   end
 
   test "writing without all tags present" do
@@ -215,10 +199,7 @@ defmodule Instream.Writer.LineTest do
       |> DefaultConnection.write()
 
     assert %{results: [%{series: [%{columns: columns}]}]} =
-             DefaultConnection.query(
-               "SELECT * FROM #{EmptyTagSeries.__meta__(:measurement)}",
-               database: EmptyTagSeries.__meta__(:database)
-             )
+             DefaultConnection.query("SELECT * FROM #{EmptyTagSeries.__meta__(:measurement)}")
 
     assert Enum.member?(columns, "filled")
     assert Enum.member?(columns, "defaulting")

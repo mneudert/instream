@@ -36,9 +36,8 @@ defmodule Instream do
   will be searched (in order from top to bottom) for a configured database:
 
   1. `opts[:database]` parameter
-  2. `Instream.Series` struct (if used)
-  3. `Instream.Connection` configuration
-  4. No database used!
+  2. `Instream.Connection` configuration
+  3. No database used!
 
   By default the response of a query will be a map decoded from your
   server's JSON response.
@@ -126,7 +125,6 @@ defmodule Instream do
         use Instream.Series
 
         series do
-          database "my_database"
           measurement "my_measurement"
 
           tag :bar
@@ -154,7 +152,6 @@ defmodule Instream do
       MyConnection.write(%{
         points: [
           %{
-            database: "my_database",
             measurement: "my_measurement",
             fields: %{answer: 42, value: 1},
             tags: %{foo: "bar"},
@@ -166,9 +163,5 @@ defmodule Instream do
       })
 
   * The field `timestamp` can be omitted, so InfluxDB will use the receive time.
-  * The field `database` can be used to write to a custom database.
-
-  Please be aware that only the database from the first point
-  will be used when writing multiple points.
   """
 end

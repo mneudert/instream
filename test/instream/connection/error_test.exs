@@ -21,7 +21,6 @@ defmodule Instream.Connection.ErrorTest do
     use Instream.Series
 
     series do
-      database "test_database"
       measurement "connection_error_tests"
 
       tag :foo, default: :bar

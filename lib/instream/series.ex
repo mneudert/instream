@@ -7,29 +7,10 @@ defmodule Instream.Series do
   If you do not want to define the raw maps for writing data you can
   pre-define a series module for later usage:
 
-      defmodule MySeries.InfluxDBv1 do
+      defmodule MySeries.InfluxDB do
         use Instream.Series
 
         series do
-          database "my_database_optional"
-
-          measurement "cpu_load"
-
-          tag :host, default: "www"
-          tag :core
-
-          field :value, default: 100
-          field :value_desc
-        end
-      end
-
-      defmodule MySeries.InfluxDBv2 do
-        use Instream.Series
-
-        series do
-          bucket "my_bucket_optional"
-          org "my_org_optional"
-
           measurement "cpu_load"
 
           tag :host, default: "www"
@@ -126,10 +107,6 @@ defmodule Instream.Series do
   Please be aware that the UDP protocol writer does not support custom
   timestamp precisions. All UDP timestamps are implicitly expected to already
   be at nanosecond precision.
-
-  _Note:_ While it is possible to write multiple points a once it is currently
-  not supported to write them to individual databases/buckets. The first point
-  written defines the database/bucket, other values are silently ignored!
   """
 
   alias Instream.Series.Hydrator
@@ -155,10 +132,6 @@ defmodule Instream.Series do
     quote do
       @behaviour unquote(__MODULE__)
 
-      @bucket nil
-      @database nil
-      @org nil
-
       @measurement nil
 
       Module.register_attribute(__MODULE__, :fields_raw, accumulate: true)
@@ -177,10 +150,6 @@ defmodule Instream.Series do
 
       @tags_names @tags_raw |> Keyword.keys() |> Enum.sort()
       @tags_struct @tags_raw |> Enum.sort(&unquote(__MODULE__).__sort_tags__/2)
-
-      def __meta__(:bucket), do: @bucket
-      def __meta__(:database), do: @database
-      def __meta__(:org), do: @org
 
       def __meta__(:fields), do: @fields_names
       def __meta__(:measurement), do: @measurement
@@ -205,11 +174,8 @@ defmodule Instream.Series do
 
   ## Available information
 
-  - `:bucket` - the bucket where the series is stored (optional)
-  - `:database` - the database where the series is stored (optional)
   - `:fields` - the fields in the series
   - `:measurement` - the measurement of the series
-  - `:org` - the organization the `:bucket` belongs to (optional)
   - `:tags` - the available tags defining the series
   """
   @callback __meta__(atom) :: any
@@ -229,24 +195,6 @@ defmodule Instream.Series do
   @callback from_result(map) :: [struct]
 
   @doc """
-  Defines the bucket for the series.
-  """
-  defmacro bucket(name) do
-    quote do
-      @bucket unquote(name)
-    end
-  end
-
-  @doc """
-  Defines the database for the series.
-  """
-  defmacro database(name) do
-    quote do
-      @database unquote(name)
-    end
-  end
-
-  @doc """
   Defines a field in the series.
   """
   defmacro field(name, opts \\ []) do
@@ -261,15 +209,6 @@ defmodule Instream.Series do
   defmacro measurement(name) do
     quote do
       @measurement unquote(name)
-    end
-  end
-
-  @doc """
-  Defines the organization for the series.
-  """
-  defmacro org(name) do
-    quote do
-      @org unquote(name)
     end
   end
 

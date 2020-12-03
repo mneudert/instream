@@ -18,7 +18,6 @@ defmodule Instream.Connection.WriterTest do
     use Instream.Series
 
     series do
-      database "test_database"
       measurement "custom_connection_writer"
 
       field :binary
@@ -74,12 +73,12 @@ defmodule Instream.Connection.WriterTest do
     :ok =
       %{binary: "binary"}
       |> WriterSeries.from_map()
-      |> WriterConnection.write()
+      |> WriterConnection.write(database: "test_database")
 
     %{error: error} =
       %{binary: 12_345}
       |> WriterSeries.from_map()
-      |> WriterConnection.write()
+      |> WriterConnection.write(database: "test_database")
 
     assert "error has changed!" = error
   end

@@ -13,7 +13,6 @@ defmodule Instream.Log.DefaultLoggerTest do
     use Instream.Series
 
     series do
-      database "test_database"
       measurement "log_write_entry_test"
 
       tag :t
@@ -130,7 +129,7 @@ defmodule Instream.Log.DefaultLoggerTest do
 
     log =
       capture_log(fn ->
-        :ok = LogConnection.write(points)
+        :ok = LogConnection.write(points, database: "test_database")
 
         :timer.sleep(10)
       end)
