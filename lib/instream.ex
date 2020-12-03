@@ -98,7 +98,7 @@ defmodule Instream do
   ### Query Timeout Configuration
 
   If you find your queries running into timeouts (e.g. `:hackney` not waiting
-  long enoug for a response) you can pass an option to the query call:
+  long enough for a response) you can pass an option to the query call:
 
       MyApp.MyConnection.query(query, timeout: 250)
 
