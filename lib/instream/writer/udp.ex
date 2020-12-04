@@ -79,7 +79,7 @@ defmodule Instream.Writer.UDP do
     {:noreply, state}
   end
 
-  defp do_write(%{payload: %{points: [_ | _] = points}}, %{module: conn, udp_socket: udp_socket}) do
+  defp do_write(%{payload: [_ | _] = points}, %{module: conn, udp_socket: udp_socket}) do
     config = conn.config()
     payload = Encoder.encode(points)
 

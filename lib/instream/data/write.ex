@@ -9,27 +9,15 @@ defmodule Instream.Data.Write do
   @spec query(map | [map], Keyword.t()) :: Query.t()
   def query(points, opts) when is_list(points) do
     %Query{
-      payload: %{
-        points: Enum.map(points, &maybe_unstruct/1)
-      },
+      payload: Enum.map(points, &maybe_unstruct/1),
       opts: opts,
       type: :write
     }
   end
 
-  def query(%{__struct__: _} = point, opts) do
+  def query(point, opts) when is_map(point) do
     %Query{
-      payload: %{
-        points: [maybe_unstruct(point)]
-      },
-      opts: opts,
-      type: :write
-    }
-  end
-
-  def query(%{points: _} = payload, opts) do
-    %Query{
-      payload: payload,
+      payload: [maybe_unstruct(point)],
       opts: opts,
       type: :write
     }

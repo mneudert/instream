@@ -75,7 +75,7 @@ defmodule Instream.Writer.LineTest do
   end
 
   test "writing no points alway succeeds" do
-    assert :ok = DefaultConnection.write(%{points: []})
+    assert :ok = DefaultConnection.write([])
   end
 
   test "writer protocol: Line" do

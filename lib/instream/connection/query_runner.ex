@@ -161,7 +161,7 @@ defmodule Instream.Connection.QueryRunner do
   Executes `:write` queries.
   """
   @spec write(Query.t(), Keyword.t(), map) :: any
-  def write(%Query{payload: %{points: points}} = query, opts, conn) do
+  def write(%Query{payload: points} = query, opts, conn) do
     config = conn.config()
 
     {query_time, result} =

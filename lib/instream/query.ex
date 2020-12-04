@@ -8,7 +8,7 @@ defmodule Instream.Query do
             opts: [],
             type: nil
 
-  @type payload_type :: String.t() | map | nil
+  @type payload_type :: String.t() | [map] | nil
   @type query_method :: :get | :post
   @type query_type :: :read | :write
 

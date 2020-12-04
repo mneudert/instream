@@ -31,7 +31,7 @@ defmodule Instream.WriterTest do
   test "writing no points alway succeeds" do
     start_supervised(UDPConnection)
 
-    assert :ok = UDPConnection.write(%{points: []})
+    assert :ok = UDPConnection.write([])
   end
 
   @tag :"influxdb_exclude_2.0"
