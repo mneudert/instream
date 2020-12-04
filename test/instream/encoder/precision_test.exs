@@ -4,15 +4,12 @@ defmodule Instream.Encoder.PrecisionTest do
   alias Instream.TestHelpers.Connections.DefaultConnection
 
   setup_all do
-    DefaultConnection.write(%{
-      database: "test_database",
-      points: [
-        %{
-          measurement: "precision_test",
-          fields: %{foo: "bar"}
-        }
-      ]
-    })
+    DefaultConnection.write([
+      %{
+        measurement: "precision_test",
+        fields: %{foo: "bar"}
+      }
+    ])
   end
 
   test "integer precisions" do

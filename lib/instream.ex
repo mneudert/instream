@@ -149,18 +149,15 @@ defmodule Instream do
 
   As an alternative you can use a non-struct map to write points to a database:
 
-      MyConnection.write(%{
-        points: [
-          %{
-            measurement: "my_measurement",
-            fields: %{answer: 42, value: 1},
-            tags: %{foo: "bar"},
-            timestamp: 1439587926000000000
-          },
-          # more points possible ...
-        ],
-        database: "my_database"
-      })
+      MyConnection.write([
+        %{
+          measurement: "my_measurement",
+          fields: %{answer: 42, value: 1},
+          tags: %{foo: "bar"},
+          timestamp: 1439587926000000000
+        },
+        # more points possible ...
+      ])
 
   * The field `timestamp` can be omitted, so InfluxDB will use the receive time.
   """

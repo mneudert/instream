@@ -66,16 +66,13 @@ defmodule Instream.ConnectionTest do
     test_tag = ~S|tag,value,with"commas"|
 
     :ok =
-      DefaultConnection.write(%{
-        database: @database,
-        points: [
-          %{
-            measurement: "params",
-            tags: %{foo: test_tag},
-            fields: %{value: test_field}
-          }
-        ]
-      })
+      DefaultConnection.write([
+        %{
+          measurement: "params",
+          tags: %{foo: test_tag},
+          fields: %{value: test_field}
+        }
+      ])
 
     query = "SELECT value FROM \"#{@database}\".\"autogen\".\"params\" WHERE foo = $foo_val"
     params = %{foo_val: test_tag}
@@ -87,16 +84,13 @@ defmodule Instream.ConnectionTest do
   @tag :"influxdb_exclude_1.7"
   test "read using flux query" do
     :ok =
-      DefaultConnection.write(%{
-        database: @database,
-        points: [
-          %{
-            measurement: "flux",
-            tags: %{foo: "bar"},
-            fields: %{value: 1}
-          }
-        ]
-      })
+      DefaultConnection.write([
+        %{
+          measurement: "flux",
+          tags: %{foo: "bar"},
+          fields: %{value: 1}
+        }
+      ])
 
     query = ~S[
       from(bucket:"test_database/autogen")
@@ -116,17 +110,13 @@ defmodule Instream.ConnectionTest do
     measurement = "write_data"
 
     :ok =
-      %{
-        database: @database,
-        points: [
-          %{
-            measurement: measurement,
-            tags: @tags,
-            fields: %{value: 0.66}
-          }
-        ]
-      }
-      |> DefaultConnection.write()
+      DefaultConnection.write([
+        %{
+          measurement: measurement,
+          tags: @tags,
+          fields: %{value: 0.66}
+        }
+      ])
 
     assert %{results: [%{series: [%{tags: values_tags, values: value_rows}]}]} =
              DefaultConnection.query("SELECT * FROM #{measurement} GROUP BY *")
@@ -154,30 +144,24 @@ defmodule Instream.ConnectionTest do
 
   @tag :"influxdb_include_2.0"
   test "write data without authorization" do
-    data = %{
-      database: @database,
-      points: [
-        %{
-          measurement: "write_data_privileges",
-          fields: %{value: 0.66}
-        }
-      ]
-    }
+    data = [
+      %{
+        measurement: "write_data_privileges",
+        fields: %{value: 0.66}
+      }
+    ]
 
     assert %{code: "unauthorized", message: "Unauthorized"} = GuestConnection.write(data)
   end
 
   @tag :"influxdb_exclude_2.0"
   test "write data with missing privileges" do
-    data = %{
-      database: @database,
-      points: [
-        %{
-          measurement: "write_data_privileges",
-          fields: %{value: 0.66}
-        }
-      ]
-    }
+    data = [
+      %{
+        measurement: "write_data_privileges",
+        fields: %{value: 0.66}
+      }
+    ]
 
     %{error: error} = GuestConnection.write(data)
 
