@@ -21,7 +21,7 @@ defmodule Instream.Writer.Line do
     url =
       config
       |> URL.write()
-      |> URL.append_database(opts[:database] || config[:database])
+      |> URL.append_database(query_opts[:database] || config[:database])
       |> URL.append_precision(query_opts[:precision])
       |> URL.append_retention_policy(query_opts[:retention_policy])
 
