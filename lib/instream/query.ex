@@ -13,9 +13,8 @@ defmodule Instream.Query do
   @type query_type :: :read | :write
 
   @type t :: %__MODULE__{
-          method: query_method,
           payload: payload_type,
-          opts: Keyword.t(),
+          opts: [{:method, query_method} | {atom, any}],
           type: query_type
         }
 end

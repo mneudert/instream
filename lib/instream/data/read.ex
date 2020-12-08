@@ -14,7 +14,6 @@ defmodule Instream.Data.Read do
   @spec query(String.t(), Keyword.t()) :: Query.t()
   def query(query_str, opts) do
     %Query{
-      method: opts[:method] || :get,
       payload: query_str,
       opts: opts,
       type: :read

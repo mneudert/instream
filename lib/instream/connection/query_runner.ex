@@ -62,7 +62,7 @@ defmodule Instream.Connection.QueryRunner do
     headers = Headers.assemble(config, opts)
 
     body = read_body(query, opts)
-    method = read_method(query, opts)
+    method = read_method(opts)
     url = read_url(conn, query, opts)
 
     {query_time, response} =
@@ -207,10 +207,10 @@ defmodule Instream.Connection.QueryRunner do
     end
   end
 
-  defp read_method(%{method: query_method}, opts) do
+  defp read_method(opts) do
     case opts[:query_language] do
       :flux -> :post
-      _ -> query_method || opts[:method] || :get
+      _ -> opts[:method] || :get
     end
   end
 
