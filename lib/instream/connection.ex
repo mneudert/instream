@@ -91,19 +91,6 @@ defmodule Instream.Connection do
       @otp_app opts[:otp_app]
       @config opts[:config] || []
 
-      @doc false
-      def __log__(entry) do
-        case config(:loggers) do
-          [_ | _] = loggers ->
-            Enum.reduce(loggers, entry, fn {mod, fun, extra_args}, acc ->
-              apply(mod, fun, [acc | extra_args])
-            end)
-
-          _ ->
-            entry
-        end
-      end
-
       def child_spec(_) do
         %{
           id: __MODULE__,

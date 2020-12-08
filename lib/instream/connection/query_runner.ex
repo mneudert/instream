@@ -40,7 +40,7 @@ defmodule Instream.Connection.QueryRunner do
           _ -> 0
         end
 
-      conn.__log__(%PingEntry{
+      log(config[:loggers], %PingEntry{
         host: config[:host],
         result: result,
         metadata: %Metadata{
@@ -75,7 +75,7 @@ defmodule Instream.Connection.QueryRunner do
       result = Response.maybe_parse({status, headers, body}, conn, opts)
 
       if false != opts[:log] do
-        conn.__log__(%QueryEntry{
+        log(config[:loggers], %QueryEntry{
           query: query_payload,
           result: result,
           metadata: %Metadata{
@@ -119,7 +119,7 @@ defmodule Instream.Connection.QueryRunner do
           _ -> 0
         end
 
-      conn.__log__(%StatusEntry{
+      log(config[:loggers], %StatusEntry{
         host: config[:host],
         result: result,
         metadata: %Metadata{
@@ -172,7 +172,7 @@ defmodule Instream.Connection.QueryRunner do
       end)
 
     if false != opts[:log] do
-      conn.__log__(%WriteEntry{
+      log(config[:loggers], %WriteEntry{
         points: length(points),
         result: result,
         metadata: %Metadata{
@@ -199,6 +199,14 @@ defmodule Instream.Connection.QueryRunner do
     |> Keyword.merge(config_opts)
     |> Keyword.merge(call_opts)
   end
+
+  defp log([_ | _] = loggers, entry) do
+    Enum.each(loggers, fn {mod, fun, extra_args} ->
+      apply(mod, fun, [entry | extra_args])
+    end)
+  end
+
+  defp log(_, _), do: :ok
 
   defp read_body(%{payload: query_payload}, opts) do
     case opts[:query_language] do
