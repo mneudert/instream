@@ -81,6 +81,7 @@ defmodule Instream.Connection do
   defmacro __using__(opts) do
     quote bind_quoted: [opts: opts] do
       alias Instream.Connection
+      alias Instream.Connection.Config
       alias Instream.Connection.QueryRunner
       alias Instream.Connection.Supervisor
       alias Instream.Data
@@ -110,9 +111,7 @@ defmodule Instream.Connection do
         }
       end
 
-      def config(key \\ nil) do
-        Connection.Config.get(@otp_app, __MODULE__, key, @config)
-      end
+      def config(key \\ nil), do: Config.get(@otp_app, __MODULE__, key, @config)
 
       def ping(opts \\ []) do
         case config(:version) do
