@@ -198,8 +198,8 @@ defmodule Instream.ConnectionTest do
     query_in = "SELECT value FROM \"#{@database}\".\"autogen\".\"empty_measurement\""
     query_out = "SELECT value FROM empty_measurement"
 
-    result_in = query_in |> UnixSocketConnection.query()
-    result_out = query_out |> UnixSocketConnection.query()
+    result_in = UnixSocketConnection.query(query_in)
+    result_out = UnixSocketConnection.query(query_out)
 
     assert ^result_in = result_out
   end

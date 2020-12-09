@@ -22,9 +22,8 @@ defmodule Instream.Connection.ConfigTest do
   end
 
   test "default value access", %{test: test} do
-    # credo:disable-for-next-line Credo.Check.Refactor.PipeChainStart
-    assert "http" = Config.get(test, __MODULE__, nil, []) |> Keyword.get(:scheme)
-    assert "http" = DefaultConnection.config() |> Keyword.get(:scheme)
+    assert "http" = Config.get(test, __MODULE__, :scheme, [])
+    assert "http" = DefaultConnection.config(:scheme)
   end
 
   test "static otp_app configuration access", %{test: test} do
