@@ -3,7 +3,6 @@ defmodule Instream.Connection.TimeoutTest do
 
   defmodule InetsConnection do
     use Instream.Connection,
-      otp_app: :instream,
       config: [
         loggers: []
       ]

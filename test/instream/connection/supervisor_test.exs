@@ -12,7 +12,6 @@ defmodule Instream.Connection.SupervisorTest do
 
   defmodule InitializerConnection do
     use Instream.Connection,
-      otp_app: :instream,
       config: [
         init: {Instream.Connection.SupervisorTest.Initializer, :call_init}
       ]
