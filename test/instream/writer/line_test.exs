@@ -152,7 +152,7 @@ defmodule Instream.Writer.LineTest do
       |> ErrorsSeries.from_map()
       |> DefaultConnection.write()
 
-    String.contains?(error, "conflict")
+    assert String.contains?(error, "conflict")
   end
 
   test "line protocol batch series" do
