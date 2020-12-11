@@ -1,8 +1,6 @@
 defmodule Instream.WriterTest do
   use ExUnit.Case, async: true
 
-  import Instream.TestHelpers.Retry
-
   alias Instream.TestHelpers.Connections.DefaultConnection
 
   defmodule ProtocolsSeries do
@@ -48,33 +46,32 @@ defmodule Instream.WriterTest do
              |> ProtocolsSeries.from_map()
              |> UDPConnection.write()
 
-    assert retry(
-             2500,
-             50,
-             fn ->
-               DefaultConnection.query(
-                 "SELECT * FROM #{ProtocolsSeries.__meta__(:measurement)} WHERE proto='UDP-sync'",
-                 precision: :nanosecond
-               )
-             end,
-             fn
-               %{
-                 results: [
-                   %{
-                     series: [
-                       %{
-                         values: [[1_439_587_927_000_000_000, "UDP-sync", "UDP"]]
-                       }
-                     ]
-                   }
-                 ]
-               } ->
-                 true
+    retry_call = fn ->
+      DefaultConnection.query(
+        "SELECT * FROM #{ProtocolsSeries.__meta__(:measurement)} WHERE proto='UDP-sync'",
+        precision: :nanosecond
+      )
+    end
 
-               _ ->
-                 false
-             end
-           )
+    retry_test = fn
+      %{
+        results: [
+          %{
+            series: [
+              %{
+                values: [[1_439_587_927_000_000_000, "UDP-sync", "UDP"]]
+              }
+            ]
+          }
+        ]
+      } ->
+        true
+
+      _ ->
+        false
+    end
+
+    assert retry(2500, 50, retry_call, retry_test)
   end
 
   @tag :"influxdb_exclude_2.0"
@@ -91,32 +88,44 @@ defmodule Instream.WriterTest do
              |> ProtocolsSeries.from_map()
              |> UDPConnection.write(async: true)
 
-    assert retry(
-             2500,
-             50,
-             fn ->
-               DefaultConnection.query(
-                 "SELECT * FROM #{ProtocolsSeries.__meta__(:measurement)} WHERE proto='UDP-async'",
-                 precision: :nanosecond
-               )
-             end,
-             fn
-               %{
-                 results: [
-                   %{
-                     series: [
-                       %{
-                         values: [[1_439_587_927_000_000_000, "UDP-async", "UDP"]]
-                       }
-                     ]
-                   }
-                 ]
-               } ->
-                 true
+    retry_call = fn ->
+      DefaultConnection.query(
+        "SELECT * FROM #{ProtocolsSeries.__meta__(:measurement)} WHERE proto='UDP-async'",
+        precision: :nanosecond
+      )
+    end
 
-               _ ->
-                 false
-             end
-           )
+    retry_test = fn
+      %{
+        results: [
+          %{
+            series: [
+              %{
+                values: [[1_439_587_927_000_000_000, "UDP-async", "UDP"]]
+              }
+            ]
+          }
+        ]
+      } ->
+        true
+
+      _ ->
+        false
+    end
+
+    assert retry(2500, 50, retry_call, retry_test)
+  end
+
+  defp retry(0, _, _, _), do: false
+
+  defp retry(timeout, delay, retry_call, retry_test) do
+    case retry_test.(retry_call.()) do
+      true ->
+        true
+
+      false ->
+        :timer.sleep(delay)
+        retry(timeout - delay, delay, retry_call, retry_test)
+    end
   end
 end
