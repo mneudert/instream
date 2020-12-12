@@ -19,12 +19,11 @@ defmodule Instream.Connection.QueryRunner do
   def ping(opts, conn) do
     config = conn.config()
     headers = Headers.assemble(config, opts)
+    url = URL.ping(config)
 
     {query_time, response} =
       :timer.tc(fn ->
-        config
-        |> URL.ping()
-        |> :hackney.head(headers, "", http_opts(config, opts))
+        :hackney.request(:head, url, headers, "", http_opts(config, opts))
       end)
 
     result =
@@ -98,12 +97,11 @@ defmodule Instream.Connection.QueryRunner do
   def status(opts, conn) do
     config = conn.config()
     headers = Headers.assemble(config, opts)
+    url = URL.status(config)
 
     {query_time, response} =
       :timer.tc(fn ->
-        config
-        |> URL.status()
-        |> :hackney.head(headers, "", http_opts(config, opts))
+        :hackney.request(:head, url, headers, "", http_opts(config, opts))
       end)
 
     result =
@@ -139,11 +137,8 @@ defmodule Instream.Connection.QueryRunner do
   def version(opts, conn) do
     config = conn.config()
     headers = Headers.assemble(config, opts)
-
-    response =
-      config
-      |> URL.ping()
-      |> :hackney.head(headers, "", http_opts(config, opts))
+    url = URL.ping(config)
+    response = :hackney.request(:head, url, headers, "", http_opts(config, opts))
 
     case response do
       {:ok, 204, headers} ->
