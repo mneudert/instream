@@ -8,11 +8,13 @@ defmodule Instream.Writer.Line do
   """
 
   alias Instream.Encoder.Line, as: Encoder
+  alias Instream.HTTPClient.Hackney
   alias Instream.Query.Headers
   alias Instream.Query.URL
 
   @behaviour Instream.Writer
 
+  @impl Instream.Writer
   def write(%{payload: [_ | _] = points, opts: query_opts}, opts, conn) do
     config = conn.config()
     headers = Headers.assemble(config, opts) ++ [{"Content-Type", "text/plain"}]
@@ -28,13 +30,8 @@ defmodule Instream.Writer.Line do
     http_opts =
       Keyword.merge(Keyword.get(config, :http_opts, []), Keyword.get(opts, :http_opts, []))
 
-    with {:ok, status, headers, client} <- :hackney.request(:post, url, headers, body, http_opts),
-         {:ok, body} <- :hackney.body(client) do
-      {status, headers, body}
-    else
-      {:error, _} = error -> error
-    end
+    Hackney.request(:post, url, headers, body, http_opts)
   end
 
-  def write(_, _, _), do: {200, [], ""}
+  def write(_, _, _), do: {:ok, 200, [], ""}
 end

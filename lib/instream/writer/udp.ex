@@ -23,7 +23,7 @@ defmodule Instream.Writer.UDP do
   @behaviour :poolboy_worker
   @behaviour Instream.Writer
 
-  @response {200, [], ""}
+  @response {:ok, 200, [], ""}
 
   def writer_workers(conn) do
     pool_name = Module.concat(conn, UDPWriterPool)

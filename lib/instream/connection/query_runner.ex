@@ -2,6 +2,7 @@ defmodule Instream.Connection.QueryRunner do
   @moduledoc false
 
   alias Instream.Connection.JSON
+  alias Instream.HTTPClient.Hackney
   alias Instream.Log.Metadata
   alias Instream.Log.PingEntry
   alias Instream.Log.QueryEntry
@@ -23,7 +24,7 @@ defmodule Instream.Connection.QueryRunner do
 
     {query_time, response} =
       :timer.tc(fn ->
-        :hackney.request(:head, url, headers, "", http_opts(config, opts))
+        Hackney.request(:head, url, headers, "", http_opts(config, opts))
       end)
 
     result =
@@ -66,27 +67,28 @@ defmodule Instream.Connection.QueryRunner do
 
     {query_time, response} =
       :timer.tc(fn ->
-        :hackney.request(method, url, headers, body, http_opts(config, opts))
+        Hackney.request(method, url, headers, body, http_opts(config, opts))
       end)
 
-    with {:ok, status, headers, client} <- response,
-         {:ok, body} <- :hackney.body(client) do
-      result = Response.maybe_parse({status, headers, body}, conn, opts)
+    case response do
+      {:ok, status, _, _} ->
+        result = Response.maybe_parse(response, conn, opts)
 
-      if false != opts[:log] do
-        log(config[:loggers], %QueryEntry{
-          query: query_payload,
-          result: result,
-          metadata: %Metadata{
-            query_time: query_time,
-            response_status: status
-          }
-        })
-      end
+        if false != opts[:log] do
+          log(config[:loggers], %QueryEntry{
+            query: query_payload,
+            result: result,
+            metadata: %Metadata{
+              query_time: query_time,
+              response_status: status
+            }
+          })
+        end
 
-      result
-    else
-      {:error, _} = error -> error
+        result
+
+      {:error, _} ->
+        response
     end
   end
 
@@ -101,7 +103,7 @@ defmodule Instream.Connection.QueryRunner do
 
     {query_time, response} =
       :timer.tc(fn ->
-        :hackney.request(:head, url, headers, "", http_opts(config, opts))
+        Hackney.request(:head, url, headers, "", http_opts(config, opts))
       end)
 
     result =
@@ -138,7 +140,7 @@ defmodule Instream.Connection.QueryRunner do
     config = conn.config()
     headers = Headers.assemble(config, opts)
     url = URL.ping(config)
-    response = :hackney.request(:head, url, headers, "", http_opts(config, opts))
+    response = Hackney.request(:head, url, headers, "", http_opts(config, opts))
 
     case response do
       {:ok, 204, headers} ->

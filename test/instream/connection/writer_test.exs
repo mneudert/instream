@@ -18,9 +18,9 @@ defmodule Instream.Connection.WriterTest do
   end
 
   test "custom writer configuration" do
-    assert :ok = WriterConnection.write(%{response: {200, [], ""}})
+    assert :ok = WriterConnection.write(%{response: {:ok, 200, [], ""}})
 
     assert %{error: "custom writer"} =
-             WriterConnection.write(%{response: {500, [], "custom writer"}})
+             WriterConnection.write(%{response: {:ok, 500, [], "custom writer"}})
   end
 end

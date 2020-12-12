@@ -5,16 +5,16 @@ defmodule Instream.Response do
 
   alias Instream.Connection.JSON
 
-  @type t :: {:error, term} | {status :: pos_integer, headers :: list, body :: String.t()}
+  @type t :: {:error, term} | {:ok, status :: pos_integer, headers :: list, body :: String.t()}
 
   @doc """
   Maybe parses a response based on the requested result type.
   """
   @spec maybe_parse(t, module, Keyword.t()) :: any
   def maybe_parse({:error, _} = error, _, _), do: error
-  def maybe_parse({_, _, ""}, _, _), do: :ok
+  def maybe_parse({:ok, _, _, ""}, _, _), do: :ok
 
-  def maybe_parse({status, headers, body}, conn, opts)
+  def maybe_parse({:ok, status, headers, body}, conn, opts)
       when 300 <= status do
     if :v2 === conn.config(:version) || is_json?(headers) do
       maybe_decode_json(body, conn, opts)
@@ -23,7 +23,7 @@ defmodule Instream.Response do
     end
   end
 
-  def maybe_parse({_, headers, body}, conn, opts) do
+  def maybe_parse({:ok, _, headers, body}, conn, opts) do
     if :v2 === conn.config(:version) || is_json?(headers) do
       maybe_decode_json(body, conn, opts)
     else
