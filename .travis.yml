@@ -109,13 +109,6 @@ jobs:
         - VER_INFLUXDB=1.8.3
       after_success: mix coveralls.travis
 
-    - stage: code quality
-      elixir: 1.11.2
-      otp_release: 23.0
-      script:
-        - mix format --check-formatted
-        - mix credo --strict
-
     - <<: *test
       stage: influxdb2
       elixir: 1.11.2
