@@ -2,7 +2,6 @@ defmodule Instream.Connection.QueryRunner do
   @moduledoc false
 
   alias Instream.Connection.JSON
-  alias Instream.HTTPClient.Hackney
   alias Instream.Log.Metadata
   alias Instream.Log.PingEntry
   alias Instream.Log.QueryEntry
@@ -24,7 +23,7 @@ defmodule Instream.Connection.QueryRunner do
 
     {query_time, response} =
       :timer.tc(fn ->
-        Hackney.request(:head, url, headers, "", http_opts(config, opts))
+        config[:http_client].request(:head, url, headers, "", http_opts(config, opts))
       end)
 
     result =
@@ -67,7 +66,7 @@ defmodule Instream.Connection.QueryRunner do
 
     {query_time, response} =
       :timer.tc(fn ->
-        Hackney.request(method, url, headers, body, http_opts(config, opts))
+        config[:http_client].request(method, url, headers, body, http_opts(config, opts))
       end)
 
     case response do
@@ -103,7 +102,7 @@ defmodule Instream.Connection.QueryRunner do
 
     {query_time, response} =
       :timer.tc(fn ->
-        Hackney.request(:head, url, headers, "", http_opts(config, opts))
+        config[:http_client].request(:head, url, headers, "", http_opts(config, opts))
       end)
 
     result =
@@ -140,7 +139,7 @@ defmodule Instream.Connection.QueryRunner do
     config = conn.config()
     headers = Headers.assemble(config, opts)
     url = URL.ping(config)
-    response = Hackney.request(:head, url, headers, "", http_opts(config, opts))
+    response = config[:http_client].request(:head, url, headers, "", http_opts(config, opts))
 
     case response do
       {:ok, 204, headers} ->

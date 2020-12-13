@@ -74,6 +74,7 @@ defmodule Instream.Connection.Config do
         host: "localhost",
         port: 8086,
         scheme: "http",
+        http_client: Instream.HTTPClient.Hackney,
         writer: Instream.Writer.Line,
         json_decoder: {Jason, :decode!, [[keys: :atoms]]},
         json_encoder: {Jason, :encode!, []}
@@ -91,7 +92,11 @@ defmodule Instream.Connection.Config do
 
   ## HTTP Client Configuration
 
-  Internally all requests are done using `:hackney`.
+  Internally all requests are done using the configured `:http_client`.
+
+  ### Instream.HTTPClient.Hackney
+
+  Default for no otherwise configured HTTP Client is `:hackney`.
 
   The configuration key `:http_opts` is directly passed to the client process.
   Parts of it are also used internally by `:hackney` to control more generic
@@ -203,6 +208,7 @@ defmodule Instream.Connection.Config do
     port: 8086,
     scheme: "http",
     version: :v1,
+    http_client: Instream.HTTPClient.Hackney,
     writer: Instream.Writer.Line
   ]
 

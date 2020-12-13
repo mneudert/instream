@@ -8,7 +8,6 @@ defmodule Instream.Writer.Line do
   """
 
   alias Instream.Encoder.Line, as: Encoder
-  alias Instream.HTTPClient.Hackney
   alias Instream.Query.Headers
   alias Instream.Query.URL
 
@@ -30,7 +29,7 @@ defmodule Instream.Writer.Line do
     http_opts =
       Keyword.merge(Keyword.get(config, :http_opts, []), Keyword.get(opts, :http_opts, []))
 
-    Hackney.request(:post, url, headers, body, http_opts)
+    config[:http_client].request(:post, url, headers, body, http_opts)
   end
 
   def write(_, _, _), do: {:ok, 200, [], ""}
