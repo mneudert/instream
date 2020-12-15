@@ -1,4 +1,5 @@
 _build/
 deps/
 doc/
+plts/
 test/tmp/
