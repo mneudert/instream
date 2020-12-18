@@ -127,7 +127,6 @@ defmodule Instream.Series do
   @doc """
   Defines the series.
   """
-  # credo:disable-for-next-line Credo.Check.Refactor.CyclomaticComplexity
   defmacro series(do: block) do
     quote do
       @behaviour unquote(__MODULE__)
