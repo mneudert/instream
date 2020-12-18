@@ -145,15 +145,12 @@ defmodule Instream.Series do
         :ok
       end
 
-      @fields_names @fields_raw |> Keyword.keys() |> Enum.sort()
-      @fields_struct @fields_raw |> Enum.sort(&unquote(__MODULE__).__sort_fields__/2)
+      @fields_struct Enum.sort(@fields_raw, &unquote(__MODULE__).__sort_fields__/2)
+      @tags_struct Enum.sort(@tags_raw, &unquote(__MODULE__).__sort_tags__/2)
 
-      @tags_names @tags_raw |> Keyword.keys() |> Enum.sort()
-      @tags_struct @tags_raw |> Enum.sort(&unquote(__MODULE__).__sort_tags__/2)
-
-      def __meta__(:fields), do: @fields_names
+      def __meta__(:fields), do: Keyword.keys(@fields_struct)
       def __meta__(:measurement), do: @measurement
-      def __meta__(:tags), do: @tags_names
+      def __meta__(:tags), do: Keyword.keys(@tags_struct)
 
       Module.eval_quoted(__ENV__, [
         unquote(__MODULE__).__struct_fields__(@fields_struct),
@@ -222,10 +219,10 @@ defmodule Instream.Series do
   end
 
   @doc false
-  def __sort_fields__({left, _}, {right, _}), do: left > right
+  def __sort_fields__({left, _}, {right, _}), do: left < right
 
   @doc false
-  def __sort_tags__({left, _}, {right, _}), do: left > right
+  def __sort_tags__({left, _}, {right, _}), do: left < right
 
   @doc false
   def __struct__(series) do
