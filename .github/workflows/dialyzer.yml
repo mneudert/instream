@@ -10,6 +10,7 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: setup
+      id: setup
       uses: actions/setup-elixir@v1
       with:
         elixir-version: '1.11.2'
@@ -34,7 +35,7 @@ jobs:
       id: plt-cache
       with:
         path: plts
-        key: ${{ runner.os }}-plts-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
+        key: ${{ runner.os }}-${{ steps.setup.outputs.otp-version }}-${{ steps.setup.outputs.elixir-version }}-plts-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
 
     - name: plt-create
       if: steps.plt-cache.outputs.cache-hit != 'true'
