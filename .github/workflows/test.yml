@@ -6,6 +6,18 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    services:
+      influxdb:
+        image: influxdb:1.7.10
+        env:
+          INFLUXDB_HTTP_AUTH_ENABLED: true
+          INFLUXDB_ADMIN_USER: instream_test
+          INFLUXDB_ADMIN_PASSWORD: instream_test
+          INFLUXDB_USER: instream_guest
+          INFLUXDB_USER_PASSWORD: instream_guest
+        ports:
+          - 8086:8086
+
     strategy:
       matrix:
         include:
