@@ -15,8 +15,15 @@ jobs:
           INFLUXDB_ADMIN_PASSWORD: instream_test
           INFLUXDB_USER: instream_guest
           INFLUXDB_USER_PASSWORD: instream_guest
+          INFLUXDB_UDP_ENABLED: true
+          INFLUXDB_UDP_BIND_ADDRESS: ':8089'
+          INFLUXDB_UDP_DATABASE: test_database
+          INFLUXDB_UDP_BATCH_SIZE: 1000
+          INFLUXDB_UDP_BATCH_TIMEOUT: '1s'
+          INFLUXDB_UDP_BATCH_PENDING: 5
         ports:
           - 8086:8086
+          - 8089:8089/udp
 
     strategy:
       matrix:
