@@ -1,4 +1,4 @@
-name: Test
+name: Test InfluxDB v1.8
 
 on: [push, pull_request]
 
@@ -11,26 +11,23 @@ jobs:
         include:
           - elixir: '1.7.4'
             otp: '19.3'
-            influxdb: '1.7.10'
           - elixir: '1.8.2'
             otp: '20.3'
-            influxdb: '1.8.3'
           - elixir: '1.9.4'
             otp: '21.3'
-            influxdb: '1.8.3'
           - elixir: '1.10.4'
             otp: '22.3'
-            influxdb: '1.8.3'
           - elixir: '1.11.2'
             otp: '23.0'
-            influxdb: '1.8.3'
 
     services:
       influxdb:
-        image: influxdb:${{ matrix.influxdb }}
+        image: influxdb:1.8.3
         env:
           INFLUXDB_HTTP_AUTH_ENABLED: true
           INFLUXDB_HTTP_FLUX_ENABLED: true
+          INFLUXDB_HTTP_UNIX_SOCKET_ENABLED: true
+          INFLUXDB_HTTP_BIND_SOCKET: /github/workspace/influxdb.sock
           INFLUXDB_ADMIN_USER: instream_test
           INFLUXDB_ADMIN_PASSWORD: instream_test
           INFLUXDB_USER: instream_guest
@@ -44,6 +41,8 @@ jobs:
         ports:
           - 8086:8086
           - 8089:8089/udp
+        volumes:
+          - ${{ github.workspace }}:/github/workspace
 
     steps:
     - uses: actions/checkout@v2
@@ -69,4 +68,6 @@ jobs:
         mix deps.get
 
     - name: test
+      env:
+        INFLUXDB_SOCKET: ${{ github.workspace }}/influxdb.sock
       run: mix coveralls
