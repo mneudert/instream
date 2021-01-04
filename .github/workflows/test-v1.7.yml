@@ -56,4 +56,8 @@ jobs:
         mix deps.get
 
     - name: test
-      run: mix coveralls
+      run: |
+        until curl -s -o /dev/null 'http://localhost:8086' 2>/dev/null; do
+          sleep 1
+        done
+        mix coveralls
