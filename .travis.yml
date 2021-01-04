@@ -107,7 +107,6 @@ jobs:
       otp_release: 23.0
       env:
         - VER_INFLUXDB=1.8.3
-      after_success: mix coveralls.travis
 
     - <<: *test
       stage: influxdb2

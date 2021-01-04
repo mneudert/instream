@@ -44,6 +44,10 @@ jobs:
         volumes:
           - ${{ github.workspace }}:/github/workspace
 
+    env:
+      MIX_ENV: test
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
     steps:
     - uses: actions/checkout@v2
 
@@ -70,4 +74,4 @@ jobs:
     - name: test
       env:
         INFLUXDB_SOCKET: ${{ github.workspace }}/influxdb.sock
-      run: mix coveralls
+      run: mix coveralls.github
