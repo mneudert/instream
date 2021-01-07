@@ -1,0 +1,54 @@
+name: Test InfluxDB v2.0
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        include:
+          - elixir: '1.11.2'
+            otp: '23.0'
+
+    services:
+      influxdb:
+        image: quay.io/influxdb/influxdb:v2.0.3
+        ports:
+          - 8086:8086
+
+    env:
+      MIX_ENV: test
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: setup
+      uses: actions/setup-elixir@v1
+      with:
+        elixir-version: ${{ matrix.elixir }}
+        otp-version: ${{ matrix.otp }}
+
+    - name: mix-cache
+      uses: actions/cache@v1
+      id: mix-cache
+      with:
+        path: deps
+        key: ${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}-mix-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
+
+    - name: mix-deps
+      if: steps.mix-cache.outputs.cache-hit != 'true'
+      run: |
+        mix local.rebar --force
+        mix local.hex --force
+        mix deps.get
+
+    - name: test
+      continue-on-error: true
+      env:
+        INFLUX_TOKEN: instream_test
+      run: |
+        curl -s -o /dev/null -XPOST http://localhost:8086/api/v2/setup -H 'accept: application/json' -d "{\"username\": \"instream_test\", \"password\": \"instream_test\", \"org\": \"instream_test\", \"bucket\": \"test_database\", \"token\": \"${INFLUX_TOKEN}\"}"
+        mix coveralls.github
