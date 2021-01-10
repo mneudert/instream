@@ -2,18 +2,17 @@ alias Instream.TestHelpers.Connections
 
 config = ExUnit.configuration()
 
-# grab ALL helpers and start connections
-File.ls!("test/helpers/connections")
-|> Enum.filter(&String.contains?(&1, "connection"))
-|> Enum.map(fn helper ->
-  conn =
-    helper
-    |> String.replace(".ex", "")
-    |> Macro.camelize()
-
-  Module.concat(Connections, conn)
-end)
-|> Supervisor.start_link(strategy: :one_for_one)
+# start helper connections
+Supervisor.start_link(
+  [
+    Connections.DefaultConnection,
+    Connections.DefaultConnectionV2,
+    Connections.GuestConnection,
+    Connections.RanchSocketConnection,
+    Connections.UnixSocketConnection
+  ],
+  strategy: :one_for_one
+)
 
 # setup test database
 _ = Connections.DefaultConnection.query("DROP DATABASE test_database", method: :post)
