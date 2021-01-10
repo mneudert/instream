@@ -47,8 +47,8 @@ jobs:
 
     - name: test
       continue-on-error: true
-      env:
-        INFLUX_TOKEN: instream_test
       run: |
-        curl -s -o /dev/null -XPOST http://localhost:8086/api/v2/setup -H 'accept: application/json' -d "{\"username\": \"instream_test\", \"password\": \"instream_test\", \"org\": \"instream_test\", \"bucket\": \"test_database\", \"token\": \"${INFLUX_TOKEN}\"}"
+        SETUP=$(curl -s -XPOST http://localhost:8086/api/v2/setup -H 'accept: application/json' -d "{\"username\": \"instream_test\", \"password\": \"instream_test\", \"org\": \"instream_test\", \"bucket\": \"test_database\"}")
+
+        export INFLUX_TOKEN=$(jq -r '.auth.token' <<< "${SETUP}")
         mix coveralls.github
