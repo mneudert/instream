@@ -132,7 +132,8 @@ defmodule Instream.Writer.LineTest do
              )
   end
 
-  test "protocol error decoding" do
+  @tag :"influxdb_exclude_2.0"
+  test "protocol error decoding (v1)" do
     :ok =
       %{binary: "binary"}
       |> ErrorsSeries.from_map()
@@ -148,6 +149,30 @@ defmodule Instream.Writer.LineTest do
 
     # make entry fail
     %{error: error} =
+      %{binary: 12_345}
+      |> ErrorsSeries.from_map()
+      |> DefaultConnection.write()
+
+    assert String.contains?(error, "conflict")
+  end
+
+  @tag :"influxdb_include_2.0"
+  test "protocol error decoding (v2)" do
+    :ok =
+      %{binary: "binary"}
+      |> ErrorsSeries.from_map()
+      |> DefaultConnection.write()
+
+    assert %{
+             results: [
+               %{
+                 series: [_]
+               }
+             ]
+           } = DefaultConnection.query("SELECT * FROM #{ErrorsSeries.__meta__(:measurement)}")
+
+    # make entry fail
+    %{code: _, message: error} =
       %{binary: 12_345}
       |> ErrorsSeries.from_map()
       |> DefaultConnection.write()
