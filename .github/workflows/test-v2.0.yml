@@ -50,8 +50,8 @@ jobs:
       run: |
         SETUP=$(curl -s -XPOST http://localhost:8086/api/v2/setup -H 'accept: application/json' -d "{\"username\": \"instream_test\", \"password\": \"instream_test\", \"org\": \"instream_test\", \"bucket\": \"test_database\"}")
 
-        export INFLUX_TOKEN=$(jq -r '.auth.token' <<< "${SETUP}")
-        export INFLUX_BUCKETID=$(jq -r '.bucket.id' <<< "${SETUP}")
+        export INFLUXDB_TOKEN=$(jq -r '.auth.token' <<< "${SETUP}")
+        export INFLUXDB_BUCKETID=$(jq -r '.bucket.id' <<< "${SETUP}")
 
         curl -s -o /dev/null -XPOST http://localhost:8086/api/v2/dbrps -H "Authorization: Token ${INFLUX_TOKEN}" -H 'accept: application/json' -d "{\"org\": \"instream_test\", \"bucketID\": \"${INFLUX_BUCKETID}\", \"database\": \"test_database\", \"retention_policy\": \"autogen\", \"default\": true}"
 

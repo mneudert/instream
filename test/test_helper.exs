@@ -39,7 +39,7 @@ config =
 
 # configure InfluxDB v2 authorization token
 :ok =
-  case System.get_env("INFLUX_TOKEN") do
+  case System.get_env("INFLUXDB_TOKEN") do
     nil ->
       :ok
 
