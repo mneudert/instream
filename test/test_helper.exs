@@ -26,39 +26,21 @@ config =
 
       Keyword.put(config, :exclude, [:unix_socket | config[:exclude]])
 
-    influxdb_socket ->
-      socket_env =
-        :instream
-        |> Application.get_env(Connections.UnixSocketConnection)
-        |> Keyword.put(:host, URI.encode_www_form(influxdb_socket))
-
-      Application.put_env(:instream, Connections.UnixSocketConnection, socket_env)
-
+    _ ->
       config
-  end
-
-# configure InfluxDB v2 authorization token
-:ok =
-  case System.get_env("INFLUXDB_TOKEN") do
-    nil ->
-      :ok
-
-    token ->
-      token_env =
-        :instream
-        |> Application.get_env(Connections.DefaultConnection)
-        |> Keyword.put(:auth, method: :token, token: token)
-        |> Keyword.put(:bucket, "test_database")
-        |> Keyword.put(:org, "instream_test")
-
-      Application.put_env(:instream, Connections.DefaultConnection, token_env)
   end
 
 # configure InfluxDB test exclusion
 conn_version =
-  Connections.DefaultConnection.version()
-  |> Kernel.to_string()
-  |> Version.parse()
+  case Connections.DefaultConnection.config(:version) do
+    :v1 ->
+      Connections.DefaultConnection.version()
+      |> Kernel.to_string()
+      |> Version.parse()
+
+    _ ->
+      :error
+  end
 
 excludes =
   case conn_version do
@@ -81,17 +63,6 @@ version =
 config = Keyword.put(config, :exclude, excludes ++ (config[:exclude] || []))
 
 IO.puts("Running tests for InfluxDB version: #{version}")
-
-# Configure DefaultConnection for :v2
-if version == "2.0" do
-  Application.put_env(
-    :instream,
-    Connections.DefaultConnection,
-    :instream
-    |> Application.get_env(Connections.DefaultConnection)
-    |> Keyword.put(:version, :v2)
-  )
-end
 
 # start ExUnit
 ExUnit.start(config)
