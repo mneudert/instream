@@ -13,7 +13,10 @@ if Mix.env() == :test do
     loggers: []
 
   config :instream, TestHelpers.Connections.DefaultConnectionV2,
+    auth: [method: :token, token: System.get_env("INFLUX_TOKEN")],
+    bucket: "test_database",
     loggers: [],
+    org: "instream_test",
     version: :v2
 
   config :instream, TestHelpers.Connections.GuestConnection,

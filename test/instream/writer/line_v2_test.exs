@@ -1,7 +1,10 @@
-defmodule Instream.Writer.LineTest do
+defmodule Instream.Writer.LineV2Test do
   use ExUnit.Case, async: true
 
+  @moduletag :"influxdb_include_2.0"
+
   alias Instream.TestHelpers.Connections.DefaultConnection
+  alias Instream.TestHelpers.Connections.DefaultConnectionV2
 
   defmodule BatchSeries do
     use Instream.Series
@@ -75,7 +78,7 @@ defmodule Instream.Writer.LineTest do
   end
 
   test "writing no points alway succeeds" do
-    assert :ok = DefaultConnection.write([])
+    assert :ok = DefaultConnectionV2.write([])
   end
 
   test "writer protocol: Line" do
@@ -86,7 +89,7 @@ defmodule Instream.Writer.LineTest do
         value: "Line"
       }
       |> ProtocolsSeries.from_map()
-      |> DefaultConnection.write(precision: :second)
+      |> DefaultConnectionV2.write(precision: :second)
 
     assert %{
              results: [
@@ -114,7 +117,7 @@ defmodule Instream.Writer.LineTest do
         integer: 100
       }
       |> LineEncodingSeries.from_map()
-      |> DefaultConnection.write()
+      |> DefaultConnectionV2.write()
 
     assert %{
              results: [
@@ -132,36 +135,11 @@ defmodule Instream.Writer.LineTest do
              )
   end
 
-  @tag :"influxdb_exclude_2.0"
-  test "protocol error decoding (v1)" do
+  test "protocol error decoding" do
     :ok =
       %{binary: "binary"}
       |> ErrorsSeries.from_map()
-      |> DefaultConnection.write()
-
-    assert %{
-             results: [
-               %{
-                 series: [_]
-               }
-             ]
-           } = DefaultConnection.query("SELECT * FROM #{ErrorsSeries.__meta__(:measurement)}")
-
-    # make entry fail
-    %{error: error} =
-      %{binary: 12_345}
-      |> ErrorsSeries.from_map()
-      |> DefaultConnection.write()
-
-    assert String.contains?(error, "conflict")
-  end
-
-  @tag :"influxdb_include_2.0"
-  test "protocol error decoding (v2)" do
-    :ok =
-      %{binary: "binary"}
-      |> ErrorsSeries.from_map()
-      |> DefaultConnection.write()
+      |> DefaultConnectionV2.write()
 
     assert %{
              results: [
@@ -175,7 +153,7 @@ defmodule Instream.Writer.LineTest do
     %{code: _, message: error} =
       %{binary: 12_345}
       |> ErrorsSeries.from_map()
-      |> DefaultConnection.write()
+      |> DefaultConnectionV2.write()
 
     assert String.contains?(error, "conflict")
   end
@@ -195,7 +173,7 @@ defmodule Instream.Writer.LineTest do
         }
       ]
       |> Enum.map(&BatchSeries.from_map/1)
-      |> DefaultConnection.write(precision: :second)
+      |> DefaultConnectionV2.write(precision: :second)
 
     assert %{
              results: [
@@ -221,7 +199,7 @@ defmodule Instream.Writer.LineTest do
         value: 100
       }
       |> EmptyTagSeries.from_map()
-      |> DefaultConnection.write()
+      |> DefaultConnectionV2.write()
 
     assert %{results: [%{series: [%{columns: columns}]}]} =
              DefaultConnection.query("SELECT * FROM #{EmptyTagSeries.__meta__(:measurement)}")
@@ -232,13 +210,14 @@ defmodule Instream.Writer.LineTest do
     refute Enum.member?(columns, "empty")
   end
 
-  test "writing with passed database option" do
-    database = DefaultConnection.config(:database)
+  test "writing with passed org/bucket option" do
+    org = DefaultConnectionV2.config(:org)
+    bucket = DefaultConnectionV2.config(:bucket)
 
     :ok =
       %{value: 100}
       |> CustomDatabaseSeries.from_map()
-      |> DefaultConnection.write(database: database)
+      |> DefaultConnectionV2.write(org: org, bucket: bucket)
 
     assert %{results: [%{series: [%{columns: columns}]}]} =
              DefaultConnection.query(
@@ -246,29 +225,5 @@ defmodule Instream.Writer.LineTest do
              )
 
     assert Enum.member?(columns, "value")
-  end
-
-  test "writing with passed retention policy option" do
-    _ =
-      DefaultConnection.query(
-        "CREATE RETENTION POLICY one_week ON test_database DURATION 1w REPLICATION 1",
-        method: :post
-      )
-
-    :ok =
-      %{proto: "ForRp", value: "Line"}
-      |> ProtocolsSeries.from_map()
-      |> DefaultConnection.write(retention_policy: "one_week")
-
-    assert %{results: [%{series: [%{values: [[_, "ForRp", "Line"]]}]}]} =
-             DefaultConnection.query(
-               ~s[SELECT * FROM "one_week"."writer_protocols" WHERE proto='ForRp'],
-               database: "test_database"
-             )
-
-    assert %{results: [should_not_be_in_default_rp]} =
-             DefaultConnection.query("SELECT * FROM writer_protocols WHERE proto='ForRp'")
-
-    refute Map.has_key?(should_not_be_in_default_rp, :series)
   end
 end

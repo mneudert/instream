@@ -87,8 +87,21 @@ defmodule Instream.Query.URL do
   @doc """
   Returns the proper URL for a `:write` request.
   """
-  @spec write(Keyword.t()) :: String.t()
-  def write(config), do: url(config, "write")
+  @spec write(Keyword.t(), Keyword.t()) :: String.t()
+  def write(config, opts) do
+    case config[:version] do
+      :v2 ->
+        config
+        |> url("api/v2/write")
+        |> append_param("bucket", opts[:bucket] || config[:bucket])
+        |> append_param("org", opts[:org] || config[:org])
+
+      _ ->
+        config
+        |> url("write")
+        |> append_param("db", opts[:database] || config[:database])
+    end
+  end
 
   defp append_param(url, _, nil), do: url
   defp append_param(url, _, ""), do: url

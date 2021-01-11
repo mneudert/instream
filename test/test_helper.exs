@@ -48,6 +48,8 @@ config =
         :instream
         |> Application.get_env(Connections.DefaultConnection)
         |> Keyword.put(:auth, method: :token, token: token)
+        |> Keyword.put(:bucket, "test_database")
+        |> Keyword.put(:org, "instream_test")
 
       Application.put_env(:instream, Connections.DefaultConnection, token_env)
   end
