@@ -1,6 +1,8 @@
 defmodule Instream.Connection.DatabaseTest do
   use ExUnit.Case, async: true
 
+  @moduletag :"influxdb_exclude_2.0"
+
   alias Instream.TestHelpers.Connections.DefaultConnection
 
   defmodule InvalidConnection do
@@ -60,14 +62,12 @@ defmodule Instream.Connection.DatabaseTest do
     assert String.contains?(message, opts[:database])
   end
 
-  @tag :"influxdb_exclude_2.0"
   test "write || default: database from connection" do
     %{error: message} = InvalidConnection.write(%DefaultSeries{})
 
     assert String.contains?(message, "database not found")
   end
 
-  @tag :"influxdb_exclude_2.0"
   test "write || opts database has priority over connection database" do
     opts = [database: "database_config_optsdb_test"]
 

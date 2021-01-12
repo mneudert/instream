@@ -46,6 +46,25 @@ defmodule Instream.Connection.BucketOrgTest do
     :ok
   end
 
+  test "read || default: bucket/org from connection" do
+    %{results: [%{error: message}]} =
+      InvalidConnection.query("SELECT * FROM database_config_test")
+
+    assert String.contains?(message, "database not found")
+    assert String.contains?(message, InvalidConnection.config(:database))
+  end
+
+  test "read || opts bucket/org has priority over connection database" do
+    bucket = "database_config_optsdb_test"
+    opts = [bucket: bucket, org: "instream_test"]
+
+    %{results: [%{error: message}]} =
+      DefaultConnection.query("SELECT * FROM database_config_test", opts)
+
+    assert String.contains?(message, "database not found")
+    assert String.contains?(message, opts[:database])
+  end
+
   test "write || default: bucket/org from connection" do
     %{code: "not found", message: message} = InvalidConnection.write(%DefaultSeries{})
 

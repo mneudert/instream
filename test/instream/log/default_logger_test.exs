@@ -38,7 +38,7 @@ defmodule Instream.Log.DefaultLoggerTest do
             org: DefaultConnection.config(:org),
             version: :v2
           ]
-    end
+      end
 
     conn_env = Application.get_env(:instream, LogConnection, [])
 

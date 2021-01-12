@@ -60,8 +60,8 @@ defmodule Instream.Connection.QueryRunner do
     config = conn.config()
     headers = Headers.assemble(config, opts)
 
-    body = read_body(query, opts)
-    method = read_method(opts)
+    body = read_body(conn, query, opts)
+    method = read_method(config, opts)
     url = read_url(conn, query, opts)
 
     {query_time, response} =
@@ -204,17 +204,42 @@ defmodule Instream.Connection.QueryRunner do
 
   defp log(_, _), do: :ok
 
-  defp read_body(%{payload: query_payload}, opts) do
-    case opts[:query_language] do
-      :flux -> query_payload
-      _ -> ""
+  defp read_body(conn, %{payload: query_payload}, opts) do
+    config = conn.config()
+
+    case {config[:version], opts[:query_language]} do
+      {:v2, :flux} ->
+        JSON.encode(
+          %{
+            type: "flux",
+            query: query_payload
+          },
+          conn
+        )
+
+      {:v2, _} ->
+        JSON.encode(
+          %{
+            type: "influxql",
+            bucket: opts[:bucket] || config[:bucket],
+            query: query_payload
+          },
+          conn
+        )
+
+      {:v1, :flux} ->
+        query_payload
+
+      {:v1, _} ->
+        ""
     end
   end
 
-  defp read_method(opts) do
-    case opts[:query_language] do
-      :flux -> :post
-      _ -> opts[:method] || :get
+  defp read_method(config, opts) do
+    case {config[:version], opts[:query_language]} do
+      {:v2, _} -> :post
+      {:v1, :flux} -> :post
+      {:v1, _} -> opts[:method] || :get
     end
   end
 
@@ -223,8 +248,7 @@ defmodule Instream.Connection.QueryRunner do
 
     url =
       config
-      |> URL.query(opts[:query_language])
-      |> URL.append_database(opts[:database] || config[:database])
+      |> URL.query(opts)
       |> URL.append_epoch(query_opts[:precision])
 
     url =
@@ -238,9 +262,10 @@ defmodule Instream.Connection.QueryRunner do
           url
       end
 
-    case opts[:query_language] do
-      :flux -> url
-      _ -> URL.append_query(url, query_payload)
+    case {config[:version], opts[:query_language]} do
+      {:v2, _} -> url
+      {:v1, :flux} -> url
+      {:v1, _} -> URL.append_query(url, query_payload)
     end
   end
 end

@@ -74,9 +74,25 @@ defmodule Instream.Query.URL do
   @doc """
   Returns the proper URL for a `:query` request.
   """
-  @spec query(Keyword.t(), atom | nil) :: String.t()
-  def query(config, :flux), do: url(config, "api/v2/query")
-  def query(config, _), do: url(config, "query")
+  @spec query(Keyword.t(), Keyword.t()) :: String.t()
+  def query(config, opts) do
+    case {config[:version], opts[:query_language]} do
+      {:v2, _} ->
+        config
+        |> url("api/v2/query")
+        |> append_param("org", opts[:org] || config[:org])
+
+      {:v1, :flux} ->
+        config
+        |> url("api/v2/query")
+        |> append_param("db", opts[:database] || config[:database])
+
+      {:v1, _} ->
+        config
+        |> url("query")
+        |> append_param("db", opts[:database] || config[:database])
+    end
+  end
 
   @doc """
   Returns the proper URL for a `:status` request.

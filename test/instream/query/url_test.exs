@@ -56,10 +56,11 @@ defmodule Instream.Query.URLTest do
       auth: [method: :query, username: "root", password: "root"],
       host: "localhost",
       port: 8086,
-      scheme: "http"
+      scheme: "http",
+      version: :v1
     ]
 
-    assert ^url = URL.query(conn, :influxql)
+    assert ^url = URL.query(conn, query_language: :influxql)
   end
 
   test "query url for flux" do
@@ -69,10 +70,11 @@ defmodule Instream.Query.URLTest do
       auth: [method: :query, username: "root", password: "root"],
       host: "localhost",
       port: 8086,
-      scheme: "http"
+      scheme: "http",
+      version: :v1
     ]
 
-    assert ^url = URL.query(conn, :flux)
+    assert ^url = URL.query(conn, query_language: :flux)
   end
 
   test "query url with basic authentication" do
@@ -81,10 +83,11 @@ defmodule Instream.Query.URLTest do
     conn = [
       auth: [method: :basic, username: "root", password: "root"],
       host: "localhost",
-      scheme: "http"
+      scheme: "http",
+      version: :v1
     ]
 
-    assert ^url = URL.query(conn, :influxql)
+    assert ^url = URL.query(conn, query_language: :influxql)
   end
 
   test "query url with default authentication" do
@@ -93,10 +96,11 @@ defmodule Instream.Query.URLTest do
     conn = [
       auth: [username: "root", password: "root"],
       host: "localhost",
-      scheme: "http"
+      scheme: "http",
+      version: :v1
     ]
 
-    assert ^url = URL.query(conn, :influxql)
+    assert ^url = URL.query(conn, query_language: :influxql)
   end
 
   test "query url without credentials" do
@@ -105,10 +109,11 @@ defmodule Instream.Query.URLTest do
     conn = [
       host: "localhost",
       port: 8086,
-      scheme: "http"
+      scheme: "http",
+      version: :v1
     ]
 
-    assert ^url = URL.query(conn, :influxql)
+    assert ^url = URL.query(conn, query_language: :influxql)
   end
 
   test "query url without port" do
@@ -117,10 +122,11 @@ defmodule Instream.Query.URLTest do
     conn = [
       auth: [method: :query, username: "root", password: "root"],
       host: "localhost",
-      scheme: "http"
+      scheme: "http",
+      version: :v1
     ]
 
-    assert ^url = URL.query(conn, :influxql)
+    assert ^url = URL.query(conn, query_language: :influxql)
   end
 
   test "query with partial credentials" do
@@ -129,9 +135,10 @@ defmodule Instream.Query.URLTest do
     conn = [
       auth: [method: :query, username: "root"],
       host: "localhost",
-      scheme: "http"
+      scheme: "http",
+      version: :v1
     ]
 
-    assert ^url = URL.query(conn, :influxql)
+    assert ^url = URL.query(conn, query_language: :influxql)
   end
 end
