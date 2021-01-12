@@ -22,25 +22,30 @@ defmodule Instream.Log.DefaultLoggerTest do
   end
 
   setup_all do
-    default_auth = DefaultConnection.config(:auth)
+    default_env =
+      case DefaultConnection.config(:version) do
+        :v1 ->
+          [
+            auth: DefaultConnection.config(:auth),
+            database: DefaultConnection.config(:database),
+            version: :v1
+          ]
 
-    auth =
-      case Keyword.get(default_auth, :token) do
-        nil -> default_auth
-        token -> [method: :token, token: token]
-      end
+        :v2 ->
+          [
+            auth: DefaultConnection.config(:auth),
+            bucket: DefaultConnection.config(:bucket),
+            org: DefaultConnection.config(:org),
+            version: :v2
+          ]
+    end
 
     conn_env = Application.get_env(:instream, LogConnection, [])
 
     Application.put_env(
       :instream,
       LogConnection,
-      Keyword.merge(
-        conn_env,
-        auth: auth,
-        database: DefaultConnection.config(:database),
-        version: DefaultConnection.config(:version)
-      )
+      Keyword.merge(conn_env, default_env)
     )
   end
 
