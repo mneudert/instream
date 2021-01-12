@@ -3,7 +3,7 @@ defmodule Instream.Connection.DatabaseTest do
 
   alias Instream.TestHelpers.Connections.DefaultConnection
 
-  defmodule InvalidDbConnection do
+  defmodule InvalidConnection do
     use Instream.Connection,
       otp_app: :instream,
       config: [
@@ -25,60 +25,53 @@ defmodule Instream.Connection.DatabaseTest do
   end
 
   setup_all do
-    default_auth = DefaultConnection.config(:auth)
-
-    auth =
-      case Keyword.get(default_auth, :token) do
-        nil -> default_auth
-        token -> [method: :token, token: token]
-      end
-
-    conn_env = Application.get_env(:instream, InvalidDbConnection, [])
+    conn_env = Application.get_env(:instream, InvalidConnection, [])
 
     Application.put_env(
       :instream,
-      InvalidDbConnection,
+      InvalidConnection,
       Keyword.merge(
         conn_env,
-        auth: auth,
-        version: DefaultConnection.config(:version)
+        auth: DefaultConnection.config(:auth)
       )
     )
   end
 
   setup do
-    {:ok, _} = start_supervised(InvalidDbConnection)
+    {:ok, _} = start_supervised(InvalidConnection)
     :ok
   end
 
   test "read || default: database from connection" do
     %{results: [%{error: message}]} =
-      InvalidDbConnection.query("SELECT * FROM database_config_test")
+      InvalidConnection.query("SELECT * FROM database_config_test")
 
     assert String.contains?(message, "database not found")
-    assert String.contains?(message, InvalidDbConnection.config(:database))
+    assert String.contains?(message, InvalidConnection.config(:database))
   end
 
   test "read || opts database has priority over connection database" do
     opts = [database: "database_config_optsdb_test"]
 
     %{results: [%{error: message}]} =
-      InvalidDbConnection.query("SELECT * FROM database_config_test", opts)
+      InvalidConnection.query("SELECT * FROM database_config_test", opts)
 
     assert String.contains?(message, "database not found")
     assert String.contains?(message, opts[:database])
   end
 
+  @tag :"influxdb_exclude_2.0"
   test "write || default: database from connection" do
-    %{error: message} = InvalidDbConnection.write(%DefaultSeries{})
+    %{error: message} = InvalidConnection.write(%DefaultSeries{})
 
     assert String.contains?(message, "database not found")
   end
 
+  @tag :"influxdb_exclude_2.0"
   test "write || opts database has priority over connection database" do
     opts = [database: "database_config_optsdb_test"]
 
-    %{error: message} = InvalidDbConnection.write(%DefaultSeries{}, opts)
+    %{error: message} = InvalidConnection.write(%DefaultSeries{}, opts)
 
     assert String.contains?(message, "database not found")
     assert String.contains?(message, opts[:database])
