@@ -140,9 +140,13 @@ defmodule Instream.Connection.Config do
       config :my_app, MyConnection,
         auth: [method: :basic, username: "root", password: "root"]
 
-  For `method` you can choose between header authentication (basic auth) using
-  `:basic` or query parameters using `:query`. If nothing or an invalid value
-  is given the connection will be made using `:basic` authentication.
+      config :my_app, MyConnection,
+        auth: [method: :token, token: "Ln0quM0YVQcJilrp"]
+
+  For `method` you can choose between header authentication using
+  `:basic` (InfluxDB v1) or `:token` (InfluxDB v2), or query parameters using
+  `:query`. If nothing or an invalid value is given the connection will be made
+  using `:basic` authentication.
 
   ## Writer Configuration
 
