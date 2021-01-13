@@ -4,24 +4,6 @@ defmodule Instream.Query.URL do
   alias Instream.Connection
 
   @doc """
-  Appends authentication credentials to a URL.
-  """
-  @spec append_auth(String.t(), Keyword.t()) :: String.t()
-  def append_auth(url, nil), do: url
-
-  def append_auth(url, auth) do
-    case auth[:method] do
-      :query ->
-        url
-        |> append_param("u", auth[:username])
-        |> append_param("p", auth[:password])
-
-      _ ->
-        url
-    end
-  end
-
-  @doc """
   Appends a database to a URL.
   """
   @spec append_database(String.t(), String.t()) :: String.t()
@@ -144,16 +126,26 @@ defmodule Instream.Query.URL do
   defp encode_precision(:rfc3339), do: ""
 
   defp url(config, endpoint) do
-    [
-      config[:scheme],
-      "://",
-      config[:host],
-      url_port(config[:port]),
-      "/",
-      endpoint
-    ]
-    |> Enum.join("")
-    |> append_auth(config[:auth])
+    url =
+      [
+        config[:scheme],
+        "://",
+        config[:host],
+        url_port(config[:port]),
+        "/",
+        endpoint
+      ]
+      |> Enum.join("")
+
+    case {config[:version], config[:auth][:method]} do
+      {:v1, :query} ->
+        url
+        |> append_param("u", config[:auth][:username])
+        |> append_param("p", config[:auth][:password])
+
+      _ ->
+        url
+    end
   end
 
   defp url_port(nil), do: ""
