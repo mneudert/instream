@@ -4,13 +4,6 @@ defmodule Instream.Query.URL do
   alias Instream.Connection
 
   @doc """
-  Appends a database to a URL.
-  """
-  @spec append_database(String.t(), String.t()) :: String.t()
-  def append_database(url, nil), do: url
-  def append_database(url, database), do: append_param(url, "db", database)
-
-  @doc """
   Appends an epoch value to a URL.
 
   The allowed values are identical to the precision parameters of write queries.
