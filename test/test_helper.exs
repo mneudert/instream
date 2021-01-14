@@ -14,10 +14,6 @@ Supervisor.start_link(
   strategy: :one_for_one
 )
 
-# setup test database
-_ = Connections.DefaultConnection.query("DROP DATABASE test_database", method: :post)
-_ = Connections.DefaultConnection.query("CREATE DATABASE test_database", method: :post)
-
 # configure unix socket connection
 config =
   case System.get_env("INFLUXDB_SOCKET") do
@@ -63,6 +59,11 @@ version =
 config = Keyword.put(config, :exclude, excludes ++ (config[:exclude] || []))
 
 IO.puts("Running tests for InfluxDB version: #{version}")
+
+unless "2.0" == version do
+  _ = Connections.DefaultConnection.query("DROP DATABASE test_database", method: :post)
+  _ = Connections.DefaultConnection.query("CREATE DATABASE test_database", method: :post)
+end
 
 # start ExUnit
 ExUnit.start(config)
