@@ -16,7 +16,7 @@ defmodule Instream.Response do
 
   def maybe_parse({:ok, status, headers, body}, conn, opts)
       when 300 <= status do
-    if :v2 === conn.config(:version) || is_json?(headers) do
+    if :v2 == conn.config(:version) || is_json?(headers) do
       maybe_decode_json(body, conn, opts)
     else
       maybe_wrap_error(body, opts)
@@ -24,7 +24,7 @@ defmodule Instream.Response do
   end
 
   def maybe_parse({:ok, _, headers, body}, conn, opts) do
-    if :v2 === conn.config(:version) || is_json?(headers) do
+    if is_json?(headers) do
       maybe_decode_json(body, conn, opts)
     else
       body
