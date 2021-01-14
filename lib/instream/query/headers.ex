@@ -8,7 +8,7 @@ defmodule Instream.Query.Headers do
   def assemble(config, options \\ []) do
     assemble_auth(config[:auth]) ++
       assemble_encoding(options[:result_as]) ++
-      assemble_language(options[:query_language])
+      assemble_language(config[:version], options[:query_language])
   end
 
   @doc """
@@ -73,17 +73,23 @@ defmodule Instream.Query.Headers do
 
   ## Usage
 
-      iex> assemble_language(nil)
+      iex> assemble_language(:v1, nil)
       []
 
-      iex> assemble_language(:flux)
+      iex> assemble_language(:v1, :flux)
       [{"Accept", "application/csv"}, {"Content-Type", "application/vnd.flux"}]
-  """
-  @spec assemble_language(nil | :flux) :: [{String.t(), String.t()}]
-  def assemble_language(nil), do: []
 
-  def assemble_language(:flux),
+      iex> assemble_language(:v2, :flux)
+      [{"Accept", "application/csv"}, {"Content-Type", "application/json"}]
+  """
+  @spec assemble_language(:v1 | :v2, nil | :flux) :: [{String.t(), String.t()}]
+  def assemble_language(_, nil), do: []
+
+  def assemble_language(:v1, :flux),
     do: [{"Accept", "application/csv"}, {"Content-Type", "application/vnd.flux"}]
+
+  def assemble_language(:v2, :flux),
+    do: [{"Accept", "application/csv"}, {"Content-Type", "application/json"}]
 
   defp basic_auth_header(nil, _), do: []
   defp basic_auth_header(_, nil), do: []
