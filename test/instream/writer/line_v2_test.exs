@@ -141,14 +141,6 @@ defmodule Instream.Writer.LineV2Test do
       |> ErrorsSeries.from_map()
       |> DefaultConnectionV2.write()
 
-    assert %{
-             results: [
-               %{
-                 series: [_]
-               }
-             ]
-           } = DefaultConnection.query("SELECT * FROM #{ErrorsSeries.__meta__(:measurement)}")
-
     # make entry fail
     %{code: _, message: error} =
       %{binary: 12_345}
