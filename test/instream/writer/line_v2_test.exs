@@ -3,7 +3,6 @@ defmodule Instream.Writer.LineV2Test do
 
   @moduletag :"influxdb_include_2.0"
 
-  alias Instream.TestHelpers.Connections.DefaultConnection
   alias Instream.TestHelpers.Connections.DefaultConnectionV2
 
   defmodule BatchSeries do
@@ -55,11 +54,11 @@ defmodule Instream.Writer.LineV2Test do
     end
   end
 
-  defmodule CustomDatabaseSeries do
+  defmodule CustomOrgBucketSeries do
     use Instream.Series
 
     series do
-      measurement "writer_database_option"
+      measurement "writer_org_bucket_option"
 
       field :value
     end
@@ -82,30 +81,35 @@ defmodule Instream.Writer.LineV2Test do
   end
 
   test "writer protocol: Line" do
+    timestamp = 1_439_587_926
+
     :ok =
       %{
-        timestamp: 1_439_587_926,
+        timestamp: timestamp,
         proto: "Line",
         value: "Line"
       }
       |> ProtocolsSeries.from_map()
       |> DefaultConnectionV2.write(precision: :second)
 
-    assert %{
-             results: [
-               %{
-                 series: [
-                   %{
-                     values: [[1_439_587_926_000_000_000, "Line", "Line"]]
-                   }
-                 ]
-               }
-             ]
-           } =
-             DefaultConnection.query(
-               "SELECT * FROM #{ProtocolsSeries.__meta__(:measurement)} WHERE proto='Line'",
-               precision: :nanosecond
-             )
+    result =
+      DefaultConnectionV2.query(
+        """
+          from(bucket: "#{DefaultConnectionV2.config(:bucket)}")
+          |> range(
+            start: #{timestamp - 30},
+            stop: #{timestamp + 30}
+          )
+          |> filter(fn: (r) =>
+            r._measurement == "#{ProtocolsSeries.__meta__(:measurement)}" and
+            r.proto == "Line"
+          )
+        """,
+        query_language: :flux
+      )
+
+    assert String.contains?(result, "_value,_field,_measurement,proto")
+    assert String.contains?(result, "Line,value,#{ProtocolsSeries.__meta__(:measurement)},Line")
   end
 
   test "line protocol data encoding" do
@@ -119,20 +123,23 @@ defmodule Instream.Writer.LineV2Test do
       |> LineEncodingSeries.from_map()
       |> DefaultConnectionV2.write()
 
-    assert %{
-             results: [
-               %{
-                 series: [
-                   %{
-                     values: [[_, "binary", false, 1.1, 100]]
-                   }
-                 ]
-               }
-             ]
-           } =
-             DefaultConnection.query(
-               "SELECT * FROM #{LineEncodingSeries.__meta__(:measurement)} GROUP BY *"
-             )
+    result =
+      DefaultConnectionV2.query(
+        """
+          from(bucket: "#{DefaultConnectionV2.config(:bucket)}")
+          |> range(start: -5m)
+          |> filter(fn: (r) =>
+            r._measurement == "#{LineEncodingSeries.__meta__(:measurement)}"
+          )
+        """,
+        query_language: :flux
+      )
+
+    assert String.contains?(result, "_value,_field,_measurement")
+    assert String.contains?(result, "binary,binary,#{LineEncodingSeries.__meta__(:measurement)}")
+    assert String.contains?(result, "false,boolean,#{LineEncodingSeries.__meta__(:measurement)}")
+    assert String.contains?(result, "1.1,float,#{LineEncodingSeries.__meta__(:measurement)}")
+    assert String.contains?(result, "100,integer,#{LineEncodingSeries.__meta__(:measurement)}")
   end
 
   test "protocol error decoding" do
@@ -151,15 +158,17 @@ defmodule Instream.Writer.LineV2Test do
   end
 
   test "line protocol batch series" do
+    timestamp = 1_439_587_926
+
     :ok =
       [
         %{
-          timestamp: 1_439_587_926,
+          timestamp: timestamp,
           scope: "inside",
           value: 1.23456
         },
         %{
-          timestamp: 1_439_587_927,
+          timestamp: timestamp + 1,
           scope: "outside",
           value: 9.87654
         }
@@ -167,21 +176,24 @@ defmodule Instream.Writer.LineV2Test do
       |> Enum.map(&BatchSeries.from_map/1)
       |> DefaultConnectionV2.write(precision: :second)
 
-    assert %{
-             results: [
-               %{
-                 series: [
-                   %{
-                     columns: ["time", "scope", "value"],
-                     values: [
-                       ["2015-08-14T21:32:06Z", "inside", 1.23456],
-                       ["2015-08-14T21:32:07Z", "outside", 9.87654]
-                     ]
-                   }
-                 ]
-               }
-             ]
-           } = DefaultConnection.query("SELECT * FROM #{BatchSeries.__meta__(:measurement)}")
+    result =
+      DefaultConnectionV2.query(
+        """
+          from(bucket: "#{DefaultConnectionV2.config(:bucket)}")
+          |> range(
+            start: #{timestamp - 30},
+            stop: #{timestamp + 30}
+          )
+          |> filter(fn: (r) =>
+            r._measurement == "#{BatchSeries.__meta__(:measurement)}"
+          )
+        """,
+        query_language: :flux
+      )
+
+    assert String.contains?(result, "_value,_field,_measurement,scope")
+    assert String.contains?(result, "1.23456,value,#{BatchSeries.__meta__(:measurement)},inside")
+    assert String.contains?(result, "9.87654,value,#{BatchSeries.__meta__(:measurement)},outside")
   end
 
   test "writing without all tags present" do
@@ -193,13 +205,24 @@ defmodule Instream.Writer.LineV2Test do
       |> EmptyTagSeries.from_map()
       |> DefaultConnectionV2.write()
 
-    assert %{results: [%{series: [%{columns: columns}]}]} =
-             DefaultConnection.query("SELECT * FROM #{EmptyTagSeries.__meta__(:measurement)}")
+    result =
+      DefaultConnectionV2.query(
+        """
+          from(bucket: "#{DefaultConnectionV2.config(:bucket)}")
+          |> range(start: -5m)
+          |> filter(fn: (r) =>
+            r._measurement == "#{EmptyTagSeries.__meta__(:measurement)}"
+          )
+        """,
+        query_language: :flux
+      )
 
-    assert Enum.member?(columns, "filled")
-    assert Enum.member?(columns, "defaulting")
-    assert Enum.member?(columns, "value")
-    refute Enum.member?(columns, "empty")
+    assert String.contains?(result, "_value,_field,_measurement,defaulting,filled")
+
+    assert String.contains?(
+             result,
+             "100,value,#{EmptyTagSeries.__meta__(:measurement)},default_value,filled_tag"
+           )
   end
 
   test "writing with passed org/bucket option" do
@@ -208,14 +231,22 @@ defmodule Instream.Writer.LineV2Test do
 
     :ok =
       %{value: 100}
-      |> CustomDatabaseSeries.from_map()
+      |> CustomOrgBucketSeries.from_map()
       |> DefaultConnectionV2.write(org: org, bucket: bucket)
 
-    assert %{results: [%{series: [%{columns: columns}]}]} =
-             DefaultConnection.query(
-               "SELECT * FROM #{CustomDatabaseSeries.__meta__(:measurement)}"
-             )
+    result =
+      DefaultConnectionV2.query(
+        """
+          from(bucket: "#{DefaultConnectionV2.config(:bucket)}")
+          |> range(start: -5m)
+          |> filter(fn: (r) =>
+            r._measurement == "#{CustomOrgBucketSeries.__meta__(:measurement)}"
+          )
+        """,
+        query_language: :flux
+      )
 
-    assert Enum.member?(columns, "value")
+    assert String.contains?(result, "_value,_field,_measurement")
+    assert String.contains?(result, "100,value,#{CustomOrgBucketSeries.__meta__(:measurement)}")
   end
 end
