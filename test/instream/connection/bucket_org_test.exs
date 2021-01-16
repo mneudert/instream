@@ -20,7 +20,7 @@ defmodule Instream.Connection.BucketOrgTest do
     use Instream.Series
 
     series do
-      measurement "database_config_series"
+      measurement "bucket_org_config_series"
 
       tag :foo, default: :bar
 
@@ -46,23 +46,14 @@ defmodule Instream.Connection.BucketOrgTest do
     :ok
   end
 
-  test "read || default: bucket/org from connection" do
-    %{results: [%{error: message}]} =
-      InvalidConnection.query("SELECT * FROM database_config_test")
-
-    assert String.contains?(message, "database not found")
-    assert String.contains?(message, InvalidConnection.config(:database))
-  end
-
   test "read || opts bucket/org has priority over connection database" do
-    bucket = "database_config_optsdb_test"
+    bucket = "bucket_org_config_optsdb_test"
     opts = [bucket: bucket, org: "instream_test"]
 
-    %{results: [%{error: message}]} =
-      DefaultConnection.query("SELECT * FROM database_config_test", opts)
+    %{error: message} = InvalidConnection.query("SELECT value FROM #{bucket}", opts)
 
-    assert String.contains?(message, "database not found")
-    assert String.contains?(message, opts[:database])
+    assert String.contains?(message, "could not find bucket")
+    assert String.contains?(message, bucket)
   end
 
   test "write || default: bucket/org from connection" do
@@ -71,8 +62,8 @@ defmodule Instream.Connection.BucketOrgTest do
     assert String.contains?(message, InvalidConnection.config(:bucket))
   end
 
-  test "write || opts database has priority over connection database" do
-    bucket = "database_config_optsdb_test"
+  test "write || opts bucket/org has priority over connection bucket/org" do
+    bucket = "bucket_org_config_optsdb_test"
     opts = [bucket: bucket, org: "instream_test"]
 
     %{code: "not found", message: message} = DefaultConnection.write(%DefaultSeries{}, opts)

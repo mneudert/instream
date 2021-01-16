@@ -107,7 +107,8 @@ defmodule Instream.ConnectionTest do
     assert String.contains?(result, "_measurement,foo")
   end
 
-  test "write data" do
+  @tag :"influxdb_exclude_2.0"
+  test "write data (v1)" do
     measurement = "write_data"
 
     :ok =
@@ -126,7 +127,8 @@ defmodule Instream.ConnectionTest do
     assert 0 < length(value_rows)
   end
 
-  test "writing series struct" do
+  @tag :"influxdb_exclude_2.0"
+  test "writing series struct (v1)" do
     :ok =
       %{
         bar: "bar",
@@ -137,10 +139,68 @@ defmodule Instream.ConnectionTest do
       |> DefaultConnection.write()
 
     assert %{results: [%{series: [%{tags: values_tags, values: value_rows}]}]} =
-             DefaultConnection.query("SELECT * FROM data_write_struct GROUP BY *")
+             DefaultConnection.query(
+               "SELECT * FROM #{TestSeries.__meta__(:measurement)} GROUP BY *"
+             )
 
     assert @tags == values_tags
     assert 0 < length(value_rows)
+  end
+
+  @tag :"influxdb_include_2.0"
+  test "write data (v2)" do
+    measurement = "write_data"
+
+    :ok =
+      DefaultConnection.write([
+        %{
+          measurement: measurement,
+          tags: @tags,
+          fields: %{value: 0.66}
+        }
+      ])
+
+    result =
+      DefaultConnection.query(
+        """
+          from(bucket: "#{DefaultConnectionV2.config(:bucket)}")
+          |> range(start: -5m)
+          |> filter(fn: (r) =>
+            r._measurement == "#{measurement}"
+          )
+        """,
+        query_language: :flux
+      )
+
+    assert String.contains?(result, "_value,_field,_measurement,bar,foo")
+    assert String.contains?(result, "0.66,value,#{measurement},bar,foo")
+  end
+
+  @tag :"influxdb_include_2.0"
+  test "writing series struct (v2)" do
+    :ok =
+      %{
+        bar: "bar",
+        foo: "foo",
+        value: 17
+      }
+      |> TestSeries.from_map()
+      |> DefaultConnection.write()
+
+    result =
+      DefaultConnection.query(
+        """
+          from(bucket: "#{DefaultConnectionV2.config(:bucket)}")
+          |> range(start: -5m)
+          |> filter(fn: (r) =>
+            r._measurement == "#{TestSeries.__meta__(:measurement)}"
+          )
+        """,
+        query_language: :flux
+      )
+
+    assert String.contains?(result, "_value,_field,_measurement,bar,foo")
+    assert String.contains?(result, "17,value,#{TestSeries.__meta__(:measurement)},bar,foo")
   end
 
   @tag :"influxdb_include_2.0"
