@@ -8,6 +8,7 @@ defmodule Instream.ResponseTest do
     assert %{} = DefaultConnection.query("SHOW DATABASES")
   end
 
+  @tag :"influxdb_exclude_2.0"
   test "response format: csv" do
     assert "name," <> _ = DefaultConnection.query("SHOW DATABASES", result_as: :csv)
   end

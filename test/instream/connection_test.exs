@@ -61,6 +61,7 @@ defmodule Instream.ConnectionTest do
     assert ^result_in = result_out
   end
 
+  @tag :"influxdb_exclude_2.0"
   test "read using params" do
     test_field = ~S|string field value, only " need be quoted|
     test_tag = ~S|tag,value,with"commas"|

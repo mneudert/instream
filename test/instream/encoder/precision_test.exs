@@ -1,6 +1,8 @@
 defmodule Instream.Encoder.PrecisionTest do
   use ExUnit.Case, async: true
 
+  @moduletag :"influxdb_exclude_2.0"
+
   alias Instream.TestHelpers.Connections.DefaultConnection
 
   setup_all do
