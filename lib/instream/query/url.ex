@@ -1,17 +1,6 @@
 defmodule Instream.Query.URL do
   @moduledoc false
 
-  alias Instream.Connection
-
-  @doc """
-  Appends an epoch value to a URL.
-
-  The allowed values are identical to the precision parameters of write queries.
-  """
-  @spec append_epoch(String.t(), Connection.precision()) :: String.t()
-  def append_epoch(url, nil), do: url
-  def append_epoch(url, epoch), do: append_param(url, "epoch", encode_precision(epoch))
-
   @doc """
   Appends a (json encoded) parameter map to a URL.
   """
@@ -33,8 +22,8 @@ defmodule Instream.Query.URL do
   @doc """
   Returns the proper URL for a `:query` request.
   """
-  @spec query(Keyword.t(), Keyword.t()) :: String.t()
-  def query(config, opts) do
+  @spec query(Keyword.t(), Keyword.t(), Keyword.t()) :: String.t()
+  def query(config, opts, query_opts) do
     case {config[:version], opts[:query_language]} do
       {:v2, _} ->
         config
@@ -45,11 +34,13 @@ defmodule Instream.Query.URL do
         config
         |> url("api/v2/query")
         |> append_param("db", opts[:database] || config[:database])
+        |> append_param("epoch", encode_precision(query_opts[:precision]))
 
       {:v1, _} ->
         config
         |> url("query")
         |> append_param("db", opts[:database] || config[:database])
+        |> append_param("epoch", encode_precision(query_opts[:precision]))
     end
   end
 

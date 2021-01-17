@@ -245,11 +245,7 @@ defmodule Instream.Connection.QueryRunner do
 
   defp read_url(conn, %{opts: query_opts, payload: query_payload}, opts) do
     config = conn.config()
-
-    url =
-      config
-      |> URL.query(opts)
-      |> URL.append_epoch(query_opts[:precision])
+    url = URL.query(config, opts, query_opts)
 
     url =
       case opts[:params] do

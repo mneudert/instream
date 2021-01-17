@@ -3,19 +3,6 @@ defmodule Instream.Query.URLTest do
 
   alias Instream.Query.URL
 
-  test "append epoch (read precision)" do
-    precision = :millisecond
-    url = "http://localhost/query"
-    expected = "#{url}?epoch=ms"
-
-    assert ^expected = URL.append_epoch(url, precision)
-
-    url = "#{url}?foo=bar"
-    expected = "#{url}&epoch=ms"
-
-    assert ^expected = URL.append_epoch(url, precision)
-  end
-
   test "append query" do
     query = ~s(SELECT "value" FROM "foo&bar?baz")
     url = "http://localhost/query"
@@ -40,7 +27,7 @@ defmodule Instream.Query.URLTest do
       version: :v1
     ]
 
-    assert ^url = URL.query(conn, query_language: :influxql)
+    assert ^url = URL.query(conn, [query_language: :influxql], [])
   end
 
   test "query url for flux" do
@@ -54,7 +41,7 @@ defmodule Instream.Query.URLTest do
       version: :v1
     ]
 
-    assert ^url = URL.query(conn, query_language: :flux)
+    assert ^url = URL.query(conn, [query_language: :flux], [])
   end
 
   test "query url with basic authentication" do
@@ -67,7 +54,7 @@ defmodule Instream.Query.URLTest do
       version: :v1
     ]
 
-    assert ^url = URL.query(conn, query_language: :influxql)
+    assert ^url = URL.query(conn, [query_language: :influxql], [])
   end
 
   test "query url with default authentication" do
@@ -80,7 +67,7 @@ defmodule Instream.Query.URLTest do
       version: :v1
     ]
 
-    assert ^url = URL.query(conn, query_language: :influxql)
+    assert ^url = URL.query(conn, [query_language: :influxql], [])
   end
 
   test "query url without credentials" do
@@ -93,7 +80,7 @@ defmodule Instream.Query.URLTest do
       version: :v1
     ]
 
-    assert ^url = URL.query(conn, query_language: :influxql)
+    assert ^url = URL.query(conn, [query_language: :influxql], [])
   end
 
   test "query url without port" do
@@ -106,7 +93,7 @@ defmodule Instream.Query.URLTest do
       version: :v1
     ]
 
-    assert ^url = URL.query(conn, query_language: :influxql)
+    assert ^url = URL.query(conn, [query_language: :influxql], [])
   end
 
   test "query with partial credentials" do
@@ -119,6 +106,6 @@ defmodule Instream.Query.URLTest do
       version: :v1
     ]
 
-    assert ^url = URL.query(conn, query_language: :influxql)
+    assert ^url = URL.query(conn, [query_language: :influxql], [])
   end
 end
