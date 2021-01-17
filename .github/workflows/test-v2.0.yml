@@ -46,7 +46,6 @@ jobs:
         mix deps.get
 
     - name: test
-      continue-on-error: true
       run: |
         SETUP=$(curl -s -XPOST http://localhost:8086/api/v2/setup -H 'accept: application/json' -d "{\"username\": \"instream_test\", \"password\": \"instream_test\", \"org\": \"instream_test\", \"bucket\": \"test_database\"}")
 
