@@ -19,22 +19,6 @@ defmodule Instream.Query.URL do
   def append_json_params(json_params, url), do: append_param(url, "params", json_params)
 
   @doc """
-  Appends a precision value to a URL.
-  """
-  @spec append_precision(String.t(), Connection.precision()) :: String.t()
-  def append_precision(url, nil), do: url
-
-  def append_precision(url, precision),
-    do: append_param(url, "precision", encode_precision(precision))
-
-  @doc """
-  Appends a retention policy to a URL.
-  """
-  @spec append_retention_policy(String.t(), String.t()) :: String.t()
-  def append_retention_policy(url, nil), do: url
-  def append_retention_policy(url, policy), do: append_param(url, "rp", policy)
-
-  @doc """
   Appends a query to a URL.
   """
   @spec append_query(String.t(), String.t()) :: String.t()
@@ -86,11 +70,14 @@ defmodule Instream.Query.URL do
         |> url("api/v2/write")
         |> append_param("bucket", opts[:bucket] || config[:bucket])
         |> append_param("org", opts[:org] || config[:org])
+        |> append_param("precision", encode_precision(opts[:precision]))
 
       _ ->
         config
         |> url("write")
         |> append_param("db", opts[:database] || config[:database])
+        |> append_param("precision", encode_precision(opts[:precision]))
+        |> append_param("rp", opts[:retention_policy])
     end
   end
 
@@ -116,7 +103,7 @@ defmodule Instream.Query.URL do
   defp encode_precision(:millisecond), do: "ms"
   defp encode_precision(:microsecond), do: "u"
   defp encode_precision(:nanosecond), do: "ns"
-  defp encode_precision(:rfc3339), do: ""
+  defp encode_precision(_), do: ""
 
   defp url(config, endpoint) do
     url =

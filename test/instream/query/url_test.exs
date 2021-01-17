@@ -16,26 +16,6 @@ defmodule Instream.Query.URLTest do
     assert ^expected = URL.append_epoch(url, precision)
   end
 
-  test "append precision" do
-    precision = :millisecond
-    url = "http://localhost/query"
-    expected = "#{url}?precision=ms"
-
-    assert ^expected = URL.append_precision(url, precision)
-
-    url = "#{url}?foo=bar"
-    expected = "#{url}&precision=ms"
-
-    assert ^expected = URL.append_precision(url, precision)
-  end
-
-  test "rfc3339 == default precision (not in url)" do
-    precision = :rfc3339
-    url = "http://localhost/query"
-
-    assert ^url = URL.append_precision(url, precision)
-  end
-
   test "append query" do
     query = ~s(SELECT "value" FROM "foo&bar?baz")
     url = "http://localhost/query"

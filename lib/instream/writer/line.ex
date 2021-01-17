@@ -18,12 +18,7 @@ defmodule Instream.Writer.Line do
     config = conn.config()
     headers = Headers.assemble(config, opts) ++ [{"Content-Type", "text/plain"}]
     body = Encoder.encode(points)
-
-    url =
-      config
-      |> URL.write(query_opts)
-      |> URL.append_precision(query_opts[:precision])
-      |> URL.append_retention_policy(query_opts[:retention_policy])
+    url = URL.write(config, query_opts)
 
     http_opts =
       Keyword.merge(Keyword.get(config, :http_opts, []), Keyword.get(opts, :http_opts, []))
