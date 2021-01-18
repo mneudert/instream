@@ -59,9 +59,9 @@ defmodule Instream.Writer.UDP do
     worker = :poolboy.checkout(pool_name, pool_timeout)
 
     if opts[:async] do
-      :ok = GenServer.cast(worker, {:execute, query, opts})
+      :ok = GenServer.cast(worker, {:write, query})
     else
-      _ = GenServer.call(worker, {:execute, query, opts}, :infinity)
+      _ = GenServer.call(worker, {:write, query}, :infinity)
     end
 
     :ok = :poolboy.checkin(pool_name, worker)
@@ -69,11 +69,11 @@ defmodule Instream.Writer.UDP do
     @response
   end
 
-  def handle_call({:execute, query, _opts}, _from, state) do
+  def handle_call({:write, query}, _from, state) do
     {:reply, do_write(query, state), state}
   end
 
-  def handle_cast({:execute, query, _opts}, state) do
+  def handle_cast({:write, query}, state) do
     _ = do_write(query, state)
 
     {:noreply, state}
