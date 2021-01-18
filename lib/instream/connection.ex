@@ -41,25 +41,14 @@ defmodule Instream.Connection do
 
   The response will be `:pong` on success or `:error` on any failure.
 
-  To ping "a host other than the first in your configuration"
-  you can pass it explicitly:
-
-      MyConnection.ping("some.host.name")
-
-  All values necessary to ping the host (scheme, port, ...) will be
-  taken from the connection used. It does not matter whether the host
-  is configured in that connection or not.
-
   To get InfluxDB to verify the status of your server you can send a status call:
 
       MyConnection.status()
-      MyConnection.status("some.host.name")
 
   If you are interested in the version of InfluxDB your server is
   reporting you can request it:
 
       MyConnection.version()
-      MyConnection.version("some.host.name")
 
   If the version if undetectable (no header returned) it will be
   reported as `"unknown"`. If the host is unreachable or an error occurred
