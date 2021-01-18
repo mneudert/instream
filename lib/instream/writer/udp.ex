@@ -58,11 +58,12 @@ defmodule Instream.Writer.UDP do
 
     worker = :poolboy.checkout(pool_name, pool_timeout)
 
-    if opts[:async] do
-      :ok = GenServer.cast(worker, {:write, query})
-    else
-      _ = GenServer.call(worker, {:write, query}, :infinity)
-    end
+    :ok =
+      if opts[:async] do
+        GenServer.cast(worker, {:write, query})
+      else
+        GenServer.call(worker, {:write, query}, :infinity)
+      end
 
     :ok = :poolboy.checkin(pool_name, worker)
 
@@ -83,16 +84,13 @@ defmodule Instream.Writer.UDP do
     config = conn.config()
     payload = Encoder.encode(points)
 
-    :ok =
-      :gen_udp.send(
-        udp_socket,
-        String.to_charlist(config[:host]),
-        config[:port_udp],
-        String.to_charlist(payload)
-      )
-
-    @response
+    :gen_udp.send(
+      udp_socket,
+      String.to_charlist(config[:host]),
+      config[:port_udp],
+      String.to_charlist(payload)
+    )
   end
 
-  defp do_write(_, _), do: @response
+  defp do_write(_, _), do: :ok
 end
