@@ -132,7 +132,7 @@ defmodule Instream.Connection do
   @doc """
   Returns the connection configuration.
   """
-  @callback config(keys :: nil | nonempty_list(term)) :: Keyword.t()
+  @callback config(key :: atom | nil) :: Keyword.t() | term
 
   @doc """
   Pings the connection server.
