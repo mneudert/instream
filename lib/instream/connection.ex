@@ -144,7 +144,9 @@ defmodule Instream.Connection do
 
   Options:
 
+  - `database`; use a database differing from the connection config for reading
   - `method`: whether to use a `:get` or `:post` request
+  - `org`: use an organization differing from the connection config for reading
   - `precision`: return data with a "precision" other than `:rfc3339`
   """
   @callback query(query :: String.t(), opts :: Keyword.t()) :: any
