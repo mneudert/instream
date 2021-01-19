@@ -4,6 +4,10 @@ defmodule Instream.Writer.Line do
 
   ## Additional Write Options
 
+  - `bucket`: write data to a bucket differing from the connection config
+  - `database`: write data to a database differing from the connection config
+  - `org`: write data to an organization differing from the connection config
+  - `precision`: write points with a "precision" other than `:nanosecond`
   - `retention_policy`: write data with a specific retention policy
   """
 

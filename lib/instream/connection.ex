@@ -162,12 +162,7 @@ defmodule Instream.Connection do
   @doc """
   Executes a writing query.
 
-  Options:
-
-  - `database`: write data to a database differing from the connection database
-  - `precision`: write points with a "precision" other than `:nanosecond`
-
-  Additional options depend on the writer module configured.
+  Usable options depend on the writer module configured.
   """
   @callback write(payload :: map | [map], opts :: Keyword.t()) :: any
 end
