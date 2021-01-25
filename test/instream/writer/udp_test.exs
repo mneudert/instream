@@ -1,4 +1,4 @@
-defmodule Instream.WriterTest do
+defmodule Instream.Writer.UDPTest do
   use ExUnit.Case, async: true
 
   alias Instream.TestHelpers.Connections.DefaultConnection
