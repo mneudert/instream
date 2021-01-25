@@ -84,7 +84,7 @@ defmodule Instream.Series.HydratorTest do
                    series: [
                      %{
                        columns: ["time", "value"],
-                       name: "hydrator_test",
+                       name: TestSeries.__meta__(:measurement),
                        tags: %{foo: val_tag},
                        values: [[val_timestamp_1, val_field_1], [val_timestamp_2, val_field_2]]
                      }
@@ -100,7 +100,7 @@ defmodule Instream.Series.HydratorTest do
                    series: [
                      %{
                        columns: ["time", "value"],
-                       name: "hydrator_test",
+                       name: TestSeries.__meta__(:measurement),
                        tags: %{foo: val_tag},
                        values: [[val_datetime_1, val_field_1], [val_datetime_2, val_field_2]]
                      }
