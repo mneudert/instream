@@ -2,18 +2,6 @@ alias Instream.TestHelpers.Connections
 
 config = ExUnit.configuration()
 
-# start helper connections
-Supervisor.start_link(
-  [
-    Connections.DefaultConnection,
-    Connections.DefaultConnectionV2,
-    Connections.GuestConnection,
-    Connections.RanchSocketConnection,
-    Connections.UnixSocketConnection
-  ],
-  strategy: :one_for_one
-)
-
 # configure unix socket connection
 config =
   case System.get_env("INFLUXDB_SOCKET") do

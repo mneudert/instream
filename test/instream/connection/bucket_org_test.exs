@@ -41,11 +41,6 @@ defmodule Instream.Connection.BucketOrgTest do
     )
   end
 
-  setup do
-    {:ok, _} = start_supervised(InvalidConnection)
-    :ok
-  end
-
   test "read || opts bucket/org has priority over connection database" do
     bucket = "bucket_org_config_optsdb_test"
     opts = [bucket: bucket, org: "instream_test"]

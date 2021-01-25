@@ -49,11 +49,6 @@ defmodule Instream.Log.DefaultLoggerTest do
     )
   end
 
-  setup do
-    {:ok, _} = start_supervised(LogConnection)
-    :ok
-  end
-
   @tag :"influxdb_exclude_2.0"
   test "logging ping request" do
     log =

@@ -39,11 +39,6 @@ defmodule Instream.Connection.DatabaseTest do
     )
   end
 
-  setup do
-    {:ok, _} = start_supervised(InvalidConnection)
-    :ok
-  end
-
   test "read || default: database from connection" do
     %{results: [%{error: message}]} =
       InvalidConnection.query("SELECT * FROM database_config_test")

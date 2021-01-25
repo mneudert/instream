@@ -29,12 +29,6 @@ defmodule Instream.Connection.ErrorTest do
     end
   end
 
-  setup do
-    {:ok, _} = start_supervised(OptionsConnection)
-    {:ok, _} = start_supervised(UnreachableConnection)
-    :ok
-  end
-
   @tag :"influxdb_exclude_2.0"
   test "ping connection" do
     assert :error = OptionsConnection.ping()
