@@ -41,7 +41,7 @@ defmodule Instream.Connection.BucketOrgTest do
     )
   end
 
-  test "read || opts bucket/org has priority over connection database" do
+  test "read || opts bucket/org has priority over connection bucket/org" do
     bucket = "bucket_org_config_optsdb_test"
     opts = [bucket: bucket, org: "instream_test"]
 
