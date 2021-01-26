@@ -40,18 +40,4 @@ if Mix.env() == :test do
     loggers: [],
     port: 0,
     scheme: "http+unix"
-
-  case System.get_env("INFLUXDB_SOCKET") do
-    nil ->
-      :ok
-
-    socket ->
-      config :instream, TestHelpers.Connections.UnixSocketConnection,
-        auth: [username: "instream_test", password: "instream_test"],
-        database: "test_database",
-        host: URI.encode_www_form(socket),
-        loggers: [],
-        port: 0,
-        scheme: "http+unix"
-  end
 end
