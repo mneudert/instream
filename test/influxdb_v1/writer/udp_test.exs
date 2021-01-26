@@ -1,7 +1,10 @@
-defmodule Instream.Writer.UDPTest do
+defmodule Instream.InfluxDBv1.Writer.UDPTest do
   use ExUnit.Case, async: true
 
   alias Instream.TestHelpers.Connections.DefaultConnection
+
+  @moduletag :"influxdb_exclude_2.0"
+  @moduletag :udp
 
   defmodule ProtocolsSeries do
     use Instream.Series
@@ -24,16 +27,12 @@ defmodule Instream.Writer.UDPTest do
       ]
   end
 
-  @tag :"influxdb_exclude_2.0"
-  @tag :udp
   test "writing no points alway succeeds" do
     start_supervised!(UDPConnection)
 
     assert :ok = UDPConnection.write([])
   end
 
-  @tag :"influxdb_exclude_2.0"
-  @tag :udp
   test "writer protocol: UDP (async: false)" do
     start_supervised!(UDPConnection)
 
@@ -74,8 +73,6 @@ defmodule Instream.Writer.UDPTest do
     assert retry(2500, 50, retry_call, retry_test)
   end
 
-  @tag :"influxdb_exclude_2.0"
-  @tag :udp
   test "writer protocol: UDP (async: true)" do
     start_supervised!(UDPConnection)
 

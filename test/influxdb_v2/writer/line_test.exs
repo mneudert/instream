@@ -1,9 +1,9 @@
-defmodule Instream.Writer.LineV2Test do
+defmodule Instream.InfluxDBv2.Writer.LineTest do
   use ExUnit.Case, async: true
 
   @moduletag :"influxdb_include_2.0"
 
-  alias Instream.TestHelpers.Connections.DefaultConnectionV2
+  alias Instream.TestHelpers.Connections.DefaultConnection
 
   defmodule BatchSeries do
     use Instream.Series
@@ -77,7 +77,7 @@ defmodule Instream.Writer.LineV2Test do
   end
 
   test "writing no points alway succeeds" do
-    assert :ok = DefaultConnectionV2.write([])
+    assert :ok = DefaultConnection.write([])
   end
 
   test "writer protocol: Line" do
@@ -90,12 +90,12 @@ defmodule Instream.Writer.LineV2Test do
         value: "Line"
       }
       |> ProtocolsSeries.from_map()
-      |> DefaultConnectionV2.write(precision: :second)
+      |> DefaultConnection.write(precision: :second)
 
     result =
-      DefaultConnectionV2.query(
+      DefaultConnection.query(
         """
-          from(bucket: "#{DefaultConnectionV2.config(:bucket)}")
+          from(bucket: "#{DefaultConnection.config(:bucket)}")
           |> range(
             start: #{timestamp - 30},
             stop: #{timestamp + 30}
@@ -121,12 +121,12 @@ defmodule Instream.Writer.LineV2Test do
         integer: 100
       }
       |> LineEncodingSeries.from_map()
-      |> DefaultConnectionV2.write()
+      |> DefaultConnection.write()
 
     result =
-      DefaultConnectionV2.query(
+      DefaultConnection.query(
         """
-          from(bucket: "#{DefaultConnectionV2.config(:bucket)}")
+          from(bucket: "#{DefaultConnection.config(:bucket)}")
           |> range(start: -5m)
           |> filter(fn: (r) =>
             r._measurement == "#{LineEncodingSeries.__meta__(:measurement)}"
@@ -146,13 +146,13 @@ defmodule Instream.Writer.LineV2Test do
     :ok =
       %{binary: "binary"}
       |> ErrorsSeries.from_map()
-      |> DefaultConnectionV2.write()
+      |> DefaultConnection.write()
 
     # make entry fail
     %{code: _, message: error} =
       %{binary: 12_345}
       |> ErrorsSeries.from_map()
-      |> DefaultConnectionV2.write()
+      |> DefaultConnection.write()
 
     assert String.contains?(error, "conflict")
   end
@@ -174,12 +174,12 @@ defmodule Instream.Writer.LineV2Test do
         }
       ]
       |> Enum.map(&BatchSeries.from_map/1)
-      |> DefaultConnectionV2.write(precision: :second)
+      |> DefaultConnection.write(precision: :second)
 
     result =
-      DefaultConnectionV2.query(
+      DefaultConnection.query(
         """
-          from(bucket: "#{DefaultConnectionV2.config(:bucket)}")
+          from(bucket: "#{DefaultConnection.config(:bucket)}")
           |> range(
             start: #{timestamp - 30},
             stop: #{timestamp + 30}
@@ -203,12 +203,12 @@ defmodule Instream.Writer.LineV2Test do
         value: 100
       }
       |> EmptyTagSeries.from_map()
-      |> DefaultConnectionV2.write()
+      |> DefaultConnection.write()
 
     result =
-      DefaultConnectionV2.query(
+      DefaultConnection.query(
         """
-          from(bucket: "#{DefaultConnectionV2.config(:bucket)}")
+          from(bucket: "#{DefaultConnection.config(:bucket)}")
           |> range(start: -5m)
           |> filter(fn: (r) =>
             r._measurement == "#{EmptyTagSeries.__meta__(:measurement)}"
@@ -226,18 +226,18 @@ defmodule Instream.Writer.LineV2Test do
   end
 
   test "writing with passed org/bucket option" do
-    org = DefaultConnectionV2.config(:org)
-    bucket = DefaultConnectionV2.config(:bucket)
+    org = DefaultConnection.config(:org)
+    bucket = DefaultConnection.config(:bucket)
 
     :ok =
       %{value: 100}
       |> CustomOrgBucketSeries.from_map()
-      |> DefaultConnectionV2.write(org: org, bucket: bucket)
+      |> DefaultConnection.write(org: org, bucket: bucket)
 
     result =
-      DefaultConnectionV2.query(
+      DefaultConnection.query(
         """
-          from(bucket: "#{DefaultConnectionV2.config(:bucket)}")
+          from(bucket: "#{DefaultConnection.config(:bucket)}")
           |> range(start: -5m)
           |> filter(fn: (r) =>
             r._measurement == "#{CustomOrgBucketSeries.__meta__(:measurement)}"

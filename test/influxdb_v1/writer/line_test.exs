@@ -1,4 +1,4 @@
-defmodule Instream.Writer.LineV1Test do
+defmodule Instream.InfluxDBv1.Writer.LineTest do
   use ExUnit.Case, async: true
 
   @moduletag :"influxdb_exclude_2.0"
