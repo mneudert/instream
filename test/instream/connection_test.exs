@@ -2,7 +2,6 @@ defmodule Instream.ConnectionTest do
   use ExUnit.Case, async: true
 
   alias Instream.TestHelpers.Connections.DefaultConnection
-  alias Instream.TestHelpers.Connections.DefaultConnectionV2
   alias Instream.TestHelpers.Connections.GuestConnection
 
   @database "test_database"
@@ -19,28 +18,6 @@ defmodule Instream.ConnectionTest do
 
       field :value
     end
-  end
-
-  @tag :"influxdb_exclude_2.0"
-  test "ping connection" do
-    assert :pong = DefaultConnection.ping()
-  end
-
-  @tag :"influxdb_exclude_2.0"
-  test "status connection" do
-    assert :ok = DefaultConnection.status()
-  end
-
-  @tag :"influxdb_exclude_2.0"
-  test "version connection" do
-    assert is_binary(DefaultConnection.version())
-  end
-
-  @tag :"influxdb_include_2.0"
-  test "mismatched InfluxDB version" do
-    assert {:error, :version_mismatch} = DefaultConnectionV2.ping()
-    assert {:error, :version_mismatch} = DefaultConnectionV2.status()
-    assert {:error, :version_mismatch} = DefaultConnectionV2.version()
   end
 
   test "read from empty measurement" do
@@ -162,7 +139,7 @@ defmodule Instream.ConnectionTest do
     result =
       DefaultConnection.query(
         """
-          from(bucket: "#{DefaultConnectionV2.config(:bucket)}")
+          from(bucket: "#{DefaultConnection.config(:bucket)}")
           |> range(start: -5m)
           |> filter(fn: (r) =>
             r._measurement == "#{measurement}"
@@ -189,7 +166,7 @@ defmodule Instream.ConnectionTest do
     result =
       DefaultConnection.query(
         """
-          from(bucket: "#{DefaultConnectionV2.config(:bucket)}")
+          from(bucket: "#{DefaultConnection.config(:bucket)}")
           |> range(start: -5m)
           |> filter(fn: (r) =>
             r._measurement == "#{TestSeries.__meta__(:measurement)}"
