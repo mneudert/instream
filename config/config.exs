@@ -34,10 +34,4 @@ if Mix.env() == :test do
     auth: [username: "instream_guest", password: "instream_guest"],
     database: "test_database",
     loggers: []
-
-  config :instream, TestHelpers.Connections.RanchSocketConnection,
-    database: "test_database",
-    loggers: [],
-    port: 0,
-    scheme: "http+unix"
 end

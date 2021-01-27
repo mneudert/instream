@@ -1,7 +1,17 @@
 defmodule Instream.Connection.BodyReadErrorTest do
   use ExUnit.Case, async: true
 
-  alias Instream.TestHelpers.Connections.RanchSocketConnection
+  alias Instream.TestHelpers.Connections.DefaultConnection
+
+  defmodule RanchSocketConnection do
+    use Instream.Connection,
+      otp_app: :instream,
+      config: [
+        loggers: [],
+        port: 0,
+        scheme: "http+unix"
+      ]
+  end
 
   defmodule SocketProtocol do
     use GenServer
@@ -45,8 +55,12 @@ defmodule Instream.Connection.BodyReadErrorTest do
 
     socket_env =
       :instream
-      |> Application.get_env(RanchSocketConnection)
-      |> Keyword.put(:host, URI.encode_www_form(socket))
+      |> Application.get_env(DefaultConnection)
+      |> Keyword.merge(
+        host: URI.encode_www_form(socket),
+        port: 0,
+        scheme: "http+unix"
+      )
 
     Application.put_env(:instream, RanchSocketConnection, socket_env)
 
@@ -64,8 +78,12 @@ defmodule Instream.Connection.BodyReadErrorTest do
       fields: %{field: :test}
     }
 
-    assert :error = RanchSocketConnection.ping()
-    assert :error = RanchSocketConnection.status()
+    if :v1 == DefaultConnection.config(:version) do
+      assert :error = RanchSocketConnection.ping()
+      assert :error = RanchSocketConnection.status()
+      assert :error = RanchSocketConnection.version()
+    end
+
     assert {:error, :bad_request} = RanchSocketConnection.query("")
     assert {:error, :bad_request} = RanchSocketConnection.write(point)
 
