@@ -54,4 +54,6 @@ unless "2.0" == version do
 end
 
 # start ExUnit
+Mox.defmock(Instream.TestHelpers.HTTPClientMock, for: Instream.HTTPClient)
+
 ExUnit.start(config)
