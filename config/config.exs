@@ -23,13 +23,6 @@ if Mix.env() == :test do
         version: :v2
   end
 
-  config :instream, TestHelpers.Connections.DefaultConnectionV2,
-    auth: [method: :token, token: System.get_env("INFLUXDB_TOKEN")],
-    bucket: "test_database",
-    loggers: [],
-    org: "instream_test",
-    version: :v2
-
   config :instream, TestHelpers.Connections.GuestConnection,
     auth: [username: "instream_guest", password: "instream_guest"],
     database: "test_database",
