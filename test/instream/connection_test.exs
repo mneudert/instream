@@ -2,7 +2,6 @@ defmodule Instream.ConnectionTest do
   use ExUnit.Case, async: true
 
   alias Instream.TestHelpers.Connections.DefaultConnection
-  alias Instream.TestHelpers.Connections.GuestConnection
 
   @database "test_database"
   @tags %{foo: "foo", bar: "bar"}
@@ -177,38 +176,5 @@ defmodule Instream.ConnectionTest do
 
     assert String.contains?(result, "_value,_field,_measurement,bar,foo")
     assert String.contains?(result, "17,value,#{TestSeries.__meta__(:measurement)},bar,foo")
-  end
-
-  @tag :"influxdb_include_2.0"
-  test "write data without authorization" do
-    data = [
-      %{
-        measurement: "write_data_privileges",
-        fields: %{value: 0.66}
-      }
-    ]
-
-    assert %{code: "unauthorized", message: "Unauthorized"} = GuestConnection.write(data)
-  end
-
-  @tag :"influxdb_exclude_2.0"
-  test "write data with missing privileges" do
-    data = [
-      %{
-        measurement: "write_data_privileges",
-        fields: %{value: 0.66}
-      }
-    ]
-
-    %{error: error} = GuestConnection.write(data)
-
-    assert String.contains?(error, "not authorized")
-  end
-
-  @tag :"influxdb_exclude_2.0"
-  test "privilege missing" do
-    %{error: error} = GuestConnection.query("DROP DATABASE ignore", method: :post)
-
-    assert String.contains?(error, "requires admin privilege")
   end
 end

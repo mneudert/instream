@@ -22,9 +22,4 @@ if Mix.env() == :test do
         loggers: [],
         version: :v2
   end
-
-  config :instream, TestHelpers.Connections.GuestConnection,
-    auth: [username: "instream_guest", password: "instream_guest"],
-    database: "test_database",
-    loggers: []
 end
