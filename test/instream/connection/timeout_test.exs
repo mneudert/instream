@@ -21,11 +21,6 @@ defmodule Instream.Connection.TimeoutTest do
       serve_dummy()
     end
 
-    defp serve_uri('/query?db=timeout_long', _mod_data) do
-      :timer.sleep(10_000)
-      serve_dummy()
-    end
-
     defp serve_dummy do
       body = '{"results": [{}]}'
 
@@ -64,17 +59,6 @@ defmodule Instream.Connection.TimeoutTest do
 
     opts = [
       database: "timeout",
-      timeout: timeout
-    ]
-
-    assert {:error, :timeout} = InetsConnection.query("", opts)
-  end
-
-  test "timeout above GenServer defaults" do
-    timeout = 7500
-
-    opts = [
-      database: "timeout_long",
       timeout: timeout
     ]
 
