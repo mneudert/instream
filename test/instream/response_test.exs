@@ -5,7 +5,7 @@ defmodule Instream.ResponseTest do
   alias Instream.TestHelpers.Connections.DefaultConnection
 
   test "response format: default (parsed)" do
-    assert %{} = DefaultConnection.query("SHOW DATABASES")
+    assert %{} = DefaultConnection.query("SELECT * FROM ignore")
   end
 
   @tag :"influxdb_exclude_2.0"
@@ -14,7 +14,7 @@ defmodule Instream.ResponseTest do
   end
 
   test "response format: raw" do
-    assert "{" <> _ = DefaultConnection.query("SHOW DATABASES", result_as: :raw)
+    assert "{" <> _ = DefaultConnection.query("SELECT * FROM ignore", result_as: :raw)
   end
 
   test "raw json error response" do
