@@ -1,4 +1,4 @@
-defmodule Instream.Encoder.PrecisionTest do
+defmodule Instream.InfluxDBv1.Connection.QueryPrecisionTest do
   use ExUnit.Case, async: true
 
   @moduletag :"influxdb_exclude_2.0"
@@ -38,11 +38,7 @@ defmodule Instream.Encoder.PrecisionTest do
     %{results: [%{series: [%{values: [[time, _]]}]}]} =
       DefaultConnection.query("SELECT * FROM precision_test", precision: :rfc3339)
 
-    assert 20 <=
-             time
-             |> Kernel.to_string()
-             |> String.length()
-
+    assert 20 <= String.length(time)
     assert String.contains?(time, "Z")
   end
 end
