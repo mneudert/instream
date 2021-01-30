@@ -1,4 +1,4 @@
-alias Instream.TestHelpers.Connections
+alias Instream.TestHelpers.Connections.DefaultConnection
 
 config = ExUnit.configuration()
 
@@ -16,9 +16,9 @@ config =
 
 # configure InfluxDB test exclusion
 conn_version =
-  case Connections.DefaultConnection.config(:version) do
+  case DefaultConnection.config(:version) do
     :v1 ->
-      Connections.DefaultConnection.version()
+      DefaultConnection.version()
       |> Kernel.to_string()
       |> Version.parse()
 
@@ -49,8 +49,8 @@ config = Keyword.put(config, :exclude, excludes ++ (config[:exclude] || []))
 IO.puts("Running tests for InfluxDB version: #{version}")
 
 unless "2.0" == version do
-  _ = Connections.DefaultConnection.query("DROP DATABASE test_database", method: :post)
-  _ = Connections.DefaultConnection.query("CREATE DATABASE test_database", method: :post)
+  _ = DefaultConnection.query("DROP DATABASE test_database", method: :post)
+  _ = DefaultConnection.query("CREATE DATABASE test_database", method: :post)
 end
 
 # start ExUnit
