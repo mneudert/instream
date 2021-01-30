@@ -3,8 +3,7 @@ defmodule Instream.Query do
   Query struct.
   """
 
-  defstruct method: :get,
-            payload: nil,
+  defstruct payload: nil,
             opts: [],
             type: nil
 
