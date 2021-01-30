@@ -19,23 +19,6 @@ defmodule Instream.ConnectionTest do
     end
   end
 
-  test "read from empty measurement" do
-    query = "SELECT value FROM empty_measurement"
-    result = DefaultConnection.query(query)
-
-    assert %{results: _} = result
-  end
-
-  test "read using database in query string" do
-    query_in = "SELECT value FROM \"#{@database}\".\"autogen\".\"empty_measurement\""
-    query_out = "SELECT value FROM empty_measurement"
-
-    result_in = DefaultConnection.query(query_in)
-    result_out = DefaultConnection.query(query_out)
-
-    assert ^result_in = result_out
-  end
-
   @tag :"influxdb_exclude_2.0"
   test "read using params" do
     test_field = ~S|string field value, only " need be quoted|
