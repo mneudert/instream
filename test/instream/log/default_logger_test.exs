@@ -22,30 +22,10 @@ defmodule Instream.Log.DefaultLoggerTest do
   end
 
   setup_all do
-    default_env =
-      case DefaultConnection.config(:version) do
-        :v1 ->
-          [
-            auth: DefaultConnection.config(:auth),
-            database: DefaultConnection.config(:database),
-            version: :v1
-          ]
-
-        :v2 ->
-          [
-            auth: DefaultConnection.config(:auth),
-            bucket: DefaultConnection.config(:bucket),
-            org: DefaultConnection.config(:org),
-            version: :v2
-          ]
-      end
-
-    conn_env = Application.get_env(:instream, LogConnection, [])
-
     Application.put_env(
       :instream,
       LogConnection,
-      Keyword.merge(conn_env, default_env)
+      Keyword.drop(DefaultConnection.config(), [:loggers])
     )
   end
 

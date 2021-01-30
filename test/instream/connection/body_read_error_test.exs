@@ -54,9 +54,8 @@ defmodule Instream.Connection.BodyReadErrorTest do
     File.rm(socket)
 
     socket_env =
-      :instream
-      |> Application.get_env(DefaultConnection)
-      |> Keyword.merge(
+      Keyword.merge(
+        DefaultConnection.config(),
         host: URI.encode_www_form(socket),
         port: 0,
         scheme: "http+unix"
