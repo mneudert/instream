@@ -96,11 +96,7 @@ defmodule Instream.Connection do
         end
       end
 
-      def query(query, opts \\ []) do
-        query
-        |> Data.Read.query(opts)
-        |> QueryRunner.read(opts, __MODULE__)
-      end
+      def query(query, opts \\ []), do: QueryRunner.read(query, opts, __MODULE__)
 
       def status(opts \\ []) do
         case config(:version) do

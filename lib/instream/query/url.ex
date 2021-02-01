@@ -22,8 +22,8 @@ defmodule Instream.Query.URL do
   @doc """
   Returns the proper URL for a `:query` request.
   """
-  @spec query(Keyword.t(), Keyword.t(), Keyword.t()) :: String.t()
-  def query(config, opts, query_opts) do
+  @spec query(Keyword.t(), Keyword.t()) :: String.t()
+  def query(config, opts) do
     case {config[:version], opts[:query_language]} do
       {:v2, _} ->
         config
@@ -34,13 +34,13 @@ defmodule Instream.Query.URL do
         config
         |> url("api/v2/query")
         |> append_param("db", opts[:database] || config[:database])
-        |> append_param("epoch", encode_precision(query_opts[:precision]))
+        |> append_param("epoch", encode_precision(opts[:precision]))
 
       {:v1, _} ->
         config
         |> url("query")
         |> append_param("db", opts[:database] || config[:database])
-        |> append_param("epoch", encode_precision(query_opts[:precision]))
+        |> append_param("epoch", encode_precision(opts[:precision]))
     end
   end
 

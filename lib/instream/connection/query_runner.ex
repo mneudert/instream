@@ -55,8 +55,8 @@ defmodule Instream.Connection.QueryRunner do
   @doc """
   Executes `:read` queries.
   """
-  @spec read(Query.t(), Keyword.t(), module) :: any
-  def read(%Query{payload: query_payload} = query, opts, conn) do
+  @spec read(String.t(), Keyword.t(), module) :: any
+  def read(query, opts, conn) do
     config = conn.config()
     headers = Headers.assemble(config, opts)
 
@@ -75,7 +75,7 @@ defmodule Instream.Connection.QueryRunner do
 
         if false != opts[:log] do
           log(config[:loggers], %QueryEntry{
-            query: query_payload,
+            query: query,
             result: result,
             metadata: %Metadata{
               query_time: query_time,
@@ -204,7 +204,7 @@ defmodule Instream.Connection.QueryRunner do
 
   defp log(_, _), do: :ok
 
-  defp read_body(conn, %{payload: query_payload}, opts) do
+  defp read_body(conn, query, opts) do
     config = conn.config()
 
     case {config[:version], opts[:query_language]} do
@@ -212,7 +212,7 @@ defmodule Instream.Connection.QueryRunner do
         JSON.encode(
           %{
             type: "flux",
-            query: query_payload
+            query: query
           },
           conn
         )
@@ -222,13 +222,13 @@ defmodule Instream.Connection.QueryRunner do
           %{
             type: "influxql",
             bucket: opts[:bucket] || config[:bucket],
-            query: query_payload
+            query: query
           },
           conn
         )
 
       {:v1, :flux} ->
-        query_payload
+        query
 
       {:v1, _} ->
         ""
@@ -243,9 +243,9 @@ defmodule Instream.Connection.QueryRunner do
     end
   end
 
-  defp read_url(conn, %{opts: query_opts, payload: query_payload}, opts) do
+  defp read_url(conn, query, opts) do
     config = conn.config()
-    url = URL.query(config, opts, query_opts)
+    url = URL.query(config, opts)
 
     url =
       case opts[:params] do
@@ -261,7 +261,7 @@ defmodule Instream.Connection.QueryRunner do
     case {config[:version], opts[:query_language]} do
       {:v2, _} -> url
       {:v1, :flux} -> url
-      {:v1, _} -> URL.append_query(url, query_payload)
+      {:v1, _} -> URL.append_query(url, query)
     end
   end
 end
