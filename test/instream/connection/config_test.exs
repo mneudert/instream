@@ -4,23 +4,6 @@ defmodule Instream.Connection.ConfigTest do
   alias Instream.Connection.Config
   alias Instream.TestHelpers.Connections.DefaultConnection
 
-  test "configuration changes", %{test: test} do
-    conn = Module.concat([__MODULE__, RuntimeChanges])
-    key = :runtime_testing_key
-
-    Application.put_env(test, conn, [])
-
-    defmodule conn do
-      use Instream.Connection, otp_app: test
-    end
-
-    refute Keyword.has_key?(conn.config(), key)
-
-    Application.put_env(test, conn, Keyword.put(conn.config(), key, :exists))
-
-    assert :exists = Keyword.get(conn.config(), key)
-  end
-
   test "default value access", %{test: test} do
     assert "http" = Config.get(test, __MODULE__, :scheme, [])
     assert "http" = DefaultConnection.config(:scheme)
