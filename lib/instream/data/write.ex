@@ -10,16 +10,14 @@ defmodule Instream.Data.Write do
   def query(points, opts) when is_list(points) do
     %Query{
       payload: Enum.map(points, &maybe_unstruct/1),
-      opts: opts,
-      type: :write
+      opts: opts
     }
   end
 
   def query(point, opts) when is_map(point) do
     %Query{
       payload: [maybe_unstruct(point)],
-      opts: opts,
-      type: :write
+      opts: opts
     }
   end
 
