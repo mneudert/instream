@@ -25,7 +25,10 @@ defmodule Instream.Writer.Line do
     url = URL.write(config, query_opts)
 
     http_opts =
-      Keyword.merge(Keyword.get(config, :http_opts, []), Keyword.get(opts, :http_opts, []))
+      Keyword.merge(
+        Keyword.get(config, :http_opts, []),
+        Keyword.get(opts, :http_opts, [])
+      )
 
     config[:http_client].request(:post, url, headers, body, http_opts)
   end
