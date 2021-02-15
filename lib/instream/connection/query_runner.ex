@@ -208,10 +208,11 @@ defmodule Instream.Connection.QueryRunner do
     config = conn.config()
 
     case {config[:version], opts[:query_language]} do
-      {:v2, :flux} ->
+      {:v2, :influxql} ->
         JSON.encode(
           %{
-            type: "flux",
+            type: "influxql",
+            bucket: opts[:bucket] || config[:bucket],
             query: query
           },
           conn
@@ -220,8 +221,7 @@ defmodule Instream.Connection.QueryRunner do
       {:v2, _} ->
         JSON.encode(
           %{
-            type: "influxql",
-            bucket: opts[:bucket] || config[:bucket],
+            type: "flux",
             query: query
           },
           conn
