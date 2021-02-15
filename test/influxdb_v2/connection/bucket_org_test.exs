@@ -31,7 +31,7 @@ defmodule Instream.InfluxDBv2.Connection.BucketOrgTest do
     end
   end
 
-  test "query database priority" do
+  test "query bucket/org priority" do
     url_default = "http://localhost:8086/api/v2/query?org=default_org"
     url_override = "http://localhost:8086/api/v2/query?org=override_org"
 
@@ -51,7 +51,7 @@ defmodule Instream.InfluxDBv2.Connection.BucketOrgTest do
     MockConnection.query("--ignored--", bucket: "override_bucket", org: "override_org")
   end
 
-  test "write database priority" do
+  test "write bucket/org priority" do
     url_default = "http://localhost:8086/api/v2/write?bucket=default_bucket&org=default_org"
     url_override = "http://localhost:8086/api/v2/write?bucket=default_bucket&org=default_org"
 
