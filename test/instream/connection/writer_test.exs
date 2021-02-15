@@ -14,7 +14,7 @@ defmodule Instream.Connection.WriterTest do
   defmodule TestWriter do
     @behaviour Instream.Writer
 
-    def write(%{payload: [%{response: response}]}, _, _), do: response
+    def write([%{response: response}], _, _), do: response
   end
 
   test "custom writer configuration" do

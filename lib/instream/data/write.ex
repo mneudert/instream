@@ -4,22 +4,11 @@ defmodule Instream.Data.Write do
   alias Instream.Query
 
   @doc """
-  Creates a writing query object from a single or a list of points.
+  Prepares a list of points for writing.
   """
-  @spec query(map | [map], Keyword.t()) :: Query.t()
-  def query(points, opts) when is_list(points) do
-    %Query{
-      payload: Enum.map(points, &maybe_unstruct/1),
-      opts: opts
-    }
-  end
-
-  def query(point, opts) when is_map(point) do
-    %Query{
-      payload: [maybe_unstruct(point)],
-      opts: opts
-    }
-  end
+  @spec prepare(map | [map]) :: [map]
+  def prepare(points) when is_list(points), do: Enum.map(points, &maybe_unstruct/1)
+  def prepare(point) when is_map(point), do: [maybe_unstruct(point)]
 
   defp maybe_unstruct(%{__struct__: series, fields: fields, tags: tags, timestamp: timestamp}) do
     %{

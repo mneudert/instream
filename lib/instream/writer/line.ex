@@ -18,11 +18,11 @@ defmodule Instream.Writer.Line do
   @behaviour Instream.Writer
 
   @impl Instream.Writer
-  def write(%{payload: [_ | _] = points, opts: query_opts}, opts, conn) do
+  def write([_ | _] = points, opts, conn) do
     config = conn.config()
     headers = Headers.assemble(config, opts) ++ [{"Content-Type", "text/plain"}]
     body = Encoder.encode(points)
-    url = URL.write(config, query_opts)
+    url = URL.write(config, opts)
 
     http_opts =
       Keyword.merge(

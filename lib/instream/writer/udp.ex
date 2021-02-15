@@ -50,7 +50,7 @@ defmodule Instream.Writer.UDP do
   @doc false
   def terminate(_reason, %{udp_socket: socket}), do: :gen_udp.close(socket)
 
-  def write(query, opts, conn) do
+  def write(points, opts, conn) do
     default_pool_timeout = conn.config(:pool_timeout) || 5000
 
     pool_name = Module.concat(conn, UDPWriterPool)
@@ -60,9 +60,9 @@ defmodule Instream.Writer.UDP do
 
     :ok =
       if opts[:async] do
-        GenServer.cast(worker, {:write, query})
+        GenServer.cast(worker, {:write, points})
       else
-        GenServer.call(worker, {:write, query}, :infinity)
+        GenServer.call(worker, {:write, points}, :infinity)
       end
 
     :ok = :poolboy.checkin(pool_name, worker)
@@ -70,17 +70,17 @@ defmodule Instream.Writer.UDP do
     @response
   end
 
-  def handle_call({:write, query}, _from, state) do
-    {:reply, do_write(query, state), state}
+  def handle_call({:write, points}, _from, state) do
+    {:reply, do_write(points, state), state}
   end
 
-  def handle_cast({:write, query}, state) do
-    _ = do_write(query, state)
+  def handle_cast({:write, points}, state) do
+    _ = do_write(points, state)
 
     {:noreply, state}
   end
 
-  defp do_write(%{payload: [_ | _] = points}, %{module: conn, udp_socket: udp_socket}) do
+  defp do_write([_ | _] = points, %{module: conn, udp_socket: udp_socket}) do
     config = conn.config()
     payload = Encoder.encode(points)
 

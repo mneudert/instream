@@ -112,11 +112,7 @@ defmodule Instream.Connection do
         end
       end
 
-      def write(payload, opts \\ []) do
-        payload
-        |> Data.Write.query(opts)
-        |> QueryRunner.write(opts, __MODULE__)
-      end
+      def write(points, opts \\ []), do: QueryRunner.write(points, opts, __MODULE__)
     end
   end
 
