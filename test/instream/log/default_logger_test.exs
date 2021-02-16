@@ -52,7 +52,7 @@ defmodule Instream.Log.DefaultLoggerTest do
 
     log =
       capture_log(fn ->
-        _ = LogConnection.query(query)
+        _ = LogConnection.query(query, query_language: :influxql)
 
         :timer.sleep(10)
       end)
