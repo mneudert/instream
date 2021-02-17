@@ -1,8 +1,6 @@
 defmodule Instream.Data.Write do
   @moduledoc false
 
-  alias Instream.Query
-
   @doc """
   Prepares a list of points for writing.
   """
