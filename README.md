@@ -26,9 +26,7 @@ end
 
 ### Testing
 
-To run the tests you need to have the http-authentication enabled.
-
-Using the statements from the `.travis.yml` you can generate all necessary users for the tests with their proper privileges.
+To run the tests you need to have HTTP authentication enabled.
 
 The test suite will automatically try to exclude tests not expected to work for your InfluxDB version.
 
