@@ -106,7 +106,7 @@ defmodule Instream.Query.URL do
         "/",
         endpoint
       ]
-      |> Enum.join("")
+      |> IO.iodata_to_binary()
 
     case {config[:version], config[:auth][:method]} do
       {:v1, :query} ->
@@ -119,6 +119,7 @@ defmodule Instream.Query.URL do
     end
   end
 
-  defp url_port(nil), do: ""
-  defp url_port(port), do: ":#{port}"
+  defp url_port(port) when is_binary(port), do: [":", port]
+  defp url_port(port) when is_integer(port), do: [":", Integer.to_string(port)]
+  defp url_port(_), do: ""
 end
