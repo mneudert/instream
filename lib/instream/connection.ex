@@ -71,7 +71,8 @@ defmodule Instream.Connection do
     quote bind_quoted: [opts: opts] do
       alias Instream.Connection
       alias Instream.Connection.Config
-      alias Instream.Connection.QueryRunner
+      alias Instream.Connection.QueryRunnerV1
+      alias Instream.Connection.QueryRunnerV2
       alias Instream.Connection.Supervisor
       alias Instream.Data
 
@@ -92,27 +93,37 @@ defmodule Instream.Connection do
       def ping(opts \\ []) do
         case config(:version) do
           :v2 -> {:error, :version_mismatch}
-          _ -> QueryRunner.ping(opts, __MODULE__)
+          _ -> QueryRunnerV1.ping(opts, __MODULE__)
         end
       end
 
-      def query(query, opts \\ []), do: QueryRunner.read(query, opts, __MODULE__)
+      def query(query, opts \\ []) do
+        case config(:version) do
+          :v2 -> QueryRunnerV2.read(query, opts, __MODULE__)
+          _ -> QueryRunnerV1.read(query, opts, __MODULE__)
+        end
+      end
 
       def status(opts \\ []) do
         case config(:version) do
           :v2 -> {:error, :version_mismatch}
-          _ -> QueryRunner.status(opts, __MODULE__)
+          _ -> QueryRunnerV1.status(opts, __MODULE__)
         end
       end
 
       def version(opts \\ []) do
         case config(:version) do
           :v2 -> {:error, :version_mismatch}
-          _ -> QueryRunner.version(opts, __MODULE__)
+          _ -> QueryRunnerV1.version(opts, __MODULE__)
         end
       end
 
-      def write(points, opts \\ []), do: QueryRunner.write(points, opts, __MODULE__)
+      def write(points, opts \\ []) do
+        case config(:version) do
+          :v2 -> QueryRunnerV2.write(points, opts, __MODULE__)
+          _ -> QueryRunnerV1.write(points, opts, __MODULE__)
+        end
+      end
     end
   end
 
