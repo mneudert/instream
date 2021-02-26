@@ -2,13 +2,13 @@ defmodule Instream.Connection.QueryRunnerV2 do
   @moduledoc false
 
   alias Instream.Connection.JSON
+  alias Instream.Connection.ResponseParserV2
   alias Instream.Data.Write
   alias Instream.Log.Metadata
   alias Instream.Log.QueryEntry
   alias Instream.Log.WriteEntry
   alias Instream.Query.Headers
   alias Instream.Query.URL
-  alias Instream.Response
 
   @doc """
   Executes `:read` queries.
@@ -28,7 +28,7 @@ defmodule Instream.Connection.QueryRunnerV2 do
 
     case response do
       {:ok, status, _, _} ->
-        result = Response.maybe_parse(response, conn, opts)
+        result = ResponseParserV2.maybe_parse(response, conn, opts)
 
         if false != opts[:log] do
           log(config[:loggers], %QueryEntry{
@@ -60,7 +60,7 @@ defmodule Instream.Connection.QueryRunnerV2 do
       :timer.tc(fn ->
         payload
         |> config[:writer].write(opts, conn)
-        |> Response.maybe_parse(conn, opts)
+        |> ResponseParserV2.maybe_parse(conn, opts)
       end)
 
     if false != opts[:log] do

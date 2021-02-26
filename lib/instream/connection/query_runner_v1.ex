@@ -2,6 +2,7 @@ defmodule Instream.Connection.QueryRunnerV1 do
   @moduledoc false
 
   alias Instream.Connection.JSON
+  alias Instream.Connection.ResponseParserV1
   alias Instream.Data.Write
   alias Instream.Log.Metadata
   alias Instream.Log.PingEntry
@@ -10,7 +11,6 @@ defmodule Instream.Connection.QueryRunnerV1 do
   alias Instream.Log.WriteEntry
   alias Instream.Query.Headers
   alias Instream.Query.URL
-  alias Instream.Response
 
   @doc """
   Executes `:ping` queries.
@@ -71,7 +71,7 @@ defmodule Instream.Connection.QueryRunnerV1 do
 
     case response do
       {:ok, status, _, _} ->
-        result = Response.maybe_parse(response, conn, opts)
+        result = ResponseParserV1.maybe_parse(response, conn, opts)
 
         if false != opts[:log] do
           log(config[:loggers], %QueryEntry{
@@ -165,7 +165,7 @@ defmodule Instream.Connection.QueryRunnerV1 do
       :timer.tc(fn ->
         payload
         |> config[:writer].write(opts, conn)
-        |> Response.maybe_parse(conn, opts)
+        |> ResponseParserV1.maybe_parse(conn, opts)
       end)
 
     if false != opts[:log] do
