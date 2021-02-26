@@ -99,15 +99,11 @@ defmodule Instream do
   If you find your queries running into timeouts (e.g. `:hackney` not waiting
   long enough for a response) you can pass an option to the query call:
 
-      MyApp.MyConnection.query(query, timeout: 250)
+      MyApp.MyConnection.query(query, http_opts: [recv_timeout: 250])
 
-  This value can also be set as a default via the `:recv_timeout` value for
-  your HTTP client configuration (see `Instream.Connection.Config` for details).
-  A passed configuration will take precedence over the connection configuration.
-
-  This does not apply to write requests. They are currently only affected by
-  configured `:recv_timeout` values. Setting a connection timeout enables you
-  to have a different timeout for read and write requests.
+  This value can also be set as a default using your HTTP client configuration
+  (see `Instream.Connection.Config` for details). A passed configuration will
+  take precedence over the connection configuration.
 
   ## Writing Points
 

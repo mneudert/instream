@@ -21,9 +21,15 @@ defmodule Instream.Connection.QueryRunnerV1 do
     headers = Headers.assemble(config, opts)
     url = URL.ping(config)
 
+    http_opts =
+      Keyword.merge(
+        Keyword.get(config, :http_opts, []),
+        Keyword.get(opts, :http_opts, [])
+      )
+
     {query_time, response} =
       :timer.tc(fn ->
-        config[:http_client].request(:head, url, headers, "", http_opts(config, opts))
+        config[:http_client].request(:head, url, headers, "", http_opts)
       end)
 
     result =
@@ -64,9 +70,15 @@ defmodule Instream.Connection.QueryRunnerV1 do
     method = read_method(opts)
     url = read_url(conn, query, opts)
 
+    http_opts =
+      Keyword.merge(
+        Keyword.get(config, :http_opts, []),
+        Keyword.get(opts, :http_opts, [])
+      )
+
     {query_time, response} =
       :timer.tc(fn ->
-        config[:http_client].request(method, url, headers, body, http_opts(config, opts))
+        config[:http_client].request(method, url, headers, body, http_opts)
       end)
 
     case response do
@@ -100,9 +112,15 @@ defmodule Instream.Connection.QueryRunnerV1 do
     headers = Headers.assemble(config, opts)
     url = URL.status(config)
 
+    http_opts =
+      Keyword.merge(
+        Keyword.get(config, :http_opts, []),
+        Keyword.get(opts, :http_opts, [])
+      )
+
     {query_time, response} =
       :timer.tc(fn ->
-        config[:http_client].request(:head, url, headers, "", http_opts(config, opts))
+        config[:http_client].request(:head, url, headers, "", http_opts)
       end)
 
     result =
@@ -139,7 +157,14 @@ defmodule Instream.Connection.QueryRunnerV1 do
     config = conn.config()
     headers = Headers.assemble(config, opts)
     url = URL.ping(config)
-    response = config[:http_client].request(:head, url, headers, "", http_opts(config, opts))
+
+    http_opts =
+      Keyword.merge(
+        Keyword.get(config, :http_opts, []),
+        Keyword.get(opts, :http_opts, [])
+      )
+
+    response = config[:http_client].request(:head, url, headers, "", http_opts)
 
     case response do
       {:ok, 204, headers} ->
@@ -180,21 +205,6 @@ defmodule Instream.Connection.QueryRunnerV1 do
     end
 
     result
-  end
-
-  defp http_opts(config, opts) do
-    call_opts = Keyword.get(opts, :http_opts, [])
-    config_opts = Keyword.get(config, :http_opts, [])
-
-    special_opts =
-      case opts[:timeout] do
-        nil -> []
-        timeout -> [recv_timeout: timeout]
-      end
-
-    special_opts
-    |> Keyword.merge(config_opts)
-    |> Keyword.merge(call_opts)
   end
 
   defp log([_ | _] = loggers, entry) do

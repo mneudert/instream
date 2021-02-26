@@ -59,7 +59,7 @@ defmodule Instream.Connection.TimeoutTest do
 
     opts = [
       database: "timeout",
-      timeout: timeout
+      http_opts: [recv_timeout: timeout]
     ]
 
     assert {:error, :timeout} = InetsConnection.query("", opts)

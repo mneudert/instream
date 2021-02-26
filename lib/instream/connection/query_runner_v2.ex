@@ -21,9 +21,15 @@ defmodule Instream.Connection.QueryRunnerV2 do
     body = read_body(conn, query, opts)
     url = URL.query(config, opts)
 
+    http_opts =
+      Keyword.merge(
+        Keyword.get(config, :http_opts, []),
+        Keyword.get(opts, :http_opts, [])
+      )
+
     {query_time, response} =
       :timer.tc(fn ->
-        config[:http_client].request(:post, url, headers, body, http_opts(config, opts))
+        config[:http_client].request(:post, url, headers, body, http_opts)
       end)
 
     case response do
@@ -75,21 +81,6 @@ defmodule Instream.Connection.QueryRunnerV2 do
     end
 
     result
-  end
-
-  defp http_opts(config, opts) do
-    call_opts = Keyword.get(opts, :http_opts, [])
-    config_opts = Keyword.get(config, :http_opts, [])
-
-    special_opts =
-      case opts[:timeout] do
-        nil -> []
-        timeout -> [recv_timeout: timeout]
-      end
-
-    special_opts
-    |> Keyword.merge(config_opts)
-    |> Keyword.merge(call_opts)
   end
 
   defp log([_ | _] = loggers, entry) do
