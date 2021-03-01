@@ -2,12 +2,12 @@ defmodule Instream.Connection.ResponseParserV1 do
   @moduledoc false
 
   alias Instream.Connection.JSON
-  alias Instream.Response
+  alias Instream.HTTPClient
 
   @doc """
   Parses a response.
   """
-  @spec maybe_parse(Response.t(), module, Keyword.t()) :: any
+  @spec maybe_parse(HTTPClient.response(), module, Keyword.t()) :: any
   def maybe_parse({:error, _} = error, _, _), do: error
   def maybe_parse({:ok, _, _, ""}, _, _), do: :ok
 
