@@ -81,6 +81,7 @@ defmodule Instream.InfluxDBv2.Writer.LineTest do
   end
 
   test "writer protocol: Line" do
+    measurement = ProtocolsSeries.__meta__(:measurement)
     timestamp = 1_439_587_926
 
     :ok =
@@ -101,15 +102,24 @@ defmodule Instream.InfluxDBv2.Writer.LineTest do
             stop: #{timestamp + 30}
           )
           |> filter(fn: (r) =>
-            r._measurement == "#{ProtocolsSeries.__meta__(:measurement)}" and
+            r._measurement == "#{measurement}" and
             r.proto == "Line"
           )
+          |> first()
         """,
         query_language: :flux
       )
 
-    assert String.contains?(result, "_value,_field,_measurement,proto")
-    assert String.contains?(result, "Line,value,#{ProtocolsSeries.__meta__(:measurement)},Line")
+    assert [
+             %{
+               "_field" => "value",
+               "_measurement" => ^measurement,
+               "_value" => "Line",
+               "proto" => "Line",
+               "result" => "_result"
+             }
+             | _
+           ] = result
   end
 
   test "line protocol data encoding" do
@@ -132,7 +142,8 @@ defmodule Instream.InfluxDBv2.Writer.LineTest do
             r._measurement == "#{LineEncodingSeries.__meta__(:measurement)}"
           )
         """,
-        query_language: :flux
+        query_language: :flux,
+        result_as: :raw
       )
 
     assert String.contains?(result, "_value,_field,_measurement")
@@ -158,6 +169,7 @@ defmodule Instream.InfluxDBv2.Writer.LineTest do
   end
 
   test "line protocol batch series" do
+    measurement = BatchSeries.__meta__(:measurement)
     timestamp = 1_439_587_926
 
     :ok =
@@ -185,18 +197,35 @@ defmodule Instream.InfluxDBv2.Writer.LineTest do
             stop: #{timestamp + 30}
           )
           |> filter(fn: (r) =>
-            r._measurement == "#{BatchSeries.__meta__(:measurement)}"
+            r._measurement == "#{measurement}"
           )
+          |> first()
         """,
         query_language: :flux
       )
 
-    assert String.contains?(result, "_value,_field,_measurement,scope")
-    assert String.contains?(result, "1.23456,value,#{BatchSeries.__meta__(:measurement)},inside")
-    assert String.contains?(result, "9.87654,value,#{BatchSeries.__meta__(:measurement)},outside")
+    assert [
+             %{
+               "_field" => "value",
+               "_measurement" => ^measurement,
+               "_value" => "1.23456",
+               "result" => "_result",
+               "scope" => "inside"
+             },
+             %{
+               "_field" => "value",
+               "_measurement" => ^measurement,
+               "_value" => "9.87654",
+               "result" => "_result",
+               "scope" => "outside"
+             }
+             | _
+           ] = result
   end
 
   test "writing without all tags present" do
+    measurement = EmptyTagSeries.__meta__(:measurement)
+
     :ok =
       %{
         filled: "filled_tag",
@@ -211,23 +240,30 @@ defmodule Instream.InfluxDBv2.Writer.LineTest do
           from(bucket: "#{DefaultConnection.config(:bucket)}")
           |> range(start: -5m)
           |> filter(fn: (r) =>
-            r._measurement == "#{EmptyTagSeries.__meta__(:measurement)}"
+            r._measurement == "#{measurement}"
           )
+          |> first()
         """,
         query_language: :flux
       )
 
-    assert String.contains?(result, "_value,_field,_measurement,defaulting,filled")
-
-    assert String.contains?(
-             result,
-             "100,value,#{EmptyTagSeries.__meta__(:measurement)},default_value,filled_tag"
-           )
+    assert [
+             %{
+               "_field" => "value",
+               "_measurement" => ^measurement,
+               "_value" => "100",
+               "defaulting" => "default_value",
+               "filled" => "filled_tag",
+               "result" => "_result"
+             }
+             | _
+           ] = result
   end
 
   test "writing with passed org/bucket option" do
     org = DefaultConnection.config(:org)
     bucket = DefaultConnection.config(:bucket)
+    measurement = CustomOrgBucketSeries.__meta__(:measurement)
 
     :ok =
       %{value: 100}
@@ -240,13 +276,21 @@ defmodule Instream.InfluxDBv2.Writer.LineTest do
           from(bucket: "#{DefaultConnection.config(:bucket)}")
           |> range(start: -5m)
           |> filter(fn: (r) =>
-            r._measurement == "#{CustomOrgBucketSeries.__meta__(:measurement)}"
+            r._measurement == "#{measurement}"
           )
+          |> first()
         """,
         query_language: :flux
       )
 
-    assert String.contains?(result, "_value,_field,_measurement")
-    assert String.contains?(result, "100,value,#{CustomOrgBucketSeries.__meta__(:measurement)}")
+    assert [
+             %{
+               "_field" => "value",
+               "_measurement" => ^measurement,
+               "_value" => "100",
+               "result" => "_result"
+             }
+             | _
+           ] = result
   end
 end

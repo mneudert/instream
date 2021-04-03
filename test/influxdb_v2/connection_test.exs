@@ -50,11 +50,22 @@ defmodule Instream.InfluxDBv2.ConnectionTest do
         query_language: :flux
       )
 
-    assert String.contains?(result, "_value,_field,_measurement,bar,foo")
-    assert String.contains?(result, "0.66,value,#{measurement},bar,foo")
+    assert [
+             %{
+               "_field" => "value",
+               "_measurement" => "write_data",
+               "_value" => "0.66",
+               "bar" => "bar",
+               "foo" => "foo",
+               "result" => "_result"
+             }
+             | _
+           ] = result
   end
 
   test "writing series struct" do
+    measurement = TestSeries.__meta__(:measurement)
+
     :ok =
       %{
         bar: "bar",
@@ -70,13 +81,22 @@ defmodule Instream.InfluxDBv2.ConnectionTest do
           from(bucket: "#{DefaultConnection.config(:bucket)}")
           |> range(start: -5m)
           |> filter(fn: (r) =>
-            r._measurement == "#{TestSeries.__meta__(:measurement)}"
+            r._measurement == "#{measurement}"
           )
         """,
         query_language: :flux
       )
 
-    assert String.contains?(result, "_value,_field,_measurement,bar,foo")
-    assert String.contains?(result, "17,value,#{TestSeries.__meta__(:measurement)},bar,foo")
+    assert [
+             %{
+               "_field" => "value",
+               "_measurement" => ^measurement,
+               "_value" => "17",
+               "bar" => "bar",
+               "foo" => "foo",
+               "result" => "_result"
+             }
+             | _
+           ] = result
   end
 end
