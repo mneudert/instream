@@ -48,6 +48,7 @@ defmodule Instream.MixProject do
       {:influxql, "~> 0.2.0"},
       {:jason, "~> 1.0"},
       {:mox, "~> 1.0", only: :test},
+      {:nimble_csv, "~> 1.0"},
       {:poolboy, "~> 1.5"},
       {:ranch, "~> 1.7", only: :test}
     ]
