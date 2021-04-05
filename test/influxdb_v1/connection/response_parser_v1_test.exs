@@ -11,7 +11,10 @@ defmodule Instream.Connection.ResponseParserV1Test do
   end
 
   test "response format: csv" do
-    assert "name," <> _ = DefaultConnection.query("SHOW DATABASES", result_as: :csv)
+    assert [
+             %{"name" => "_internal", "tags" => ""},
+             %{"name" => "test_database", "tags" => ""}
+           ] = DefaultConnection.query("SHOW DATABASES", result_as: :csv)
   end
 
   test "response format: raw" do

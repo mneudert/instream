@@ -2,6 +2,7 @@ defmodule Instream.Connection.ResponseParserV1 do
   @moduledoc false
 
   alias Instream.Connection.JSON
+  alias Instream.Decoder.CSV
   alias Instream.HTTPClient
 
   @doc """
@@ -21,10 +22,20 @@ defmodule Instream.Connection.ResponseParserV1 do
   end
 
   def maybe_parse({:ok, _, headers, body}, conn, opts) do
-    if is_json?(headers) do
-      maybe_decode_json(body, conn, opts)
+    cond do
+      is_json?(headers) -> maybe_decode_json(body, conn, opts)
+      is_csv?(headers) -> maybe_decode_csv(body, opts)
+      true -> body
+    end
+  end
+
+  defp is_csv?([]), do: false
+
+  defp is_csv?([{header, val} | headers]) do
+    if "content-type" == String.downcase(header) do
+      String.contains?(val, "csv")
     else
-      body
+      is_csv?(headers)
     end
   end
 
@@ -35,6 +46,13 @@ defmodule Instream.Connection.ResponseParserV1 do
       String.contains?(val, "json")
     else
       is_json?(headers)
+    end
+  end
+
+  defp maybe_decode_csv(response, opts) do
+    case opts[:result_as] do
+      :csv -> CSV.parse(response)
+      _ -> response
     end
   end
 
