@@ -123,6 +123,8 @@ defmodule Instream.InfluxDBv2.Writer.LineTest do
   end
 
   test "line protocol data encoding" do
+    measurement = LineEncodingSeries.__meta__(:measurement)
+
     :ok =
       %{
         binary: "binary",
@@ -141,16 +143,49 @@ defmodule Instream.InfluxDBv2.Writer.LineTest do
           |> filter(fn: (r) =>
             r._measurement == "#{LineEncodingSeries.__meta__(:measurement)}"
           )
+          |> first()
         """,
-        query_language: :flux,
-        result_as: :raw
+        query_language: :flux
       )
 
-    assert String.contains?(result, "_value,_field,_measurement")
-    assert String.contains?(result, "binary,binary,#{LineEncodingSeries.__meta__(:measurement)}")
-    assert String.contains?(result, "false,boolean,#{LineEncodingSeries.__meta__(:measurement)}")
-    assert String.contains?(result, "1.1,float,#{LineEncodingSeries.__meta__(:measurement)}")
-    assert String.contains?(result, "100,integer,#{LineEncodingSeries.__meta__(:measurement)}")
+    [
+      [
+        %{
+          "_field" => "binary",
+          "_measurement" => ^measurement,
+          "_value" => "binary",
+          "result" => "_result",
+          "table" => "0"
+        }
+      ],
+      [
+        %{
+          "_field" => "boolean",
+          "_measurement" => ^measurement,
+          "_value" => "false",
+          "result" => "_result",
+          "table" => "1"
+        }
+      ],
+      [
+        %{
+          "_field" => "float",
+          "_measurement" => ^measurement,
+          "_value" => "1.1",
+          "result" => "_result",
+          "table" => "2"
+        }
+      ],
+      [
+        %{
+          "_field" => "integer",
+          "_measurement" => ^measurement,
+          "_value" => "100",
+          "result" => "_result",
+          "table" => "3"
+        }
+      ]
+    ] = result
   end
 
   test "protocol error decoding" do

@@ -78,4 +78,42 @@ defmodule Instream.Decoder.LineTest do
              }
            ] = CSV.parse(response)
   end
+
+  test "multiple schema decoding" do
+    response = """
+    result,table,_start,_stop,_time,region,host,_value\r
+    my-result,0,2018-05-08T20:50:00Z,2018-05-08T20:51:00Z,2018-05-08T20:50:00Z,east,A,15.43\r
+    \r
+    result,table,_start,_stop,_time,region,host,_value\r
+    my-result,1,2018-05-08T20:50:00Z,2018-05-08T20:51:00Z,2018-05-08T20:50:00Z,west,A,62.73\r
+    \r
+    """
+
+    assert [
+             [
+               %{
+                 "result" => "my-result",
+                 "table" => "0",
+                 "_start" => "2018-05-08T20:50:00Z",
+                 "_stop" => "2018-05-08T20:51:00Z",
+                 "_time" => "2018-05-08T20:50:00Z",
+                 "region" => "east",
+                 "host" => "A",
+                 "_value" => "15.43"
+               }
+             ],
+             [
+               %{
+                 "result" => "my-result",
+                 "table" => "1",
+                 "_start" => "2018-05-08T20:50:00Z",
+                 "_stop" => "2018-05-08T20:51:00Z",
+                 "_time" => "2018-05-08T20:50:00Z",
+                 "region" => "west",
+                 "host" => "A",
+                 "_value" => "62.73"
+               }
+             ]
+           ] = CSV.parse(response)
+  end
 end
