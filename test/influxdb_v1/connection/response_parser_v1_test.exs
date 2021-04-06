@@ -11,10 +11,10 @@ defmodule Instream.Connection.ResponseParserV1Test do
   end
 
   test "response format: csv" do
-    assert [
-             %{"name" => "_internal", "tags" => ""},
+    assert Enum.member?(
+             DefaultConnection.query("SHOW DATABASES", result_as: :csv),
              %{"name" => "test_database", "tags" => ""}
-           ] = DefaultConnection.query("SHOW DATABASES", result_as: :csv)
+           )
   end
 
   test "response format: raw" do
