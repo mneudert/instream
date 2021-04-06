@@ -48,7 +48,6 @@ defmodule Instream.Connection.ResponseParserV1 do
 
   defp maybe_decode_json(response, conn, opts) do
     case opts[:result_as] do
-      :csv -> response
       :raw -> response
       _ -> JSON.decode(response, conn)
     end
