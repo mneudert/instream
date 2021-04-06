@@ -19,29 +19,19 @@ defmodule Instream.Connection.ResponseParserV2 do
 
   def maybe_parse({:ok, _, headers, body}, conn, opts) do
     cond do
-      is_csv?(headers) -> maybe_decode_csv(body, opts)
-      is_json?(headers) -> maybe_decode_json(body, conn, opts)
+      content_type_contains?("csv", headers) -> maybe_decode_csv(body, opts)
+      content_type_contains?("json", headers) -> maybe_decode_json(body, conn, opts)
       true -> body
     end
   end
 
-  defp is_csv?([]), do: false
+  defp content_type_contains?(_, []), do: false
 
-  defp is_csv?([{header, val} | headers]) do
+  defp content_type_contains?(type_part, [{header, val} | headers]) do
     if "content-type" == String.downcase(header) do
-      String.contains?(val, "csv")
+      String.contains?(val, type_part)
     else
-      is_csv?(headers)
-    end
-  end
-
-  defp is_json?([]), do: false
-
-  defp is_json?([{header, val} | headers]) do
-    if "content-type" == String.downcase(header) do
-      String.contains?(val, "json")
-    else
-      is_json?(headers)
+      content_type_contains?(type_part, headers)
     end
   end
 
