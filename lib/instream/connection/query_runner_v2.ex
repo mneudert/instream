@@ -109,7 +109,10 @@ defmodule Instream.Connection.QueryRunnerV2 do
         JSON.encode(
           %{
             type: "flux",
-            query: query
+            query: query,
+            dialect: %{
+              annotations: ["datatype"]
+            }
           },
           conn
         )

@@ -20,6 +20,12 @@ defmodule Instream.Decoder.CSV do
 
   defp parse_table(table) do
     case __MODULE__.Parser.parse_string(table, skip_headers: false) do
+      [["#datatype" | _], ["" | _ = headers] | [_ | _] = rows] ->
+        Enum.map(rows, fn ["" | row] -> headers |> Enum.zip(row) |> Map.new() end)
+
+      [["#datatype" | _], [_ | _] = headers | [_ | _] = rows] ->
+        Enum.map(rows, fn row -> headers |> Enum.zip(row) |> Map.new() end)
+
       [["" | _ = headers] | [_ | _] = rows] ->
         Enum.map(rows, fn ["" | row] -> headers |> Enum.zip(row) |> Map.new() end)
 
