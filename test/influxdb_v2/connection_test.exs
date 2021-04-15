@@ -54,7 +54,7 @@ defmodule Instream.InfluxDBv2.ConnectionTest do
              %{
                "_field" => "value",
                "_measurement" => "write_data",
-               "_value" => "0.66",
+               "_value" => 0.66,
                "bar" => "bar",
                "foo" => "foo",
                "result" => "_result"
@@ -91,7 +91,7 @@ defmodule Instream.InfluxDBv2.ConnectionTest do
              %{
                "_field" => "value",
                "_measurement" => ^measurement,
-               "_value" => "17",
+               "_value" => 17,
                "bar" => "bar",
                "foo" => "foo",
                "result" => "_result"

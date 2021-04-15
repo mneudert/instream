@@ -155,7 +155,7 @@ defmodule Instream.InfluxDBv2.Writer.LineTest do
           "_measurement" => ^measurement,
           "_value" => "binary",
           "result" => "_result",
-          "table" => "0"
+          "table" => 0
         }
       ],
       [
@@ -164,25 +164,25 @@ defmodule Instream.InfluxDBv2.Writer.LineTest do
           "_measurement" => ^measurement,
           "_value" => "false",
           "result" => "_result",
-          "table" => "1"
+          "table" => 1
         }
       ],
       [
         %{
           "_field" => "float",
           "_measurement" => ^measurement,
-          "_value" => "1.1",
+          "_value" => 1.1,
           "result" => "_result",
-          "table" => "2"
+          "table" => 2
         }
       ],
       [
         %{
           "_field" => "integer",
           "_measurement" => ^measurement,
-          "_value" => "100",
+          "_value" => 100,
           "result" => "_result",
-          "table" => "3"
+          "table" => 3
         }
       ]
     ] = result
@@ -243,14 +243,14 @@ defmodule Instream.InfluxDBv2.Writer.LineTest do
              %{
                "_field" => "value",
                "_measurement" => ^measurement,
-               "_value" => "1.23456",
+               "_value" => 1.23456,
                "result" => "_result",
                "scope" => "inside"
              },
              %{
                "_field" => "value",
                "_measurement" => ^measurement,
-               "_value" => "9.87654",
+               "_value" => 9.87654,
                "result" => "_result",
                "scope" => "outside"
              }
@@ -286,7 +286,7 @@ defmodule Instream.InfluxDBv2.Writer.LineTest do
              %{
                "_field" => "value",
                "_measurement" => ^measurement,
-               "_value" => "100",
+               "_value" => 100,
                "defaulting" => "default_value",
                "filled" => "filled_tag",
                "result" => "_result"
@@ -322,7 +322,7 @@ defmodule Instream.InfluxDBv2.Writer.LineTest do
              %{
                "_field" => "value",
                "_measurement" => ^measurement,
-               "_value" => "100",
+               "_value" => 100,
                "result" => "_result"
              }
              | _
