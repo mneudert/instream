@@ -21,9 +21,9 @@ defmodule Instream.Decoder.LineTest do
                %{
                  "result" => "my-result",
                  "table" => 0,
-                 "_start" => "2018-05-08T20:50:00Z",
-                 "_stop" => "2018-05-08T20:51:00Z",
-                 "_time" => "2018-05-08T20:50:00Z",
+                 "_start" => 1_525_812_600_000_000_000,
+                 "_stop" => 1_525_812_660_000_000_000,
+                 "_time" => 1_525_812_600_000_000_000,
                  "region" => "east",
                  "host" => "A",
                  "_value" => 15.43
@@ -31,9 +31,9 @@ defmodule Instream.Decoder.LineTest do
                %{
                  "result" => "my-result",
                  "table" => 0,
-                 "_start" => "2018-05-08T20:50:00Z",
-                 "_stop" => "2018-05-08T20:51:00Z",
-                 "_time" => "2018-05-08T20:50:20Z",
+                 "_start" => 1_525_812_600_000_000_000,
+                 "_stop" => 1_525_812_660_000_000_000,
+                 "_time" => 1_525_812_620_000_000_000,
                  "region" => "east",
                  "host" => "B",
                  "_value" => 59.25
@@ -41,9 +41,9 @@ defmodule Instream.Decoder.LineTest do
                %{
                  "result" => "my-result",
                  "table" => 0,
-                 "_start" => "2018-05-08T20:50:00Z",
-                 "_stop" => "2018-05-08T20:51:00Z",
-                 "_time" => "2018-05-08T20:50:40Z",
+                 "_start" => 1_525_812_600_000_000_000,
+                 "_stop" => 1_525_812_660_000_000_000,
+                 "_time" => 1_525_812_640_000_000_000,
                  "region" => "east",
                  "host" => "C",
                  "_value" => 52.62
@@ -51,9 +51,9 @@ defmodule Instream.Decoder.LineTest do
                %{
                  "result" => "my-result",
                  "table" => 1,
-                 "_start" => "2018-05-08T20:50:00Z",
-                 "_stop" => "2018-05-08T20:51:00Z",
-                 "_time" => "2018-05-08T20:50:00Z",
+                 "_start" => 1_525_812_600_000_000_000,
+                 "_stop" => 1_525_812_660_000_000_000,
+                 "_time" => 1_525_812_600_000_000_000,
                  "region" => "west",
                  "host" => "A",
                  "_value" => 62.73
@@ -61,9 +61,9 @@ defmodule Instream.Decoder.LineTest do
                %{
                  "result" => "my-result",
                  "table" => 1,
-                 "_start" => "2018-05-08T20:50:00Z",
-                 "_stop" => "2018-05-08T20:51:00Z",
-                 "_time" => "2018-05-08T20:50:20Z",
+                 "_start" => 1_525_812_600_000_000_000,
+                 "_stop" => 1_525_812_660_000_000_000,
+                 "_time" => 1_525_812_620_000_000_000,
                  "region" => "west",
                  "host" => "B",
                  "_value" => 12.83
@@ -71,9 +71,9 @@ defmodule Instream.Decoder.LineTest do
                %{
                  "result" => "my-result",
                  "table" => 1,
-                 "_start" => "2018-05-08T20:50:00Z",
-                 "_stop" => "2018-05-08T20:51:00Z",
-                 "_time" => "2018-05-08T20:50:40Z",
+                 "_start" => 1_525_812_600_000_000_000,
+                 "_stop" => 1_525_812_660_000_000_000,
+                 "_time" => 1_525_812_640_000_000_000,
                  "region" => "west",
                  "host" => "C",
                  "_value" => 51.62
@@ -98,9 +98,9 @@ defmodule Instream.Decoder.LineTest do
                  %{
                    "result" => "my-result",
                    "table" => 0,
-                   "_start" => "2018-05-08T20:50:00Z",
-                   "_stop" => "2018-05-08T20:51:00Z",
-                   "_time" => "2018-05-08T20:50:00Z",
+                   "_start" => 1_525_812_600_000_000_000,
+                   "_stop" => 1_525_812_660_000_000_000,
+                   "_time" => 1_525_812_600_000_000_000,
                    "region" => "east",
                    "host" => "A",
                    "_value" => 15.43
@@ -110,9 +110,9 @@ defmodule Instream.Decoder.LineTest do
                  %{
                    "result" => "my-result",
                    "table" => 1,
-                   "_start" => "2018-05-08T20:50:00Z",
-                   "_stop" => "2018-05-08T20:51:00Z",
-                   "_time" => "2018-05-08T20:50:00Z",
+                   "_start" => 1_525_812_600_000_000_000,
+                   "_stop" => 1_525_812_660_000_000_000,
+                   "_time" => 1_525_812_600_000_000_000,
                    "region" => "west",
                    "host" => "A",
                    "_value" => 62.73

@@ -1,6 +1,8 @@
 defmodule Instream.Decoder.CSV do
   @moduledoc false
 
+  alias Instream.Decoder.RFC3339
+
   NimbleCSV.define(__MODULE__.Parser, separator: ",", escape: "\"")
 
   @doc """
@@ -20,6 +22,10 @@ defmodule Instream.Decoder.CSV do
 
   defp parse_datatypes({{field, "double"}, value}), do: {field, String.to_float(value)}
   defp parse_datatypes({{field, "long"}, value}), do: {field, String.to_integer(value)}
+
+  defp parse_datatypes({{field, "dateTime:RFC3339"}, value}),
+    do: {field, RFC3339.to_nanosecond(value)}
+
   defp parse_datatypes({{field, _}, value}), do: {field, value}
 
   defp parse_table(table) do
