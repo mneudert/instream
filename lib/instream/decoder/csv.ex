@@ -18,8 +18,8 @@ defmodule Instream.Decoder.CSV do
     end
   end
 
-  defp parse_datatypes({{field, "long"}, value}), do: {field, String.to_integer(value)}
   defp parse_datatypes({{field, "double"}, value}), do: {field, String.to_float(value)}
+  defp parse_datatypes({{field, "long"}, value}), do: {field, String.to_integer(value)}
   defp parse_datatypes({{field, _}, value}), do: {field, value}
 
   defp parse_table(table) do
