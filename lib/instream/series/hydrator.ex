@@ -1,6 +1,8 @@
 defmodule Instream.Series.Hydrator do
   @moduledoc false
 
+  alias Instream.Decoder.RFC3339
+
   @doc """
   Converts a plain map into a series definition struct.
 
@@ -38,25 +40,6 @@ defmodule Instream.Series.Hydrator do
   end
 
   defp convert_to_timestamp(time) when is_integer(time), do: time
-
-  # `DateTime` only supports :microsecond level precisions
-  # OTP 21.0 is required for full precision
-  if Code.ensure_loaded?(:calendar) && function_exported?(:calendar, :rfc3339_to_system_time, 2) do
-    defp convert_to_timestamp(time) when is_binary(time) do
-      time
-      |> String.to_charlist()
-      |> :calendar.rfc3339_to_system_time(unit: :nanosecond)
-    rescue
-      _ -> nil
-    end
-  else
-    defp convert_to_timestamp(time) when is_binary(time) do
-      case DateTime.from_iso8601(time) do
-        {:ok, datetime, 0} -> DateTime.to_unix(datetime, :nanosecond)
-        _ -> nil
-      end
-    end
-  end
-
+  defp convert_to_timestamp(time) when is_binary(time), do: RFC3339.to_nanosecond(time)
   defp convert_to_timestamp(_), do: nil
 end
