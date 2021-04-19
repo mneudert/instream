@@ -118,7 +118,6 @@ defmodule Instream.InfluxDBv2.Writer.LineTest do
                "proto" => "Line",
                "result" => "_result"
              }
-             | _
            ] = result
   end
 
@@ -254,7 +253,6 @@ defmodule Instream.InfluxDBv2.Writer.LineTest do
                "result" => "_result",
                "scope" => "outside"
              }
-             | _
            ] = result
   end
 
@@ -291,7 +289,6 @@ defmodule Instream.InfluxDBv2.Writer.LineTest do
                "filled" => "filled_tag",
                "result" => "_result"
              }
-             | _
            ] = result
   end
 
@@ -325,7 +322,6 @@ defmodule Instream.InfluxDBv2.Writer.LineTest do
                "_value" => 100,
                "result" => "_result"
              }
-             | _
            ] = result
   end
 end

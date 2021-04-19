@@ -46,6 +46,7 @@ defmodule Instream.InfluxDBv2.ConnectionTest do
           |> filter(fn: (r) =>
             r._measurement == "#{measurement}"
           )
+          |> first()
         """,
         query_language: :flux
       )
@@ -59,7 +60,6 @@ defmodule Instream.InfluxDBv2.ConnectionTest do
                "foo" => "foo",
                "result" => "_result"
              }
-             | _
            ] = result
   end
 
@@ -83,6 +83,7 @@ defmodule Instream.InfluxDBv2.ConnectionTest do
           |> filter(fn: (r) =>
             r._measurement == "#{measurement}"
           )
+          |> first()
         """,
         query_language: :flux
       )
@@ -96,7 +97,6 @@ defmodule Instream.InfluxDBv2.ConnectionTest do
                "foo" => "foo",
                "result" => "_result"
              }
-             | _
            ] = result
   end
 end
