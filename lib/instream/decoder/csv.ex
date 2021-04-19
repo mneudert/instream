@@ -20,6 +20,17 @@ defmodule Instream.Decoder.CSV do
     end
   end
 
+  defp parse_annotations([["#datatype" | _ = datatypes] | rest], acc),
+    do: parse_annotations(rest, %{acc | datatypes: datatypes})
+
+  defp parse_annotations([["#default" | _ = defaults] | rest], acc),
+    do: parse_annotations(rest, %{acc | defaults: defaults})
+
+  defp parse_annotations([["#group" | _ = groups] | rest], acc),
+    do: parse_annotations(rest, %{acc | groups: groups})
+
+  defp parse_annotations(rest, acc), do: %{acc | table: rest}
+
   defp parse_datatypes({{field, "double"}, value}), do: {field, String.to_float(value)}
   defp parse_datatypes({{field, "long"}, value}), do: {field, String.to_integer(value)}
 
@@ -28,34 +39,46 @@ defmodule Instream.Decoder.CSV do
 
   defp parse_datatypes({{field, _}, value}), do: {field, value}
 
+  defp parse_rows(%{datatypes: [_ | _] = datatypes, table: [["" | _ = headers] | [_ | _] = rows]}) do
+    Enum.map(rows, fn ["" | row] ->
+      headers
+      |> Enum.zip(datatypes)
+      |> Enum.zip(row)
+      |> Enum.map(&parse_datatypes/1)
+      |> Map.new()
+    end)
+  end
+
+  defp parse_rows(%{datatypes: [_ | _] = datatypes, table: [[_ | _] = headers | [_ | _] = rows]}) do
+    Enum.map(rows, fn row ->
+      headers
+      |> Enum.zip(datatypes)
+      |> Enum.zip(row)
+      |> Enum.map(&parse_datatypes/1)
+      |> Map.new()
+    end)
+  end
+
+  defp parse_rows(%{table: [["" | _ = headers] | [_ | _] = rows]}) do
+    Enum.map(rows, fn ["" | row] ->
+      headers
+      |> Enum.zip(row)
+      |> Map.new()
+    end)
+  end
+
+  defp parse_rows(%{table: [[_ | _] = headers | [_ | _] = rows]}) do
+    Enum.map(rows, fn row ->
+      headers
+      |> Enum.zip(row)
+      |> Map.new()
+    end)
+  end
+
   defp parse_table(table) do
-    case __MODULE__.Parser.parse_string(table, skip_headers: false) do
-      [["#datatype" | _ = datatypes], ["" | _ = headers] | [_ | _] = rows] ->
-        Enum.map(rows, fn ["" | row] ->
-          headers
-          |> Enum.zip(datatypes)
-          |> Enum.zip(row)
-          |> Enum.map(&parse_datatypes/1)
-          |> Map.new()
-        end)
-
-      [["#datatype" | _ = datatypes], [_ | _] = headers | [_ | _] = rows] ->
-        Enum.map(rows, fn row ->
-          headers
-          |> Enum.zip(datatypes)
-          |> Enum.zip(row)
-          |> Enum.map(&parse_datatypes/1)
-          |> Map.new()
-        end)
-
-      [["" | _ = headers] | [_ | _] = rows] ->
-        Enum.map(rows, fn ["" | row] -> headers |> Enum.zip(row) |> Map.new() end)
-
-      [[_ | _] = headers | [_ | _] = rows] ->
-        Enum.map(rows, fn row -> headers |> Enum.zip(row) |> Map.new() end)
-
-      _ ->
-        []
-    end
+    table
+    |> __MODULE__.Parser.parse_string(skip_headers: false)
+    |> parse_annotations(%{datatypes: [], defaults: [], groups: [], table: []})
+    |> parse_rows()
   end
 end
