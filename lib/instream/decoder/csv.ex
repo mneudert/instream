@@ -20,6 +20,16 @@ defmodule Instream.Decoder.CSV do
     end
   end
 
+  defp apply_defaults(row, [], []), do: row
+
+  defp apply_defaults(["" | rest], [value | defaults], acc),
+    do: apply_defaults(rest, defaults, [value | acc])
+
+  defp apply_defaults([value | rest], [_ | defaults], acc),
+    do: apply_defaults(rest, defaults, [value | acc])
+
+  defp apply_defaults([], [], acc), do: Enum.reverse(acc)
+
   defp parse_annotations([["#datatype" | _ = datatypes] | rest], acc),
     do: parse_annotations(rest, %{acc | datatypes: datatypes})
 
@@ -39,38 +49,46 @@ defmodule Instream.Decoder.CSV do
 
   defp parse_datatypes({{field, _}, value}), do: {field, value}
 
-  defp parse_rows(%{datatypes: [_ | _] = datatypes, table: [["" | _ = headers] | [_ | _] = rows]}) do
+  defp parse_rows(%{
+         datatypes: [_ | _] = datatypes,
+         defaults: defaults,
+         table: [["" | _ = headers] | [_ | _] = rows]
+       }) do
     Enum.map(rows, fn ["" | row] ->
       headers
       |> Enum.zip(datatypes)
-      |> Enum.zip(row)
+      |> Enum.zip(apply_defaults(row, defaults, []))
       |> Enum.map(&parse_datatypes/1)
       |> Map.new()
     end)
   end
 
-  defp parse_rows(%{datatypes: [_ | _] = datatypes, table: [[_ | _] = headers | [_ | _] = rows]}) do
+  defp parse_rows(%{
+         datatypes: [_ | _] = datatypes,
+         defaults: defaults,
+         table: [[_ | _] = headers | [_ | _] = rows]
+       }) do
     Enum.map(rows, fn row ->
       headers
       |> Enum.zip(datatypes)
-      |> Enum.zip(row)
+      |> Enum.zip(apply_defaults(row, defaults, []))
       |> Enum.map(&parse_datatypes/1)
       |> Map.new()
     end)
   end
 
-  defp parse_rows(%{table: [["" | _ = headers] | [_ | _] = rows]}) do
+  defp parse_rows(%{defaults: defaults, table: [["" | _ = headers] | [_ | _] = rows]}) do
     Enum.map(rows, fn ["" | row] ->
       headers
-      |> Enum.zip(row)
+      |> Enum.zip(apply_defaults(row, defaults, []))
       |> Map.new()
     end)
   end
 
-  defp parse_rows(%{table: [[_ | _] = headers | [_ | _] = rows]}) do
+  defp parse_rows(%{defaults: defaults, table: [[_ | _] = headers | [_ | _] = rows]}) do
     Enum.map(rows, fn row ->
       headers
-      |> Enum.zip(row)
+      |> Enum.zip(apply_defaults(row, defaults, []))
       |> Map.new()
     end)
   end
