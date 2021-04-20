@@ -49,7 +49,7 @@ defmodule Instream.Series do
   series you can use the built-in hydration methods:
 
       MySeries.from_map(%{
-        timestamp: 1234567890,
+        timestamp: 1_234_567_890,
         some_tag: "hydrate",
         some_field: 123
       })
@@ -84,14 +84,14 @@ defmodule Instream.Series do
   If you want to pass an explicit timestamp you can use the key `:timestamp`:
 
       data = %MySeries{}
-      data = %{data | timestamp: 1439587926000000000}
+      data = %{data | timestamp: 1_439_587_926_000_000_000}
 
   The timestamp is (by default) expected to be a nanosecond unix timestamp.
   To use different precision (for all points in this write operation!) you can
   change this value by modifying your write call:
 
       data = %MySeries{}
-      data = %{data | timestamp: 1439587926}
+      data = %{data | timestamp: 1_439_587_926}
 
       MyConnection.write(data, precision: :second)
 

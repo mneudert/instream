@@ -150,7 +150,7 @@ defmodule Instream do
           measurement: "my_measurement",
           fields: %{answer: 42, value: 1},
           tags: %{foo: "bar"},
-          timestamp: 1439587926000000000
+          timestamp: 1_439_587_926_000_000_000
         },
         # more points possible ...
       ])
