@@ -8,6 +8,7 @@ defmodule Instream.Decoder.LineTest do
       response = """
       #datatype,string,long,dateTime:RFC3339,dateTime:RFC3339,dateTime:RFC3339,string,string,double
       #default,my-result,,,,,,,\r
+      #group,false,false,true,true,false,true,true,true\r
       result,table,_start,_stop,_time,region,host,_value\r
       my-result,0,2018-05-08T20:50:00Z,2018-05-08T20:51:00Z,2018-05-08T20:50:00Z,east,A,15.43\r
       my-result,0,2018-05-08T20:50:00Z,2018-05-08T20:51:00Z,2018-05-08T20:50:20Z,east,B,59.25\r
@@ -86,11 +87,13 @@ defmodule Instream.Decoder.LineTest do
       response = """
       #datatype,string,long,dateTime:RFC3339,dateTime:RFC3339,dateTime:RFC3339,string,string,double
       #default,my-result,,,,,,,\r
+      #group,false,false,true,true,false,true,true,true\r
       result,table,_start,_stop,_time,region,host,_value\r
       ,0,2018-05-08T20:50:00Z,2018-05-08T20:51:00Z,2018-05-08T20:50:00Z,east,A,15.43\r
       \r
       #datatype,string,long,dateTime:RFC3339,dateTime:RFC3339,dateTime:RFC3339,string,string,double
       #default,my-result,,,,,,,\r
+      #group,false,false,true,true,false,true,true,true\r
       result,table,_start,_stop,_time,region,host,_value\r
       ,1,2018-05-08T20:50:00Z,2018-05-08T20:51:00Z,2018-05-08T20:50:00Z,west,A,62.73\r
       \r

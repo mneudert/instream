@@ -111,7 +111,7 @@ defmodule Instream.Connection.QueryRunnerV2 do
             type: "flux",
             query: query,
             dialect: %{
-              annotations: ["datatype", "default"]
+              annotations: ["datatype", "default", "group"]
             }
           },
           conn
