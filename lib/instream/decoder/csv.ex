@@ -41,6 +41,8 @@ defmodule Instream.Decoder.CSV do
 
   defp parse_annotations(rest, acc), do: %{acc | table: rest}
 
+  defp parse_datatypes({{field, "boolean"}, "false"}), do: {field, false}
+  defp parse_datatypes({{field, "boolean"}, "true"}), do: {field, true}
   defp parse_datatypes({{field, "double"}, value}), do: {field, String.to_float(value)}
   defp parse_datatypes({{field, "long"}, value}), do: {field, String.to_integer(value)}
 
