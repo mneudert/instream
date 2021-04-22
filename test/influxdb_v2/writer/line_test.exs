@@ -161,7 +161,7 @@ defmodule Instream.InfluxDBv2.Writer.LineTest do
         %{
           "_field" => "boolean",
           "_measurement" => ^measurement,
-          "_value" => "false",
+          "_value" => false,
           "result" => "_result",
           "table" => 1
         }
