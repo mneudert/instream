@@ -14,11 +14,12 @@ defmodule Instream.InfluxDBv2.ConnectionTest do
       tag :bar
       tag :foo
 
-      field :value
+      field :numeric
+      field :boolean
     end
   end
 
-  @tags %{foo: "foo", bar: "bar"}
+  @tags %{bar: "bar", foo: "foo"}
 
   test "mismatched InfluxDB version" do
     assert {:error, :version_mismatch} = DefaultConnection.ping()
@@ -34,7 +35,7 @@ defmodule Instream.InfluxDBv2.ConnectionTest do
         %{
           measurement: measurement,
           tags: @tags,
-          fields: %{value: 0.66}
+          fields: %{numeric: 0.66, boolean: true}
         }
       ])
 
@@ -52,14 +53,26 @@ defmodule Instream.InfluxDBv2.ConnectionTest do
       )
 
     assert [
-             %{
-               "_field" => "value",
-               "_measurement" => "write_data",
-               "_value" => 0.66,
-               "bar" => "bar",
-               "foo" => "foo",
-               "result" => "_result"
-             }
+             [
+               %{
+                 "_field" => "boolean",
+                 "_measurement" => ^measurement,
+                 "_value" => true,
+                 "bar" => "bar",
+                 "foo" => "foo",
+                 "result" => "_result"
+               }
+             ],
+             [
+               %{
+                 "_field" => "numeric",
+                 "_measurement" => ^measurement,
+                 "_value" => 0.66,
+                 "bar" => "bar",
+                 "foo" => "foo",
+                 "result" => "_result"
+               }
+             ]
            ] = result
   end
 
@@ -70,7 +83,8 @@ defmodule Instream.InfluxDBv2.ConnectionTest do
       %{
         bar: "bar",
         foo: "foo",
-        value: 17
+        boolean: false,
+        numeric: 17
       }
       |> TestSeries.from_map()
       |> DefaultConnection.write()
@@ -89,14 +103,26 @@ defmodule Instream.InfluxDBv2.ConnectionTest do
       )
 
     assert [
-             %{
-               "_field" => "value",
-               "_measurement" => ^measurement,
-               "_value" => 17,
-               "bar" => "bar",
-               "foo" => "foo",
-               "result" => "_result"
-             }
+             [
+               %{
+                 "_field" => "boolean",
+                 "_measurement" => ^measurement,
+                 "_value" => false,
+                 "bar" => "bar",
+                 "foo" => "foo",
+                 "result" => "_result"
+               }
+             ],
+             [
+               %{
+                 "_field" => "numeric",
+                 "_measurement" => ^measurement,
+                 "_value" => 17,
+                 "bar" => "bar",
+                 "foo" => "foo",
+                 "result" => "_result"
+               }
+             ]
            ] = result
   end
 end

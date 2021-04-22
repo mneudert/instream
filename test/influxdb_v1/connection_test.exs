@@ -60,8 +60,8 @@ defmodule Instream.InfluxDBv1.ConnectionTest do
       DefaultConnection.write([
         %{
           measurement: measurement,
-          tags: %{foo: "bar"},
-          fields: %{value: 1}
+          tags: @tags,
+          fields: %{numeric: 0.66, boolean: true}
         }
       ])
 
@@ -77,13 +77,26 @@ defmodule Instream.InfluxDBv1.ConnectionTest do
       )
 
     assert [
-             %{
-               "_field" => "value",
-               "_measurement" => ^measurement,
-               "_value" => 1,
-               "foo" => "bar",
-               "result" => "_result"
-             }
+             [
+               %{
+                 "_field" => "boolean",
+                 "_measurement" => ^measurement,
+                 "_value" => true,
+                 "bar" => "bar",
+                 "foo" => "foo",
+                 "result" => "_result"
+               }
+             ],
+             [
+               %{
+                 "_field" => "numeric",
+                 "_measurement" => ^measurement,
+                 "_value" => 0.66,
+                 "bar" => "bar",
+                 "foo" => "foo",
+                 "result" => "_result"
+               }
+             ]
            ] = result
   end
 
