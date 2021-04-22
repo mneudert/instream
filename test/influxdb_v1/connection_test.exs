@@ -54,27 +54,37 @@ defmodule Instream.InfluxDBv1.ConnectionTest do
 
   @tag :"influxdb_include_1.8"
   test "read using flux query" do
+    measurement = "flux"
+
     :ok =
       DefaultConnection.write([
         %{
-          measurement: "flux",
+          measurement: measurement,
           tags: %{foo: "bar"},
           fields: %{value: 1}
         }
       ])
 
-    query = ~S[
-      from(bucket:"test_database/autogen")
-      |> range(start: -1h)
-      |> filter(fn: (r) => r._measurement == "flux")
-    ]
+    result =
+      DefaultConnection.query(
+        """
+        from(bucket:"test_database/autogen")
+        |> range(start: -1h)
+        |> filter(fn: (r) => r._measurement == "#{measurement}")
+        """,
+        query_language: :flux,
+        result_as: :csv
+      )
 
-    result = DefaultConnection.query(query, query_language: :flux)
-
-    assert "#datatype," <> _ = result
-
-    assert String.contains?(result, "flux,bar")
-    assert String.contains?(result, "_measurement,foo")
+    assert [
+             %{
+               "_field" => "value",
+               "_measurement" => ^measurement,
+               "_value" => 1,
+               "foo" => "bar",
+               "result" => "_result"
+             }
+           ] = result
   end
 
   test "write data" do
