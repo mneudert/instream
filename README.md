@@ -7,7 +7,7 @@ InfluxDB driver for Elixir
 Tested InfluxDB versions:
 
 - `1.7.11`
-- `1.8.4`
+- `1.8.5`
 - `2.0.4`
 
 ## Package Setup
