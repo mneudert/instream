@@ -15,7 +15,7 @@ jobs:
 
     services:
       influxdb:
-        image: quay.io/influxdb/influxdb:v2.0.4
+        image: quay.io/influxdb/influxdb:v2.0.5
         ports:
           - 8086:8086
 
