@@ -48,6 +48,10 @@ jobs:
 
     - name: test
       run: |
+        until curl -s -o /dev/null 'http://localhost:8086' 2>/dev/null; do
+          sleep 1
+        done
+
         SETUP=$(curl -s -XPOST http://localhost:8086/api/v2/setup -H 'accept: application/json' -d "{\"username\": \"instream_test\", \"password\": \"instream_test\", \"org\": \"instream_test\", \"bucket\": \"test_database\"}")
 
         export INFLUXDB_TOKEN=$(jq -r '.auth.token' <<< "${SETUP}")
