@@ -6,122 +6,138 @@ defmodule Instream.Decoder.LineTest do
   describe "with datatype annotation" do
     test "single schema decoding" do
       response = """
-      #datatype,string,long,dateTime:RFC3339,dateTime:RFC3339,dateTime:RFC3339,boolean,string,double
-      #default,my-result,,,,,,,\r
-      #group,false,false,true,true,false,true,true,true\r
-      result,table,_start,_stop,_time,region_east,host,_value\r
-      my-result,0,2018-05-08T20:50:00Z,2018-05-08T20:51:00Z,2018-05-08T20:50:00Z,true,A,15.43\r
-      my-result,0,2018-05-08T20:50:00Z,2018-05-08T20:51:00Z,2018-05-08T20:50:20Z,true,B,59.25\r
-      my-result,0,2018-05-08T20:50:00Z,2018-05-08T20:51:00Z,2018-05-08T20:50:40Z,true,C,52.62\r
-      my-result,1,2018-05-08T20:50:00Z,2018-05-08T20:51:00Z,2018-05-08T20:50:00Z,false,A,62.73\r
-      my-result,1,2018-05-08T20:50:00Z,2018-05-08T20:51:00Z,2018-05-08T20:50:20Z,false,B,12.83\r
-      my-result,1,2018-05-08T20:50:00Z,2018-05-08T20:51:00Z,2018-05-08T20:50:40Z,false,C,51.62\r
+      #datatype,string,long,dateTime:RFC3339,dateTime:RFC3339,dateTime:RFC3339,double,string,string,boolean,string
+      #default,my-result,,,,,,,,,\r
+      #group,false,false,true,true,false,true,true,true,true,true\r
+      result,table,_start,_stop,_time,_value,_field,_measurement,region_east,host\r
+      my-result,0,2018-05-08T20:50:00Z,2018-05-08T20:51:00Z,2018-05-08T20:50:00Z,15.43,value,cpu,true,A\r
+      my-result,0,2018-05-08T20:50:00Z,2018-05-08T20:51:00Z,2018-05-08T20:50:20Z,59.25,value,cpu,true,B\r
+      my-result,0,2018-05-08T20:50:00Z,2018-05-08T20:51:00Z,2018-05-08T20:50:40Z,52.62,value,cpu,true,C\r
+      my-result,1,2018-05-08T20:50:00Z,2018-05-08T20:51:00Z,2018-05-08T20:50:00Z,62.73,value,cpu,false,A\r
+      my-result,1,2018-05-08T20:50:00Z,2018-05-08T20:51:00Z,2018-05-08T20:50:20Z,12.83,value,cpu,false,B\r
+      my-result,1,2018-05-08T20:50:00Z,2018-05-08T20:51:00Z,2018-05-08T20:50:40Z,51.62,value,cpu,false,C\r
       \r
       """
 
       assert [
                %{
-                 "result" => "my-result",
-                 "table" => 0,
+                 "_field" => "value",
+                 "_measurement" => "cpu",
                  "_start" => 1_525_812_600_000_000_000,
                  "_stop" => 1_525_812_660_000_000_000,
                  "_time" => 1_525_812_600_000_000_000,
-                 "region_east" => true,
+                 "_value" => 15.43,
                  "host" => "A",
-                 "_value" => 15.43
+                 "region_east" => true,
+                 "result" => "my-result",
+                 "table" => 0
                },
                %{
-                 "result" => "my-result",
-                 "table" => 0,
+                 "_field" => "value",
+                 "_measurement" => "cpu",
                  "_start" => 1_525_812_600_000_000_000,
                  "_stop" => 1_525_812_660_000_000_000,
                  "_time" => 1_525_812_620_000_000_000,
-                 "region_east" => true,
+                 "_value" => 59.25,
                  "host" => "B",
-                 "_value" => 59.25
+                 "region_east" => true,
+                 "result" => "my-result",
+                 "table" => 0
                },
                %{
-                 "result" => "my-result",
-                 "table" => 0,
+                 "_field" => "value",
+                 "_measurement" => "cpu",
                  "_start" => 1_525_812_600_000_000_000,
                  "_stop" => 1_525_812_660_000_000_000,
                  "_time" => 1_525_812_640_000_000_000,
-                 "region_east" => true,
+                 "_value" => 52.62,
                  "host" => "C",
-                 "_value" => 52.62
+                 "region_east" => true,
+                 "result" => "my-result",
+                 "table" => 0
                },
                %{
-                 "result" => "my-result",
-                 "table" => 1,
+                 "_field" => "value",
+                 "_measurement" => "cpu",
                  "_start" => 1_525_812_600_000_000_000,
                  "_stop" => 1_525_812_660_000_000_000,
                  "_time" => 1_525_812_600_000_000_000,
-                 "region_east" => false,
+                 "_value" => 62.73,
                  "host" => "A",
-                 "_value" => 62.73
+                 "region_east" => false,
+                 "result" => "my-result",
+                 "table" => 1
                },
                %{
-                 "result" => "my-result",
-                 "table" => 1,
+                 "_field" => "value",
+                 "_measurement" => "cpu",
                  "_start" => 1_525_812_600_000_000_000,
                  "_stop" => 1_525_812_660_000_000_000,
                  "_time" => 1_525_812_620_000_000_000,
-                 "region_east" => false,
+                 "_value" => 12.83,
                  "host" => "B",
-                 "_value" => 12.83
+                 "region_east" => false,
+                 "result" => "my-result",
+                 "table" => 1
                },
                %{
-                 "result" => "my-result",
-                 "table" => 1,
+                 "_field" => "value",
+                 "_measurement" => "cpu",
                  "_start" => 1_525_812_600_000_000_000,
                  "_stop" => 1_525_812_660_000_000_000,
                  "_time" => 1_525_812_640_000_000_000,
-                 "region_east" => false,
+                 "_value" => 51.62,
                  "host" => "C",
-                 "_value" => 51.62
+                 "region_east" => false,
+                 "result" => "my-result",
+                 "table" => 1
                }
              ] = CSV.parse(response)
     end
 
     test "multiple schema decoding" do
       response = """
-      #datatype,string,long,dateTime:RFC3339,dateTime:RFC3339,dateTime:RFC3339,boolean,string,double
-      #default,my-result,,,,,,,\r
-      #group,false,false,true,true,false,true,true,true\r
-      result,table,_start,_stop,_time,region_east,host,_value\r
-      ,0,2018-05-08T20:50:00Z,2018-05-08T20:51:00Z,2018-05-08T20:50:00Z,true,A,15.43\r
+      #datatype,string,long,dateTime:RFC3339,dateTime:RFC3339,dateTime:RFC3339,double,string,string,boolean,string
+      #default,my-result,,,,,,,,,\r
+      #group,false,false,true,true,false,true,true,true,true,true\r
+      result,table,_start,_stop,_time,_value,_field,_measurement,region_east,host\r
+      ,0,2018-05-08T20:50:00Z,2018-05-08T20:51:00Z,2018-05-08T20:50:00Z,15.43,value,cpu,true,A\r
       \r
-      #datatype,string,long,dateTime:RFC3339,dateTime:RFC3339,dateTime:RFC3339,boolean,string,double
-      #default,my-result,,,,,,,\r
-      #group,false,false,true,true,false,true,true,true\r
-      result,table,_start,_stop,_time,region_east,host,_value\r
-      ,1,2018-05-08T20:50:00Z,2018-05-08T20:51:00Z,2018-05-08T20:50:00Z,false,A,62.73\r
+      #datatype,string,long,dateTime:RFC3339,dateTime:RFC3339,dateTime:RFC3339,double,string,string,boolean,string
+      #default,my-result,,,,,,,,,\r
+      #group,false,false,true,true,false,true,true,true,true,true\r
+      result,table,_start,_stop,_time,_value,_field,_measurement,region_east,host\r
+      ,1,2018-05-08T20:50:00Z,2018-05-08T20:51:00Z,2018-05-08T20:50:00Z,62.73,value,cpu,false,A\r
       \r
       """
 
       assert [
                [
                  %{
-                   "result" => "my-result",
-                   "table" => 0,
+                   "_field" => "value",
+                   "_measurement" => "cpu",
                    "_start" => 1_525_812_600_000_000_000,
                    "_stop" => 1_525_812_660_000_000_000,
                    "_time" => 1_525_812_600_000_000_000,
-                   "region_east" => true,
+                   "_value" => 15.43,
                    "host" => "A",
-                   "_value" => 15.43
+                   "region_east" => true,
+                   "result" => "my-result",
+                   "table" => 0
                  }
                ],
                [
                  %{
-                   "result" => "my-result",
-                   "table" => 1,
+                   "_field" => "value",
+                   "_measurement" => "cpu",
                    "_start" => 1_525_812_600_000_000_000,
                    "_stop" => 1_525_812_660_000_000_000,
                    "_time" => 1_525_812_600_000_000_000,
-                   "region_east" => false,
+                   "_value" => 62.73,
                    "host" => "A",
-                   "_value" => 62.73
+                   "region_east" => false,
+                   "result" => "my-result",
+                   "table" => 1
                  }
                ]
              ] = CSV.parse(response)
@@ -131,113 +147,129 @@ defmodule Instream.Decoder.LineTest do
   describe "without datatype annotation" do
     test "single schema decoding" do
       response = """
-      result,table,_start,_stop,_time,region_east,host,_value\r
-      my-result,0,2018-05-08T20:50:00Z,2018-05-08T20:51:00Z,2018-05-08T20:50:00Z,true,A,15.43\r
-      my-result,0,2018-05-08T20:50:00Z,2018-05-08T20:51:00Z,2018-05-08T20:50:20Z,true,B,59.25\r
-      my-result,0,2018-05-08T20:50:00Z,2018-05-08T20:51:00Z,2018-05-08T20:50:40Z,true,C,52.62\r
-      my-result,1,2018-05-08T20:50:00Z,2018-05-08T20:51:00Z,2018-05-08T20:50:00Z,false,A,62.73\r
-      my-result,1,2018-05-08T20:50:00Z,2018-05-08T20:51:00Z,2018-05-08T20:50:20Z,false,B,12.83\r
-      my-result,1,2018-05-08T20:50:00Z,2018-05-08T20:51:00Z,2018-05-08T20:50:40Z,false,C,51.62\r
+      result,table,_start,_stop,_time,_value,_field,_measurement,region_east,host\r
+      my-result,0,2018-05-08T20:50:00Z,2018-05-08T20:51:00Z,2018-05-08T20:50:00Z,15.43,value,cpu,true,A\r
+      my-result,0,2018-05-08T20:50:00Z,2018-05-08T20:51:00Z,2018-05-08T20:50:20Z,59.25,value,cpu,true,B\r
+      my-result,0,2018-05-08T20:50:00Z,2018-05-08T20:51:00Z,2018-05-08T20:50:40Z,52.62,value,cpu,true,C\r
+      my-result,1,2018-05-08T20:50:00Z,2018-05-08T20:51:00Z,2018-05-08T20:50:00Z,62.73,value,cpu,false,A\r
+      my-result,1,2018-05-08T20:50:00Z,2018-05-08T20:51:00Z,2018-05-08T20:50:20Z,12.83,value,cpu,false,B\r
+      my-result,1,2018-05-08T20:50:00Z,2018-05-08T20:51:00Z,2018-05-08T20:50:40Z,51.62,value,cpu,false,C\r
       \r
       """
 
       assert [
                %{
-                 "result" => "my-result",
-                 "table" => "0",
+                 "_field" => "value",
+                 "_measurement" => "cpu",
                  "_start" => "2018-05-08T20:50:00Z",
                  "_stop" => "2018-05-08T20:51:00Z",
                  "_time" => "2018-05-08T20:50:00Z",
-                 "region_east" => "true",
+                 "_value" => "15.43",
                  "host" => "A",
-                 "_value" => "15.43"
+                 "region_east" => "true",
+                 "result" => "my-result",
+                 "table" => "0"
                },
                %{
-                 "result" => "my-result",
-                 "table" => "0",
+                 "_field" => "value",
+                 "_measurement" => "cpu",
                  "_start" => "2018-05-08T20:50:00Z",
                  "_stop" => "2018-05-08T20:51:00Z",
                  "_time" => "2018-05-08T20:50:20Z",
-                 "region_east" => "true",
+                 "_value" => "59.25",
                  "host" => "B",
-                 "_value" => "59.25"
+                 "region_east" => "true",
+                 "result" => "my-result",
+                 "table" => "0"
                },
                %{
-                 "result" => "my-result",
-                 "table" => "0",
+                 "_field" => "value",
+                 "_measurement" => "cpu",
                  "_start" => "2018-05-08T20:50:00Z",
                  "_stop" => "2018-05-08T20:51:00Z",
                  "_time" => "2018-05-08T20:50:40Z",
-                 "region_east" => "true",
+                 "_value" => "52.62",
                  "host" => "C",
-                 "_value" => "52.62"
+                 "region_east" => "true",
+                 "result" => "my-result",
+                 "table" => "0"
                },
                %{
-                 "result" => "my-result",
-                 "table" => "1",
+                 "_field" => "value",
+                 "_measurement" => "cpu",
                  "_start" => "2018-05-08T20:50:00Z",
                  "_stop" => "2018-05-08T20:51:00Z",
                  "_time" => "2018-05-08T20:50:00Z",
-                 "region_east" => "false",
+                 "_value" => "62.73",
                  "host" => "A",
-                 "_value" => "62.73"
+                 "region_east" => "false",
+                 "result" => "my-result",
+                 "table" => "1"
                },
                %{
-                 "result" => "my-result",
-                 "table" => "1",
+                 "_field" => "value",
+                 "_measurement" => "cpu",
                  "_start" => "2018-05-08T20:50:00Z",
                  "_stop" => "2018-05-08T20:51:00Z",
                  "_time" => "2018-05-08T20:50:20Z",
-                 "region_east" => "false",
+                 "_value" => "12.83",
                  "host" => "B",
-                 "_value" => "12.83"
+                 "region_east" => "false",
+                 "result" => "my-result",
+                 "table" => "1"
                },
                %{
-                 "result" => "my-result",
-                 "table" => "1",
+                 "_field" => "value",
+                 "_measurement" => "cpu",
                  "_start" => "2018-05-08T20:50:00Z",
                  "_stop" => "2018-05-08T20:51:00Z",
                  "_time" => "2018-05-08T20:50:40Z",
-                 "region_east" => "false",
+                 "_value" => "51.62",
                  "host" => "C",
-                 "_value" => "51.62"
+                 "region_east" => "false",
+                 "result" => "my-result",
+                 "table" => "1"
                }
              ] = CSV.parse(response)
     end
 
     test "multiple schema decoding" do
       response = """
-      result,table,_start,_stop,_time,region_east,host,_value\r
-      my-result,0,2018-05-08T20:50:00Z,2018-05-08T20:51:00Z,2018-05-08T20:50:00Z,true,A,15.43\r
+      result,table,_start,_stop,_time,_value,_field,_measurement,region_east,host\r
+      my-result,0,2018-05-08T20:50:00Z,2018-05-08T20:51:00Z,2018-05-08T20:50:00Z,15.43,value,cpu,true,A\r
       \r
-      result,table,_start,_stop,_time,region_east,host,_value\r
-      my-result,1,2018-05-08T20:50:00Z,2018-05-08T20:51:00Z,2018-05-08T20:50:00Z,false,A,62.73\r
+      result,table,_start,_stop,_time,_value,_field,_measurement,region_east,host\r
+      my-result,1,2018-05-08T20:50:00Z,2018-05-08T20:51:00Z,2018-05-08T20:50:00Z,62.73,value,cpu,false,A\r
       \r
       """
 
       assert [
                [
                  %{
-                   "result" => "my-result",
-                   "table" => "0",
+                   "_field" => "value",
+                   "_measurement" => "cpu",
                    "_start" => "2018-05-08T20:50:00Z",
                    "_stop" => "2018-05-08T20:51:00Z",
                    "_time" => "2018-05-08T20:50:00Z",
+                   "_value" => "15.43",
                    "region_east" => "true",
+                   "result" => "my-result",
                    "host" => "A",
-                   "_value" => "15.43"
+                   "table" => "0"
                  }
                ],
                [
                  %{
-                   "result" => "my-result",
-                   "table" => "1",
+                   "_field" => "value",
+                   "_measurement" => "cpu",
                    "_start" => "2018-05-08T20:50:00Z",
                    "_stop" => "2018-05-08T20:51:00Z",
                    "_time" => "2018-05-08T20:50:00Z",
-                   "region_east" => "false",
+                   "_value" => "62.73",
                    "host" => "A",
-                   "_value" => "62.73"
+                   "region_east" => "false",
+                   "result" => "my-result",
+                   "table" => "1"
                  }
                ]
              ] = CSV.parse(response)
