@@ -19,13 +19,8 @@ defmodule Instream.Connection.QueryRunnerV1 do
   def ping(opts, conn) do
     config = conn.config()
     headers = Headers.assemble(config, opts)
+    http_opts = http_opts(config, opts)
     url = URL.ping(config)
-
-    http_opts =
-      Keyword.merge(
-        Keyword.get(config, :http_opts, []),
-        Keyword.get(opts, :http_opts, [])
-      )
 
     {query_time, response} =
       :timer.tc(fn ->
@@ -65,16 +60,11 @@ defmodule Instream.Connection.QueryRunnerV1 do
   def read(query, opts, conn) do
     config = conn.config()
     headers = Headers.assemble(config, opts)
+    http_opts = http_opts(config, opts)
 
     body = read_body(query, opts)
     method = read_method(opts)
     url = read_url(conn, query, opts)
-
-    http_opts =
-      Keyword.merge(
-        Keyword.get(config, :http_opts, []),
-        Keyword.get(opts, :http_opts, [])
-      )
 
     {query_time, response} =
       :timer.tc(fn ->
@@ -110,13 +100,8 @@ defmodule Instream.Connection.QueryRunnerV1 do
   def status(opts, conn) do
     config = conn.config()
     headers = Headers.assemble(config, opts)
+    http_opts = http_opts(config, opts)
     url = URL.status(config)
-
-    http_opts =
-      Keyword.merge(
-        Keyword.get(config, :http_opts, []),
-        Keyword.get(opts, :http_opts, [])
-      )
 
     {query_time, response} =
       :timer.tc(fn ->
@@ -156,13 +141,8 @@ defmodule Instream.Connection.QueryRunnerV1 do
   def version(opts, conn) do
     config = conn.config()
     headers = Headers.assemble(config, opts)
+    http_opts = http_opts(config, opts)
     url = URL.ping(config)
-
-    http_opts =
-      Keyword.merge(
-        Keyword.get(config, :http_opts, []),
-        Keyword.get(opts, :http_opts, [])
-      )
 
     response = config[:http_client].request(:head, url, headers, "", http_opts)
 
@@ -205,6 +185,13 @@ defmodule Instream.Connection.QueryRunnerV1 do
     end
 
     result
+  end
+
+  defp http_opts(config, opts) do
+    Keyword.merge(
+      Keyword.get(config, :http_opts, []),
+      Keyword.get(opts, :http_opts, [])
+    )
   end
 
   defp log([_ | _] = loggers, entry) do

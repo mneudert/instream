@@ -17,15 +17,10 @@ defmodule Instream.Connection.QueryRunnerV2 do
   def read(query, opts, conn) do
     config = conn.config()
     headers = Headers.assemble(config, opts)
+    http_opts = http_opts(config, opts)
 
     body = read_body(conn, query, opts)
     url = URL.query(config, opts)
-
-    http_opts =
-      Keyword.merge(
-        Keyword.get(config, :http_opts, []),
-        Keyword.get(opts, :http_opts, [])
-      )
 
     {query_time, response} =
       :timer.tc(fn ->
@@ -81,6 +76,13 @@ defmodule Instream.Connection.QueryRunnerV2 do
     end
 
     result
+  end
+
+  defp http_opts(config, opts) do
+    Keyword.merge(
+      Keyword.get(config, :http_opts, []),
+      Keyword.get(opts, :http_opts, [])
+    )
   end
 
   defp log([_ | _] = loggers, entry) do
