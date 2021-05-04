@@ -184,11 +184,11 @@ defmodule Instream.Series do
   @callback from_map(map) :: struct
 
   @doc """
-  Creates a list of series datasets from a query result map.
+  Creates a list of series datasets from a query result.
 
   Keys not defined in the series are silently dropped.
   """
-  @callback from_result(map) :: [struct]
+  @callback from_result(map | [map]) :: [struct]
 
   @doc """
   Defines a field in the series.
