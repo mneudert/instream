@@ -12,6 +12,7 @@ defmodule Instream.Connection.Supervisor do
       case conn.config(:init) do
         nil -> :ok
         {mod, fun} -> apply(mod, fun, [conn])
+        {mod, fun, extra_args} -> apply(mod, fun, [conn | extra_args])
       end
 
     writer = conn.config(:writer)
