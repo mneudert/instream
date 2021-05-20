@@ -62,6 +62,7 @@ defmodule Instream.MixProject do
         :underspecs,
         :unmatched_returns
       ],
+      ignore_warnings: ".dialyzer_ignore.exs",
       plt_core_path: "plts",
       plt_file: {:no_warn, "plts/dialyzer.plt"}
     ]
