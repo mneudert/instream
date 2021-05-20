@@ -7,8 +7,8 @@ jobs:
     strategy:
       matrix:
         include:
-          - elixir: '1.11.4'
-            otp: '23.0'
+          - elixir: '1.12.0'
+            otp: '24.0'
             runs-on: ubuntu-20.04
 
     runs-on: ${{ matrix.runs-on }}
