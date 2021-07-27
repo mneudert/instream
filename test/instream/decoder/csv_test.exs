@@ -274,5 +274,11 @@ defmodule Instream.Decoder.LineTest do
                ]
              ] = CSV.parse(response)
     end
+
+    test "emtpy response" do
+      response = "\r\n"
+
+      assert [] = CSV.parse(response)
+    end
   end
 end
