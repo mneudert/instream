@@ -51,7 +51,6 @@ defmodule Instream.Decoder.CSV do
 
   defp parse_datatypes({{field, _}, value}), do: {field, value}
 
-
   defp parse_rows(%{table: [[""]]}), do: []
 
   defp parse_rows(%{
