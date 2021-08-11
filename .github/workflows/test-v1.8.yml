@@ -30,7 +30,7 @@ jobs:
 
     services:
       influxdb:
-        image: influxdb:1.8.6
+        image: influxdb:1.8.9
         env:
           INFLUXDB_HTTP_AUTH_ENABLED: true
           INFLUXDB_HTTP_FLUX_ENABLED: true
