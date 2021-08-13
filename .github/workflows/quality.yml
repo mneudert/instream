@@ -33,6 +33,11 @@ jobs:
     - name: check unused deps
       run: mix deps.unlock --check-unused
 
+    - name: check for compiler warnings
+      run: |
+        mix deps.compile
+        mix compile --warnings-as-errors
+
     - name: format
       run: mix format --check-formatted
 
