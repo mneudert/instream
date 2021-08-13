@@ -30,6 +30,9 @@ jobs:
         mix local.hex --force
         mix deps.get
 
+    - name: check unused deps
+      run: mix deps.unlock --check-unused
+
     - name: format
       run: mix format --check-formatted
 
