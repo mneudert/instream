@@ -6,7 +6,7 @@ defmodule Instream do
 
   To connect to an InfluxDB server you need a connection module:
 
-      defmodule MyApp.MyConnection do
+      defmodule MyConnection do
         use Instream.Connection, otp_app: :my_app
       end
 
@@ -16,13 +16,13 @@ defmodule Instream do
 
       children = [
         # ...
-        MyApp.MyConnection,
+        MyConnection,
         # ...
       ]
 
   Example of the matching configuration entry:
 
-      config :my_app, MyApp.MyConnection,
+      config :my_app, MyConnection,
         database: "my_default_database",
         host: "localhost",
         port: 8086
@@ -43,7 +43,7 @@ defmodule Instream do
   server's JSON response.
 
   Alternatively you can pass `[result_as: format]` to
-  `MyApp.MyConnection.query/2` to change the result format to
+  `MyConnection.query/2` to change the result format to
   one of the following:
 
   - `:csv` - CSV encoded response
@@ -54,29 +54,29 @@ defmodule Instream do
 
   If not otherwise specified all queries will be sent as `InfluxQL`.
   This can be changed to `Flux` by passing the option `[query_language: :flux]`
-  to `MyApp.MyConnection.query/2`
+  to `MyConnection.query/2`
 
   ### Reading Data
 
       # passing database to query/2
-      MyApp.MyConnection.query(
+      MyConnection.query(
         "SELECT * FROM some_measurement",
         database: "my_database"
       )
 
       # defining database in the query
-      MyApp.MyConnection.query(~S(
+      MyConnection.query(~S(
         SELECT * FROM "my_database"."default"."some_measurement"
       ))
 
       # passing precision (= epoch) for query results
-      MyApp.MyConnection.query(
+      MyConnection.query(
         "SELECT * FROM some_measurement",
         precision: :minutes
       )
 
       # using parameter binding
-      MyApp.MyConnection.query(
+      MyConnection.query(
         "SELECT * FROM some_measurement WHERE field = $field_param",
         params: %{field_param: "some_value"}
       )
@@ -89,7 +89,7 @@ defmodule Instream do
   When not using the query build you have to pass that information
   manually to `query/2`:
 
-      MyApp.MyConnection.query(
+      MyConnection.query(
         "CREATE DATABASE create_in_write_mode",
         method: :post
       )
@@ -99,7 +99,7 @@ defmodule Instream do
   If you find your queries running into timeouts (e.g. `:hackney` not waiting
   long enough for a response) you can pass an option to the query call:
 
-      MyApp.MyConnection.query(query, http_opts: [recv_timeout: 250])
+      MyConnection.query(query, http_opts: [recv_timeout: 250])
 
   This value can also be set as a default using your HTTP client configuration
   (see `Instream.Connection.Config` for details). A passed configuration will

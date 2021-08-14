@@ -6,7 +6,7 @@ defmodule Instream.Writer.UDP do
 
   Write queries are run through a process pool having an additional timeout:
 
-      config :my_app, MyApp.MyConnection,
+      config :my_app, MyConnection,
         pool: [max_overflow: 10, size: 5],
         pool_timeout: 500
 
