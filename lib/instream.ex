@@ -16,7 +16,7 @@ defmodule Instream do
 
       children = [
         # ...
-        MyApp.Connection,
+        MyApp.MyConnection,
         # ...
       ]
 
@@ -46,9 +46,9 @@ defmodule Instream do
   `MyApp.MyConnection.query/2` to change the result format to
   one of the following:
 
-  - `:csv`  CSV encoded response
+  - `:csv` - CSV encoded response
   - `:json` - JSON encoded response (implicit default)
-  - `:raw`  Raw server format (JSON string)
+  - `:raw` - Raw server format (JSON string)
 
   ### Query Language Selection
 
