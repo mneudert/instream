@@ -32,29 +32,36 @@ defmodule Instream do
 
   ## Queries
 
-  _Note:_ Most queries require a database to operate on. The following places
-  will be searched (in order from top to bottom) for a configured database:
+  Most queries require a `:database` or `:bucket`/`:organization` to operate on.
 
-  1. `opts[:database]` parameter
-  2. `Instream.Connection` configuration
-  3. No database used!
+  These values will be taken from your connection configuration by default.
+  By using the option parameter of `MyConnection.query/2` you can pass different
+  values to use on a per-query basis:
 
-  By default the response of a query will be a map decoded from your
-  server's JSON response.
+      MyConnection.query("... query ...", database: "my_other_database")
 
-  Alternatively you can pass `[result_as: format]` to
-  `MyConnection.query/2` to change the result format to
-  one of the following:
+      MyConnection.query(
+        "... query ...",
+        bucket: "my_other_bucket",
+        org: "my_other_organization"
+      )
 
-  - `:csv` - CSV encoded response
-  - `:json` - JSON encoded response (implicit default)
-  - `:raw` - Raw server format (JSON string)
+  Responses from a query will be decoded into maps by default.
+
+  Depending on your InfluxDB version you can use the `:result_as` option
+  parameter to skip the decoding or request a non-default response type:
+
+  - `result_as: :csv`: response as CSV when using InfluxDB v1
+  - `result_as: :raw`: result as sent from the server without decoding
 
   ### Query Language Selection
 
-  If not otherwise specified all queries will be sent as `InfluxQL`.
-  This can be changed to `Flux` by passing the option `[query_language: :flux]`
-  to `MyConnection.query/2`
+  Depending on your configured InfluxDB version all queries will be treated
+  as `:flux` (v2) or `:influxql` by default. You can send a query in the
+  non-default language by passing the `:query_language` option:
+
+      MyConnection.query("... query ...", query_language: :flux)
+      MyConnection.query("... query ...", query_language: :influxql)
 
   ### Reading Data
 
@@ -101,21 +108,21 @@ defmodule Instream do
 
       MyConnection.query(query, http_opts: [recv_timeout: 250])
 
-  This value can also be set as a default using your HTTP client configuration
-  (see `Instream.Connection.Config` for details). A passed configuration will
-  take precedence over the connection configuration.
+  This value can also be set as a default using your
+  [HTTP client configuration](`Instream.Connection.Config`).
+  A passed configuration will take precedence over the connection configuration.
 
   ## Writing Points
 
-  Writing data to your InfluxDB server can be done via
-  `Instream.Series` modules or using raw maps.
+  Writing data to your InfluxDB server is done using either `Instream.Series`
+  modules or raw maps.
 
-  Please also refer to `c:Instream.Connection.write/2` for an overview
-  of additional options you can use when writing data.
+  Depending on your [connection configuration](`Instream.Connection.Config`)
+  the selected writer module provides additional options.
 
   ### Writing Points using Series
 
-  Each series in your database is represented by a definition module:
+  Each series in your database can be represented using a definition module:
 
       defmodule MySeries do
         use Instream.Series
@@ -130,8 +137,8 @@ defmodule Instream do
         end
       end
 
-  Using this definition you can use the generated struct to create
-  a data point and write it to your database:
+  This module will provide you with a struct you can use to define points
+  you want to write to your database:
 
       MyConnection.write(%MySeries{
         fields: %MySeries.Fields{value: 17},
@@ -155,6 +162,7 @@ defmodule Instream do
         # more points possible ...
       ])
 
-  * The field `timestamp` can be omitted, so InfluxDB will use the receive time.
+  The field `:timestamp` is optional. InfluxDB will use the receive time of
+  the write request if it is missing.
   """
 end
