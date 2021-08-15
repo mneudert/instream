@@ -2,12 +2,18 @@ defmodule Instream.Writer.Line do
   @moduledoc """
   Point writer for the line protocol.
 
-  ## Additional Write Options
+  ## Accepted Write Options
 
-  - `bucket`: write data to a bucket differing from the connection config
-  - `database`: write data to a database differing from the connection config
-  - `org`: write data to an organization differing from the connection config
-  - `precision`: write points with a "precision" other than `:nanosecond`
+  - `precision`: write points with a precision other than `:nanosecond`
+
+  ### InfluxDB v2.x Options
+
+  - `bucket`: write data to a specific bucket
+  - `org`: write data to a specific organization
+
+  ### InfluxDB v1.x Options
+
+  - `database`: write data to a specific database
   - `retention_policy`: write data with a specific retention policy
   """
 
