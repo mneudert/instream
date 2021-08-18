@@ -33,7 +33,7 @@ defmodule Instream.Connection do
   `InfluxDB 1.x` server (`version: :v1`). Configure `version: :v2` if you
   are running an `InfluxDB 2.x` server.
 
-  ## Ping / Status / Version
+  ## Ping / Status / Version (only InfluxDB 1.x)
 
   To validate a connection you can send ping requests to the server:
 
@@ -139,6 +139,8 @@ defmodule Instream.Connection do
 
   @doc """
   Pings the connection server.
+
+  Only available with InfluxDB v1.x connections.
   """
   @callback ping(opts :: Keyword.t()) :: :pong | :error | e_version_mismatch
 
@@ -156,11 +158,15 @@ defmodule Instream.Connection do
 
   @doc """
   Checks the status of the connection server.
+
+  Only available with InfluxDB v1.x connections.
   """
   @callback status(opts :: Keyword.t()) :: :ok | :error | e_version_mismatch
 
   @doc """
   Determines the version of the connection server.
+
+  Only available with InfluxDB v1.x connections.
   """
   @callback version(opts :: Keyword.t()) :: String.t() | :error | e_version_mismatch
 
