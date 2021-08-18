@@ -61,10 +61,19 @@ children = [
 Example of the matching configuration entry:
 
 ```
+# InfluxDB v2.x
 config :my_app, MyConnection,
+  auth: [method: :token, token: "my_token"],
+  bucket: "my_default_bucket",
+  org: "my_default_org",
+  host: "my.influxdb.host",
+  version: :v2
+
+# InfluxDB v1.x
+config :my_app, MyConnection,
+  auth: [username: "my_username", password: "my_password"],
   database: "my_default_database",
-  host: "localhost",
-  port: 8086
+  host: "my.influxdb.host"
 ```
 
 More details on connections and configuration options can be found with the `Instream.Connection` module.
