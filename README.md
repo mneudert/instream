@@ -76,7 +76,7 @@ config :my_app, MyConnection,
   host: "my.influxdb.host"
 ```
 
-More details on connections and configuration options can be found with the `Instream.Connection` module.
+More details on connections and configuration options can be found with the `Instream.Connection` and `Instream.Connection.Config` modules.
 
 ### Queries
 
