@@ -32,27 +32,6 @@ defmodule Instream.Connection do
   By default a connection module will expect to communicate with an
   `InfluxDB 1.x` server (`version: :v1`). Configure `version: :v2` if you
   are running an `InfluxDB 2.x` server.
-
-  ## Ping / Status / Version (only InfluxDB 1.x)
-
-  To validate a connection you can send ping requests to the server:
-
-      MyConnection.ping()
-
-  The response will be `:pong` on success or `:error` on any failure.
-
-  To get InfluxDB to verify the status of your server you can send a status call:
-
-      MyConnection.status()
-
-  If you are interested in the version of InfluxDB your server is
-  reporting you can request it:
-
-      MyConnection.version()
-
-  If the version if undetectable (no header returned) it will be
-  reported as `"unknown"`. If the host is unreachable or an error occurred
-  the response will be `:error`.
   """
 
   alias Instream.Log
@@ -140,7 +119,7 @@ defmodule Instream.Connection do
   @doc """
   Pings the connection server.
 
-  Only available with InfluxDB v1.x connections.
+  *Only available with InfluxDB v1.x connections.*
   """
   @callback ping(opts :: Keyword.t()) :: :pong | :error | e_version_mismatch
 
@@ -159,14 +138,18 @@ defmodule Instream.Connection do
   @doc """
   Checks the status of the connection server.
 
-  Only available with InfluxDB v1.x connections.
+  *Only available with InfluxDB v1.x connections.*
   """
   @callback status(opts :: Keyword.t()) :: :ok | :error | e_version_mismatch
 
   @doc """
   Determines the version of the connection server.
 
-  Only available with InfluxDB v1.x connections.
+  *Only available with InfluxDB v1.x connections.*
+
+  If the version if undetectable (no header returned) it will be
+  reported as `"unknown"`. If the host is unreachable or an error occurred
+  the response will be `:error`.
   """
   @callback version(opts :: Keyword.t()) :: String.t() | :error | e_version_mismatch
 
