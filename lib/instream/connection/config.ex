@@ -75,6 +75,7 @@ defmodule Instream.Connection.Config do
         port: 8086,
         scheme: "http",
         http_client: Instream.HTTPClient.Hackney,
+        loggers: [{Instream.Log.DefaultLogger, :log, []}],
         writer: Instream.Writer.Line,
         json_decoder: {Jason, :decode!, [[keys: :atoms]]},
         json_encoder: {Jason, :encode!, []}
