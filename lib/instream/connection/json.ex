@@ -1,9 +1,6 @@
 defmodule Instream.Connection.JSON do
   @moduledoc false
 
-  @default_decoder {Jason, :decode!, [[keys: :atoms]]}
-  @default_encoder {Jason, :encode!, []}
-
   @doc """
   Decodes a JSON value.
   """
@@ -25,14 +22,14 @@ defmodule Instream.Connection.JSON do
   end
 
   defp decoder(conn) do
-    conn.config()
-    |> Keyword.get(:json_decoder, @default_decoder)
+    :json_decoder
+    |> conn.config()
     |> convert_to_mfargs(:decode!)
   end
 
   defp encoder(conn) do
-    conn.config()
-    |> Keyword.get(:json_encoder, @default_encoder)
+    :json_encoder
+    |> conn.config()
     |> convert_to_mfargs(:encode!)
   end
 

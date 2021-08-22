@@ -214,7 +214,9 @@ defmodule Instream.Connection.Config do
     scheme: "http",
     version: :v1,
     http_client: Instream.HTTPClient.Hackney,
-    writer: Instream.Writer.Line
+    writer: Instream.Writer.Line,
+    json_decoder: {Jason, :decode!, [[keys: :atoms]]},
+    json_encoder: {Jason, :encode!, []}
   ]
 
   @doc """
