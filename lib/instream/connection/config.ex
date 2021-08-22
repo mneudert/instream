@@ -97,7 +97,7 @@ defmodule Instream.Connection.Config do
 
   ### Instream.HTTPClient.Hackney
 
-  Default for no otherwise configured HTTP Client is `:hackney`.
+  Default for not otherwise configured HTTP Client is `:hackney`.
 
   The configuration key `:http_opts` is directly passed to the client process.
   Parts of it are also used internally by `:hackney` to control more generic
