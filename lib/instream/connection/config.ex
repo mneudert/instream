@@ -130,7 +130,7 @@ defmodule Instream.Connection.Config do
 
   If you configure only a module name it will be called as
   `module.decode!(binary)` and `module.encode!(map)`. When using a more complete
-  `{m, f}` or `{m, f, a}` configuration the data to decode/encode will passed
+  `{m, f}` or `{m, f, args}` configuration the data to decode/encode will passed
   as the first argument with your configured extra arguments following.
 
   ## Authentication
