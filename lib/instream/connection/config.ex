@@ -181,7 +181,7 @@ defmodule Instream.Connection.Config do
 
   Configuration is given as a tuple of `{module, function, arguments}`.
   The log entry will be inserted as the first argument of the method call.
-  It will be  one of `Instream.Log.PingEntry`, `Instream.Log.QueryEntry`,
+  It will be one of `Instream.Log.PingEntry`, `Instream.Log.QueryEntry`,
   `Instream.Log.StatusEntry` or `Instream.Log.WriteEntry`, depending on
   what type of request should be logged.
 
