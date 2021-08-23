@@ -158,7 +158,6 @@ defmodule Instream.Connection.Config do
   To write points over UDP you can adjust your configuration:
 
       config :my_app, MyConnection,
-        host: "localhost",
         port_udp: 8089,
         writer: Instream.Writer.UDP
 
