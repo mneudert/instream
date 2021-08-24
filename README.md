@@ -28,7 +28,11 @@ end
 
 To run the tests you need to have HTTP authentication enabled.
 
-The test suite will automatically try to exclude tests not expected to work for your InfluxDB version.
+The following environment variables are used to select some test suites and the InfluxDB version under test:
+
+- `INFLUXDB_VERSION`: one of `"1.7"`, `"1.8"` or `"2.0"`
+- `INFLUXDB_SOCKET`: path to the unix socket a tested InfluxDB 1.8.x instance listens on
+- `INFLUXDB_TOKEN`: the connection token used to test an InfluxDB 2.0.x instance
 
 If you have not configured your InfluxDB testing instance to provide an UDP endpoint to the "test\_database", you can exclude these tests manually:
 

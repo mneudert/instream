@@ -36,6 +36,7 @@ jobs:
     env:
       MIX_ENV: test
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      INFLUXDB_VERSION: '1.7'
 
     steps:
     - uses: actions/checkout@v2
