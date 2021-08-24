@@ -21,10 +21,14 @@ defmodule Instream.InfluxDBv1.Writer.UDPTest do
   defmodule UDPConnection do
     use Instream.Connection,
       config: [
+        init: {__MODULE__, :fetch_port_udp},
         loggers: [],
-        port_udp: 8089,
         writer: Instream.Writer.UDP
       ]
+
+    def fetch_port_udp(_) do
+      Application.put_env(:instream, __MODULE__, port_udp: System.get_env("INFLUXDB_PORT_UDP"))
+    end
   end
 
   test "writing no points alway succeeds" do

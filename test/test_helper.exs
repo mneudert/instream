@@ -14,6 +14,17 @@ config =
       config
   end
 
+# configure UDP writer tests
+config =
+  case System.get_env("INFLUXDB_PORT_UDP") do
+    nil ->
+      IO.puts("Environment variable 'INFLUXDB_PORT_UDP' not set, skipping UDP writer tests")
+      Keyword.put(config, :exclude, [:udp | (config[:exclude] || [])])
+
+    _ ->
+      config
+  end
+
 # configure InfluxDB test version
 version = System.get_env("INFLUXDB_VERSION")
 
