@@ -4,8 +4,8 @@ defmodule Instream.Series do
 
   ## Series Definition
 
-  If you do not want to define the raw maps for writing data you can
-  pre-define a series module for later usage:
+  Series definitions can be used to have a fixed structured usable for
+  reading and writing data to an InfluxDB server:
 
       defmodule MySeries.InfluxDB do
         use Instream.Series
@@ -25,12 +25,7 @@ defmodule Instream.Series do
   `:default` entry. This value will be pre-assigned when using the data
   struct with all other fields or tags being set to `nil`.
 
-  ## Metadata
-
-  The metadata of a series (e.g. the measurement) can
-  be retrieved using the `__meta__/1` method.
-
-  ## Struct
+  ### Struct
 
   Every series will be registered as a struct.
   Following the above usage example you will get the following struct:
@@ -43,7 +38,7 @@ defmodule Instream.Series do
 
   `:timestamp` is expected to be a unix nanosecond timestamp.
 
-  ## Series Hydration
+  ## Reading Series Points (Hydration)
 
   Whenever you want to convert a plain map or a query result into a specific
   series you can use the built-in hydration methods:
@@ -104,9 +99,9 @@ defmodule Instream.Series do
   - `:microsecond`
   - `:nanosecond`
 
-  Please be aware that the UDP protocol writer does not support custom
-  timestamp precisions. All UDP timestamps are implicitly expected to already
-  be at nanosecond precision.
+  Please be aware that the UDP protocol writer (`Instream.Writer.UDP`) does
+  not support custom timestamp precisions. All UDP timestamps are implicitly
+  expected to already be at nanosecond precision.
   """
 
   alias Instream.Series.Hydrator
@@ -166,7 +161,7 @@ defmodule Instream.Series do
   end
 
   @doc """
-  Provides metadata access for a series.
+  Provides additional metadata for a series.
 
   ## Available information
 
