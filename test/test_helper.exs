@@ -17,7 +17,30 @@ config = Keyword.put(config, :exclude, version_excludes ++ (config[:exclude] || 
 
 IO.puts("Running tests for InfluxDB version: #{version}")
 
-unless "2.0" == version do
+# configure InfluxDB connection
+if "2.0" == version do
+  unless System.get_env("INFLUXDB_TOKEN") do
+    raise RuntimeError, "Required environment variable 'INFLUXDB_TOKEN' not set!"
+  end
+
+  Application.put_env(
+    :instream,
+    DefaultConnection,
+    auth: [method: :token, token: System.get_env("INFLUXDB_TOKEN")],
+    bucket: "test_database",
+    org: "instream_test",
+    loggers: [],
+    version: :v2
+  )
+else
+  Application.put_env(
+    :instream,
+    DefaultConnection,
+    auth: [username: "instream_test", password: "instream_test"],
+    database: "test_database",
+    loggers: []
+  )
+
   _ = DefaultConnection.query("DROP DATABASE test_database", method: :post)
   _ = DefaultConnection.query("CREATE DATABASE test_database", method: :post)
 end
