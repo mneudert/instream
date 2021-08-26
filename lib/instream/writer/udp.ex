@@ -25,6 +25,7 @@ defmodule Instream.Writer.UDP do
 
   @response {:ok, 200, [], ""}
 
+  @impl Instream.Writer
   def writer_workers(conn) do
     pool_name = Module.concat(conn, UDPWriterPool)
 
@@ -37,7 +38,7 @@ defmodule Instream.Writer.UDP do
     [:poolboy.child_spec(conn, pool_opts, module: conn)]
   end
 
-  @doc false
+  @impl :poolboy_worker
   def start_link(default), do: GenServer.start_link(__MODULE__, default)
 
   @doc false
@@ -50,6 +51,7 @@ defmodule Instream.Writer.UDP do
   @doc false
   def terminate(_reason, %{udp_socket: socket}), do: :gen_udp.close(socket)
 
+  @impl Instream.Writer
   def write(points, opts, conn) do
     default_pool_timeout = conn.config(:pool_timeout) || 5000
 
@@ -70,10 +72,12 @@ defmodule Instream.Writer.UDP do
     @response
   end
 
+  @doc false
   def handle_call({:write, points}, _from, state) do
     {:reply, do_write(points, state), state}
   end
 
+  @doc false
   def handle_cast({:write, points}, state) do
     _ = do_write(points, state)
 
