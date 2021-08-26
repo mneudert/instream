@@ -80,31 +80,23 @@ More details on connections and configuration options can be found with the `Ins
 ### Queries
 
 ```elixir
-# passing database to query/2
+# Flux query
 MyConnection.query(
-  "SELECT * FROM some_measurement",
-  database: "my_database"
+  """
+    from(bucket: "#{MyConnection.config(:bucket)}")
+    |> range(start: -5m)
+    |> filter(fn: (r) =>
+      r._measurement == "instream_examples"
+    )
+    |> first()
+  """
 )
 
-# defining database in the query
-MyConnection.query(~S(
-  SELECT * FROM "my_database"."default"."some_measurement"
-))
-
-# passing precision (= epoch) for query results
-MyConnection.query(
-  "SELECT * FROM some_measurement",
-  precision: :minutes
-)
-
-# using parameter binding
-MyConnection.query(
-  "SELECT * FROM some_measurement WHERE field = $field_param",
-  params: %{field_param: "some_value"}
-)
+# InfluxQL query
+MyConnection.query("SELECT * FROM instream_examples")
 ```
 
-A more detailed documentation on queries (reading/writing/options) is available in the main `Instream` module documentation.
+A more detailed documentation on queries (reading/writing/options) is available in the documentation for the modules `Instream` and `Instream.Connection`.
 
 ## Series Definitions
 
