@@ -1,13 +1,11 @@
 defmodule Instream.Series do
   @moduledoc """
-  Defines a series.
-
   ## Series Definition
 
   Series definitions can be used to have a fixed structured usable for
   reading and writing data to an InfluxDB server:
 
-      defmodule MySeries.InfluxDB do
+      defmodule MySeries.CPULoad do
         use Instream.Series
 
         series do
@@ -25,14 +23,16 @@ defmodule Instream.Series do
   `:default` entry. This value will be pre-assigned when using the data
   struct with all other fields or tags being set to `nil`.
 
-  ### Struct
+  ### Structs
 
-  Every series will be registered as a struct.
-  Following the above usage example you will get the following struct:
+  Each of your series definitions will register three separate structs.
 
-      %MySeries{
-        fields: %MySeries.Fields{value: 100, value_desc: nil},
-        tags: %MySeries.Tags{host: "www", core: nil},
+  Based on the aforementioned `MySeries.CPULoad` you will have access
+  to the following structs:
+
+      %MySeries.CPULoad{
+        fields: %MySeries.CPULoad.Fields{value: 100, value_desc: nil},
+        tags: %MySeries.CPULoad.Tags{host: "www", core: nil},
         timestamp: nil
       }
 
