@@ -60,6 +60,7 @@ defmodule Instream.Connection do
       @otp_app opts[:otp_app]
       @config opts[:config] || []
 
+      @impl Connection
       def child_spec(_) do
         %{
           id: __MODULE__,
@@ -67,8 +68,10 @@ defmodule Instream.Connection do
         }
       end
 
+      @impl Connection
       def config(key \\ nil), do: Config.get(@otp_app, __MODULE__, key, @config)
 
+      @impl Connection
       def ping(opts \\ []) do
         case config(:version) do
           :v2 -> {:error, :version_mismatch}
@@ -76,6 +79,7 @@ defmodule Instream.Connection do
         end
       end
 
+      @impl Connection
       def query(query, opts \\ []) do
         case config(:version) do
           :v2 -> QueryRunnerV2.read(query, opts, __MODULE__)
@@ -83,6 +87,7 @@ defmodule Instream.Connection do
         end
       end
 
+      @impl Connection
       def status(opts \\ []) do
         case config(:version) do
           :v2 -> {:error, :version_mismatch}
@@ -90,6 +95,7 @@ defmodule Instream.Connection do
         end
       end
 
+      @impl Connection
       def version(opts \\ []) do
         case config(:version) do
           :v2 -> {:error, :version_mismatch}
@@ -97,6 +103,7 @@ defmodule Instream.Connection do
         end
       end
 
+      @impl Connection
       def write(points, opts \\ []) do
         case config(:version) do
           :v2 -> QueryRunnerV2.write(points, opts, __MODULE__)
