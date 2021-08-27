@@ -222,8 +222,8 @@ defmodule Instream.Series do
   def __struct__(series) do
     quote do
       @type t :: %unquote(series){
-              fields: unquote(series).Fields.t(),
-              tags: unquote(series).Tags.t(),
+              fields: %unquote(series).Fields{},
+              tags: %unquote(series).Tags{},
               timestamp: non_neg_integer
             }
 
@@ -239,8 +239,6 @@ defmodule Instream.Series do
       defmodule Fields do
         @moduledoc false
 
-        @type t :: %__MODULE__{}
-
         defstruct unquote(Macro.escape(fields))
       end
     end
@@ -251,8 +249,6 @@ defmodule Instream.Series do
     quote do
       defmodule Tags do
         @moduledoc false
-
-        @type t :: %__MODULE__{}
 
         defstruct unquote(Macro.escape(tags))
       end
