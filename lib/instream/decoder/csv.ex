@@ -98,9 +98,15 @@ defmodule Instream.Decoder.CSV do
   end
 
   defp parse_table(table) do
-    table
-    |> __MODULE__.Parser.parse_string(skip_headers: false)
-    |> parse_annotations(%{datatypes: [], defaults: [], groups: [], table: []})
-    |> parse_rows()
+    case String.trim(table) do
+      "" ->
+        []
+
+      _ ->
+        table
+        |> __MODULE__.Parser.parse_string(skip_headers: false)
+        |> parse_annotations(%{datatypes: [], defaults: [], groups: [], table: []})
+        |> parse_rows()
+    end
   end
 end

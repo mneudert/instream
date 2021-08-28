@@ -274,11 +274,17 @@ defmodule Instream.Decoder.LineTest do
                ]
              ] = CSV.parse(response)
     end
+  end
 
-    test "empty response" do
-      response = "\r\n"
-
-      assert [] = CSV.parse(response)
+  describe "empty or broken responses" do
+    test "empty responses" do
+      assert [] = CSV.parse("")
+      assert [] = CSV.parse("\r")
+      assert [] = CSV.parse("\n")
+      assert [] = CSV.parse("\r\n")
+      assert [] = CSV.parse("\r\n\r")
+      assert [] = CSV.parse("\r\n\n")
+      assert [] = CSV.parse("\r\n\r\n")
     end
   end
 end
