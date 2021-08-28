@@ -6,7 +6,7 @@ defmodule Instream.Decoder.LineTest do
   describe "with datatype annotation" do
     test "single schema decoding" do
       response = """
-      #datatype,string,long,dateTime:RFC3339,dateTime:RFC3339,dateTime:RFC3339,double,string,string,boolean,string
+      #datatype,string,long,dateTime:RFC3339,dateTime:RFC3339,dateTime:RFC3339,double,string,string,boolean,string\r
       #default,my-result,,,,,,,,,\r
       #group,false,false,true,true,false,true,true,true,true,true\r
       result,table,_start,_stop,_time,_value,_field,_measurement,region_east,host\r
@@ -97,13 +97,13 @@ defmodule Instream.Decoder.LineTest do
 
     test "multiple schema decoding" do
       response = """
-      #datatype,string,long,dateTime:RFC3339,dateTime:RFC3339,dateTime:RFC3339,double,string,string,boolean,string
+      #datatype,string,long,dateTime:RFC3339,dateTime:RFC3339,dateTime:RFC3339,double,string,string,boolean,string\r
       #default,my-result,,,,,,,,,\r
       #group,false,false,true,true,false,true,true,true,true,true\r
       result,table,_start,_stop,_time,_value,_field,_measurement,region_east,host\r
       ,0,2018-05-08T20:50:00Z,2018-05-08T20:51:00Z,2018-05-08T20:50:00Z,15.43,value,cpu,true,A\r
       \r
-      #datatype,string,long,dateTime:RFC3339,dateTime:RFC3339,dateTime:RFC3339,double,string,string,boolean,string
+      #datatype,string,long,dateTime:RFC3339,dateTime:RFC3339,dateTime:RFC3339,double,string,string,boolean,string\r
       #default,my-result,,,,,,,,,\r
       #group,false,false,true,true,false,true,true,true,true,true\r
       result,table,_start,_stop,_time,_value,_field,_measurement,region_east,host\r
