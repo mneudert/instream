@@ -51,8 +51,6 @@ defmodule Instream.Decoder.CSV do
 
   defp parse_datatypes({{field, _}, value}), do: {field, value}
 
-  defp parse_rows(%{table: [[""]]}), do: []
-
   defp parse_rows(%{
          datatypes: [_ | _] = datatypes,
          defaults: defaults,
@@ -96,6 +94,8 @@ defmodule Instream.Decoder.CSV do
       |> Map.new()
     end)
   end
+
+  defp parse_rows(_), do: []
 
   defp parse_table(table) do
     case String.trim(table) do

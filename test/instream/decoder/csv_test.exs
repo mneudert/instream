@@ -286,5 +286,21 @@ defmodule Instream.Decoder.LineTest do
       assert [] = CSV.parse("\r\n\n")
       assert [] = CSV.parse("\r\n\r\n")
     end
+
+    test "header only response" do
+      response = """
+      result,table,_start,_stop,_time,_value,_field,_measurement,region_east,host\r
+      """
+
+      assert [] = CSV.parse(response)
+    end
+
+    test "annotation only response" do
+      response = """
+      #datatype,string,long,dateTime:RFC3339,dateTime:RFC3339,dateTime:RFC3339,double,string,string,boolean,string\ŗ
+      """
+
+      assert [] = CSV.parse(response)
+    end
   end
 end
