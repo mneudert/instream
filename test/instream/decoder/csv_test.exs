@@ -302,5 +302,14 @@ defmodule Instream.Decoder.LineTest do
 
       assert [] = CSV.parse(response)
     end
+
+    test "response without values" do
+      response = """
+      #datatype,string,long,dateTime:RFC3339,dateTime:RFC3339,dateTime:RFC3339,double,string,string,boolean,string\ŗ
+      result,table,_start,_stop,_time,_value,_field,_measurement,region_east,host\r
+      """
+
+      assert [] = CSV.parse(response)
+    end
   end
 end
