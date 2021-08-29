@@ -25,7 +25,7 @@ defmodule Instream.Connection.ConfigTest do
     defmodule conn do
       use Instream.Connection,
         otp_app: :instream,
-        config: [{:"#{key}", "inline value"}]
+        config: [{key, "inline value"}]
     end
 
     assert "inline value" = conn.config(key)
