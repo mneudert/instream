@@ -42,8 +42,8 @@ defmodule Instream.Series.HydratorTest do
 
   test "hydrating from map (defaults)" do
     assert %TestSeries{
-             fields: %{value: 100},
-             tags: %{foo: "bar"},
+             fields: %TestSeries.Fields{value: 100},
+             tags: %TestSeries.Tags{foo: "bar"},
              timestamp: nil
            } = TestSeries.from_map(%{})
   end
