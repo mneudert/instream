@@ -21,16 +21,22 @@ defmodule Instream.Connection.Config do
 
   ### Dynamic Configuration
 
-  If you cannot, for whatever reason, use a static application config you
-  can configure an initializer module that will be called every time your
+  An alternative to a static configuration is using an initializer
+  module/function that will be called every time your
   connection is started (or restarted) in your supervision tree:
 
       config :my_app, MyConnection,
         init: {MyInitModule, :my_init_fun}
 
+      config :my_app, MyOtherConnection,
+        init: {MyInitModule, :my_init_fun, [:extra, :args]}
+
       defmodule MyInitModule do
         @spec my_init_fun(module) :: :ok
-        def my_init_fun(conn) do
+        def my_init_fun(conn), do: my_init_fun(conn, :extra, :args)
+
+        @spec my_init_fun(module, atom, atom) :: :ok
+        def my_init_fun(conn, :extra, :args) do
           config =
             Keyword.merge(
               conn.config(),
@@ -43,8 +49,7 @@ defmodule Instream.Connection.Config do
       end
 
   When the connection is started the function will be called with the
-  connection module as the first (and only) parameter. This will be done
-  before the connection is available for use.
+  connection module as the first parameter.
 
   The function is expected to always return `:ok`.
 
