@@ -37,7 +37,7 @@ defmodule Instream do
         host: "my.influxdb.host"
 
   More details on connections and configuration options can be found with the
-  `Instream.Connection` module.
+  modules `Instream.Connection` and `Instream.Connection.Config`.
 
   ## Queries
 
