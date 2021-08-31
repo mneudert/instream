@@ -6,7 +6,7 @@ defmodule Instream.Connection.Supervisor do
   @doc false
   def start_link(conn), do: Supervisor.start_link(__MODULE__, conn, name: conn)
 
-  @doc false
+  @impl Supervisor
   def init(conn) do
     :ok =
       case conn.config(:init) do
