@@ -3,7 +3,7 @@ defmodule Instream.Decoder.CSV do
 
   alias Instream.Decoder.RFC3339
 
-  NimbleCSV.define(__MODULE__.Parser, separator: ",", escape: "\"")
+  NimbleCSV.define(__MODULE__.Parser, separator: ",", escape: "\"", moduledoc: false)
 
   @doc """
   Converts a full CSV response into a list of maps.
