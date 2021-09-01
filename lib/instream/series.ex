@@ -165,9 +165,9 @@ defmodule Instream.Series do
 
   ## Available information
 
-  - `:fields` - the fields in the series
-  - `:measurement` - the measurement of the series
-  - `:tags` - the available tags defining the series
+  - `:fields`: the fields in the series
+  - `:measurement`: the measurement of the series
+  - `:tags`: the available tags defining the series
   """
   @callback __meta__(atom) :: any
 
