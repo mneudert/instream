@@ -116,7 +116,7 @@ defmodule Instream.Connection.Config do
 
   ## JSON Configuration
 
-  By default the library used for encoding/decoding JSON is `:jason`.
+  By default the library used for encoding/decoding JSON is `Jason`.
   For the time `:instream` directly depends on it to ensure it is available.
 
   If you want to use another library you can switch it:
