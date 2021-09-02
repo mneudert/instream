@@ -50,7 +50,7 @@ defmodule Instream.MixProject do
       {:mox, "~> 1.0", only: :test},
       {:nimble_csv, "~> 1.0"},
       {:poolboy, "~> 1.5"},
-      {:ranch, "~> 1.7", only: :test}
+      {:ranch, "~> 1.7.0", only: :test}
     ]
   end
 
