@@ -4,20 +4,30 @@ defmodule Instream.Connection.Config do
 
   ## How To Configure
 
-  ### Static Configuration
+  There are multiple ways to configure a connection:
 
-  One way to configure your connection is using the application environment:
+  - Application Configuration: config files
+  - Runtime/Startup Configuration: functions modifying the application configuration
+  - Inline Configuration: values known at compile time
+
+  All three can be mixed as required.
+
+  ### Application Configuration
+
+  If you know all configuration values before starting your application you can
+  use config files (e.g. `config.exs`, `release.exs` and/or `runtime.exs`)
+  to set up your connection(s):
 
       config :my_app, MyConnection,
         database: "my_default_database",
         host: "localhost",
         port: 8086
 
-  ### Dynamic Configuration
+  ### Runtime/Startup Configuration
 
-  An alternative to a static configuration is using an initializer
-  module/function that will be called every time your
-  connection is started (or restarted) in your supervision tree:
+  An alternative to config files is using an initializer function that will
+  be called every time your connection is started (or restarted) in your
+  supervision tree:
 
       config :my_app, MyConnection,
         init: {MyInitModule, :my_init_fun}
@@ -49,12 +59,11 @@ defmodule Instream.Connection.Config do
 
   ### Inline Configuration
 
-  For some use cases (e.g. testing) it may be sufficient to define hardcoded
-  configuration defaults outside of your application environment:
+  In some environments it is sufficient to define the configuration
+  in the connection module itself, for example during tests:
 
       defmodule MyConnection do
         use Instream.Connection,
-          otp_app: :my_app,
           config: [
             host: "localhost",
             port: 8086
@@ -62,7 +71,7 @@ defmodule Instream.Connection.Config do
       end
 
   These values will be overwritten by and/or merged with the application
-  environment values when the configuration is accessed.
+  environment values (if available) when the configuration is accessed.
 
   ## Configuration Defaults
 
