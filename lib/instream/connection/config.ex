@@ -13,12 +13,6 @@ defmodule Instream.Connection.Config do
         host: "localhost",
         port: 8086
 
-  Please be aware that if you are using the scheme `"http+unix"` you need to
-  encode the socket path yourself:
-
-      config :my_app, MyConnection,
-        host: URI.encode_www_form("/path/to/influxdb.sock")
-
   ### Dynamic Configuration
 
   An alternative to a static configuration is using an initializer
@@ -113,6 +107,17 @@ defmodule Instream.Connection.Config do
   Setting the `:http_opts` key when calling a connection method allows usage
   of per-call options. The options are merged with the connection options and
   then passed on.
+
+  #### Unix Socket Connections
+
+  Some InfluxDB versions allow connecting via a unix socket. These sockets
+  have native support in `:hackney` with the appropriate configuration:
+
+      config :my_app, MyConnection,
+        scheme: "http+unix",
+        host: URI.encode_www_form("/path/to/influxdb.sock")
+
+  Please be aware that you need to encode the socket path yourself.
 
   ## JSON Configuration
 
