@@ -100,7 +100,7 @@ defmodule Instream do
   ### POST Queries
 
   Some queries require you to switch from the regular `read only context`
-  (all GET requets) to a `write context` (all POST requests).
+  (all GET requests) to a `write context` (all POST requests).
 
   When not using the query build you have to pass that information
   manually to `query/2`:
