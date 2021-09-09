@@ -88,7 +88,7 @@ defmodule Instream do
       # passing precision (= epoch) for query results
       MyConnection.query(
         "SELECT * FROM some_measurement",
-        precision: :minutes
+        precision: :minute
       )
 
       # using parameter binding
