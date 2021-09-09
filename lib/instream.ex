@@ -44,7 +44,7 @@ defmodule Instream do
   Most queries require a `:database` or `:bucket`/`:organization` to operate on.
 
   These values will be taken from your connection configuration by default.
-  By using the option parameter of `MyConnection.query/2` you can pass different
+  By using the option argument of `MyConnection.query/2` you can pass different
   values to use on a per-query basis:
 
       MyConnection.query("... query ...", database: "my_other_database")
@@ -58,7 +58,7 @@ defmodule Instream do
   Responses from a query will be decoded into maps by default.
 
   Depending on your InfluxDB version you can use the `:result_as` option
-  parameter to skip the decoding or request a non-default response type:
+  argument to skip the decoding or request a non-default response type:
 
   - `result_as: :csv`: response as CSV when using InfluxDB v1
   - `result_as: :raw`: result as sent from the server without decoding

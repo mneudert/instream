@@ -53,7 +53,7 @@ defmodule Instream.Connection.Config do
       end
 
   When the connection is started the function will be called with the
-  connection module as the first parameter.
+  connection module as the first argument.
 
   The function is expected to always return `:ok`.
 
