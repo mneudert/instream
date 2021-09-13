@@ -2,7 +2,7 @@ defmodule Instream.Writer.Line do
   @moduledoc """
   Point writer for the line protocol.
 
-  ## Accepted Write Options
+  ## Write Options
 
   - `precision`: write points with a precision other than `:nanosecond`
 

@@ -13,7 +13,7 @@ defmodule Instream.Writer.UDP do
   This configuration will be used to wait for an available worker
   to execute a query and defaults to `5_000`.
 
-  ## Additional Write Options
+  ## Write Options
 
   - `async: true`: execute writes asynchronously
   """
