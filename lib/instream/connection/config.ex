@@ -90,7 +90,7 @@ defmodule Instream.Connection.Config do
 
   This also means that per default the connection uses no authentication.
 
-  ## InfluxDB Version Configuration
+  ## InfluxDB Version
 
   By default (`version: :v1`) the communication will be done with the
   expectation of an `InfluxDB 1.x` server responding. If you are communicating
@@ -99,7 +99,7 @@ defmodule Instream.Connection.Config do
   Any methods not supported by your configured version will respond with a
   special error tuple `{:error, :version_mismatch}` when called.
 
-  ## HTTP Client Configuration
+  ## HTTP Client
 
   Internally all requests are done using the configured `:http_client`.
 
@@ -128,7 +128,7 @@ defmodule Instream.Connection.Config do
 
   Please be aware that you need to encode the socket path yourself.
 
-  ## JSON Configuration
+  ## JSON Library
 
   By default the library used for encoding/decoding JSON is `Jason`.
   For the time `:instream` directly depends on it to ensure it is available.
@@ -168,7 +168,7 @@ defmodule Instream.Connection.Config do
   `:query`. If nothing or an invalid value is given the connection will be made
   using `:basic` authentication.
 
-  ## Writer Configuration
+  ## Point Writer
 
   If you are using the regular line protocol writer `Instream.Writer.Line`
   you are done without having anything to configure. It is used by default
