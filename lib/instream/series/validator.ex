@@ -38,7 +38,7 @@ defmodule Instream.Series.Validator do
   end
 
   defp fields?(series) do
-    if Enum.empty?(series.__meta__(:fields)) do
+    if [] == series.__meta__(:fields) do
       raise ArgumentError, "series #{series} has no fields"
     end
 
@@ -46,7 +46,7 @@ defmodule Instream.Series.Validator do
   end
 
   defp forbidden_fields?(series) do
-    if Enum.any?(series.__meta__(:fields), &(&1 == :time)) do
+    if Enum.member?(series.__meta__(:fields), :time) do
       raise ArgumentError, "forbidden field :time defined in series #{series}"
     end
 
@@ -54,7 +54,7 @@ defmodule Instream.Series.Validator do
   end
 
   defp forbidden_tags?(series) do
-    if Enum.any?(series.__meta__(:tags), &(&1 == :time)) do
+    if Enum.member?(series.__meta__(:tags), :time) do
       raise ArgumentError, "forbidden tag :time defined in series #{series}"
     end
 
