@@ -2,7 +2,7 @@ defmodule Instream.Series.ValidatorTest do
   use ExUnit.Case, async: true
 
   test "field and tag with same name raises" do
-    assert_raise ArgumentError, ~r/same name/, fn ->
+    assert_raise ArgumentError, ~r/same name.+conflicting_name/, fn ->
       defmodule FieldTagSameName do
         use Instream.Series
 

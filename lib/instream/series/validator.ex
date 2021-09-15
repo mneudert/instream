@@ -25,13 +25,19 @@ defmodule Instream.Series.Validator do
   end
 
   defp field_tag_conflict?(series) do
-    fields = series.__meta__(:fields)
-    tags = series.__meta__(:tags)
-    conflict = Enum.any?(fields, fn field -> Enum.member?(tags, field) end)
+    fields = :fields |> series.__meta__() |> MapSet.new()
+    tags = :tags |> series.__meta__() |> MapSet.new()
+    conflicts = MapSet.intersection(fields, tags) |> MapSet.to_list()
 
-    if conflict do
+    unless [] == conflicts do
+      conflict_message =
+        conflicts
+        |> Enum.map(&Atom.to_string/1)
+        |> Enum.sort()
+        |> Enum.join(", ")
+
       raise ArgumentError,
-            "series #{series} contains at least one field and tag with the same name"
+            "series #{series} contains fields and tags with the same name: #{conflict_message}"
     end
 
     series
