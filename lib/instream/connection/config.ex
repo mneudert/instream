@@ -165,8 +165,8 @@ defmodule Instream.Connection.Config do
 
   For `method` you can choose between header authentication using
   `:basic` (InfluxDB v1) or `:token` (InfluxDB v2), or query parameters using
-  `:query`. If nothing or an invalid value is given the connection will be made
-  using `:basic` authentication.
+  `:query` (InfluxDB v1). If nothing or an invalid value is given the connection
+  will be made using `:basic` authentication.
 
   ## Point Writer
 
