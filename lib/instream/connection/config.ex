@@ -204,22 +204,19 @@ defmodule Instream.Connection.Config do
   `Instream.Log.StatusEntry` or `Instream.Log.WriteEntry`, depending on
   what type of request should be logged.
 
-  Please be aware that every logger has to return the entry it received in
-  order to allow combining multiple loggers.
-
   In addition to query specific information every entry carries metadata around:
 
   - `:query_time`: milliseconds it took to send request and receive the response
   - `:response_status`: status code or `0` if not applicable/available
 
-  When using the default logger you have to re-configure `:logger` to be
+  When using the default logger you should re-configure `:logger` to be
   able to get them printed:
 
       config :logger, :console,
         format: "\n$time $metadata[$level] $levelpad$message\n",
         metadata: [:application, :pid, :query_time, :response_status]
 
-  To prevent a query from logging you can pass an option:
+  To prevent a query from being logged you can pass an option:
 
       MyConnection.ping(log: false)
       MyConnection.query(query, log: false)
