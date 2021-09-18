@@ -22,9 +22,6 @@ defmodule Instream.Encoder.LineTest do
     assert ^measurement = Line.encode(points)
   end
 
-  # This test suite is a direct port of:
-  # https://influxdb.com/docs/v0.9/write_protocols/write_syntax.html
-
   test "simplest valid point" do
     expected = "disk_free value=442221834240i"
 
