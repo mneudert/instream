@@ -16,6 +16,34 @@ defmodule Instream.Series.ValidatorTest do
     end
   end
 
+  test "forbidden field :_field raises" do
+    assert_raise ArgumentError, ~r/forbidden field.+_field/, fn ->
+      defmodule ForbiddenFieldField do
+        use Instream.Series
+
+        series do
+          measurement "satisfy_definition_rules"
+
+          field :_field
+        end
+      end
+    end
+  end
+
+  test "forbidden field :_measurement raises" do
+    assert_raise ArgumentError, ~r/forbidden field.+_measurement/, fn ->
+      defmodule ForbiddenMeasurementField do
+        use Instream.Series
+
+        series do
+          measurement "satisfy_definition_rules"
+
+          field :_measurement
+        end
+      end
+    end
+  end
+
   test "forbidden field :time raises" do
     assert_raise ArgumentError, ~r/forbidden field.+time/, fn ->
       defmodule ForbiddenTimeField do
@@ -25,6 +53,36 @@ defmodule Instream.Series.ValidatorTest do
           measurement "satisfy_definition_rules"
 
           field :time
+        end
+      end
+    end
+  end
+
+  test "forbidden tag :_field raises" do
+    assert_raise ArgumentError, ~r/forbidden tag.+_field/, fn ->
+      defmodule ForbiddenFieldTag do
+        use Instream.Series
+
+        series do
+          measurement "satisfy_definition_rules"
+
+          field :satisfy_definition
+          tag :_field
+        end
+      end
+    end
+  end
+
+  test "forbidden tag :_measurement raises" do
+    assert_raise ArgumentError, ~r/forbidden tag.+_measurement/, fn ->
+      defmodule ForbiddenMeasurementTag do
+        use Instream.Series
+
+        series do
+          measurement "satisfy_definition_rules"
+
+          field :satisfy_definition
+          tag :_measurement
         end
       end
     end

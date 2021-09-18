@@ -1,6 +1,8 @@
 defmodule Instream.Series.Validator do
   @moduledoc false
 
+  @forbidden_keys [:_field, :_measurement, :time]
+
   @doc """
   Checks if all mandatory definitions for a series are available.
   """
@@ -52,16 +54,36 @@ defmodule Instream.Series.Validator do
   end
 
   defp forbidden_fields?(series) do
-    if Enum.member?(series.__meta__(:fields), :time) do
-      raise ArgumentError, "forbidden field :time defined in series #{series}"
+    fields = :fields |> series.__meta__() |> MapSet.new()
+    conflicts = @forbidden_keys |> MapSet.new() |> MapSet.intersection(fields) |> MapSet.to_list()
+
+    unless [] == conflicts do
+      conflict_message =
+        conflicts
+        |> Enum.map(&Atom.to_string/1)
+        |> Enum.sort()
+        |> Enum.join(", ")
+
+      raise ArgumentError,
+            "series #{series} contains forbidden fields: #{conflict_message}"
     end
 
     series
   end
 
   defp forbidden_tags?(series) do
-    if Enum.member?(series.__meta__(:tags), :time) do
-      raise ArgumentError, "forbidden tag :time defined in series #{series}"
+    tags = :tags |> series.__meta__() |> MapSet.new()
+    conflicts = @forbidden_keys |> MapSet.new() |> MapSet.intersection(tags) |> MapSet.to_list()
+
+    unless [] == conflicts do
+      conflict_message =
+        conflicts
+        |> Enum.map(&Atom.to_string/1)
+        |> Enum.sort()
+        |> Enum.join(", ")
+
+      raise ArgumentError,
+            "series #{series} contains forbidden tags: #{conflict_message}"
     end
 
     series
