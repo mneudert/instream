@@ -98,7 +98,7 @@ defmodule Instream.Encoder.LineTest do
   end
 
   test "multiple fields" do
-    expected = "disk_free free_space=442221834240i,disk_type=\"SSD\" 1435362189575692182"
+    expected = ~S|disk_free free_space=442221834240i,disk_type="SSD" 1435362189575692182|
 
     points = [
       %{
@@ -211,7 +211,7 @@ defmodule Instream.Encoder.LineTest do
   end
 
   test "multiple points" do
-    expected = "multiline value=\"first\"\nmultiline value=\"second\""
+    expected = ~s|multiline value="first"\nmultiline value="second"|
 
     points = [
       %{

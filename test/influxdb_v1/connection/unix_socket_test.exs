@@ -31,7 +31,7 @@ defmodule Instream.InfluxDBv1.Connection.UnixSocketTest do
   test "unix socket: read using database in query string" do
     database = UnixSocketConnection.config(:database)
 
-    query_in = "SELECT value FROM \"#{database}\".\"autogen\".\"empty_measurement\""
+    query_in = ~s(SELECT value FROM "#{database}"."autogen"."empty_measurement")
     query_out = "SELECT value FROM empty_measurement"
 
     result_in = UnixSocketConnection.query(query_in)
