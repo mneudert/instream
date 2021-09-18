@@ -24,7 +24,7 @@ defmodule Instream.Connection.ResponseParserV1Test do
   test "raw json error response" do
     error = "text"
     response = {:ok, 500, [{"Content-Type", "application/json"}], error}
-    parse_opts = [json_decoder: Jason, result_as: :raw]
+    parse_opts = [result_as: :raw]
 
     assert ^error = ResponseParserV1.maybe_parse(response, DefaultConnection, parse_opts)
   end
@@ -32,16 +32,15 @@ defmodule Instream.Connection.ResponseParserV1Test do
   test "raw non-json error response" do
     error = "text"
     response = {:ok, 500, [], error}
-    parse_opts = [json_decoder: Jason, result_as: :raw]
+    parse_opts = [result_as: :raw]
 
     assert ^error = ResponseParserV1.maybe_parse(response, DefaultConnection, parse_opts)
   end
 
   test "regular non-json response" do
-    response = "text"
-    parse_opts = [json_decoder: Jason]
+    content = "text"
+    response = {:ok, 200, [], content}
 
-    assert ^response =
-             ResponseParserV1.maybe_parse({:ok, 200, [], response}, DefaultConnection, parse_opts)
+    assert ^content = ResponseParserV1.maybe_parse(response, DefaultConnection, [])
   end
 end
