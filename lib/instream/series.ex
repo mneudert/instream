@@ -31,6 +31,18 @@ defmodule Instream.Series do
   the same name. Some internal keys like `:time` will also raise aǹ
   `ArgumentError` during compilation.
 
+  You can deactivate this compile time validation by passing
+  `skip_validation: true` in your series module:
+
+      defmodule MySeries.ConflictButAccepted do
+        use Instream.Series, skip_validation: true
+
+        series do
+          tag :conflict
+          field :conflict
+        end
+      end
+
   ### Structs
 
   Each of your series definitions will register three separate structs.
@@ -115,9 +127,11 @@ defmodule Instream.Series do
   alias Instream.Series.Hydrator
   alias Instream.Series.Validator
 
-  defmacro __using__(_opts) do
+  defmacro __using__(opts) do
     quote do
-      @after_compile unquote(__MODULE__)
+      unless unquote(opts[:skip_validation]) do
+        @after_compile unquote(__MODULE__)
+      end
 
       import unquote(__MODULE__), only: [series: 1]
     end

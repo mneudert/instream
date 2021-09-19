@@ -133,4 +133,19 @@ defmodule Instream.Series.ValidatorTest do
       end
     end
   end
+
+  test "allow deactivating validation" do
+    defmodule UnvalidatedSeries do
+      use Instream.Series, skip_validation: true
+
+      series do
+        measurement "satisfy_definition_rules"
+
+        field :conflicting_name
+        tag :conflicting_name
+      end
+    end
+
+    assert UnvalidatedSeries.__meta__(:fields) == UnvalidatedSeries.__meta__(:tags)
+  end
 end
