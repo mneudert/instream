@@ -47,7 +47,7 @@ defmodule Instream.Connection do
   @type e_version_mismatch :: {:error, :version_mismatch}
 
   defmacro __using__(opts) do
-    quote bind_quoted: [opts: opts] do
+    quote bind_quoted: [opts: opts], location: :keep do
       alias Instream.Connection
       alias Instream.Connection.Config
       alias Instream.Connection.QueryRunnerV1

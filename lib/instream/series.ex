@@ -128,7 +128,7 @@ defmodule Instream.Series do
   alias Instream.Series.Validator
 
   defmacro __using__(opts) do
-    quote do
+    quote location: :keep do
       unless unquote(opts[:skip_validation]) do
         @after_compile unquote(__MODULE__)
       end
@@ -145,7 +145,7 @@ defmodule Instream.Series do
   Defines the series.
   """
   defmacro series(do: block) do
-    quote do
+    quote location: :keep do
       @behaviour unquote(__MODULE__)
 
       @measurement nil
