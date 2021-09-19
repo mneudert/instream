@@ -23,6 +23,14 @@ defmodule Instream.Series do
   `:default` entry. This value will be pre-assigned when using the data
   struct with all other fields or tags being set to `nil`.
 
+  ### Series Validation
+
+  Defining a series triggers a validation function during compilation.
+
+  This validation for example prevents the usage of a field and tag sharing
+  the same name. Some internal keys like `:time` will also raise aǹ
+  `ArgumentError` during compilation.
+
   ### Structs
 
   Each of your series definitions will register three separate structs.
