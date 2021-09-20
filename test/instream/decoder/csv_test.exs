@@ -276,6 +276,27 @@ defmodule Instream.Decoder.LineTest do
     end
   end
 
+  describe "error responses" do
+    test "minimal response" do
+      response = """
+      error
+      unable to parse authentication credentials
+      """
+
+      assert [%{"error" => "unable to parse authentication credentials"}] = CSV.parse(response)
+    end
+
+    test "full response" do
+      response = """
+      #datatype,string,long
+      ,error,reference
+      ,Failed to parse query,897
+      """
+
+      assert [%{"error" => "Failed to parse query", "reference" => 897}] = CSV.parse(response)
+    end
+  end
+
   describe "empty or broken responses" do
     test "empty responses" do
       assert [] = CSV.parse("")
