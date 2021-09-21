@@ -237,7 +237,7 @@ defmodule Instream.Connection.Config do
   @doc """
   Retrieves the connection configuration for `conn` in `otp_app`.
   """
-  @spec get(atom, module, nil | atom, Keyword.t()) :: Keyword.t()
+  @spec get(atom, module, nil | atom, Keyword.t()) :: term
   def get(otp_app, _, :otp_app, _), do: otp_app
   def get(nil, _, nil, defaults), do: Keyword.merge(@global_defaults, defaults)
 
