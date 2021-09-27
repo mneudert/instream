@@ -61,19 +61,17 @@ defmodule Instream.SeriesTest do
     measurement = "test_series_measurement"
 
     defmodule ClosureDefinition do
-      use Instream.Series
+      use Instream.Series, skip_validation: true
 
       series do
         fn_measurement = fn -> "test_series_measurement" end
 
         measurement fn_measurement.()
-
-        field :satisfy_definition_rules
       end
     end
 
     defmodule ExternalDefinition do
-      use Instream.Series
+      use Instream.Series, skip_validation: true
 
       defmodule ExternalDefinitionProvider do
         def measurement, do: "test_series_measurement"
@@ -81,18 +79,14 @@ defmodule Instream.SeriesTest do
 
       series do
         measurement ExternalDefinitionProvider.measurement()
-
-        field :satisfy_definition_rules
       end
     end
 
     defmodule InterpolatedDefinition do
-      use Instream.Series
+      use Instream.Series, skip_validation: true
 
       series do
         measurement "#{Mix.env()}_series_measurement"
-
-        field :satisfy_definition_rules
       end
     end
 
