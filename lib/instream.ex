@@ -41,7 +41,23 @@ defmodule Instream do
 
   ## Queries
 
-  Most queries require a `:database` or `:bucket`/`:organization` to operate on.
+  To read data from your InfluxDB server you should send a query:
+
+      # Flux query
+      MyConnection.query(~s(
+        from(bucket: "\#{MyConnection.config(:bucket)}")
+        |> range(start: -5m)
+        |> filter(fn: (r) =>
+          r._measurement == "instream_examples"
+        )
+        |> first()
+      ))
+
+      # InfluxQL query
+      MyConnection.query("SELECT * FROM instream_examples")
+
+  Most of the queries you send require a `:database` or
+  `:bucket`/`:organization` to operate on.
 
   These values will be taken from your connection configuration by default.
   By using the option argument of `MyConnection.query/2` you can pass different
@@ -72,32 +88,17 @@ defmodule Instream do
       MyConnection.query("... query ...", query_language: :flux)
       MyConnection.query("... query ...", query_language: :influxql)
 
-  ### Reading Data
+  ### Query Parameter Binding (InfluxDB v1.x)
 
-      # passing database to query/2
-      MyConnection.query(
-        "SELECT * FROM some_measurement",
-        database: "my_database"
-      )
+  Queries can be parameterized, for example when you are dealing with
+  untrusted user input:
 
-      # defining database in the query
-      MyConnection.query(~S(
-        SELECT * FROM "my_database"."default"."some_measurement"
-      ))
-
-      # passing precision (= epoch) for query results
-      MyConnection.query(
-        "SELECT * FROM some_measurement",
-        precision: :minute
-      )
-
-      # using parameter binding
       MyConnection.query(
         "SELECT * FROM some_measurement WHERE field = $field_param",
         params: %{field_param: "some_value"}
       )
 
-  ### POST Queries
+  ### POST Queries (InfluxDB v1.x)
 
   Some queries require you to switch from the regular `read only context`
   (all GET requests) to a `write context` (all POST requests).
