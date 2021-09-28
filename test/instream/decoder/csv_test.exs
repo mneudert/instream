@@ -333,4 +333,86 @@ defmodule Instream.Decoder.LineTest do
       assert [] = CSV.parse(response)
     end
   end
+
+  describe "datatype mapping" do
+    test "boolean" do
+      response = """
+      #datatype,string,boolean\r
+      type,value\r
+      boolean,true\r
+      boolean,false\r
+      """
+
+      assert [
+               %{
+                 "type" => "boolean",
+                 "value" => true
+               },
+               %{
+                 "type" => "boolean",
+                 "value" => false
+               }
+             ] = CSV.parse(response)
+    end
+
+    test "dateTime:RFC3339" do
+      response = """
+      #datatype,string,dateTime:RFC3339\r
+      type,value\r
+      dateTime:RFC3339,2018-05-08T20:50:00Z\r
+      """
+
+      assert [
+               %{
+                 "type" => "dateTime:RFC3339",
+                 "value" => 1_525_812_600_000_000_000
+               }
+             ] = CSV.parse(response)
+    end
+
+    test "double" do
+      response = """
+      #datatype,string,double\r
+      type,value\r
+      double,10.20\r
+      """
+
+      assert [
+               %{
+                 "type" => "double",
+                 "value" => 10.20
+               }
+             ] = CSV.parse(response)
+    end
+
+    test "long" do
+      response = """
+      #datatype,string,long\r
+      type,value\r
+      long,100\r
+      """
+
+      assert [
+               %{
+                 "type" => "long",
+                 "value" => 100
+               }
+             ] = CSV.parse(response)
+    end
+
+    test "string" do
+      response = """
+      #datatype,string,string\r
+      type,value\r
+      string,some-value\r
+      """
+
+      assert [
+               %{
+                 "type" => "string",
+                 "value" => "some-value"
+               }
+             ] = CSV.parse(response)
+    end
+  end
 end
