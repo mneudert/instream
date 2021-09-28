@@ -439,5 +439,25 @@ defmodule Instream.Decoder.LineTest do
                }
              ] = CSV.parse(response)
     end
+
+    test "unsignedLong" do
+      response = """
+      #datatype,string,unsignedLong\r
+      type,value\r
+      unsignedLong,100\r
+      unsignedLong,\r
+      """
+
+      assert [
+               %{
+                 "type" => "unsignedLong",
+                 "value" => 100
+               },
+               %{
+                 "type" => "unsignedLong",
+                 "value" => nil
+               }
+             ] = CSV.parse(response)
+    end
   end
 end
