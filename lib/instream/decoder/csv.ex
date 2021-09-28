@@ -43,7 +43,9 @@ defmodule Instream.Decoder.CSV do
 
   defp parse_datatypes({{field, "boolean"}, "false"}), do: {field, false}
   defp parse_datatypes({{field, "boolean"}, "true"}), do: {field, true}
+  defp parse_datatypes({{field, "double"}, ""}), do: {field, 0.0}
   defp parse_datatypes({{field, "double"}, value}), do: {field, String.to_float(value)}
+  defp parse_datatypes({{field, "long"}, ""}), do: {field, 0}
   defp parse_datatypes({{field, "long"}, value}), do: {field, String.to_integer(value)}
 
   defp parse_datatypes({{field, "dateTime:RFC3339"}, value}),
