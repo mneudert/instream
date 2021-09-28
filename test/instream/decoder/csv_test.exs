@@ -341,6 +341,7 @@ defmodule Instream.Decoder.LineTest do
       type,value\r
       boolean,true\r
       boolean,false\r
+      boolean,\r
       """
 
       assert [
@@ -351,6 +352,10 @@ defmodule Instream.Decoder.LineTest do
                %{
                  "type" => "boolean",
                  "value" => false
+               },
+               %{
+                 "type" => "boolean",
+                 "value" => nil
                }
              ] = CSV.parse(response)
     end
@@ -360,12 +365,17 @@ defmodule Instream.Decoder.LineTest do
       #datatype,string,dateTime:RFC3339\r
       type,value\r
       dateTime:RFC3339,2018-05-08T20:50:00Z\r
+      dateTime:RFC3339,\r
       """
 
       assert [
                %{
                  "type" => "dateTime:RFC3339",
                  "value" => 1_525_812_600_000_000_000
+               },
+               %{
+                 "type" => "dateTime:RFC3339",
+                 "value" => nil
                }
              ] = CSV.parse(response)
     end
@@ -375,12 +385,17 @@ defmodule Instream.Decoder.LineTest do
       #datatype,string,double\r
       type,value\r
       double,10.20\r
+      double,\r
       """
 
       assert [
                %{
                  "type" => "double",
                  "value" => 10.20
+               },
+               %{
+                 "type" => "double",
+                 "value" => nil
                }
              ] = CSV.parse(response)
     end
@@ -390,12 +405,17 @@ defmodule Instream.Decoder.LineTest do
       #datatype,string,long\r
       type,value\r
       long,100\r
+      long,\r
       """
 
       assert [
                %{
                  "type" => "long",
                  "value" => 100
+               },
+               %{
+                 "type" => "long",
+                 "value" => nil
                }
              ] = CSV.parse(response)
     end
@@ -405,12 +425,17 @@ defmodule Instream.Decoder.LineTest do
       #datatype,string,string\r
       type,value\r
       string,some-value\r
+      string,\r
       """
 
       assert [
                %{
                  "type" => "string",
                  "value" => "some-value"
+               },
+               %{
+                 "type" => "string",
+                 "value" => nil
                }
              ] = CSV.parse(response)
     end
