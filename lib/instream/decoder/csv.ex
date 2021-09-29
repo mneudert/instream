@@ -41,6 +41,7 @@ defmodule Instream.Decoder.CSV do
 
   defp parse_annotations(rest, acc), do: %{acc | table: rest}
 
+  defp parse_datatypes({{field, "boolean"}, ""}), do: {field, true}
   defp parse_datatypes({{field, _}, ""}), do: {field, nil}
   defp parse_datatypes({{field, "boolean"}, "false"}), do: {field, false}
   defp parse_datatypes({{field, "boolean"}, "true"}), do: {field, true}

@@ -355,7 +355,7 @@ defmodule Instream.Decoder.LineTest do
                },
                %{
                  "type" => "boolean",
-                 "value" => nil
+                 "value" => true
                }
              ] = CSV.parse(response)
     end
