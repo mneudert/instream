@@ -43,8 +43,8 @@ defmodule Instream.Decoder.CSV do
 
   defp parse_datatypes({{field, "boolean"}, ""}), do: {field, true}
   defp parse_datatypes({{field, _}, ""}), do: {field, nil}
-  defp parse_datatypes({{field, "boolean"}, "false"}), do: {field, false}
   defp parse_datatypes({{field, "boolean"}, "true"}), do: {field, true}
+  defp parse_datatypes({{field, "boolean"}, _}), do: {field, false}
   defp parse_datatypes({{field, "double"}, value}), do: {field, String.to_float(value)}
   defp parse_datatypes({{field, "long"}, value}), do: {field, String.to_integer(value)}
   defp parse_datatypes({{field, "unsignedLong"}, value}), do: {field, String.to_integer(value)}

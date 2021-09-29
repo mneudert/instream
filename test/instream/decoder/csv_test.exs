@@ -341,6 +341,7 @@ defmodule Instream.Decoder.LineTest do
       type,value\r
       boolean,true\r
       boolean,false\r
+      boolean,x\r
       boolean,\r
       """
 
@@ -348,6 +349,10 @@ defmodule Instream.Decoder.LineTest do
                %{
                  "type" => "boolean",
                  "value" => true
+               },
+               %{
+                 "type" => "boolean",
+                 "value" => false
                },
                %{
                  "type" => "boolean",
