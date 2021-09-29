@@ -380,6 +380,26 @@ defmodule Instream.Decoder.LineTest do
              ] = CSV.parse(response)
     end
 
+    test "dateTime:RFC3339Nano" do
+      response = """
+      #datatype,string,dateTime:RFC3339Nano\r
+      type,value\r
+      dateTime:RFC3339Nano,2018-05-08T20:50:00.100200000Z\r
+      dateTime:RFC3339Nano,\r
+      """
+
+      assert [
+               %{
+                 "type" => "dateTime:RFC3339Nano",
+                 "value" => 1_525_812_600_100_200_000
+               },
+               %{
+                 "type" => "dateTime:RFC3339Nano",
+                 "value" => nil
+               }
+             ] = CSV.parse(response)
+    end
+
     test "double" do
       response = """
       #datatype,string,double\r

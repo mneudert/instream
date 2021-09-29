@@ -51,6 +51,9 @@ defmodule Instream.Decoder.CSV do
   defp parse_datatypes({{field, "dateTime:RFC3339"}, value}),
     do: {field, RFC3339.to_nanosecond(value)}
 
+  defp parse_datatypes({{field, "dateTime:RFC3339Nano"}, value}),
+    do: {field, RFC3339.to_nanosecond(value)}
+
   defp parse_datatypes({{field, _}, value}), do: {field, value}
 
   defp parse_rows(%{
