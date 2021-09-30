@@ -410,6 +410,8 @@ defmodule Instream.Decoder.LineTest do
       #datatype,string,double\r
       type,value\r
       double,10.20\r
+      double,+Inf\r
+      double,-Inf\r
       double,\r
       """
 
@@ -417,6 +419,14 @@ defmodule Instream.Decoder.LineTest do
                %{
                  "type" => "double",
                  "value" => 10.20
+               },
+               %{
+                 "type" => "double",
+                 "value" => :infinity
+               },
+               %{
+                 "type" => "double",
+                 "value" => :neg_infinity
                },
                %{
                  "type" => "double",
