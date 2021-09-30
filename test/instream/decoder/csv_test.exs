@@ -460,6 +460,26 @@ defmodule Instream.Decoder.LineTest do
              ] = CSV.parse(response)
     end
 
+    test "duration" do
+      response = """
+      #datatype,string,duration\r
+      type,value\r
+      duration,100\r
+      duration,\r
+      """
+
+      assert [
+               %{
+                 "type" => "duration",
+                 "value" => 100
+               },
+               %{
+                 "type" => "duration",
+                 "value" => nil
+               }
+             ] = CSV.parse(response)
+    end
+
     test "long" do
       response = """
       #datatype,string,long\r
