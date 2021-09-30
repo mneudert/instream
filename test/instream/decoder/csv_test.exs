@@ -335,6 +335,31 @@ defmodule Instream.Decoder.LineTest do
   end
 
   describe "datatype mapping" do
+    test "base64Binary" do
+      response = """
+      #datatype,string,base64Binary\r
+      type,value\r
+      base64Binary,c29tZS1iYXNlNjQtdmFsdWU=\r
+      base64Binary,invalid-base64-value\r
+      base64Binary,\r
+      """
+
+      assert [
+               %{
+                 "type" => "base64Binary",
+                 "value" => "some-base64-value"
+               },
+               %{
+                 "type" => "base64Binary",
+                 "value" => nil
+               },
+               %{
+                 "type" => "base64Binary",
+                 "value" => nil
+               }
+             ] = CSV.parse(response)
+    end
+
     test "boolean" do
       response = """
       #datatype,string,boolean\r

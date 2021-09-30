@@ -43,6 +43,14 @@ defmodule Instream.Decoder.CSV do
 
   defp parse_datatypes({{field, "boolean"}, ""}), do: {field, true}
   defp parse_datatypes({{field, _}, ""}), do: {field, nil}
+
+  defp parse_datatypes({{field, "base64Binary"}, value}) do
+    case Base.decode64(value) do
+      {:ok, decoded} -> {field, decoded}
+      _ -> {field, nil}
+    end
+  end
+
   defp parse_datatypes({{field, "boolean"}, "true"}), do: {field, true}
   defp parse_datatypes({{field, "boolean"}, _}), do: {field, false}
   defp parse_datatypes({{field, "double"}, "+Inf"}), do: {field, :infinity}
