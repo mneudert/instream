@@ -28,7 +28,7 @@ defmodule Instream.Series do
   Defining a series triggers a validation function during compilation.
 
   This validation for example prevents the usage of a field and tag sharing
-  the same name. Some internal keys like `:time` will also raise aǹ
+  the same name. Some internal keys like `:time` will also raise an
   `ArgumentError` during compilation.
 
   You can deactivate this compile time validation by passing
