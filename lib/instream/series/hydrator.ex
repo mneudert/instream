@@ -14,8 +14,8 @@ defmodule Instream.Series.Hydrator do
     data_tags = Map.take(data, series.__meta__(:tags))
 
     struct(series, %{
-      fields: struct(Module.concat(series, Fields), data_fields),
-      tags: struct(Module.concat(series, Tags), data_tags),
+      fields: struct(Module.safe_concat(series, Fields), data_fields),
+      tags: struct(Module.safe_concat(series, Tags), data_tags),
       timestamp: convert_to_timestamp(data[:time] || data[:timestamp])
     })
   end
