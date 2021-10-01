@@ -520,6 +520,26 @@ defmodule Instream.Decoder.LineTest do
              ] = CSV.parse(response)
     end
 
+    test "unknown type as string" do
+      response = """
+      #datatype,string,doesnotexist\r
+      type,value\r
+      string,some-value\r
+      string,\r
+      """
+
+      assert [
+               %{
+                 "type" => "string",
+                 "value" => "some-value"
+               },
+               %{
+                 "type" => "string",
+                 "value" => nil
+               }
+             ] = CSV.parse(response)
+    end
+
     test "unsignedLong" do
       response = """
       #datatype,string,unsignedLong\r
