@@ -16,7 +16,7 @@ defmodule Instream.InfluxDBv2.Connection.AuthorizationTest do
 
   test "query without authorization" do
     assert %{code: "unauthorized", message: "unauthorized access"} =
-             UnauthorizedConnection.query("SELECT * FROM read_data_privileges")
+             UnauthorizedConnection.query(~S|from(bucket: "ignored")|)
   end
 
   test "write without authorization" do
