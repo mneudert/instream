@@ -66,6 +66,7 @@ defmodule Instream.Log.DefaultLoggerTest do
     assert String.contains?(log, "response_status=200")
   end
 
+  @tag :"influxdb_exclude_2.0"
   test "logging read request with redacted password" do
     query = ~s(CREATE USER "instream_test" WITH PASSWORD "instream_test")
 
@@ -126,7 +127,7 @@ defmodule Instream.Log.DefaultLoggerTest do
 
   describe "passing [log: false]" do
     @tag :"influxdb_exclude_2.0"
-    test "not logging ping requests" do
+    test "ping request" do
       assert "" =
                capture_log(fn ->
                  :pong = LogConnection.ping(log: false)
@@ -135,11 +136,11 @@ defmodule Instream.Log.DefaultLoggerTest do
                end)
     end
 
-    test "not logging read request" do
+    test "read request" do
       assert "" =
                capture_log(fn ->
                  query = "SELECT value FROM empty_measurement"
-                 _ = LogConnection.query(query, log: false)
+                 _ = LogConnection.query(query, query_language: :influxql, log: false)
 
                  Logger.flush()
                end)
