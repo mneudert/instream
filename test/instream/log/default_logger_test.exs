@@ -1,6 +1,8 @@
 defmodule Instream.Log.DefaultLoggerTest do
   use ExUnit.Case, async: false
 
+  require Logger
+
   import ExUnit.CaptureLog
 
   alias Instream.TestHelpers.Connections.DefaultConnection
@@ -35,7 +37,7 @@ defmodule Instream.Log.DefaultLoggerTest do
       capture_log(fn ->
         :pong = LogConnection.ping()
 
-        :timer.sleep(10)
+        Logger.flush()
       end)
 
     assert String.contains?(log, "ping")
@@ -54,7 +56,7 @@ defmodule Instream.Log.DefaultLoggerTest do
       capture_log(fn ->
         _ = LogConnection.query(query, query_language: :influxql)
 
-        :timer.sleep(10)
+        Logger.flush()
       end)
 
     assert String.contains?(log, "query")
@@ -71,7 +73,7 @@ defmodule Instream.Log.DefaultLoggerTest do
       capture_log(fn ->
         _ = LogConnection.query(query, method: :post)
 
-        :timer.sleep(10)
+        Logger.flush()
       end)
 
     assert String.contains?(log, "CREATE USER")
@@ -84,7 +86,7 @@ defmodule Instream.Log.DefaultLoggerTest do
       capture_log(fn ->
         :ok = LogConnection.status()
 
-        :timer.sleep(10)
+        Logger.flush()
       end)
 
     assert String.contains?(log, "status")
@@ -112,7 +114,7 @@ defmodule Instream.Log.DefaultLoggerTest do
       capture_log(fn ->
         :ok = LogConnection.write(points)
 
-        :timer.sleep(10)
+        Logger.flush()
       end)
 
     assert String.contains?(log, "write")
@@ -129,7 +131,7 @@ defmodule Instream.Log.DefaultLoggerTest do
                capture_log(fn ->
                  :pong = LogConnection.ping(log: false)
 
-                 :timer.sleep(10)
+                 Logger.flush()
                end)
     end
 
@@ -139,7 +141,7 @@ defmodule Instream.Log.DefaultLoggerTest do
                  query = "SELECT value FROM empty_measurement"
                  _ = LogConnection.query(query, log: false)
 
-                 :timer.sleep(10)
+                 Logger.flush()
                end)
     end
   end
