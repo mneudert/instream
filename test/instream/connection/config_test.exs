@@ -9,13 +9,6 @@ defmodule Instream.Connection.ConfigTest do
     assert "http" = DefaultConnection.config(:scheme)
   end
 
-  test "static otp_app configuration access", %{test: test} do
-    assert :instream = DefaultConnection.config(:otp_app)
-
-    # not intended to be used this way!
-    assert ^test = Config.get(test, nil, :otp_app, [])
-  end
-
   test "inline configuration defaults" do
     conn = Module.concat([__MODULE__, DefaultConfig])
     key = :inline_config_key
