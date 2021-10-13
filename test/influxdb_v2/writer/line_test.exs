@@ -305,7 +305,7 @@ defmodule Instream.InfluxDBv2.Writer.LineTest do
     result =
       DefaultConnection.query(
         """
-          from(bucket: "#{DefaultConnection.config(:bucket)}")
+          from(bucket: "#{bucket}")
           |> range(start: -5m)
           |> filter(fn: (r) =>
             r._measurement == "#{measurement}"
