@@ -130,6 +130,11 @@ defmodule Instream do
   Depending on your [connection configuration](`Instream.Connection.Config`)
   the selected writer module provides additional options.
 
+  The write function can be used with a single or multiple data points:
+
+      MyConnection.write(point)
+      MyConnection.write([point_1, point_2])
+
   ### Writing Points using Series
 
   Each series in your database can be represented using a definition module:
@@ -162,7 +167,7 @@ defmodule Instream do
 
   As an alternative you can use a non-struct map to write points to a database:
 
-      MyConnection.write([
+      MyConnection.write(
         %{
           measurement: "my_measurement",
           fields: %{answer: 42, value: 1},
@@ -170,7 +175,7 @@ defmodule Instream do
           timestamp: 1_439_587_926_000_000_000
         },
         # more points possible ...
-      ])
+      )
 
   The field `:timestamp` is optional. InfluxDB will use the receive time of
   the write request if it is missing.
