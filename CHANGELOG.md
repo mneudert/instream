@@ -8,6 +8,7 @@
     - The HTTP client library can be replaced by providing a custom implementation of the `Instream.HTTPClient` behaviour
 
 - Backwards incompatible changes
+    - Minimum required elixir version is now `~> 1.9`
     - Passing a host to `ping/1,2`, `status/1,2`, `version/1,2` is now longer supported. Only the hostname configured in the connection module will be used.
     - Support for the InfluxDB versions earlier than `1.7.x` is no longer guaranteed
 
