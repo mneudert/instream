@@ -22,9 +22,12 @@ defmodule Instream.InfluxDBv2.ConnectionTest do
   @tags %{bar: "bar", foo: "foo"}
 
   test "mismatched InfluxDB version" do
-    assert {:error, :version_mismatch} = DefaultConnection.ping()
     assert {:error, :version_mismatch} = DefaultConnection.status()
     assert {:error, :version_mismatch} = DefaultConnection.version()
+  end
+
+  test "ping connection" do
+    assert :pong = DefaultConnection.ping()
   end
 
   test "write data" do

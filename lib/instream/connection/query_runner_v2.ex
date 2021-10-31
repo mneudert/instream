@@ -5,10 +5,52 @@ defmodule Instream.Connection.QueryRunnerV2 do
   alias Instream.Connection.ResponseParserV2
   alias Instream.Data.Write
   alias Instream.Log.Metadata
+  alias Instream.Log.PingEntry
   alias Instream.Log.QueryEntry
   alias Instream.Log.WriteEntry
   alias Instream.Query.Headers
   alias Instream.Query.URL
+
+  @doc """
+  Executes `:ping` queries.
+  """
+  @spec ping(Keyword.t(), module) :: :pong | :error
+  def ping(opts, conn) do
+    config = conn.config()
+    headers = Headers.assemble(config, opts)
+    http_opts = http_opts(config, opts)
+    url = URL.ping(config)
+
+    {query_time, response} =
+      :timer.tc(fn ->
+        config[:http_client].request(:head, url, headers, "", http_opts)
+      end)
+
+    result =
+      case response do
+        {:ok, 204, _} -> :pong
+        _ -> :error
+      end
+
+    if false != opts[:log] do
+      status =
+        case response do
+          {:ok, status, _} -> status
+          _ -> 0
+        end
+
+      log(config[:loggers], %PingEntry{
+        host: config[:host],
+        result: result,
+        metadata: %Metadata{
+          query_time: query_time,
+          response_status: status
+        }
+      })
+    end
+
+    result
+  end
 
   @doc """
   Executes `:read` queries.

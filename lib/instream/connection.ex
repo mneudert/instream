@@ -74,7 +74,7 @@ defmodule Instream.Connection do
       @impl Connection
       def ping(opts \\ []) do
         case config(:version) do
-          :v2 -> {:error, :version_mismatch}
+          :v2 -> QueryRunnerV2.ping(opts, __MODULE__)
           _ -> QueryRunnerV1.ping(opts, __MODULE__)
         end
       end
@@ -125,10 +125,8 @@ defmodule Instream.Connection do
 
   @doc """
   Pings the connection server.
-
-  *Only available with InfluxDB v1.x connections.*
   """
-  @callback ping(opts :: Keyword.t()) :: :pong | :error | e_version_mismatch
+  @callback ping(opts :: Keyword.t()) :: :pong | :error
 
   @doc """
   Executes a reading query.

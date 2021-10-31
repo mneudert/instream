@@ -29,7 +29,6 @@ defmodule Instream.Connection.ErrorTest do
     end
   end
 
-  @tag :"influxdb_exclude_2.0"
   test "ping connection" do
     assert :error = OptionsConnection.ping()
     assert :error = UnreachableConnection.ping()
