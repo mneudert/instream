@@ -4,6 +4,7 @@ defmodule Instream.Connection.QueryRunnerV2 do
   alias Instream.Connection.JSON
   alias Instream.Connection.ResponseParserV2
   alias Instream.Data.Write
+  alias Instream.HTTPClient
   alias Instream.Log.Metadata
   alias Instream.Log.PingEntry
   alias Instream.Log.QueryEntry
@@ -105,9 +106,9 @@ defmodule Instream.Connection.QueryRunnerV2 do
 
     case response do
       {:ok, 204, headers} ->
-        case List.keyfind(headers, "X-Influxdb-Version", 0) do
-          {"X-Influxdb-Version", version} -> version
-          _ -> "unknown"
+        case HTTPClient.Headers.find("x-influxdb-version", headers) do
+          nil -> "unknown"
+          version -> version
         end
 
       _ ->

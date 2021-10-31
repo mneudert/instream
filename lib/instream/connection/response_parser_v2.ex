@@ -25,13 +25,10 @@ defmodule Instream.Connection.ResponseParserV2 do
     end
   end
 
-  defp content_type_contains?(_, []), do: false
-
-  defp content_type_contains?(type_part, [{header, val} | headers]) do
-    if "content-type" == String.downcase(header) do
-      String.contains?(val, type_part)
-    else
-      content_type_contains?(type_part, headers)
+  defp content_type_contains?(type_part, headers) do
+    case HTTPClient.Headers.find("content-type", headers) do
+      nil -> false
+      val -> String.contains?(val, type_part)
     end
   end
 
