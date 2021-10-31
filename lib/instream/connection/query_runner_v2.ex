@@ -92,6 +92,30 @@ defmodule Instream.Connection.QueryRunnerV2 do
   end
 
   @doc """
+  Executes `:version` queries.
+  """
+  @spec version(Keyword.t(), module) :: any
+  def version(opts, conn) do
+    config = conn.config()
+    headers = Headers.assemble(config, opts)
+    http_opts = http_opts(config, opts)
+    url = URL.ping(config)
+
+    response = config[:http_client].request(:head, url, headers, "", http_opts)
+
+    case response do
+      {:ok, 204, headers} ->
+        case List.keyfind(headers, "X-Influxdb-Version", 0) do
+          {"X-Influxdb-Version", version} -> version
+          _ -> "unknown"
+        end
+
+      _ ->
+        :error
+    end
+  end
+
+  @doc """
   Executes `:write` queries.
   """
   @spec write(map | [map], Keyword.t(), map) :: any

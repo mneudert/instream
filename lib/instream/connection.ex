@@ -98,7 +98,7 @@ defmodule Instream.Connection do
       @impl Connection
       def version(opts \\ []) do
         case config(:version) do
-          :v2 -> {:error, :version_mismatch}
+          :v2 -> QueryRunnerV2.version(opts, __MODULE__)
           _ -> QueryRunnerV1.version(opts, __MODULE__)
         end
       end
@@ -150,13 +150,11 @@ defmodule Instream.Connection do
   @doc """
   Determines the version of the connection server.
 
-  *Only available with InfluxDB v1.x connections.*
-
   If the version if undetectable (no header returned) it will be
   reported as `"unknown"`. If the host is unreachable or an error occurred
   the response will be `:error`.
   """
-  @callback version(opts :: Keyword.t()) :: String.t() | :error | e_version_mismatch
+  @callback version(opts :: Keyword.t()) :: String.t() | :error
 
   @doc """
   Executes a writing query.

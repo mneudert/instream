@@ -23,11 +23,14 @@ defmodule Instream.InfluxDBv2.ConnectionTest do
 
   test "mismatched InfluxDB version" do
     assert {:error, :version_mismatch} = DefaultConnection.status()
-    assert {:error, :version_mismatch} = DefaultConnection.version()
   end
 
   test "ping connection" do
     assert :pong = DefaultConnection.ping()
+  end
+
+  test "version connection" do
+    assert is_binary(DefaultConnection.version())
   end
 
   test "write data" do
