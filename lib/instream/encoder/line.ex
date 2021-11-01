@@ -36,8 +36,9 @@ defmodule Instream.Encoder.Line do
     fields
     |> Enum.reduce([], fn
       {_, nil}, acc -> acc
-      {field, value}, acc -> [",", encode_property(field), "=", encode_value(value) | acc]
+      {field, value}, acc -> [[encode_property(field), "=", encode_value(value)], "," | acc]
     end)
+    |> Enum.reverse()
     |> case do
       [] -> line
       ["," | encoded_fields] -> [line, " " | encoded_fields]
@@ -48,8 +49,9 @@ defmodule Instream.Encoder.Line do
     tags
     |> Enum.reduce([], fn
       {_, nil}, acc -> acc
-      {tag, value}, acc -> [",", encode_property(tag), "=", encode_property(value) | acc]
+      {tag, value}, acc -> [[encode_property(tag), "=", encode_property(value)], "," | acc]
     end)
+    |> Enum.reverse()
     |> case do
       [] -> line
       encoded_tags -> [line | encoded_tags]

@@ -55,7 +55,7 @@ defmodule Instream.Encoder.LineTest do
   end
 
   test "with tags" do
-    expected = "disk_free,hostname=server01,disk_type=SSD value=442221834240i"
+    expected = "disk_free,disk_type=SSD,hostname=server01 value=442221834240i"
 
     points = [
       %{
@@ -75,7 +75,7 @@ defmodule Instream.Encoder.LineTest do
   end
 
   test "with tags and timestamp" do
-    expected = "disk_free,hostname=server01,disk_type=SSD value=442221834240i 1435362189575692182"
+    expected = "disk_free,disk_type=SSD,hostname=server01 value=442221834240i 1435362189575692182"
 
     points = [
       %{
@@ -95,7 +95,7 @@ defmodule Instream.Encoder.LineTest do
   end
 
   test "multiple fields" do
-    expected = ~S|disk_free free_space=442221834240i,disk_type="SSD" 1435362189575692182|
+    expected = ~S|disk_free disk_type="SSD",free_space=442221834240i 1435362189575692182|
 
     points = [
       %{
@@ -171,7 +171,7 @@ defmodule Instream.Encoder.LineTest do
 
   test "escaping field key" do
     expected =
-      ~S|disk_free working\ directories="C:\My Documents\Stuff for examples,C:\My Documents",value=442221834240i|
+      ~S|disk_free value=442221834240i,working\ directories="C:\My Documents\Stuff for examples,C:\My Documents"|
 
     points = [
       %{
