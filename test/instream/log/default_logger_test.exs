@@ -31,7 +31,6 @@ defmodule Instream.Log.DefaultLoggerTest do
     )
   end
 
-  @tag :"influxdb_exclude_2.0"
   test "logging ping request" do
     log =
       capture_log(fn ->
