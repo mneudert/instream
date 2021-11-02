@@ -53,6 +53,7 @@ jobs:
       MIX_ENV: test
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       INFLXUDB_PORT_UDP: 8089
+      INFLUXDB_SOCKET: ${{ github.workspace }}/influxdb.sock
       INFLUXDB_VERSION: '1.8'
 
     steps:
@@ -79,6 +80,4 @@ jobs:
         mix deps.get
 
     - name: test
-      env:
-        INFLUXDB_SOCKET: ${{ github.workspace }}/influxdb.sock
       run: mix coveralls.github
