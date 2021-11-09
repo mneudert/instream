@@ -55,7 +55,7 @@ defmodule Instream.Decoder.CSV do
   defp parse_datatypes({{field, "boolean"}, _}), do: {field, false}
   defp parse_datatypes({{field, "double"}, "+Inf"}), do: {field, :infinity}
   defp parse_datatypes({{field, "double"}, "-Inf"}), do: {field, :neg_infinity}
-  defp parse_datatypes({{field, "double"}, value}), do: {field, String.to_float(value)}
+  defp parse_datatypes({{field, "double"}, value}), do: {field, Float.parse(value) |> elem(0)}
   defp parse_datatypes({{field, "duration"}, value}), do: {field, String.to_integer(value)}
   defp parse_datatypes({{field, "long"}, value}), do: {field, String.to_integer(value)}
   defp parse_datatypes({{field, "unsignedLong"}, value}), do: {field, String.to_integer(value)}
