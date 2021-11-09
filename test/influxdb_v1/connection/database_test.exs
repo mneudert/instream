@@ -2,6 +2,7 @@ defmodule Instream.InfluxDBv1.Connection.DatabaseTest do
   use ExUnit.Case, async: true
 
   @moduletag :"influxdb_exclude_2.0"
+  @moduletag :"influxdb_exclude_2.1"
 
   import Mox
 

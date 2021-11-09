@@ -4,6 +4,7 @@ defmodule Instream.InfluxDBv1.Writer.UDPTest do
   alias Instream.TestHelpers.Connections.DefaultConnection
 
   @moduletag :"influxdb_exclude_2.0"
+  @moduletag :"influxdb_exclude_2.1"
   @moduletag :udp
 
   defmodule ProtocolsSeries do

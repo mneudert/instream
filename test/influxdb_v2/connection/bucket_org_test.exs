@@ -1,7 +1,7 @@
 defmodule Instream.InfluxDBv2.Connection.BucketOrgTest do
   use ExUnit.Case, async: true
 
-  @moduletag :"influxdb_include_2.0"
+  @moduletag :"influxdb_include_2.x"
 
   import Mox
 

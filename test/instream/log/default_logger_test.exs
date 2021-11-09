@@ -66,6 +66,7 @@ defmodule Instream.Log.DefaultLoggerTest do
   end
 
   @tag :"influxdb_exclude_2.0"
+  @tag :"influxdb_exclude_2.1"
   test "logging read request with redacted password" do
     query = ~s(CREATE USER "instream_test" WITH PASSWORD "instream_test")
 
@@ -81,6 +82,7 @@ defmodule Instream.Log.DefaultLoggerTest do
   end
 
   @tag :"influxdb_exclude_2.0"
+  @tag :"influxdb_exclude_2.1"
   test "logging status request" do
     log =
       capture_log(fn ->
@@ -126,6 +128,7 @@ defmodule Instream.Log.DefaultLoggerTest do
 
   describe "passing [log: false]" do
     @tag :"influxdb_exclude_2.0"
+    @tag :"influxdb_exclude_2.1"
     test "ping request" do
       assert "" =
                capture_log(fn ->

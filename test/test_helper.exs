@@ -7,9 +7,10 @@ version = System.get_env("INFLUXDB_VERSION")
 
 version_excludes =
   case version do
-    "1.7" -> [:"influxdb_exclude_1.7", :"influxdb_include_2.0", :"influxdb_include_1.8"]
-    "1.8" -> [:"influxdb_exclude_1.8", :"influxdb_include_2.0", :"influxdb_include_1.7"]
+    "1.7" -> [:"influxdb_exclude_1.7", :"influxdb_include_2.x", :"influxdb_include_1.8"]
+    "1.8" -> [:"influxdb_exclude_1.8", :"influxdb_include_2.x", :"influxdb_include_1.7"]
     "2.0" -> [:"influxdb_exclude_2.0", :"influxdb_include_1.8", :"influxdb_include_1.7"]
+    "2.1" -> [:"influxdb_exclude_2.1", :"influxdb_include_1.8", :"influxdb_include_1.7"]
     _ -> raise RuntimeError, "Required environment variable 'INFLUXDB_VERSION' not set!"
   end
 
@@ -18,7 +19,7 @@ config = Keyword.put(config, :exclude, version_excludes ++ (config[:exclude] || 
 IO.puts("Running tests for InfluxDB version: #{version}")
 
 # configure InfluxDB connection
-if "2.0" == version do
+if version in ["2.0", "2.1"] do
   unless System.get_env("INFLUXDB_TOKEN") do
     raise RuntimeError, "Required environment variable 'INFLUXDB_TOKEN' not set!"
   end

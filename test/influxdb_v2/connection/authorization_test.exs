@@ -1,7 +1,7 @@
 defmodule Instream.InfluxDBv2.Connection.AuthorizationTest do
   use ExUnit.Case, async: true
 
-  @moduletag :"influxdb_include_2.0"
+  @moduletag :"influxdb_include_2.x"
 
   defmodule UnauthorizedConnection do
     use Instream.Connection,
