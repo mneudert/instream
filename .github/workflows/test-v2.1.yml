@@ -15,7 +15,7 @@ jobs:
 
     services:
       influxdb:
-        image: influxdb:2.1.0
+        image: influxdb:2.1.1
         ports:
           - 8086:8086
 
