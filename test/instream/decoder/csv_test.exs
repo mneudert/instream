@@ -103,11 +103,11 @@ defmodule Instream.Decoder.LineTest do
       result,table,_start,_stop,_time,_value,_field,_measurement,region_east,host\r
       ,0,2018-05-08T20:50:00Z,2018-05-08T20:51:00Z,2018-05-08T20:50:00Z,15.43,value,cpu,true,A\r
       \r
-      #datatype,string,long,dateTime:RFC3339,dateTime:RFC3339,dateTime:RFC3339,double,string,string,boolean,string\r
+      #datatype,string,long,dateTime:RFC3339,dateTime:RFC3339,dateTime:RFC3339,string,string,string,boolean,string\r
       #default,my-result,,,,,,,,,\r
       #group,false,false,true,true,false,true,true,true,true,true\r
       result,table,_start,_stop,_time,_value,_field,_measurement,region_east,host\r
-      ,1,2018-05-08T20:50:00Z,2018-05-08T20:51:00Z,2018-05-08T20:50:00Z,62.73,value,cpu,false,A\r
+      ,1,2018-05-08T20:50:00Z,2018-05-08T20:51:00Z,2018-05-08T20:50:00Z,not double,value,cpu,false,A\r
       \r
       """
 
@@ -133,7 +133,7 @@ defmodule Instream.Decoder.LineTest do
                    "_start" => 1_525_812_600_000_000_000,
                    "_stop" => 1_525_812_660_000_000_000,
                    "_time" => 1_525_812_600_000_000_000,
-                   "_value" => 62.73,
+                   "_value" => "not double",
                    "host" => "A",
                    "region_east" => false,
                    "result" => "my-result",
@@ -239,7 +239,7 @@ defmodule Instream.Decoder.LineTest do
       my-result,0,2018-05-08T20:50:00Z,2018-05-08T20:51:00Z,2018-05-08T20:50:00Z,15.43,value,cpu,true,A\r
       \r
       result,table,_start,_stop,_time,_value,_field,_measurement,region_east,host\r
-      my-result,1,2018-05-08T20:50:00Z,2018-05-08T20:51:00Z,2018-05-08T20:50:00Z,62.73,value,cpu,false,A\r
+      my-result,1,2018-05-08T20:50:00Z,2018-05-08T20:51:00Z,2018-05-08T20:50:00Z,not double,value,cpu,false,A\r
       \r
       """
 
@@ -265,7 +265,7 @@ defmodule Instream.Decoder.LineTest do
                    "_start" => "2018-05-08T20:50:00Z",
                    "_stop" => "2018-05-08T20:51:00Z",
                    "_time" => "2018-05-08T20:50:00Z",
-                   "_value" => "62.73",
+                   "_value" => "not double",
                    "host" => "A",
                    "region_east" => "false",
                    "result" => "my-result",
