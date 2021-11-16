@@ -15,7 +15,7 @@ defmodule Instream.Query.Headers do
   Assembles headers for basic authentication.
 
   Will return an empty list if query authentication is configured.
-  Will return an empty list if either username of password is missing.
+  Will return an empty list if either username or password is missing.
 
   ## Usage
 
