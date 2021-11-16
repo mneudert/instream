@@ -23,7 +23,22 @@ defmodule Instream.Series do
   `:default` entry. This value will be pre-assigned when using the data
   struct with all other fields or tags being set to `nil`.
 
-  ### Series Validation
+  ### Structs
+
+  Each of your series definitions will register three separate structs.
+
+  Based on the aforementioned `MySeries.CPULoad` you will have access
+  to the following structs:
+
+      %MySeries.CPULoad{
+        fields: %MySeries.CPULoad.Fields{value: 100, value_desc: nil},
+        tags: %MySeries.CPULoad.Tags{host: "www", core: nil},
+        timestamp: nil
+      }
+
+  `:timestamp` is expected to be a unix nanosecond timestamp.
+
+  ### Compile-Time Series Validation
 
   Defining a series triggers a validation function during compilation.
 
@@ -43,20 +58,14 @@ defmodule Instream.Series do
         end
       end
 
-  ### Structs
+  Validations performed:
 
-  Each of your series definitions will register three separate structs.
-
-  Based on the aforementioned `MySeries.CPULoad` you will have access
-  to the following structs:
-
-      %MySeries.CPULoad{
-        fields: %MySeries.CPULoad.Fields{value: 100, value_desc: nil},
-        tags: %MySeries.CPULoad.Tags{host: "www", core: nil},
-        timestamp: nil
-      }
-
-  `:timestamp` is expected to be a unix nanosecond timestamp.
+  - having `use Instream.Series` requires also calling `series do .. end`
+  - a measurement must be defined
+  - at least one field must be defined
+  - fields and tags must not share a name
+  - the names `:_field`, `:_measurement`, and `:time` are not allowed to be
+    used for fields or tags
 
   ## Reading Series Points (Hydration)
 
