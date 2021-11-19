@@ -53,7 +53,6 @@ defmodule Instream.Connection do
       alias Instream.Connection.QueryRunnerV1
       alias Instream.Connection.QueryRunnerV2
       alias Instream.Connection.Supervisor
-      alias Instream.Data
 
       @behaviour Connection
 
