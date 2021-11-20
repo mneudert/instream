@@ -1,12 +1,19 @@
 defmodule Instream.Encoder.Line do
   @moduledoc false
 
-  @type point_map :: %{
-          required(:fields) => [{term, term}],
-          required(:measurement) => term,
-          optional(:tags) => [{term, term}],
-          optional(:timestamp) => term
-        }
+  @type point_map ::
+          %{
+            required(:fields) => [{term, term}],
+            required(:measurement) => term,
+            optional(:tags) => [{term, term}],
+            optional(:timestamp) => term
+          }
+          | %{
+              __struct__: atom,
+              fields: map,
+              tags: map,
+              timestamp: non_neg_integer
+            }
 
   @doc """
   Creates the write string for a list of data points.
@@ -14,12 +21,8 @@ defmodule Instream.Encoder.Line do
   @spec encode([point_map()]) :: binary
   def encode(points), do: encode(points, [])
 
-  defp encode([%{measurement: measurement} = point | points], lines) do
-    line =
-      [encode_property(measurement)]
-      |> append_tags(point)
-      |> append_fields(point)
-      |> append_timestamp(point)
+  defp encode([point | points], lines) do
+    line = encode_point(point)
 
     encode(points, ["\n", line | lines])
   end
@@ -67,6 +70,22 @@ defmodule Instream.Encoder.Line do
 
   defp append_timestamp(line, %{timestamp: ts}) when is_binary(ts), do: [line, " ", ts]
   defp append_timestamp(line, _), do: line
+
+  defp encode_point(%{__struct__: series, fields: fields, tags: tags, timestamp: timestamp}) do
+    encode_point(%{
+      measurement: series.__meta__(:measurement),
+      fields: Map.from_struct(fields),
+      tags: Map.from_struct(tags),
+      timestamp: timestamp
+    })
+  end
+
+  defp encode_point(%{measurement: measurement} = point) do
+    [encode_property(measurement)]
+    |> append_tags(point)
+    |> append_fields(point)
+    |> append_timestamp(point)
+  end
 
   defp encode_property(s) when is_binary(s) do
     s

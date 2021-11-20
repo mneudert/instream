@@ -103,7 +103,11 @@ defmodule Instream.Connection do
       end
 
       @impl Connection
-      def write(points, opts \\ []) do
+      def write(points, opts \\ [])
+
+      def write(point, opts) when is_map(point), do: write([point], opts)
+
+      def write(points, opts) when is_list(points) do
         case config(:version) do
           :v2 -> QueryRunnerV2.write(points, opts, __MODULE__)
           _ -> QueryRunnerV1.write(points, opts, __MODULE__)

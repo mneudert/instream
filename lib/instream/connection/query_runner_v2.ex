@@ -3,7 +3,6 @@ defmodule Instream.Connection.QueryRunnerV2 do
 
   alias Instream.Connection.JSON
   alias Instream.Connection.ResponseParserV2
-  alias Instream.Data.Write
   alias Instream.HTTPClient
   alias Instream.Log.Metadata
   alias Instream.Log.PingEntry
@@ -119,21 +118,20 @@ defmodule Instream.Connection.QueryRunnerV2 do
   @doc """
   Executes `:write` queries.
   """
-  @spec write(map | [map], Keyword.t(), map) :: any
+  @spec write([map], Keyword.t(), map) :: any
   def write(points, opts, conn) do
     config = conn.config()
-    payload = Write.prepare(points)
 
     {query_time, result} =
       :timer.tc(fn ->
-        payload
+        points
         |> config[:writer].write(opts, conn)
         |> ResponseParserV2.maybe_parse(conn, opts)
       end)
 
     if false != opts[:log] do
       log(config[:loggers], %WriteEntry{
-        points: length(payload),
+        points: length(points),
         result: result,
         metadata: %Metadata{
           query_time: query_time,
