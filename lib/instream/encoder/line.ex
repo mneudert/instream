@@ -3,10 +3,10 @@ defmodule Instream.Encoder.Line do
 
   @type point_map ::
           %{
-            required(:fields) => [{term, term}],
-            required(:measurement) => term,
-            optional(:tags) => [{term, term}],
-            optional(:timestamp) => term
+            required(:fields) => map,
+            required(:measurement) => binary,
+            optional(:tags) => map,
+            optional(:timestamp) => non_neg_integer | binary
           }
           | %{
               __struct__: atom,
