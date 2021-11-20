@@ -34,7 +34,7 @@ defmodule Instream.Encoder.LineTest do
     assert ^expected = Line.encode([point])
   end
 
-  test "with timestamp" do
+  test "with integer timestamp" do
     expected = "disk_free value=442221834240i 1435362189575692182"
 
     point = %{
@@ -43,6 +43,20 @@ defmodule Instream.Encoder.LineTest do
         value: 442_221_834_240
       },
       timestamp: 1_435_362_189_575_692_182
+    }
+
+    assert ^expected = Line.encode([point])
+  end
+
+  test "with RFC3339 timestamp" do
+    expected = "disk_free value=442221834240i 1435362189575692182"
+
+    point = %{
+      measurement: "disk_free",
+      fields: %{
+        value: 442_221_834_240
+      },
+      timestamp: "2015-06-26T23:43:09.575692182+00:00"
     }
 
     assert ^expected = Line.encode([point])

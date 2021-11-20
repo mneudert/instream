@@ -1,6 +1,8 @@
 defmodule Instream.Encoder.Line do
   @moduledoc false
 
+  alias Instream.Decoder.RFC3339
+
   @type point_map ::
           %{
             required(:fields) => map,
@@ -68,7 +70,9 @@ defmodule Instream.Encoder.Line do
   defp append_timestamp(line, %{timestamp: ts}) when is_integer(ts),
     do: [line, " ", Integer.to_string(ts)]
 
-  defp append_timestamp(line, %{timestamp: ts}) when is_binary(ts), do: [line, " ", ts]
+  defp append_timestamp(line, %{timestamp: ts}) when is_binary(ts),
+    do: [line, " ", ts |> RFC3339.to_nanosecond() |> Integer.to_string()]
+
   defp append_timestamp(line, _), do: line
 
   defp encode_point(%{__struct__: series, fields: fields, tags: tags, timestamp: timestamp}) do
