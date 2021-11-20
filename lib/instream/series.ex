@@ -36,7 +36,8 @@ defmodule Instream.Series do
         timestamp: nil
       }
 
-  `:timestamp` is expected to be a unix nanosecond timestamp.
+  `:timestamp` is expected to be either a
+  unix nanosecond or an RFC3339 timestamp.
 
   ### Compile-Time Series Validation
 
@@ -127,6 +128,7 @@ defmodule Instream.Series do
   - `:millisecond`
   - `:microsecond`
   - `:nanosecond`
+  - `:rfc3339`
 
   Please be aware that the UDP protocol writer (`Instream.Writer.UDP`) does
   not support custom timestamp precisions. All UDP timestamps are implicitly
@@ -255,7 +257,7 @@ defmodule Instream.Series do
       @type t :: %unquote(series){
               fields: %unquote(series).Fields{},
               tags: %unquote(series).Tags{},
-              timestamp: non_neg_integer
+              timestamp: non_neg_integer | binary
             }
 
       defstruct fields: %unquote(series).Fields{},

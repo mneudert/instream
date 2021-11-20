@@ -14,7 +14,7 @@ defmodule Instream.Encoder.Line do
               __struct__: atom,
               fields: map,
               tags: map,
-              timestamp: non_neg_integer
+              timestamp: non_neg_integer | binary
             }
 
   @doc """
