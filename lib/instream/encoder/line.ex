@@ -3,7 +3,7 @@ defmodule Instream.Encoder.Line do
 
   alias Instream.Decoder.RFC3339
 
-  @type point_map ::
+  @type point ::
           %{
             required(:fields) => map,
             required(:measurement) => binary,
@@ -20,7 +20,7 @@ defmodule Instream.Encoder.Line do
   @doc """
   Creates the write string for a list of data points.
   """
-  @spec encode([point_map()]) :: binary
+  @spec encode([point()]) :: binary
   def encode(points), do: encode(points, [])
 
   defp encode([point | points], lines) do
