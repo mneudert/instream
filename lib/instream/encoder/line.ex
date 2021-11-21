@@ -11,7 +11,7 @@ defmodule Instream.Encoder.Line do
             optional(:timestamp) => non_neg_integer | binary
           }
           | %{
-              __struct__: atom,
+              __struct__: module,
               fields: map,
               tags: map,
               timestamp: non_neg_integer | binary

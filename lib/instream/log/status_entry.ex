@@ -9,7 +9,7 @@ defmodule Instream.Log.StatusEntry do
 
   @type t :: %__MODULE__{
           host: String.t(),
-          result: atom,
+          result: :ok | :error,
           metadata: Instream.Log.Metadata.t()
         }
 end

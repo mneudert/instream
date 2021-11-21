@@ -9,7 +9,7 @@ defmodule Instream.Log.PingEntry do
 
   @type t :: %__MODULE__{
           host: String.t(),
-          result: atom,
+          result: :pong | :error,
           metadata: Instream.Log.Metadata.t()
         }
 end

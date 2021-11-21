@@ -202,7 +202,7 @@ defmodule Instream.Series do
   - `:measurement`: the measurement of the series
   - `:tags`: the available tags defining the series
   """
-  @callback __meta__(atom) :: any
+  @callback __meta__(:field | :measurement | :tags) :: any
 
   @doc """
   Creates a series dataset from any given map.
