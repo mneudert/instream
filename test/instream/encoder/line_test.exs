@@ -49,14 +49,14 @@ defmodule Instream.Encoder.LineTest do
   end
 
   test "with RFC3339 timestamp" do
-    expected = "disk_free value=442221834240i 1435362189575692182"
+    expected = "disk_free value=442221834240i 1435362189575692000"
 
     point = %{
       measurement: "disk_free",
       fields: %{
         value: 442_221_834_240
       },
-      timestamp: "2015-06-26T23:43:09.575692182+00:00"
+      timestamp: "2015-06-26T23:43:09.575692000+00:00"
     }
 
     assert ^expected = Line.encode([point])
