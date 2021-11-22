@@ -257,7 +257,7 @@ defmodule Instream.Series do
       @type t :: %unquote(series){
               fields: %unquote(series).Fields{},
               tags: %unquote(series).Tags{},
-              timestamp: non_neg_integer | binary
+              timestamp: non_neg_integer | binary | nil
             }
 
       defstruct fields: %unquote(series).Fields{},

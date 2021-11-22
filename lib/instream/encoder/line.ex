@@ -10,13 +10,13 @@ defmodule Instream.Encoder.Line do
             required(:fields) => map,
             required(:measurement) => binary,
             optional(:tags) => map,
-            optional(:timestamp) => non_neg_integer | binary
+            optional(:timestamp) => non_neg_integer | binary | nil
           }
           | %{
               __struct__: module,
               fields: map,
               tags: map,
-              timestamp: non_neg_integer | binary
+              timestamp: non_neg_integer | binary | nil
             }
 
   @doc """
