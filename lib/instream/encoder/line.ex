@@ -38,26 +38,30 @@ defmodule Instream.Encoder.Line do
   defp encode([], []), do: ""
 
   defp append_fields(line, %{fields: fields}) do
-    fields
-    |> Enum.reduce([], fn
-      {_, nil}, acc -> acc
-      {field, value}, acc -> [[encode_property(field), "=", encode_value(value)], "," | acc]
-    end)
-    |> Enum.reverse()
-    |> case do
+    content =
+      fields
+      |> Enum.reduce([], fn
+        {_, nil}, acc -> acc
+        {field, value}, acc -> [[encode_property(field), "=", encode_value(value)], "," | acc]
+      end)
+      |> Enum.reverse()
+
+    case content do
       [] -> line
       ["," | encoded_fields] -> [line, " " | encoded_fields]
     end
   end
 
   defp append_tags(line, %{tags: tags}) do
-    tags
-    |> Enum.reduce([], fn
-      {_, nil}, acc -> acc
-      {tag, value}, acc -> [[encode_property(tag), "=", encode_property(value)], "," | acc]
-    end)
-    |> Enum.reverse()
-    |> case do
+    content =
+      tags
+      |> Enum.reduce([], fn
+        {_, nil}, acc -> acc
+        {tag, value}, acc -> [[encode_property(tag), "=", encode_property(value)], "," | acc]
+      end)
+      |> Enum.reverse()
+
+    case content do
       [] -> line
       encoded_tags -> [line | encoded_tags]
     end

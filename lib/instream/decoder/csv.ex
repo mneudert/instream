@@ -10,10 +10,12 @@ defmodule Instream.Decoder.CSV do
   """
   @spec parse(binary) :: [map]
   def parse(response) do
-    response
-    |> String.trim_trailing("\r\n\r\n")
-    |> String.split(["\r\n\r\n"])
-    |> case do
+    blocks =
+      response
+      |> String.trim_trailing("\r\n\r\n")
+      |> String.split(["\r\n\r\n"])
+
+    case blocks do
       [table | []] -> parse_table(table)
       [_ | _] = tables -> Enum.map(tables, &parse_table/1)
       _ -> []
