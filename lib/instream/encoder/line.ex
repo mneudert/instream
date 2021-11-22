@@ -1,5 +1,7 @@
 defmodule Instream.Encoder.Line do
-  @moduledoc false
+  @moduledoc """
+  Encoder for the InfluxDB line protocol.
+  """
 
   alias Instream.Decoder.RFC3339
 
@@ -18,7 +20,7 @@ defmodule Instream.Encoder.Line do
             }
 
   @doc """
-  Creates the write string for a list of data points.
+  Creates protocol contents for a list of data points.
   """
   @spec encode([point()]) :: binary
   def encode(points), do: encode(points, [])
