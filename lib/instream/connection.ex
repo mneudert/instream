@@ -8,7 +8,7 @@ defmodule Instream.Connection do
         use Instream.Connection, otp_app: :my_app
       end
 
-  This connection will fetch it's configuration from the application environment
+  This connection will fetch its configuration from the application environment
   as defined by `:otp_app`. As an alternative you can define the configuration
   in the module definition itself:
 

@@ -109,7 +109,7 @@ defmodule Instream.Connection.Config do
 
   The configuration key `:http_opts` is directly passed to the client process.
   Parts of it are also used internally by `:hackney` to control more generic
-  behaviour (request pool to be used and it's configuration).
+  behaviour (request pool to be used and its configuration).
 
   Please see `:hackney.request/5` for a complete list of available options.
 
