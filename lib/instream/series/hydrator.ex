@@ -29,6 +29,7 @@ defmodule Instream.Series.Hydrator do
   def from_result(series, %{
         results: [%{series: [%{values: result_values, columns: columns} = data]}]
       }) do
+    # optional :tags set in InfluxQL "GROUP BY" results
     tags = Map.get(data, :tags, %{})
 
     Enum.map(result_values, fn values ->
