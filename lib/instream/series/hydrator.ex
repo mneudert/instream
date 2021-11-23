@@ -26,16 +26,18 @@ defmodule Instream.Series.Hydrator do
   Keys not defined in the series are silently dropped.
   """
   @spec from_result(module, map | [map]) :: [struct]
-  def from_result(series, %{results: [%{series: [data]}]}) do
-    data_tags = Map.get(data, :tags, %{})
+  def from_result(series, %{
+        results: [%{series: [%{values: result_values, columns: columns} = data]}]
+      }) do
+    tags = Map.get(data, :tags, %{})
 
-    Enum.map(Map.get(data, :values, []), fn values ->
-      data_fields =
-        data.columns
+    Enum.map(result_values, fn values ->
+      mapped_values =
+        columns
         |> Enum.zip(values)
         |> Enum.into(%{}, fn {k, v} -> {String.to_atom(k), v} end)
 
-      from_map(series, Map.merge(data_tags, data_fields))
+      from_map(series, Map.merge(tags, mapped_values))
     end)
   end
 
