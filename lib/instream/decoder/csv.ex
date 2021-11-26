@@ -121,7 +121,7 @@ defmodule Instream.Decoder.CSV do
       "" ->
         []
 
-      _ ->
+      table ->
         table
         |> __MODULE__.Parser.parse_string(skip_headers: false)
         |> parse_annotations(%{datatypes: [], defaults: [], groups: [], table: []})

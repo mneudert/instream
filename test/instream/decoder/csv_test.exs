@@ -332,6 +332,34 @@ defmodule Instream.Decoder.LineTest do
 
       assert [] = CSV.parse(response)
     end
+
+    test "response with multiple line break" do
+      response = """
+      #datatype,string,long\r
+      type,value\r
+      long,1\r
+      \r
+      \r
+      #datatype,string,long\r
+      type,value\r
+      long,2\r
+      """
+
+      assert [
+               [
+                 %{
+                   "type" => "long",
+                   "value" => 1
+                 }
+               ],
+               [
+                 %{
+                   "type" => "long",
+                   "value" => 2
+                 }
+               ]
+             ] = CSV.parse(response)
+    end
   end
 
   describe "datatype mapping" do
