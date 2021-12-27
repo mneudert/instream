@@ -7,7 +7,7 @@ jobs:
     strategy:
       matrix:
         include:
-          - elixir: '1.12.3'
+          - elixir: '1.13.1'
             otp: '24.2'
             runs-on: ubuntu-20.04
 
