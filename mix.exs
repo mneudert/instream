@@ -82,7 +82,7 @@ defmodule Instream.MixProject do
   defp package do
     %{
       files: [".formatter.exs", "CHANGELOG.md", "LICENSE", "mix.exs", "README.md", "lib"],
-      licenses: ["Apache 2.0"],
+      licenses: ["Apache-2.0"],
       links: %{"GitHub" => @url_github}
     }
   end
