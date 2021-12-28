@@ -71,6 +71,12 @@ defmodule Instream.MixProject do
   defp docs do
     [
       main: "Instream",
+      extras: [
+        "CHANGELOG.md",
+        "LICENSE": [title: "License"],
+        "README.md": [title: "Overview"]
+      ],
+      skip_undefined_reference_warnings_on: ["CHANGELOG.md"],
       source_ref: "master",
       source_url: @url_github
     ]
