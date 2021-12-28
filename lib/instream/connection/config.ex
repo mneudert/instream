@@ -235,9 +235,22 @@ defmodule Instream.Connection.Config do
   ]
 
   @doc """
-  Retrieves the connection configuration for `conn` in `otp_app`.
+  Returns the configuration for a connection.
+
+  The configuration will be merged with global defaults and the defaults passed
+  to the lookup function. The latter are usually the inline defaults from the
+  connection module (`conn`).
+
+  If an `otp_app` is passed it will be used to fetch configuration values from
+  the application environment.
+
+  Priority for configuration lookup (first found is returned):
+
+  1. Application configuration
+  2. Inline configuration
+  3. Global defaults
   """
-  @spec get(atom, module, nil | atom, Keyword.t()) :: term
+  @spec get(otp_app :: atom, conn :: module, key :: nil | atom, defaults :: Keyword.t()) :: term
   def get(nil, _, nil, defaults), do: Keyword.merge(@global_defaults, defaults)
 
   def get(nil, _, key, defaults) do
