@@ -73,7 +73,7 @@ defmodule Instream.MixProject do
       main: "Instream",
       extras: [
         "CHANGELOG.md",
-        "LICENSE": [title: "License"],
+        LICENSE: [title: "License"],
         "README.md": [title: "Overview"]
       ],
       skip_undefined_reference_warnings_on: ["CHANGELOG.md"],
