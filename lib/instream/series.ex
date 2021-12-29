@@ -92,6 +92,25 @@ defmodule Instream.Series do
   `:calendar.rfc3339_to_system_time/2` not being available and
   `DateTime.from_iso8601/1` only supporting microseconds.
 
+  ### Hydrating Results With Multiple Fields (InfluxDB v2.x Pivoting)
+
+  If you are connecting to an InfluxDB v2.x instance and have more than one
+  field in your series you will need to "pivot" your query results to be able
+  to fully hydrate your structs:
+
+      MyConnection.query(~s(
+        from(bucket: "\#{MyConnection.config(:bucket)}")
+        |> range(start: -5m)
+        |> pivot(rowKey:["_time"], columnKey: ["_field"], valueColumn: "_value")
+      ))
+
+  Without using the `pivot()` function in your `:flux` query you will receive
+  one result struct for each field (other fields containing default values)
+  instead of one struct with all fields.
+
+  See https://www.influxdata.com/blog/how-to-pivot-data-flux-columnar-data/ for
+  more details and examples.
+
   ## Writing Series Points
 
   You can then use your series module to assemble a data point (one at a time)
