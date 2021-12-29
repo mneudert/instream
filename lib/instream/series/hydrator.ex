@@ -44,15 +44,18 @@ defmodule Instream.Series.Hydrator do
 
   def from_result(series, rows) when is_list(rows) do
     Enum.map(rows, fn row ->
-      field_key = String.to_atom(row["_field"])
-      field_value = row["_value"]
+      row =
+        case row["_field"] do
+          nil -> row
+          field -> Map.put(row, field, row["_value"])
+        end
+
       timestamp = row["_time"]
 
       data =
         row
         |> Map.drop(["_field", "_measurement", "_start", "_stop", "_time", "_value", "table"])
         |> Map.new(fn {k, v} -> {String.to_atom(k), v} end)
-        |> Map.put(field_key, field_value)
         |> Map.put(:time, timestamp)
 
       from_map(series, data)

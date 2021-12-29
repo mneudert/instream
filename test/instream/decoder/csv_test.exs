@@ -276,6 +276,31 @@ defmodule Instream.Decoder.LineTest do
     end
   end
 
+  test "pivoted result" do
+    response = """
+    #datatype,string,long,dateTime:RFC3339,dateTime:RFC3339,dateTime:RFC3339,string,boolean,string,double\r
+    #default,_result,,,,,,,,\r
+    #group,false,false,true,true,false,true,true,true,false\r
+    ,result,table,_start,_stop,_time,_measurement,region_east,host,value\r
+    ,,0,2018-05-08T20:50:00Z,2018-05-08T20:51:00Z,2018-05-08T20:50:00Z,cpu,true,A,15.43\r
+    \r
+    """
+
+    assert [
+             %{
+               "_measurement" => "cpu",
+               "_start" => 1_525_812_600_000_000_000,
+               "_stop" => 1_525_812_660_000_000_000,
+               "_time" => 1_525_812_600_000_000_000,
+               "host" => "A",
+               "region_east" => true,
+               "result" => "_result",
+               "table" => 0,
+               "value" => 15.43
+             }
+           ] = CSV.parse(response)
+  end
+
   describe "error responses" do
     test "minimal response" do
       response = """

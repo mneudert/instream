@@ -105,6 +105,52 @@ defmodule Instream.Series.HydratorTest do
                ])
     end
 
+    test "CSV result (pivoted, single field)", %{test: test} do
+      val_field_1 = System.unique_integer()
+      val_field_2 = System.unique_integer()
+      val_tag = Atom.to_string(test)
+
+      {val_timestamp_1, _} = create_test_time()
+      {val_timestamp_2, _} = create_test_time()
+
+      expected = [
+        %TestSeries{
+          fields: %TestSeries.Fields{value: val_field_1},
+          tags: %TestSeries.Tags{foo: val_tag},
+          timestamp: val_timestamp_1
+        },
+        %TestSeries{
+          fields: %TestSeries.Fields{value: val_field_2},
+          tags: %TestSeries.Tags{foo: val_tag},
+          timestamp: val_timestamp_2
+        }
+      ]
+
+      assert ^expected =
+               TestSeries.from_result([
+                 %{
+                   "_measurement" => TestSeries.__meta__(:measurement),
+                   "_start" => val_timestamp_1,
+                   "_stop" => val_timestamp_1,
+                   "_time" => val_timestamp_1,
+                   "foo" => val_tag,
+                   "result" => "my-result",
+                   "table" => 0,
+                   "value" => val_field_1
+                 },
+                 %{
+                   "_measurement" => TestSeries.__meta__(:measurement),
+                   "_start" => val_timestamp_2,
+                   "_stop" => val_timestamp_2,
+                   "_time" => val_timestamp_2,
+                   "foo" => val_tag,
+                   "result" => "my-result",
+                   "table" => 0,
+                   "value" => val_field_2
+                 }
+               ])
+    end
+
     test "map result", %{test: test} do
       val_field_1 = System.unique_integer()
       val_field_2 = System.unique_integer()
