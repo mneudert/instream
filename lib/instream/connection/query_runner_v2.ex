@@ -118,7 +118,7 @@ defmodule Instream.Connection.QueryRunnerV2 do
   @doc """
   Executes `:write` queries.
   """
-  @spec write([map], Keyword.t(), map) :: any
+  @spec write([map], Keyword.t(), module) :: any
   def write(points, opts, conn) do
     config = conn.config()
 
