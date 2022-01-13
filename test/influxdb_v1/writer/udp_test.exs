@@ -1,7 +1,7 @@
 defmodule Instream.InfluxDBv1.Writer.UDPTest do
   use ExUnit.Case, async: true
 
-  alias Instream.TestHelpers.Connections.DefaultConnection
+  alias Instream.TestHelpers.TestConnection
 
   @moduletag :"influxdb_exclude_2.0"
   @moduletag :"influxdb_exclude_2.1"
@@ -51,7 +51,7 @@ defmodule Instream.InfluxDBv1.Writer.UDPTest do
              |> UDPConnection.write()
 
     retry_call = fn ->
-      DefaultConnection.query(
+      TestConnection.query(
         "SELECT * FROM #{ProtocolsSeries.__meta__(:measurement)} WHERE proto='UDP-sync'",
         precision: :nanosecond
       )
@@ -91,7 +91,7 @@ defmodule Instream.InfluxDBv1.Writer.UDPTest do
              |> UDPConnection.write(async: true)
 
     retry_call = fn ->
-      DefaultConnection.query(
+      TestConnection.query(
         "SELECT * FROM #{ProtocolsSeries.__meta__(:measurement)} WHERE proto='UDP-async'",
         precision: :nanosecond
       )

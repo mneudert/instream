@@ -4,10 +4,10 @@ defmodule Instream.InfluxDBv1.Connection.QueryPrecisionTest do
   @moduletag :"influxdb_exclude_2.0"
   @moduletag :"influxdb_exclude_2.1"
 
-  alias Instream.TestHelpers.Connections.DefaultConnection
+  alias Instream.TestHelpers.TestConnection
 
   setup_all do
-    DefaultConnection.write([
+    TestConnection.write([
       %{
         measurement: "precision_test",
         fields: %{foo: "bar"}
@@ -26,7 +26,7 @@ defmodule Instream.InfluxDBv1.Connection.QueryPrecisionTest do
     ]
     |> Enum.each(fn {precision, timelen} ->
       %{results: [%{series: [%{values: [[time, _]]}]}]} =
-        DefaultConnection.query("SELECT * FROM precision_test", precision: precision)
+        TestConnection.query("SELECT * FROM precision_test", precision: precision)
 
       assert ^timelen =
                time
@@ -37,7 +37,7 @@ defmodule Instream.InfluxDBv1.Connection.QueryPrecisionTest do
 
   test "rfc3339 precision" do
     %{results: [%{series: [%{values: [[time, _]]}]}]} =
-      DefaultConnection.query("SELECT * FROM precision_test", precision: :rfc3339)
+      TestConnection.query("SELECT * FROM precision_test", precision: :rfc3339)
 
     assert 20 <= String.length(time)
     assert String.contains?(time, "Z")

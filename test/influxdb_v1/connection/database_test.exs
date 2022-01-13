@@ -7,7 +7,7 @@ defmodule Instream.InfluxDBv1.Connection.DatabaseTest do
   import Mox
 
   alias Instream.TestHelpers.HTTPClientMock
-  alias Instream.TestHelpers.Series.DefaultSeries
+  alias Instream.TestHelpers.TestSeries
 
   setup :verify_on_exit!
 
@@ -41,7 +41,7 @@ defmodule Instream.InfluxDBv1.Connection.DatabaseTest do
     |> expect(:request, fn :post, ^url_default, _, _, _ -> {:ok, 200, [], ""} end)
     |> expect(:request, fn :post, ^url_override, _, _, _ -> {:ok, 200, [], ""} end)
 
-    MockConnection.write(%DefaultSeries{})
-    MockConnection.write(%DefaultSeries{}, database: "override_database")
+    MockConnection.write(%TestSeries{})
+    MockConnection.write(%TestSeries{}, database: "override_database")
   end
 end

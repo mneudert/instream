@@ -3,7 +3,7 @@ defmodule Instream.InfluxDBv2.Writer.LineTest do
 
   @moduletag :"influxdb_include_2.x"
 
-  alias Instream.TestHelpers.Connections.DefaultConnection
+  alias Instream.TestHelpers.TestConnection
 
   defmodule BatchSeries do
     use Instream.Series
@@ -77,7 +77,7 @@ defmodule Instream.InfluxDBv2.Writer.LineTest do
   end
 
   test "writing no points alway succeeds" do
-    assert :ok = DefaultConnection.write([])
+    assert :ok = TestConnection.write([])
   end
 
   test "writer protocol: Line" do
@@ -91,12 +91,12 @@ defmodule Instream.InfluxDBv2.Writer.LineTest do
         value: "Line"
       }
       |> ProtocolsSeries.from_map()
-      |> DefaultConnection.write(precision: :second)
+      |> TestConnection.write(precision: :second)
 
     result =
-      DefaultConnection.query(
+      TestConnection.query(
         """
-          from(bucket: "#{DefaultConnection.config(:bucket)}")
+          from(bucket: "#{TestConnection.config(:bucket)}")
           |> range(
             start: #{timestamp - 30},
             stop: #{timestamp + 30}
@@ -132,12 +132,12 @@ defmodule Instream.InfluxDBv2.Writer.LineTest do
         integer: 100
       }
       |> LineEncodingSeries.from_map()
-      |> DefaultConnection.write()
+      |> TestConnection.write()
 
     result =
-      DefaultConnection.query(
+      TestConnection.query(
         """
-          from(bucket: "#{DefaultConnection.config(:bucket)}")
+          from(bucket: "#{TestConnection.config(:bucket)}")
           |> range(start: -5m)
           |> filter(fn: (r) =>
             r._measurement == "#{LineEncodingSeries.__meta__(:measurement)}"
@@ -191,13 +191,13 @@ defmodule Instream.InfluxDBv2.Writer.LineTest do
     :ok =
       %{binary: "binary"}
       |> ErrorsSeries.from_map()
-      |> DefaultConnection.write()
+      |> TestConnection.write()
 
     # make entry fail
     %{code: _, message: error} =
       %{binary: 12_345}
       |> ErrorsSeries.from_map()
-      |> DefaultConnection.write()
+      |> TestConnection.write()
 
     assert String.contains?(error, "conflict")
   end
@@ -220,12 +220,12 @@ defmodule Instream.InfluxDBv2.Writer.LineTest do
         }
       ]
       |> Enum.map(&BatchSeries.from_map/1)
-      |> DefaultConnection.write(precision: :second)
+      |> TestConnection.write(precision: :second)
 
     result =
-      DefaultConnection.query(
+      TestConnection.query(
         """
-          from(bucket: "#{DefaultConnection.config(:bucket)}")
+          from(bucket: "#{TestConnection.config(:bucket)}")
           |> range(
             start: #{timestamp - 30},
             stop: #{timestamp + 30}
@@ -265,12 +265,12 @@ defmodule Instream.InfluxDBv2.Writer.LineTest do
         value: 100
       }
       |> EmptyTagSeries.from_map()
-      |> DefaultConnection.write()
+      |> TestConnection.write()
 
     result =
-      DefaultConnection.query(
+      TestConnection.query(
         """
-          from(bucket: "#{DefaultConnection.config(:bucket)}")
+          from(bucket: "#{TestConnection.config(:bucket)}")
           |> range(start: -5m)
           |> filter(fn: (r) =>
             r._measurement == "#{measurement}"
@@ -293,17 +293,17 @@ defmodule Instream.InfluxDBv2.Writer.LineTest do
   end
 
   test "writing with passed org/bucket option" do
-    org = DefaultConnection.config(:org)
-    bucket = DefaultConnection.config(:bucket)
+    org = TestConnection.config(:org)
+    bucket = TestConnection.config(:bucket)
     measurement = CustomOrgBucketSeries.__meta__(:measurement)
 
     :ok =
       %{value: 100}
       |> CustomOrgBucketSeries.from_map()
-      |> DefaultConnection.write(org: org, bucket: bucket)
+      |> TestConnection.write(org: org, bucket: bucket)
 
     result =
-      DefaultConnection.query(
+      TestConnection.query(
         """
           from(bucket: "#{bucket}")
           |> range(start: -5m)

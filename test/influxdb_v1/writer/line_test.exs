@@ -4,7 +4,7 @@ defmodule Instream.InfluxDBv1.Writer.LineTest do
   @moduletag :"influxdb_exclude_2.0"
   @moduletag :"influxdb_exclude_2.1"
 
-  alias Instream.TestHelpers.Connections.DefaultConnection
+  alias Instream.TestHelpers.TestConnection
 
   defmodule BatchSeries do
     use Instream.Series
@@ -78,7 +78,7 @@ defmodule Instream.InfluxDBv1.Writer.LineTest do
   end
 
   test "writing no points alway succeeds" do
-    assert :ok = DefaultConnection.write([])
+    assert :ok = TestConnection.write([])
   end
 
   test "writer protocol: Line" do
@@ -89,7 +89,7 @@ defmodule Instream.InfluxDBv1.Writer.LineTest do
         value: "Line"
       }
       |> ProtocolsSeries.from_map()
-      |> DefaultConnection.write(precision: :second)
+      |> TestConnection.write(precision: :second)
 
     assert %{
              results: [
@@ -102,7 +102,7 @@ defmodule Instream.InfluxDBv1.Writer.LineTest do
                }
              ]
            } =
-             DefaultConnection.query(
+             TestConnection.query(
                "SELECT * FROM #{ProtocolsSeries.__meta__(:measurement)} WHERE proto='Line'",
                precision: :nanosecond
              )
@@ -117,7 +117,7 @@ defmodule Instream.InfluxDBv1.Writer.LineTest do
         integer: 100
       }
       |> LineEncodingSeries.from_map()
-      |> DefaultConnection.write()
+      |> TestConnection.write()
 
     assert %{
              results: [
@@ -130,7 +130,7 @@ defmodule Instream.InfluxDBv1.Writer.LineTest do
                }
              ]
            } =
-             DefaultConnection.query(
+             TestConnection.query(
                "SELECT * FROM #{LineEncodingSeries.__meta__(:measurement)} GROUP BY *"
              )
   end
@@ -139,13 +139,13 @@ defmodule Instream.InfluxDBv1.Writer.LineTest do
     :ok =
       %{binary: "binary"}
       |> ErrorsSeries.from_map()
-      |> DefaultConnection.write()
+      |> TestConnection.write()
 
     # make entry fail
     %{error: error} =
       %{binary: 12_345}
       |> ErrorsSeries.from_map()
-      |> DefaultConnection.write()
+      |> TestConnection.write()
 
     assert String.contains?(error, "conflict")
   end
@@ -165,7 +165,7 @@ defmodule Instream.InfluxDBv1.Writer.LineTest do
         }
       ]
       |> Enum.map(&BatchSeries.from_map/1)
-      |> DefaultConnection.write(precision: :second)
+      |> TestConnection.write(precision: :second)
 
     assert %{
              results: [
@@ -181,7 +181,7 @@ defmodule Instream.InfluxDBv1.Writer.LineTest do
                  ]
                }
              ]
-           } = DefaultConnection.query("SELECT * FROM #{BatchSeries.__meta__(:measurement)}")
+           } = TestConnection.query("SELECT * FROM #{BatchSeries.__meta__(:measurement)}")
   end
 
   test "writing without all tags present" do
@@ -191,10 +191,10 @@ defmodule Instream.InfluxDBv1.Writer.LineTest do
         value: 100
       }
       |> EmptyTagSeries.from_map()
-      |> DefaultConnection.write()
+      |> TestConnection.write()
 
     assert %{results: [%{series: [%{columns: columns}]}]} =
-             DefaultConnection.query("SELECT * FROM #{EmptyTagSeries.__meta__(:measurement)}")
+             TestConnection.query("SELECT * FROM #{EmptyTagSeries.__meta__(:measurement)}")
 
     assert Enum.member?(columns, "filled")
     assert Enum.member?(columns, "defaulting")
@@ -203,24 +203,22 @@ defmodule Instream.InfluxDBv1.Writer.LineTest do
   end
 
   test "writing with passed database option" do
-    database = DefaultConnection.config(:database)
+    database = TestConnection.config(:database)
 
     :ok =
       %{value: 100}
       |> CustomDatabaseSeries.from_map()
-      |> DefaultConnection.write(database: database)
+      |> TestConnection.write(database: database)
 
     assert %{results: [%{series: [%{columns: columns}]}]} =
-             DefaultConnection.query(
-               "SELECT * FROM #{CustomDatabaseSeries.__meta__(:measurement)}"
-             )
+             TestConnection.query("SELECT * FROM #{CustomDatabaseSeries.__meta__(:measurement)}")
 
     assert Enum.member?(columns, "value")
   end
 
   test "writing with passed retention policy option" do
     _ =
-      DefaultConnection.query(
+      TestConnection.query(
         "CREATE RETENTION POLICY one_week ON test_database DURATION 1w REPLICATION 1",
         method: :post
       )
@@ -228,16 +226,16 @@ defmodule Instream.InfluxDBv1.Writer.LineTest do
     :ok =
       %{proto: "ForRp", value: "Line"}
       |> ProtocolsSeries.from_map()
-      |> DefaultConnection.write(retention_policy: "one_week")
+      |> TestConnection.write(retention_policy: "one_week")
 
     assert %{results: [%{series: [%{values: [[_, "ForRp", "Line"]]}]}]} =
-             DefaultConnection.query(
+             TestConnection.query(
                ~s[SELECT * FROM "one_week"."writer_protocols" WHERE proto='ForRp'],
                database: "test_database"
              )
 
     assert %{results: [should_not_be_in_default_rp]} =
-             DefaultConnection.query("SELECT * FROM writer_protocols WHERE proto='ForRp'")
+             TestConnection.query("SELECT * FROM writer_protocols WHERE proto='ForRp'")
 
     refute Map.has_key?(should_not_be_in_default_rp, :series)
   end

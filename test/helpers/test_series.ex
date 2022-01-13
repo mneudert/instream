@@ -1,4 +1,4 @@
-defmodule Instream.TestHelpers.Series.DefaultSeries do
+defmodule Instream.TestHelpers.TestSeries do
   @moduledoc """
   Test Series.
   """
@@ -6,7 +6,7 @@ defmodule Instream.TestHelpers.Series.DefaultSeries do
   use Instream.Series
 
   series do
-    measurement "default_series"
+    measurement "test_series"
 
     tag :foo, default: :bar
     field :value, default: 100

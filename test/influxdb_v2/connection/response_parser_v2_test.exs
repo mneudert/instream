@@ -10,7 +10,7 @@ defmodule Instream.Connection.ResponseParserV2Test do
     response = {:ok, 200, [{"Content-Type", "application/csv"}], error}
     parse_opts = [result_as: :raw]
 
-    assert ^error = ResponseParserV2.maybe_parse(response, DefaultConnection, parse_opts)
+    assert ^error = ResponseParserV2.maybe_parse(response, TestConnection, parse_opts)
   end
 
   test "raw json error response" do
@@ -18,7 +18,7 @@ defmodule Instream.Connection.ResponseParserV2Test do
     response = {:ok, 500, [{"Content-Type", "application/json"}], error}
     parse_opts = [result_as: :raw]
 
-    assert ^error = ResponseParserV2.maybe_parse(response, DefaultConnection, parse_opts)
+    assert ^error = ResponseParserV2.maybe_parse(response, TestConnection, parse_opts)
   end
 
   test "raw non-json error response" do
@@ -26,6 +26,6 @@ defmodule Instream.Connection.ResponseParserV2Test do
     response = {:ok, 500, [], error}
     parse_opts = [result_as: :raw]
 
-    assert ^error = ResponseParserV2.maybe_parse(response, DefaultConnection, parse_opts)
+    assert ^error = ResponseParserV2.maybe_parse(response, TestConnection, parse_opts)
   end
 end

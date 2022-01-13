@@ -6,7 +6,7 @@ defmodule Instream.InfluxDBv2.Connection.BucketOrgTest do
   import Mox
 
   alias Instream.TestHelpers.HTTPClientMock
-  alias Instream.TestHelpers.Series.DefaultSeries
+  alias Instream.TestHelpers.TestSeries
 
   setup :verify_on_exit!
 
@@ -66,7 +66,7 @@ defmodule Instream.InfluxDBv2.Connection.BucketOrgTest do
     |> expect(:request, fn :post, ^url_default, _, _, _ -> {:ok, 200, [], ""} end)
     |> expect(:request, fn :post, ^url_override, _, _, _ -> {:ok, 200, [], ""} end)
 
-    MockConnection.write(%DefaultSeries{})
-    MockConnection.write(%DefaultSeries{}, bucket: "default_bucket", org: "default_org")
+    MockConnection.write(%TestSeries{})
+    MockConnection.write(%TestSeries{}, bucket: "default_bucket", org: "default_org")
   end
 end

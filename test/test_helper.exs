@@ -1,4 +1,4 @@
-alias Instream.TestHelpers.Connections.DefaultConnection
+alias Instream.TestHelpers.TestConnection
 
 config = ExUnit.configuration()
 
@@ -26,7 +26,7 @@ if version in ["2.0", "2.1"] do
 
   Application.put_env(
     :instream,
-    DefaultConnection,
+    TestConnection,
     auth: [method: :token, token: System.get_env("INFLUXDB_TOKEN")],
     bucket: "test_database",
     org: "instream_test",
@@ -36,14 +36,14 @@ if version in ["2.0", "2.1"] do
 else
   Application.put_env(
     :instream,
-    DefaultConnection,
+    TestConnection,
     auth: [username: "instream_test", password: "instream_test"],
     database: "test_database",
     loggers: []
   )
 
-  _ = DefaultConnection.query("DROP DATABASE test_database", method: :post)
-  _ = DefaultConnection.query("CREATE DATABASE test_database", method: :post)
+  _ = TestConnection.query("DROP DATABASE test_database", method: :post)
+  _ = TestConnection.query("CREATE DATABASE test_database", method: :post)
 end
 
 # configure unix socket connection tests

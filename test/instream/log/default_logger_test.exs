@@ -5,7 +5,7 @@ defmodule Instream.Log.DefaultLoggerTest do
 
   import ExUnit.CaptureLog
 
-  alias Instream.TestHelpers.Connections.DefaultConnection
+  alias Instream.TestHelpers.TestConnection
 
   defmodule LogConnection do
     use Instream.Connection, otp_app: :instream
@@ -27,7 +27,7 @@ defmodule Instream.Log.DefaultLoggerTest do
     Application.put_env(
       :instream,
       LogConnection,
-      Keyword.drop(DefaultConnection.config(), [:loggers])
+      Keyword.drop(TestConnection.config(), [:loggers])
     )
   end
 

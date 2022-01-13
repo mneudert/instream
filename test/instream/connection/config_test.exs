@@ -2,11 +2,11 @@ defmodule Instream.Connection.ConfigTest do
   use ExUnit.Case, async: true
 
   alias Instream.Connection.Config
-  alias Instream.TestHelpers.Connections.DefaultConnection
+  alias Instream.TestHelpers.TestConnection
 
   test "default value access", %{test: test} do
     assert "http" = Config.get(test, __MODULE__, :scheme, [])
-    assert "http" = DefaultConnection.config(:scheme)
+    assert "http" = TestConnection.config(:scheme)
   end
 
   test "inline configuration defaults" do

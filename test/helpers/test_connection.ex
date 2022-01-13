@@ -1,4 +1,4 @@
-defmodule Instream.TestHelpers.Connections.DefaultConnection do
+defmodule Instream.TestHelpers.TestConnection do
   @moduledoc """
   Test Connection.
   """

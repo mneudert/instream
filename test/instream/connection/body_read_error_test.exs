@@ -1,7 +1,7 @@
 defmodule Instream.Connection.BodyReadErrorTest do
   use ExUnit.Case, async: true
 
-  alias Instream.TestHelpers.Connections.DefaultConnection
+  alias Instream.TestHelpers.TestConnection
 
   defmodule RanchSocketConnection do
     use Instream.Connection,
@@ -55,7 +55,7 @@ defmodule Instream.Connection.BodyReadErrorTest do
 
     socket_env =
       Keyword.merge(
-        DefaultConnection.config(),
+        TestConnection.config(),
         host: URI.encode_www_form(socket),
         port: 0,
         scheme: "http+unix"
@@ -77,7 +77,7 @@ defmodule Instream.Connection.BodyReadErrorTest do
       fields: %{field: :test}
     }
 
-    if :v1 == DefaultConnection.config(:version) do
+    if :v1 == TestConnection.config(:version) do
       assert :error = RanchSocketConnection.ping()
       assert :error = RanchSocketConnection.status()
       assert :error = RanchSocketConnection.version()

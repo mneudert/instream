@@ -3,7 +3,7 @@ defmodule Instream.InfluxDBv2.ConnectionTest do
 
   @moduletag :"influxdb_include_2.x"
 
-  alias Instream.TestHelpers.Connections.DefaultConnection
+  alias Instream.TestHelpers.TestConnection
 
   defmodule TestSeries do
     use Instream.Series
@@ -22,22 +22,22 @@ defmodule Instream.InfluxDBv2.ConnectionTest do
   @tags %{bar: "bar", foo: "foo"}
 
   test "mismatched InfluxDB version" do
-    assert {:error, :version_mismatch} = DefaultConnection.status()
+    assert {:error, :version_mismatch} = TestConnection.status()
   end
 
   test "ping connection" do
-    assert :pong = DefaultConnection.ping()
+    assert :pong = TestConnection.ping()
   end
 
   test "version connection" do
-    assert is_binary(DefaultConnection.version())
+    assert is_binary(TestConnection.version())
   end
 
   test "write data" do
     measurement = "write_data"
 
     :ok =
-      DefaultConnection.write([
+      TestConnection.write([
         %{
           measurement: measurement,
           tags: @tags,
@@ -46,9 +46,9 @@ defmodule Instream.InfluxDBv2.ConnectionTest do
       ])
 
     result =
-      DefaultConnection.query(
+      TestConnection.query(
         """
-          from(bucket: "#{DefaultConnection.config(:bucket)}")
+          from(bucket: "#{TestConnection.config(:bucket)}")
           |> range(start: -5m)
           |> filter(fn: (r) =>
             r._measurement == "#{measurement}"
@@ -93,12 +93,12 @@ defmodule Instream.InfluxDBv2.ConnectionTest do
         numeric: 17
       }
       |> TestSeries.from_map()
-      |> DefaultConnection.write()
+      |> TestConnection.write()
 
     result =
-      DefaultConnection.query(
+      TestConnection.query(
         """
-          from(bucket: "#{DefaultConnection.config(:bucket)}")
+          from(bucket: "#{TestConnection.config(:bucket)}")
           |> range(start: -5m)
           |> filter(fn: (r) =>
             r._measurement == "#{measurement}"
