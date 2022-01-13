@@ -6,6 +6,7 @@ defmodule Instream.InfluxDBv2.Connection.BucketOrgTest do
   import Mox
 
   alias Instream.TestHelpers.HTTPClientMock
+  alias Instream.TestHelpers.Series.DefaultSeries
 
   setup :verify_on_exit!
 
@@ -18,17 +19,6 @@ defmodule Instream.InfluxDBv2.Connection.BucketOrgTest do
         org: "default_org",
         version: :v2
       ]
-  end
-
-  defmodule DefaultSeries do
-    use Instream.Series
-
-    series do
-      measurement "default_series"
-
-      tag :foo, default: :bar
-      field :value, default: 100
-    end
   end
 
   test "query bucket/org priority (Flux)" do

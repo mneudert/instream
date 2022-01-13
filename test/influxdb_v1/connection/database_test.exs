@@ -7,6 +7,7 @@ defmodule Instream.InfluxDBv1.Connection.DatabaseTest do
   import Mox
 
   alias Instream.TestHelpers.HTTPClientMock
+  alias Instream.TestHelpers.Series.DefaultSeries
 
   setup :verify_on_exit!
 
@@ -18,17 +19,6 @@ defmodule Instream.InfluxDBv1.Connection.DatabaseTest do
         loggers: [],
         version: :v1
       ]
-  end
-
-  defmodule DefaultSeries do
-    use Instream.Series
-
-    series do
-      measurement "default_series"
-
-      tag :foo, default: :bar
-      field :value, default: 100
-    end
   end
 
   test "query database priority" do
