@@ -38,8 +38,8 @@ defmodule Instream.Connection.ResponseParserV1 do
 
   defp maybe_decode_csv(response, opts) do
     case opts[:result_as] do
-      :csv -> CSV.parse(response)
-      _ -> response
+      :raw -> response
+      _ -> CSV.parse(response)
     end
   end
 
