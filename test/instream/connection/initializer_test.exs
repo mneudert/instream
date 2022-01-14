@@ -1,4 +1,4 @@
-defmodule Instream.Connection.SupervisorTest do
+defmodule Instream.Connection.InitializerTest do
   use ExUnit.Case, async: true
 
   defmodule Initializer do
@@ -15,16 +15,20 @@ defmodule Instream.Connection.SupervisorTest do
   end
 
   defmodule InitializerConnectionModFun do
+    alias Instream.Connection.InitializerTest.Initializer
+
     use Instream.Connection,
       config: [
-        init: {Instream.Connection.SupervisorTest.Initializer, :call_init}
+        init: {Initializer, :call_init}
       ]
   end
 
   defmodule InitializerConnectionModFunArgs do
+    alias Instream.Connection.InitializerTest.Initializer
+
     use Instream.Connection,
       config: [
-        init: {Instream.Connection.SupervisorTest.Initializer, :call_init, [:extra, :args]}
+        init: {Initializer, :call_init, [:extra, :args]}
       ]
   end
 
