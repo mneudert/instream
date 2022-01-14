@@ -194,6 +194,7 @@ defmodule Instream.Series do
       @fields_struct Enum.sort(@fields_raw, &unquote(__MODULE__).__sort_fields__/2)
       @tags_struct Enum.sort(@tags_raw, &unquote(__MODULE__).__sort_tags__/2)
 
+      @impl unquote(__MODULE__)
       def __meta__(:fields), do: Keyword.keys(@fields_struct)
       def __meta__(:measurement), do: @measurement
       def __meta__(:tags), do: Keyword.keys(@tags_struct)
@@ -207,7 +208,10 @@ defmodule Instream.Series do
         unquote(__MODULE__).__struct__(__MODULE__)
       ])
 
+      @impl unquote(__MODULE__)
       def from_map(data), do: Hydrator.from_map(__MODULE__, data)
+
+      @impl unquote(__MODULE__)
       def from_result(data), do: Hydrator.from_result(__MODULE__, data)
     end
   end
