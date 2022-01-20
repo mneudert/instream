@@ -2,7 +2,7 @@ defmodule Instream.MixProject do
   use Mix.Project
 
   @url_github "https://github.com/mneudert/instream"
-  @version "2.0.0-rc.0"
+  @version "2.0.0-rc.1-dev"
 
   def project do
     [
