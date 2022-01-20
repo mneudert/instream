@@ -19,7 +19,7 @@ To use Instream with your projects, edit your `mix.exs` file and add the require
 defp deps do
   [
     # ...
-    {:instream, "~> 1.0"},
+    {:instream, "~> 2.0.0-rc"},
     # ...
   ]
 end

@@ -2,12 +2,13 @@ defmodule Instream.MixProject do
   use Mix.Project
 
   @url_github "https://github.com/mneudert/instream"
+  @version "2.0.0-rc.0"
 
   def project do
     [
       app: :instream,
       name: "Instream",
-      version: "2.0.0-dev",
+      version: @version,
       elixir: "~> 1.9",
       aliases: aliases(),
       deps: deps(),
@@ -78,7 +79,7 @@ defmodule Instream.MixProject do
         "README.md": [title: "Overview"]
       ],
       skip_undefined_reference_warnings_on: ["CHANGELOG.md"],
-      source_ref: "master",
+      source_ref: "v#{@version}",
       source_url: @url_github
     ]
   end
