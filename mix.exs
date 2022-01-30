@@ -78,6 +78,7 @@ defmodule Instream.MixProject do
         LICENSE: [title: "License"],
         "README.md": [title: "Overview"]
       ],
+      formatters: ["html"],
       skip_undefined_reference_warnings_on: ["CHANGELOG.md"],
       source_ref: "v#{@version}",
       source_url: @url_github
