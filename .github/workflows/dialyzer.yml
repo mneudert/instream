@@ -35,7 +35,7 @@ jobs:
       id: plt-cache
       with:
         path: plts
-        key: ${{ runner.os }}-${{ steps.setup.outputs.otp-version }}-${{ steps.setup.outputs.elixir-version }}-plts-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
+        key: ${{ runner.os }}-${{ steps.setup.outputs.otp-version }}-${{ steps.setup.outputs.elixir-version }}-plts
 
     - name: plt-create
       if: steps.plt-cache.outputs.cache-hit != 'true'
@@ -44,4 +44,4 @@ jobs:
         mix dialyzer --plt
 
     - name: dialyzer
-      run: mix dialyzer --no-check
+      run: mix dialyzer
