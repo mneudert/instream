@@ -1,4 +1,4 @@
-name: Test InfluxDB v2.1
+name: Test InfluxDB v2.x
 
 on: [push, pull_request]
 
@@ -11,17 +11,23 @@ jobs:
         include:
           - elixir: '1.13.4'
             otp: '24.3'
+            influxdb_image_version: '2.0.9'
+            influxdb_test_version: '2.0'
+          - elixir: '1.13.4'
+            otp: '24.3'
+            influxdb_image_version: '2.1.1'
+            influxdb_test_version: '2.1'
 
     services:
       influxdb:
-        image: influxdb:2.1.1
+        image: influxdb:${{ matrix.influxdb_image_version }}
         ports:
           - 8086:8086
 
     env:
       MIX_ENV: test
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      INFLUXDB_VERSION: '2.1'
+      INFLUXDB_VERSION: ${{ matrix.influxdb_test_version }}
 
     steps:
     - uses: actions/checkout@v2
