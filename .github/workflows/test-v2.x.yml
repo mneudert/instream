@@ -70,8 +70,9 @@ jobs:
                     }'
         )
 
-        export INFLUXDB_TOKEN=$(jq -r '.auth.token' <<< "${SETUP}")
         export INFLUXDB_BUCKETID=$(jq -r '.bucket.id' <<< "${SETUP}")
+        export INFLUXDB_ORGID=$(jq -r '.org.id' <<< "${SETUP}")
+        export INFLUXDB_TOKEN=$(jq -r '.auth.token' <<< "${SETUP}")
 
         curl -s -o /dev/null \
             -XPOST http://localhost:8086/api/v2/dbrps \
@@ -81,8 +82,8 @@ jobs:
                   "bucketID": "${INFLUX_BUCKETID}",
                   "database": "test_database",
                   "default": true,
-                  "org": "instream_test",
-                  "retention_policy": "autogen"
+                  "orgID": "${INFLUX_ORGID}",
+                  "retention_policy": "test_retention"
                 }'
 
         mix coveralls.github
