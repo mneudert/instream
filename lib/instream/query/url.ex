@@ -25,6 +25,12 @@ defmodule Instream.Query.URL do
   @spec query(Keyword.t(), Keyword.t()) :: String.t()
   def query(config, opts) do
     case {config[:version], opts[:query_language]} do
+      {:v2, :influxql} ->
+        config
+        |> url("query")
+        |> append_param("db", opts[:database] || config[:database])
+        |> append_param("epoch", encode_precision(opts[:precision]))
+
       {:v2, _} ->
         config
         |> url("api/v2/query")

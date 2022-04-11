@@ -62,7 +62,7 @@ defmodule Instream.Connection.QueryRunnerV2 do
     http_opts = http_opts(config, opts)
 
     body = read_body(conn, query, opts)
-    url = URL.query(config, opts)
+    url = read_url(conn, query, opts)
 
     {query_time, response} =
       :timer.tc(fn ->
@@ -159,18 +159,8 @@ defmodule Instream.Connection.QueryRunnerV2 do
   defp log(_, _), do: :ok
 
   defp read_body(conn, query, opts) do
-    config = conn.config()
-
-    case opts[:query_language] do
-      :influxql ->
-        JSON.encode(
-          %{
-            type: "influxql",
-            bucket: opts[:bucket] || config[:bucket],
-            query: query
-          },
-          conn
-        )
+   case opts[:query_language] do
+      :influxql -> ""
 
       _ ->
         JSON.encode(
@@ -183,6 +173,27 @@ defmodule Instream.Connection.QueryRunnerV2 do
           },
           conn
         )
+    end
+  end
+
+  defp read_url(conn, query, opts) do
+    config = conn.config()
+    url = URL.query(config, opts)
+
+    url =
+      case opts[:params] do
+        params when is_map(params) ->
+          params
+          |> JSON.encode(conn)
+          |> URL.append_json_params(url)
+
+        _ ->
+          url
+      end
+
+    case opts[:query_language] do
+      :influxql -> URL.append_query(url, query)
+      _ -> url
     end
   end
 end

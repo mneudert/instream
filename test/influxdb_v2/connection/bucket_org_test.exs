@@ -21,7 +21,7 @@ defmodule Instream.InfluxDBv2.Connection.BucketOrgTest do
       ]
   end
 
-  test "query bucket/org priority (Flux)" do
+  test "query bucket/org priority" do
     url_default = "http://localhost:8086/api/v2/query?org=default_org"
     url_override = "http://localhost:8086/api/v2/query?org=override_org"
 
@@ -31,31 +31,6 @@ defmodule Instream.InfluxDBv2.Connection.BucketOrgTest do
 
     MockConnection.query("--ignored--")
     MockConnection.query("--ignored--", org: "override_org")
-  end
-
-  test "query bucket/org priority (InfluxQL)" do
-    url_default = "http://localhost:8086/api/v2/query?org=default_org"
-    url_override = "http://localhost:8086/api/v2/query?org=override_org"
-
-    HTTPClientMock
-    |> expect(:request, fn :post, ^url_default, _, body, _ ->
-      assert %{"bucket" => "default_bucket"} = Jason.decode!(body)
-
-      {:ok, 200, [], ""}
-    end)
-    |> expect(:request, fn :post, ^url_override, _, body, _ ->
-      assert %{"bucket" => "override_bucket"} = Jason.decode!(body)
-
-      {:ok, 200, [], ""}
-    end)
-
-    MockConnection.query("--ignored--", query_language: :influxql)
-
-    MockConnection.query("--ignored--",
-      bucket: "override_bucket",
-      org: "override_org",
-      query_language: :influxql
-    )
   end
 
   test "write bucket/org priority" do
