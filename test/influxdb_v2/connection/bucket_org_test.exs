@@ -60,13 +60,13 @@ defmodule Instream.InfluxDBv2.Connection.BucketOrgTest do
 
   test "write bucket/org priority" do
     url_default = "http://localhost:8086/api/v2/write?bucket=default_bucket&org=default_org"
-    url_override = "http://localhost:8086/api/v2/write?bucket=default_bucket&org=default_org"
+    url_override = "http://localhost:8086/api/v2/write?bucket=override_bucket&org=override_org"
 
     HTTPClientMock
     |> expect(:request, fn :post, ^url_default, _, _, _ -> {:ok, 200, [], ""} end)
     |> expect(:request, fn :post, ^url_override, _, _, _ -> {:ok, 200, [], ""} end)
 
     MockConnection.write(%TestSeries{})
-    MockConnection.write(%TestSeries{}, bucket: "default_bucket", org: "default_org")
+    MockConnection.write(%TestSeries{}, bucket: "override_bucket", org: "override_org")
   end
 end
