@@ -76,14 +76,14 @@ jobs:
 
         curl -s -o /dev/null \
             -XPOST http://localhost:8086/api/v2/dbrps \
-            -H "Authorization: Token ${INFLUX_TOKEN}" \
+            -H "Authorization: Token ${INFLUXDB_TOKEN}" \
             -H 'accept: application/json' \
-            -d '{
-                  "bucketID": "${INFLUX_BUCKETID}",
-                  "database": "test_database",
-                  "default": true,
-                  "orgID": "${INFLUX_ORGID}",
-                  "retention_policy": "test_retention"
-                }'
+            -d "{
+                  \"bucketID\": \"${INFLUXDB_BUCKETID}\",
+                  \"database\": \"mapped_database\",
+                  \"default\": true,
+                  \"orgID\": \"${INFLUXDB_ORGID}\",
+                  \"retention_policy\": \"mapped_retention\"
+                }"
 
         mix coveralls.github
