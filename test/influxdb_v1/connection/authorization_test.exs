@@ -3,6 +3,7 @@ defmodule Instream.InfluxDBv1.Connection.AuthorizationTest do
 
   @moduletag :"influxdb_exclude_2.0"
   @moduletag :"influxdb_exclude_2.1"
+  @moduletag :"influxdb_exclude_2.2"
 
   defmodule UnauthorizedConnection do
     use Instream.Connection,

@@ -17,6 +17,10 @@ jobs:
             otp: '24.3'
             influxdb_image_version: '2.1.1'
             influxdb_test_version: '2.1'
+          - elixir: '1.13.4'
+            otp: '24.3'
+            influxdb_image_version: '2.2.0'
+            influxdb_test_version: '2.2'
 
     services:
       influxdb:

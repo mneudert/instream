@@ -36,6 +36,7 @@ defmodule Instream.Connection.ErrorTest do
 
   @tag :"influxdb_exclude_2.0"
   @tag :"influxdb_exclude_2.1"
+  @tag :"influxdb_exclude_2.2"
   test "status connection" do
     assert :error = OptionsConnection.status()
     assert :error = UnreachableConnection.status()
@@ -43,6 +44,7 @@ defmodule Instream.Connection.ErrorTest do
 
   @tag :"influxdb_exclude_2.0"
   @tag :"influxdb_exclude_2.1"
+  @tag :"influxdb_exclude_2.2"
   test "version connection" do
     assert :error = OptionsConnection.version()
     assert :error = UnreachableConnection.version()

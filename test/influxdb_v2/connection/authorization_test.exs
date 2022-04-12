@@ -34,6 +34,7 @@ defmodule Instream.InfluxDBv2.Connection.AuthorizationTest do
 
   describe ":bearer authentication" do
     @tag :"influxdb_exclude_2.1"
+    @tag :"influxdb_exclude_2.2"
     test "influxdb v2.0" do
       assert BearerAuthenticationConnection.query(~S|from(bucket: "ignored")|) == %{
                code: "unauthorized",
@@ -42,7 +43,7 @@ defmodule Instream.InfluxDBv2.Connection.AuthorizationTest do
     end
 
     @tag :"influxdb_exclude_2.0"
-    test "influxdb v2.1" do
+    test "influxdb >= v2.1" do
       start_supervised!(BearerAuthenticationConnection)
 
       refute BearerAuthenticationConnection.query(~S|from(bucket: "ignored")|) == %{
