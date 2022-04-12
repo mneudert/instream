@@ -159,8 +159,9 @@ defmodule Instream.Connection.QueryRunnerV2 do
   defp log(_, _), do: :ok
 
   defp read_body(conn, query, opts) do
-   case opts[:query_language] do
-      :influxql -> ""
+    case opts[:query_language] do
+      :influxql ->
+        ""
 
       _ ->
         JSON.encode(
