@@ -28,7 +28,7 @@ if version in ["2.0", "2.1"] do
     :instream,
     TestConnection,
     auth: [method: :token, token: System.get_env("INFLUXDB_TOKEN")],
-    bucket: "test_database",
+    bucket: "test_bucket",
     database: "mapped_database",
     org: "instream_test",
     loggers: [],

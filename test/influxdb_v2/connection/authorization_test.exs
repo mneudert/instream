@@ -8,7 +8,7 @@ defmodule Instream.InfluxDBv2.Connection.AuthorizationTest do
       otp_app: :instream,
       config: [
         init: {__MODULE__, :fetch_influxdb_auth},
-        bucket: "test_database",
+        bucket: "test_bucket",
         org: "instream_test",
         loggers: [],
         version: :v2
