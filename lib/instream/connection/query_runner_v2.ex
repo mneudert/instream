@@ -181,20 +181,21 @@ defmodule Instream.Connection.QueryRunnerV2 do
     config = conn.config()
     url = URL.query(config, opts)
 
-    url =
-      case opts[:params] do
-        params when is_map(params) ->
-          params
-          |> JSON.encode(conn)
-          |> URL.append_json_params(url)
-
-        _ ->
-          url
-      end
-
     case opts[:query_language] do
-      :influxql -> URL.append_query(url, query)
-      _ -> url
+      :influxql ->
+        case opts[:params] do
+          params when is_map(params) ->
+            params
+            |> JSON.encode(conn)
+            |> URL.append_json_params(url)
+
+          _ ->
+            url
+        end
+        |> URL.append_query(query)
+
+      _ ->
+        url
     end
   end
 end
