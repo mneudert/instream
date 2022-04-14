@@ -46,17 +46,14 @@ defmodule Instream.InfluxDBv2.ConnectionTest do
       ])
 
     result =
-      TestConnection.query(
-        """
-          from(bucket: "#{TestConnection.config(:bucket)}")
-          |> range(start: -5m)
-          |> filter(fn: (r) =>
-            r._measurement == "#{measurement}"
-          )
-          |> first()
-        """,
-        query_language: :flux
-      )
+      TestConnection.query("""
+        from(bucket: "#{TestConnection.config(:bucket)}")
+        |> range(start: -5m)
+        |> filter(fn: (r) =>
+          r._measurement == "#{measurement}"
+        )
+        |> first()
+      """)
 
     assert [
              [
@@ -96,17 +93,14 @@ defmodule Instream.InfluxDBv2.ConnectionTest do
       |> TestConnection.write()
 
     result =
-      TestConnection.query(
-        """
-          from(bucket: "#{TestConnection.config(:bucket)}")
-          |> range(start: -5m)
-          |> filter(fn: (r) =>
-            r._measurement == "#{measurement}"
-          )
-          |> first()
-        """,
-        query_language: :flux
-      )
+      TestConnection.query("""
+        from(bucket: "#{TestConnection.config(:bucket)}")
+        |> range(start: -5m)
+        |> filter(fn: (r) =>
+          r._measurement == "#{measurement}"
+        )
+        |> first()
+      """)
 
     assert [
              [

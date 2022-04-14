@@ -94,21 +94,18 @@ defmodule Instream.InfluxDBv2.Writer.LineTest do
       |> TestConnection.write(precision: :second)
 
     result =
-      TestConnection.query(
-        """
-          from(bucket: "#{TestConnection.config(:bucket)}")
-          |> range(
-            start: #{timestamp - 30},
-            stop: #{timestamp + 30}
-          )
-          |> filter(fn: (r) =>
-            r._measurement == "#{measurement}" and
-            r.proto == "Line"
-          )
-          |> first()
-        """,
-        query_language: :flux
-      )
+      TestConnection.query("""
+        from(bucket: "#{TestConnection.config(:bucket)}")
+        |> range(
+          start: #{timestamp - 30},
+          stop: #{timestamp + 30}
+        )
+        |> filter(fn: (r) =>
+          r._measurement == "#{measurement}" and
+          r.proto == "Line"
+        )
+        |> first()
+      """)
 
     assert [
              %{
@@ -135,17 +132,14 @@ defmodule Instream.InfluxDBv2.Writer.LineTest do
       |> TestConnection.write()
 
     result =
-      TestConnection.query(
-        """
-          from(bucket: "#{TestConnection.config(:bucket)}")
-          |> range(start: -5m)
-          |> filter(fn: (r) =>
-            r._measurement == "#{LineEncodingSeries.__meta__(:measurement)}"
-          )
-          |> first()
-        """,
-        query_language: :flux
-      )
+      TestConnection.query("""
+        from(bucket: "#{TestConnection.config(:bucket)}")
+        |> range(start: -5m)
+        |> filter(fn: (r) =>
+          r._measurement == "#{LineEncodingSeries.__meta__(:measurement)}"
+        )
+        |> first()
+      """)
 
     [
       [
@@ -223,20 +217,17 @@ defmodule Instream.InfluxDBv2.Writer.LineTest do
       |> TestConnection.write(precision: :second)
 
     result =
-      TestConnection.query(
-        """
-          from(bucket: "#{TestConnection.config(:bucket)}")
-          |> range(
-            start: #{timestamp - 30},
-            stop: #{timestamp + 30}
-          )
-          |> filter(fn: (r) =>
-            r._measurement == "#{measurement}"
-          )
-          |> first()
-        """,
-        query_language: :flux
-      )
+      TestConnection.query("""
+        from(bucket: "#{TestConnection.config(:bucket)}")
+        |> range(
+          start: #{timestamp - 30},
+          stop: #{timestamp + 30}
+        )
+        |> filter(fn: (r) =>
+          r._measurement == "#{measurement}"
+        )
+        |> first()
+      """)
 
     assert [
              %{
@@ -268,17 +259,14 @@ defmodule Instream.InfluxDBv2.Writer.LineTest do
       |> TestConnection.write()
 
     result =
-      TestConnection.query(
-        """
-          from(bucket: "#{TestConnection.config(:bucket)}")
-          |> range(start: -5m)
-          |> filter(fn: (r) =>
-            r._measurement == "#{measurement}"
-          )
-          |> first()
-        """,
-        query_language: :flux
-      )
+      TestConnection.query("""
+        from(bucket: "#{TestConnection.config(:bucket)}")
+        |> range(start: -5m)
+        |> filter(fn: (r) =>
+          r._measurement == "#{measurement}"
+        )
+        |> first()
+      """)
 
     assert [
              %{
@@ -303,17 +291,14 @@ defmodule Instream.InfluxDBv2.Writer.LineTest do
       |> TestConnection.write(org: org, bucket: bucket)
 
     result =
-      TestConnection.query(
-        """
-          from(bucket: "#{bucket}")
-          |> range(start: -5m)
-          |> filter(fn: (r) =>
-            r._measurement == "#{measurement}"
-          )
-          |> first()
-        """,
-        query_language: :flux
-      )
+      TestConnection.query("""
+        from(bucket: "#{bucket}")
+        |> range(start: -5m)
+        |> filter(fn: (r) =>
+          r._measurement == "#{measurement}"
+        )
+        |> first()
+      """)
 
     assert [
              %{
