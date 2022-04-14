@@ -66,7 +66,7 @@ defmodule Instream.InfluxDBv1.Series.HydratorTest do
           r._measurement == "#{TestSeries.__meta__(:measurement)}" and
           r.hydrator == "flux"
         )
-        |> first()
+        |> last()
       """
       |> TestConnection.query(query_language: :flux)
       |> TestSeries.from_result()

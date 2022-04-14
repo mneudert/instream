@@ -31,7 +31,7 @@ defmodule Instream.InfluxDBv2.Series.HydratorTest do
           r._measurement == "#{TestSeries.__meta__(:measurement)}" and
           r.hydrator == "flux"
         )
-        |> first()
+        |> last()
       """
       |> TestConnection.query()
       |> TestSeries.from_result()
@@ -65,7 +65,7 @@ defmodule Instream.InfluxDBv2.Series.HydratorTest do
           r._measurement == "#{TestSeries.__meta__(:measurement)}" and
           r.hydrator == "flux-pivoted"
         )
-        |> first()
+        |> last()
         |> pivot(rowKey:["_time"], columnKey: ["_field"], valueColumn: "_value")
       """
       |> TestConnection.query()

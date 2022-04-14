@@ -104,7 +104,7 @@ defmodule Instream.InfluxDBv2.Writer.LineTest do
           r._measurement == "#{measurement}" and
           r.proto == "Line"
         )
-        |> first()
+        |> last()
       """)
 
     assert [
@@ -138,7 +138,7 @@ defmodule Instream.InfluxDBv2.Writer.LineTest do
         |> filter(fn: (r) =>
           r._measurement == "#{LineEncodingSeries.__meta__(:measurement)}"
         )
-        |> first()
+        |> last()
       """)
 
     [
@@ -226,7 +226,7 @@ defmodule Instream.InfluxDBv2.Writer.LineTest do
         |> filter(fn: (r) =>
           r._measurement == "#{measurement}"
         )
-        |> first()
+        |> last()
       """)
 
     assert [
@@ -265,7 +265,7 @@ defmodule Instream.InfluxDBv2.Writer.LineTest do
         |> filter(fn: (r) =>
           r._measurement == "#{measurement}"
         )
-        |> first()
+        |> last()
       """)
 
     assert [
@@ -297,7 +297,7 @@ defmodule Instream.InfluxDBv2.Writer.LineTest do
         |> filter(fn: (r) =>
           r._measurement == "#{measurement}"
         )
-        |> first()
+        |> last()
       """)
 
     assert [

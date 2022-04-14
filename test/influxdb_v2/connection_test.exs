@@ -52,7 +52,7 @@ defmodule Instream.InfluxDBv2.ConnectionTest do
         |> filter(fn: (r) =>
           r._measurement == "#{measurement}"
         )
-        |> first()
+        |> last()
       """)
 
     assert [
@@ -99,7 +99,7 @@ defmodule Instream.InfluxDBv2.ConnectionTest do
         |> filter(fn: (r) =>
           r._measurement == "#{measurement}"
         )
-        |> first()
+        |> last()
       """)
 
     assert [
