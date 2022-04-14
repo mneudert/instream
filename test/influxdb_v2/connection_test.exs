@@ -131,4 +131,24 @@ defmodule Instream.InfluxDBv2.ConnectionTest do
              ]
            ] = result
   end
+
+  test "read using InfluxQL and params" do
+    test_field = ~S|string field value, only " need be quoted|
+    test_tag = ~S|tag,value,with"commas"|
+
+    :ok =
+      TestConnection.write([
+        %{
+          measurement: "params",
+          tags: %{foo: test_tag},
+          fields: %{value: test_field}
+        }
+      ])
+
+    query = "SELECT LAST(value) FROM params WHERE foo = $foo_val"
+    params = %{foo_val: test_tag}
+
+    assert %{results: [%{series: [%{name: "params", values: [[_, ^test_field]]}]}]} =
+             TestConnection.query(query, query_language: :influxql, params: params)
+  end
 end
