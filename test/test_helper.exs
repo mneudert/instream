@@ -50,25 +50,26 @@ end
 
 # configure unix socket connection tests
 config =
-  case System.get_env("INFLUXDB_SOCKET") do
-    nil ->
-      IO.puts("Environment variable 'INFLUXDB_SOCKET' not set, skipping unix socket tests")
+  if version in ["1.8"] do
+    unless System.get_env("INFLUXDB_SOCKET") do
+      raise RuntimeError, "Required environment variable 'INFLUXDB_SOCKET' not set!"
+    end
 
-      Keyword.put(config, :exclude, [:unix_socket | config[:exclude]])
-
-    _ ->
-      config
+    config
+  else
+    Keyword.put(config, :exclude, [:unix_socket | config[:exclude]])
   end
 
 # configure UDP writer tests
 config =
-  case System.get_env("INFLUXDB_PORT_UDP") do
-    nil ->
-      IO.puts("Environment variable 'INFLUXDB_PORT_UDP' not set, skipping UDP writer tests")
-      Keyword.put(config, :exclude, [:udp | config[:exclude]])
+  if version in ["1.7", "1.8"] do
+    unless System.get_env("INFLUXDB_PORT_UDP") do
+      raise RuntimeError, "Required environment variable 'INFLUXDB_PORT_UDP' not set!"
+    end
 
-    _ ->
-      config
+    config
+  else
+    Keyword.put(config, :exclude, [:udp | config[:exclude]])
   end
 
 # start ExUnit
