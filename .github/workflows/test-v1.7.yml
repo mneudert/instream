@@ -35,7 +35,7 @@ jobs:
     env:
       MIX_ENV: test
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      INFLXUDB_PORT_UDP: 8089
+      INFLUXDB_PORT_UDP: 8089
       INFLUXDB_VERSION: '1.7'
 
     steps:
