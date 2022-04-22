@@ -32,10 +32,10 @@ To run the tests you need to have HTTP authentication enabled.
 
 The following environment variables are used to select some test suites and the InfluxDB version under test:
 
-- `INFLUXDB_VERSION`: one of `"1.7"`, `"1.8"`, `"2.0"` or `"2.1"`
-- `INFLUXDB_PORT_UDP`: the UDP port used for writer testing
-- `INFLUXDB_SOCKET`: path to the unix socket a tested InfluxDB 1.8.x instance listens on
-- `INFLUXDB_TOKEN`: the connection token used to test an InfluxDB 2.x instance
+- `INFLUXDB_VERSION`: one of `"1.7"`, `"1.8"`, `"2.0"`, `"2.1"`, or `"2.2"`
+- `INFLUXDB_PORT_UDP`: the UDP port used for writer testing _(InfluxDB 1.x only)_
+- `INFLUXDB_SOCKET`: path to the InfluxDB unix socket _(InfluxDB 1.8 only)_
+- `INFLUXDB_TOKEN`: the authentication token used _(InfluxDB 2.x only)_
 
 ## Usage
 
