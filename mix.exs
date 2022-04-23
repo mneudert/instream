@@ -1,6 +1,7 @@
 defmodule Instream.MixProject do
   use Mix.Project
 
+  @url_changelog "https://hexdocs.pm/instream/changelog.html"
   @url_github "https://github.com/mneudert/instream"
   @version "2.0.0-rc.1-dev"
 
@@ -92,7 +93,10 @@ defmodule Instream.MixProject do
     [
       files: [".formatter.exs", "CHANGELOG.md", "LICENSE", "mix.exs", "README.md", "lib"],
       licenses: ["Apache-2.0"],
-      links: %{"GitHub" => @url_github}
+      links: %{
+        "Changelog" => @url_changelog,
+        "GitHub" => @url_github
+      }
     ]
   end
 end
