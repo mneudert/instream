@@ -3,6 +3,10 @@ defmodule Instream.Encoder.LineTest do
 
   alias Instream.Encoder.Line
 
+  test "empty point list" do
+    assert "" = Line.encode([])
+  end
+
   test "empty point (no effective fields/tags)" do
     measurement = "test_empty"
 
