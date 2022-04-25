@@ -17,8 +17,7 @@ defmodule Instream.InfluxDBv1.Connection.DatabaseTest do
       config: [
         database: "default_database",
         http_client: HTTPClientMock,
-        loggers: [],
-        version: :v1
+        loggers: []
       ]
   end
 
