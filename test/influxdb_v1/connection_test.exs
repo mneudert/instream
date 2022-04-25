@@ -5,7 +5,21 @@ defmodule Instream.InfluxDBv1.ConnectionTest do
   @moduletag :"influxdb_exclude_2.1"
   @moduletag :"influxdb_exclude_2.2"
 
+  import Mox
+
+  alias Instream.TestHelpers.HTTPClientMock
   alias Instream.TestHelpers.TestConnection
+
+  setup :verify_on_exit!
+
+  defmodule MockConnection do
+    use Instream.Connection,
+      config: [
+        database: "default_database",
+        http_client: HTTPClientMock,
+        loggers: []
+      ]
+  end
 
   defmodule TestSeries do
     use Instream.Series
@@ -31,7 +45,11 @@ defmodule Instream.InfluxDBv1.ConnectionTest do
   end
 
   test "version connection" do
-    assert is_binary(TestConnection.version())
+    HTTPClientMock
+    |> expect(:request, fn :head, _, _, _, _ -> {:ok, 204, []} end)
+
+    assert "unknown" == MockConnection.version()
+    refute "unknown" == TestConnection.version()
   end
 
   test "read using params" do
