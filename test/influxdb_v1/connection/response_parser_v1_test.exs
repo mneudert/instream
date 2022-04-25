@@ -8,8 +8,16 @@ defmodule Instream.Connection.ResponseParserV1Test do
   alias Instream.Connection.ResponseParserV1
 
   test "raw json error response" do
-    error = "text"
+    error = ~s({"error":"type error"})
     response = {:ok, 500, [{"Content-Type", "application/json"}], error}
+    parse_opts = [result_as: :raw]
+
+    assert ^error = ResponseParserV1.maybe_parse(response, TestConnection, parse_opts)
+  end
+
+  test "raw csv error response" do
+    error = ~s(error\n"type error")
+    response = {:ok, 500, [{"Content-Type", "application/csv"}], error}
     parse_opts = [result_as: :raw]
 
     assert ^error = ResponseParserV1.maybe_parse(response, TestConnection, parse_opts)
@@ -18,6 +26,22 @@ defmodule Instream.Connection.ResponseParserV1Test do
   test "raw non-json error response" do
     error = "text"
     response = {:ok, 500, [], error}
+    parse_opts = [result_as: :raw]
+
+    assert ^error = ResponseParserV1.maybe_parse(response, TestConnection, parse_opts)
+  end
+
+  test "raw json response" do
+    error = ~s({"some":"json"})
+    response = {:ok, 200, [{"Content-Type", "application/json"}], error}
+    parse_opts = [result_as: :raw]
+
+    assert ^error = ResponseParserV1.maybe_parse(response, TestConnection, parse_opts)
+  end
+
+  test "raw csv response" do
+    error = ~s(some\ncsv)
+    response = {:ok, 200, [{"Content-Type", "application/csv"}], error}
     parse_opts = [result_as: :raw]
 
     assert ^error = ResponseParserV1.maybe_parse(response, TestConnection, parse_opts)

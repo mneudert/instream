@@ -92,8 +92,7 @@ defmodule Instream.InfluxDBv1.ConnectionTest do
         |> range(start: -1h)
         |> filter(fn: (r) => r._measurement == "#{measurement}")
         """,
-        query_language: :flux,
-        result_as: :csv
+        query_language: :flux
       )
 
     assert [
