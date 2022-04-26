@@ -3,7 +3,21 @@ defmodule Instream.InfluxDBv2.ConnectionTest do
 
   @moduletag :"influxdb_include_2.x"
 
+  import Mox
+
+  alias Instream.TestHelpers.HTTPClientMock
   alias Instream.TestHelpers.TestConnection
+
+  setup :verify_on_exit!
+
+  defmodule MockConnection do
+    use Instream.Connection,
+      config: [
+        database: "default_database",
+        http_client: HTTPClientMock,
+        loggers: []
+      ]
+  end
 
   defmodule TestSeries do
     use Instream.Series
@@ -26,11 +40,19 @@ defmodule Instream.InfluxDBv2.ConnectionTest do
   end
 
   test "ping connection" do
+    HTTPClientMock
+    |> expect(:request, fn :head, _, _, _, _ -> {:ok, 500, []} end)
+
+    assert :error = MockConnection.ping()
     assert :pong = TestConnection.ping()
   end
 
   test "version connection" do
-    assert is_binary(TestConnection.version())
+    HTTPClientMock
+    |> expect(:request, fn :head, _, _, _, _ -> {:ok, 204, []} end)
+
+    assert "unknown" == MockConnection.version()
+    refute "unknown" == TestConnection.version()
   end
 
   test "write data" do
