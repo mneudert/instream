@@ -37,10 +37,18 @@ defmodule Instream.InfluxDBv1.ConnectionTest do
   @tags %{foo: "foo", bar: "bar"}
 
   test "ping connection" do
+    HTTPClientMock
+    |> expect(:request, fn :head, _, _, _, _ -> {:ok, 500, []} end)
+
+    assert :error = MockConnection.ping()
     assert :pong = TestConnection.ping()
   end
 
   test "status connection" do
+    HTTPClientMock
+    |> expect(:request, fn :head, _, _, _, _ -> {:ok, 500, []} end)
+
+    assert :error = MockConnection.ping()
     assert :ok = TestConnection.status()
   end
 
