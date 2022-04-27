@@ -50,7 +50,6 @@ defmodule Instream do
         |> filter(fn: (r) =>
           r._measurement == "instream_examples"
         )
-        |> first()
       ))
 
       # InfluxQL query
