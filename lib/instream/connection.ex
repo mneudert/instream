@@ -16,7 +16,7 @@ defmodule Instream.Connection do
         use Instream.Connection,
           config: [
             version: :v1,
-            host: "influxdb.example.com",
+            host: "my.influxdb.host",
             scheme: "http"
           ]
       end

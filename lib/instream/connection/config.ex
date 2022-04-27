@@ -20,7 +20,7 @@ defmodule Instream.Connection.Config do
 
       config :my_app, MyConnection,
         database: "my_default_database",
-        host: "localhost",
+        host: "my.influxdb.host",
         port: 8086
 
   ### Runtime/Startup Configuration
@@ -44,7 +44,7 @@ defmodule Instream.Connection.Config do
           config =
             Keyword.merge(
               conn.config(),
-              host: "localhost",
+              host: "my.influxdb.host",
               port: 64210
             )
 
@@ -65,7 +65,7 @@ defmodule Instream.Connection.Config do
       defmodule MyConnection do
         use Instream.Connection,
           config: [
-            host: "localhost",
+            host: "my.influxdb.host",
             port: 8086
           ]
       end
