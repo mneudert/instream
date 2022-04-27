@@ -27,11 +27,29 @@ defmodule Instream.Connection do
   For more information on how to configure your connection please refer to
   the documentation of `Instream.Connection.Config`.
 
-  ### InfluxDB version
+  ## Connection configuration
 
-  By default a connection module will expect to communicate with an
-  `InfluxDB 1.x` server (`version: :v1`). Configure `version: :v2` if you
-  are running an `InfluxDB 2.x` server.
+  There are some configuration values that should be checked/changed to
+  get your connection up and running:
+
+  - `:auth`: the authentication method and credentials
+  - `:host`: the hostname of the server (defaults to `"localhost"`)
+  - `:port`: the port of the server (defaults to `8086`)
+  - `:version`: the InfluxDB server version you are using (`:v1` or `:v2`)
+
+  Some additional configuration options/requirements depend
+  on the used version:
+
+  - `:org`: InfluxDB v2.x organization
+  - `:bucket`: InfluxDB v2.x bucket
+  - `:database`: InfluxDB v1.x database
+
+  ### InfluxDB v2.x compatibility endpoint (InfluxQL queries)
+
+  If you are using InfluxQL queries with a `:v2` connection you need to
+  set the `:database` configuration to a pre-mapped database.
+
+  Please refer to the official InfluxDB DBRP mapping documentation for details.
   """
 
   alias Instream.Log
