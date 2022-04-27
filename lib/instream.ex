@@ -62,13 +62,13 @@ defmodule Instream do
   By using the option argument of `MyConnection.query/2` you can pass different
   values to use on a per-query basis:
 
-      MyConnection.query("... query ...", database: "my_other_database")
-
       MyConnection.query(
         "... query ...",
         bucket: "my_other_bucket",
         org: "my_other_organization"
       )
+
+      MyConnection.query("... query ...", database: "my_other_database")
 
   Responses from a query will be decoded into maps by default.
 
