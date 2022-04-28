@@ -92,7 +92,7 @@ defmodule Instream.Series do
   `:calendar.rfc3339_to_system_time/2` not being available and
   `DateTime.from_iso8601/1` only supporting microseconds.
 
-  ### Hydrating Results With Multiple Fields (InfluxDB v2.x Pivoting)
+  ### Hydrating Results with Multiple Fields (InfluxDB v2.x Pivoting)
 
   If you are connecting to an InfluxDB v2.x instance and have more than one
   field in your series you will need to "pivot" your query results to be able
@@ -219,7 +219,7 @@ defmodule Instream.Series do
   @doc """
   Provides additional metadata for a series.
 
-  ## Available information
+  ## Available Information
 
   - `:fields`: the fields in the series
   - `:measurement`: the measurement of the series

@@ -27,7 +27,7 @@ defmodule Instream.Connection do
   For more information on how to configure your connection please refer to
   the documentation of `Instream.Connection.Config`.
 
-  ## Connection configuration
+  ## Connection Configuration
 
   There are some configuration values that should be checked/changed to
   get your connection up and running:
@@ -44,7 +44,7 @@ defmodule Instream.Connection do
   - `:bucket`: InfluxDB v2.x bucket
   - `:database`: InfluxDB v1.x database
 
-  ### InfluxDB v2.x compatibility endpoint (InfluxQL queries)
+  ### InfluxDB v2.x Compatibility Endpoint (InfluxQL Queries)
 
   If you are using InfluxQL queries with a `:v2` connection you need to
   set the `:database` configuration to a pre-mapped database.
