@@ -1,6 +1,6 @@
 # Changelog
 
-## v2.0.0-rc.1-dev
+## v2.0.0-rc.1 (2022-04-30)
 
 - Enhancements
     - InfluxQL queries for InfluxDB `2.x` connections are now properly sent to the compatibility endpoint `/query` instead of the new `/api/v2/query` endpoint
