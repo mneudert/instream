@@ -213,7 +213,7 @@ defmodule Instream.Connection.Config do
   able to get them printed:
 
       config :logger, :console,
-        format: "\n$time $metadata[$level] $levelpad$message\n",
+        format: "\n$time $metadata[$level] $message\n",
         metadata: [:application, :pid, :query_time, :response_status]
 
   To prevent a query from being logged you can pass an option:
