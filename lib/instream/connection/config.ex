@@ -154,7 +154,7 @@ defmodule Instream.Connection.Config do
 
   ## Authentication
 
-  To connect to an InfluxDB instance with http authentication enabled you
+  To connect to an InfluxDB instance with HTTP authentication enabled you
   have to configure your credentials:
 
       config :my_app, MyConnection,

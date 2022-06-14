@@ -1,6 +1,6 @@
 defmodule Instream.HTTPClient do
   @moduledoc """
-  Behaviour definition for pluggable HTTP clients.
+  Behaviour definition for switchable HTTP clients.
   """
 
   @type method :: :get | :head | :post

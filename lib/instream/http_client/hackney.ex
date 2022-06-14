@@ -1,6 +1,9 @@
 defmodule Instream.HTTPClient.Hackney do
   @moduledoc """
-  Hackney HTTP client.
+  HTTP client using `:hackney.request/5`.
+
+  See `Instream.Connection.Config` and `Instream.HTTPClient` if you want to
+  replace the client with a library of your choice.
   """
 
   @behaviour Instream.HTTPClient
