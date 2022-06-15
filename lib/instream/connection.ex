@@ -52,6 +52,7 @@ defmodule Instream.Connection do
   Please refer to the official InfluxDB DBRP mapping documentation for details.
   """
 
+  alias Instream.Encoder.Line
   alias Instream.Log
 
   @type log_entry ::
@@ -182,5 +183,5 @@ defmodule Instream.Connection do
 
   Usable options depend on the writer module configured.
   """
-  @callback write(payload :: map | [map], opts :: Keyword.t()) :: any
+  @callback write(payload :: Line.point() | [Line.point()], opts :: Keyword.t()) :: any
 end

@@ -3,6 +3,7 @@ defmodule Instream.Connection.QueryRunnerV2 do
 
   alias Instream.Connection.JSON
   alias Instream.Connection.ResponseParserV2
+  alias Instream.Encoder.Line
   alias Instream.HTTPClient
   alias Instream.Log.Metadata
   alias Instream.Log.PingEntry
@@ -118,7 +119,7 @@ defmodule Instream.Connection.QueryRunnerV2 do
   @doc """
   Executes `:write` queries.
   """
-  @spec write([map], Keyword.t(), module) :: any
+  @spec write([Line.point()], Keyword.t(), module) :: any
   def write(points, opts, conn) do
     config = conn.config()
 

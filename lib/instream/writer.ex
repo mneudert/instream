@@ -3,6 +3,7 @@ defmodule Instream.Writer do
   Point writer behaviour.
   """
 
+  alias Instream.Encoder.Line
   alias Instream.HTTPClient
 
   @optional_callbacks [
@@ -12,7 +13,8 @@ defmodule Instream.Writer do
   @doc """
   Writes a point.
   """
-  @callback write(payload :: [map], opts :: Keyword.t(), conn :: module) :: HTTPClient.response()
+  @callback write(payload :: [Line.point()], opts :: Keyword.t(), conn :: module) ::
+              HTTPClient.response()
 
   @doc """
   Optional list of workers to be supervised by the connection.
