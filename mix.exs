@@ -3,7 +3,7 @@ defmodule Instream.MixProject do
 
   @url_changelog "https://hexdocs.pm/instream/changelog.html"
   @url_github "https://github.com/mneudert/instream"
-  @version "2.0.0-rc.2-dev"
+  @version "2.0.0"
 
   def project do
     [

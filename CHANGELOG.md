@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.0.0-dev
+## 2.0.0 (2022-06-18)
 
 - Enhancements
     - Initial query/write support for InfluxDB `2.x` added
