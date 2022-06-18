@@ -1,9 +1,7 @@
 defmodule Instream.InfluxDBv1.Connection.QueryPrecisionTest do
   use ExUnit.Case, async: true
 
-  @moduletag :"influxdb_exclude_2.0"
-  @moduletag :"influxdb_exclude_2.1"
-  @moduletag :"influxdb_exclude_2.2"
+  @moduletag :"influxdb_exclude_2.x"
 
   alias Instream.TestHelpers.TestConnection
 

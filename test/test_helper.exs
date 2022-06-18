@@ -9,9 +9,9 @@ version_excludes =
   case version do
     "1.7" -> [:"influxdb_exclude_1.7", :"influxdb_include_2.x", :"influxdb_include_1.8"]
     "1.8" -> [:"influxdb_exclude_1.8", :"influxdb_include_2.x", :"influxdb_include_1.7"]
-    "2.0" -> [:"influxdb_exclude_2.0", :"influxdb_include_1.8", :"influxdb_include_1.7"]
-    "2.1" -> [:"influxdb_exclude_2.1", :"influxdb_include_1.8", :"influxdb_include_1.7"]
-    "2.2" -> [:"influxdb_exclude_2.2", :"influxdb_include_1.8", :"influxdb_include_1.7"]
+    "2.0" -> [:"influxdb_exclude_2.0", :"influxdb_exclude_2.x", :"influxdb_include_1.x"]
+    "2.1" -> [:"influxdb_exclude_2.1", :"influxdb_exclude_2.x", :"influxdb_include_1.x"]
+    "2.2" -> [:"influxdb_exclude_2.2", :"influxdb_exclude_2.x", :"influxdb_include_1.x"]
     _ -> raise RuntimeError, "Required environment variable 'INFLUXDB_VERSION' not set!"
   end
 

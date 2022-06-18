@@ -34,17 +34,13 @@ defmodule Instream.Connection.ErrorTest do
     assert :error = UnreachableConnection.ping()
   end
 
-  @tag :"influxdb_exclude_2.0"
-  @tag :"influxdb_exclude_2.1"
-  @tag :"influxdb_exclude_2.2"
+  @tag :"influxdb_exclude_2.x"
   test "status connection" do
     assert :error = OptionsConnection.status()
     assert :error = UnreachableConnection.status()
   end
 
-  @tag :"influxdb_exclude_2.0"
-  @tag :"influxdb_exclude_2.1"
-  @tag :"influxdb_exclude_2.2"
+  @tag :"influxdb_exclude_2.x"
   test "version connection" do
     assert :error = OptionsConnection.version()
     assert :error = UnreachableConnection.version()
