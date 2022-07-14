@@ -124,6 +124,7 @@ defmodule Instream.Log.DefaultLoggerTest do
     assert String.contains?(log, "response_status=0")
   end
 
+  @tag :"influxdb_include_2.x"
   test "logging delete request" do
     predicate = %{
       "predicate" => "filled=\"filled_tag\"",
