@@ -5,11 +5,11 @@ defmodule Instream.Log.DefaultLogger do
 
   require Logger
 
+  alias Instream.Log.DeleteEntry
   alias Instream.Log.PingEntry
   alias Instream.Log.QueryEntry
   alias Instream.Log.StatusEntry
   alias Instream.Log.WriteEntry
-  alias Instream.Log.DeleteEntry
 
   @doc """
   Logs a request.

@@ -5,11 +5,11 @@ defmodule Instream.Connection.QueryRunnerV2 do
   alias Instream.Connection.ResponseParserV2
   alias Instream.Encoder.Line
   alias Instream.HTTPClient
+  alias Instream.Log.DeleteEntry
   alias Instream.Log.Metadata
   alias Instream.Log.PingEntry
   alias Instream.Log.QueryEntry
   alias Instream.Log.WriteEntry
-  alias Instream.Log.DeleteEntry
   alias Instream.Query.Headers
   alias Instream.Query.URL
 
