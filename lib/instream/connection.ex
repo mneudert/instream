@@ -132,6 +132,16 @@ defmodule Instream.Connection do
           _ -> QueryRunnerV1.write(points, opts, __MODULE__)
         end
       end
+
+      @impl Connection
+      def delete(points, opts \\ [])
+
+      def delete(points, opts) when is_map(points) do
+        case config(:version) do
+          :v2 -> QueryRunnerV2.delete(points, opts, __MODULE__)
+          _ -> {:error, :version_mismatch}
+        end
+      end
     end
   end
 
@@ -184,4 +194,11 @@ defmodule Instream.Connection do
   Usable options depend on the writer module configured.
   """
   @callback write(payload :: Line.point() | [Line.point()], opts :: Keyword.t()) :: any
+
+  @doc """
+  Deletes data from an InfluxDB bucket.
+
+  Usable options depend on the delete module configured.
+  """
+  @callback delete(payload :: map(), opts :: Keyword.t()) :: any
 end

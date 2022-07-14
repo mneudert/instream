@@ -9,6 +9,7 @@ defmodule Instream.Log.DefaultLogger do
   alias Instream.Log.QueryEntry
   alias Instream.Log.StatusEntry
   alias Instream.Log.WriteEntry
+  alias Instream.Log.DeleteEntry
 
   @doc """
   Logs a request.
@@ -48,6 +49,16 @@ defmodule Instream.Log.DefaultLogger do
     _ =
       Logger.debug(
         ["[write] ", to_string(entry.points), " points"],
+        metadata(entry)
+      )
+
+    entry
+  end
+
+  def log(%DeleteEntry{} = entry) do
+    _ =
+      Logger.debug(
+        ["[delete] ", Jason.encode!(entry.points), " predicate"],
         metadata(entry)
       )
 

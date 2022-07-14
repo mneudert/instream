@@ -9,6 +9,7 @@ defmodule Instream.Connection.QueryRunnerV2 do
   alias Instream.Log.PingEntry
   alias Instream.Log.QueryEntry
   alias Instream.Log.WriteEntry
+  alias Instream.Log.DeleteEntry
   alias Instream.Query.Headers
   alias Instream.Query.URL
 
@@ -133,6 +134,34 @@ defmodule Instream.Connection.QueryRunnerV2 do
     if false != opts[:log] do
       log(config[:loggers], %WriteEntry{
         points: length(points),
+        result: result,
+        metadata: %Metadata{
+          query_time: query_time,
+          response_status: 0
+        }
+      })
+    end
+
+    result
+  end
+
+  @doc """
+  Executes `:delete` predicate.
+  """
+  @spec delete(map(), Keyword.t(), module) :: any
+  def delete(points, opts, conn) do
+    config = conn.config()
+
+    {query_time, result} =
+      :timer.tc(fn ->
+        points
+        |> config[:deleter].delete(opts, conn)
+        |> ResponseParserV2.maybe_parse(conn, opts)
+      end)
+
+    if false != opts[:log] do
+      log(config[:loggers], %DeleteEntry{
+        points: points,
         result: result,
         metadata: %Metadata{
           query_time: query_time,

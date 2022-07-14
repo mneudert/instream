@@ -85,6 +85,7 @@ defmodule Instream.Connection.Config do
         http_client: Instream.HTTPClient.Hackney,
         loggers: [{Instream.Log.DefaultLogger, :log, []}],
         writer: Instream.Writer.Line,
+        deleter: Instream.Deleter.Predicate,
         json_decoder: {Jason, :decode!, [[keys: :atoms]]},
         json_encoder: {Jason, :encode!, []}
 
@@ -230,6 +231,7 @@ defmodule Instream.Connection.Config do
     version: :v1,
     http_client: Instream.HTTPClient.Hackney,
     writer: Instream.Writer.Line,
+    deleter: Instream.Deleter.Predicate,
     json_decoder: {Jason, :decode!, [[keys: :atoms]]},
     json_encoder: {Jason, :encode!, []}
   ]
