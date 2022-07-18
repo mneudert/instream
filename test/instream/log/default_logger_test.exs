@@ -5,6 +5,7 @@ defmodule Instream.Log.DefaultLoggerTest do
 
   import ExUnit.CaptureLog
 
+  alias Instream.Connection.JSON
   alias Instream.TestHelpers.TestConnection
 
   defmodule LogConnection do
@@ -140,7 +141,7 @@ defmodule Instream.Log.DefaultLoggerTest do
       end)
 
     assert String.contains?(log, "delete")
-    assert String.contains?(log, "#{Jason.encode!(predicate)} predicate")
+    assert String.contains?(log, "#{JSON.encode(predicate, LogConnection)} predicate")
 
     assert String.contains?(log, "query_time=")
     assert String.contains?(log, "response_status=0")

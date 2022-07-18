@@ -166,7 +166,8 @@ defmodule Instream.Connection.QueryRunnerV2 do
         metadata: %Metadata{
           query_time: query_time,
           response_status: 0
-        }
+        },
+        conn: conn
       })
     end
 

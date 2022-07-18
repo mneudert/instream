@@ -5,6 +5,7 @@ defmodule Instream.Log.DefaultLogger do
 
   require Logger
 
+  alias Instream.Connection.JSON
   alias Instream.Log.DeleteEntry
   alias Instream.Log.PingEntry
   alias Instream.Log.QueryEntry
@@ -56,9 +57,11 @@ defmodule Instream.Log.DefaultLogger do
   end
 
   def log(%DeleteEntry{} = entry) do
+    {conn, entry} = Map.pop!(entry, :conn)
+
     _ =
       Logger.debug(
-        ["[delete] ", Jason.encode!(entry.points), " predicate"],
+        ["[delete] ", JSON.encode(entry.points, conn), " predicate"],
         metadata(entry)
       )
 

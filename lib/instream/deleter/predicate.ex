@@ -8,6 +8,7 @@ defmodule Instream.Deleter.Predicate do
   - `org`: delete data to a specific organization
   """
 
+  alias Instream.Connection.JSON
   alias Instream.Query.Headers
   alias Instream.Query.URL
 
@@ -17,7 +18,7 @@ defmodule Instream.Deleter.Predicate do
   def delete(points, opts, conn) do
     config = conn.config()
     headers = Headers.assemble(config, opts) ++ [{"Content-Type", "application/json"}]
-    body = Jason.encode!(points)
+    body = JSON.encode(points, conn)
     url = URL.delete(config, opts)
 
     http_opts =
