@@ -134,9 +134,7 @@ defmodule Instream.Connection do
       end
 
       @impl Connection
-      def delete(points, opts \\ [])
-
-      def delete(points, opts) when is_map(points) do
+      def delete(points, opts \\ []) when is_map(points) do
         case config(:version) do
           :v2 -> QueryRunnerV2.delete(points, opts, __MODULE__)
           _ -> {:error, :version_mismatch}
