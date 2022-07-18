@@ -65,6 +65,12 @@ defmodule Instream.Connection do
 
   @type e_version_mismatch :: {:error, :version_mismatch}
 
+  @type delete_request :: %{
+          required(:start) => binary,
+          required(:stop) => binary,
+          optional(:predicate) => binary
+        }
+
   defmacro __using__(opts) do
     quote bind_quoted: [opts: opts], location: :keep do
       alias Instream.Connection
@@ -134,10 +140,14 @@ defmodule Instream.Connection do
       end
 
       @impl Connection
-      def delete(payload, opts \\ []) when is_map(payload) do
+      def delete(%{start: _, stop: _} = payload, opts \\ []) do
         case config(:version) do
-          :v2 -> QueryRunnerV2.delete(payload, opts, __MODULE__)
-          _ -> {:error, :version_mismatch}
+          :v2 ->
+            Map.take(payload, [:start, :stop, :predicate])
+            |> QueryRunnerV2.delete(opts, __MODULE__)
+
+          _ ->
+            {:error, :version_mismatch}
         end
       end
     end
@@ -198,5 +208,5 @@ defmodule Instream.Connection do
 
   Usable options depend on the delete module configured.
   """
-  @callback delete(payload :: map(), opts :: Keyword.t()) :: any
+  @callback delete(payload :: delete_request(), opts :: Keyword.t()) :: any
 end

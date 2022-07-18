@@ -27,13 +27,7 @@ defmodule Instream.InfluxDBv2.Deleter.PredicateTest do
     end
 
     test "deleting no points returns error" do
-      error = %{
-        code: "invalid",
-        message:
-          "invalid request; error parsing request json: invalid RFC3339Nano for field start, please format your time with RFC3339Nano format, example: 2009-01-02T23:00:00Z"
-      }
-
-      assert error == TestConnection.delete(%{})
+      assert_raise FunctionClauseError, fn -> TestConnection.delete(%{}) end
     end
 
     test "deleting with predicate", %{data_origin: data_origin} do
@@ -57,9 +51,9 @@ defmodule Instream.InfluxDBv2.Deleter.PredicateTest do
 
       :ok =
         %{
-          "predicate" => "filled=\"filled_tag\"",
-          "start" => DateTime.to_iso8601(data_origin),
-          "stop" => DateTime.to_iso8601(DateTime.utc_now())
+          predicate: "filled=\"filled_tag\"",
+          start: DateTime.to_iso8601(data_origin),
+          stop: DateTime.to_iso8601(DateTime.utc_now())
         }
         |> TestConnection.delete()
 
@@ -107,8 +101,8 @@ defmodule Instream.InfluxDBv2.Deleter.PredicateTest do
 
       :ok =
         %{
-          "start" => DateTime.to_iso8601(data_origin),
-          "stop" => DateTime.to_iso8601(DateTime.utc_now())
+          start: DateTime.to_iso8601(data_origin),
+          stop: DateTime.to_iso8601(DateTime.utc_now())
         }
         |> TestConnection.delete()
 
