@@ -59,7 +59,7 @@ defmodule Instream.Log.DefaultLogger do
   def log(%DeleteEntry{} = entry) do
     {conn, entry} = Map.pop!(entry, :conn)
 
-    _ = Logger.debug(["[delete] ", JSON.encode(entry.points, conn), " predicate"])
+    _ = Logger.debug(["[delete] ", JSON.encode(entry.payload, conn), " predicate"])
 
     entry
   end

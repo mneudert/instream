@@ -149,17 +149,17 @@ defmodule Instream.Connection.QueryRunnerV2 do
   Executes `:delete` predicate.
   """
   @spec delete(map(), Keyword.t(), module) :: any
-  def delete(points, opts, conn) do
+  def delete(payload, opts, conn) do
     config = conn.config()
 
     result =
-      points
+      payload
       |> config[:deleter].delete(opts, conn)
       |> ResponseParserV2.maybe_parse(conn, opts)
 
     if false != opts[:log] do
       log(config[:loggers], %DeleteEntry{
-        points: points,
+        payload: payload,
         result: result,
         conn: conn
       })
