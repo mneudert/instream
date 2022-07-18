@@ -152,21 +152,15 @@ defmodule Instream.Connection.QueryRunnerV2 do
   def delete(points, opts, conn) do
     config = conn.config()
 
-    {query_time, result} =
-      :timer.tc(fn ->
-        points
-        |> config[:deleter].delete(opts, conn)
-        |> ResponseParserV2.maybe_parse(conn, opts)
-      end)
+    result =
+      points
+      |> config[:deleter].delete(opts, conn)
+      |> ResponseParserV2.maybe_parse(conn, opts)
 
     if false != opts[:log] do
       log(config[:loggers], %DeleteEntry{
         points: points,
         result: result,
-        metadata: %Metadata{
-          query_time: query_time,
-          response_status: 0
-        },
         conn: conn
       })
     end
