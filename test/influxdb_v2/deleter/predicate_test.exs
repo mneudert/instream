@@ -9,7 +9,7 @@ defmodule Instream.InfluxDBv2.Writer.PredicateTest do
     use Instream.Series
 
     series do
-      measurement "empty_tags"
+      measurement "empty_predicate_tags"
 
       tag :filled
       tag :defaulting, default: "default_value"
@@ -76,7 +76,7 @@ defmodule Instream.InfluxDBv2.Writer.PredicateTest do
       assert [
                %{
                  "_field" => "value",
-                 "_measurement" => "empty_tags",
+                 "_measurement" => "empty_predicate_tags",
                  "_value" => 100,
                  "defaulting" => "default_value",
                  "filled" => "keep",
