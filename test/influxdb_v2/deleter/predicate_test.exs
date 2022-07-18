@@ -1,4 +1,4 @@
-defmodule Instream.InfluxDBv2.Writer.PredicateTest do
+defmodule Instream.InfluxDBv2.Deleter.PredicateTest do
   use ExUnit.Case, async: true
 
   @moduletag :"influxdb_include_2.x"
