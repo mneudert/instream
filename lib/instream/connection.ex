@@ -206,7 +206,12 @@ defmodule Instream.Connection do
   @doc """
   Deletes data from an InfluxDB bucket.
 
-  Usable options depend on the delete module configured.
+  Options:
+
+  - `bucket`: use a bucket differing from the connection config for deleting
+  - `org`: use an organization differing from the connection config for deleting
+
+  *Only available with InfluxDB v2.x connections.*
   """
   @callback delete(payload :: delete_request(), opts :: Keyword.t()) :: any
 end
