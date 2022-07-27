@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.1.0-dev
+
+- Enhancements
+    - Support for deleting points using the InfluxDB v2.x "delete" (predicate) API ([#75](https://github.com/mneudert/instream/pull/75))
+
 ## 2.0.0 (2022-06-18)
 
 - Enhancements
