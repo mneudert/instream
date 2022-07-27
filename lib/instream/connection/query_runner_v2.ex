@@ -151,11 +151,16 @@ defmodule Instream.Connection.QueryRunnerV2 do
   @spec delete(map(), Keyword.t(), module) :: any
   def delete(payload, opts, conn) do
     config = conn.config()
+    headers = Headers.assemble(config, opts) ++ [{"Content-Type", "application/json"}]
+    http_opts = http_opts(config, opts)
+    body = JSON.encode(payload, conn)
+    url = URL.delete(config, opts)
 
-    result =
-      payload
-      |> config[:deleter].delete(opts, conn)
-      |> ResponseParserV2.maybe_parse(conn, opts)
+    {query_time, result} =
+      :timer.tc(fn ->
+        config[:http_client].request(:post, url, headers, body, http_opts)
+        |> ResponseParserV2.maybe_parse(conn, opts)
+      end)
 
     if false != opts[:log] do
       log(config[:loggers], %DeleteEntry{
