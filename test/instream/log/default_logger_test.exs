@@ -5,6 +5,7 @@ defmodule Instream.Log.DefaultLoggerTest do
 
   import ExUnit.CaptureLog
 
+  alias Instream.Connection.JSON
   alias Instream.TestHelpers.TestConnection
 
   defmodule LogConnection do
@@ -119,6 +120,28 @@ defmodule Instream.Log.DefaultLoggerTest do
 
     assert String.contains?(log, "write")
     assert String.contains?(log, "#{length(points)} points")
+
+    assert String.contains?(log, "query_time=")
+    assert String.contains?(log, "response_status=0")
+  end
+
+  @tag :"influxdb_include_2.x"
+  test "logging delete request" do
+    predicate = %{
+      predicate: "filled=\"filled_tag\"",
+      start: DateTime.to_iso8601(~U[2021-01-01T00:00:00Z]),
+      stop: DateTime.to_iso8601(DateTime.utc_now())
+    }
+
+    log =
+      capture_log(fn ->
+        :ok = LogConnection.delete(predicate)
+
+        Logger.flush()
+      end)
+
+    assert String.contains?(log, "delete")
+    assert String.contains?(log, "#{JSON.encode(predicate, LogConnection)} predicate")
 
     assert String.contains?(log, "query_time=")
     assert String.contains?(log, "response_status=0")

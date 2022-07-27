@@ -78,6 +78,17 @@ defmodule Instream.Query.URL do
     end
   end
 
+  @doc """
+  Returns the proper URL for a `:delete` request.
+  """
+  @spec delete(Keyword.t(), Keyword.t()) :: String.t()
+  def delete(config, opts) do
+    config
+    |> url("api/v2/delete")
+    |> append_param("bucket", opts[:bucket] || config[:bucket])
+    |> append_param("org", opts[:org] || config[:org])
+  end
+
   defp append_param(url, _, nil), do: url
   defp append_param(url, _, ""), do: url
 

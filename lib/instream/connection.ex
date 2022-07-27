@@ -65,6 +65,12 @@ defmodule Instream.Connection do
 
   @type e_version_mismatch :: {:error, :version_mismatch}
 
+  @type delete_request :: %{
+          required(:start) => binary,
+          required(:stop) => binary,
+          optional(:predicate) => binary
+        }
+
   defmacro __using__(opts) do
     quote bind_quoted: [opts: opts], location: :keep do
       alias Instream.Connection
@@ -132,6 +138,18 @@ defmodule Instream.Connection do
           _ -> QueryRunnerV1.write(points, opts, __MODULE__)
         end
       end
+
+      @impl Connection
+      def delete(%{start: _, stop: _} = payload, opts \\ []) do
+        case config(:version) do
+          :v2 ->
+            Map.take(payload, [:start, :stop, :predicate])
+            |> QueryRunnerV2.delete(opts, __MODULE__)
+
+          _ ->
+            {:error, :version_mismatch}
+        end
+      end
     end
   end
 
@@ -184,4 +202,16 @@ defmodule Instream.Connection do
   Usable options depend on the writer module configured.
   """
   @callback write(payload :: Line.point() | [Line.point()], opts :: Keyword.t()) :: any
+
+  @doc """
+  Deletes data from an InfluxDB bucket.
+
+  Options:
+
+  - `bucket`: use a bucket differing from the connection config for deleting
+  - `org`: use an organization differing from the connection config for deleting
+
+  *Only available with InfluxDB v2.x connections.*
+  """
+  @callback delete(payload :: delete_request(), opts :: Keyword.t()) :: any
 end

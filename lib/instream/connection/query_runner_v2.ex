@@ -5,6 +5,7 @@ defmodule Instream.Connection.QueryRunnerV2 do
   alias Instream.Connection.ResponseParserV2
   alias Instream.Encoder.Line
   alias Instream.HTTPClient
+  alias Instream.Log.DeleteEntry
   alias Instream.Log.Metadata
   alias Instream.Log.PingEntry
   alias Instream.Log.QueryEntry
@@ -138,6 +139,38 @@ defmodule Instream.Connection.QueryRunnerV2 do
           query_time: query_time,
           response_status: 0
         }
+      })
+    end
+
+    result
+  end
+
+  @doc """
+  Executes `:delete` predicate.
+  """
+  @spec delete(map(), Keyword.t(), module) :: any
+  def delete(payload, opts, conn) do
+    config = conn.config()
+    headers = Headers.assemble(config, opts) ++ [{"Content-Type", "application/json"}]
+    http_opts = http_opts(config, opts)
+    body = JSON.encode(payload, conn)
+    url = URL.delete(config, opts)
+
+    {query_time, result} =
+      :timer.tc(fn ->
+        config[:http_client].request(:post, url, headers, body, http_opts)
+        |> ResponseParserV2.maybe_parse(conn, opts)
+      end)
+
+    if false != opts[:log] do
+      log(config[:loggers], %DeleteEntry{
+        payload: payload,
+        result: result,
+        metadata: %Metadata{
+          query_time: query_time,
+          response_status: 0
+        },
+        conn: conn
       })
     end
 
