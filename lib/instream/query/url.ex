@@ -87,7 +87,6 @@ defmodule Instream.Query.URL do
     |> url("api/v2/delete")
     |> append_param("bucket", opts[:bucket] || config[:bucket])
     |> append_param("org", opts[:org] || config[:org])
-    |> append_param("precision", encode_precision(opts[:precision]))
   end
 
   defp append_param(url, _, nil), do: url
