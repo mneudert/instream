@@ -9,7 +9,7 @@ defmodule Instream.Log.DeleteEntry do
             conn: nil
 
   @type t :: %__MODULE__{
-          payload: map(),
+          payload: Instream.Connection.delete_request(),
           result: term,
           metadata: Instream.Log.Metadata.t(),
           conn: module
