@@ -142,6 +142,9 @@ defmodule Instream.Log.DefaultLoggerTest do
 
     assert String.contains?(log, "delete")
     assert String.contains?(log, "#{JSON.encode(predicate, LogConnection)} predicate")
+
+    assert String.contains?(log, "query_time=")
+    assert String.contains?(log, "response_status=0")
   end
 
   describe "passing [log: false]" do
