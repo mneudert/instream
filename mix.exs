@@ -42,9 +42,9 @@ defmodule Instream.MixProject do
 
   defp deps do
     [
-      {:benchee, "~> 1.0", only: :bench, runtime: false},
-      {:credo, "~> 1.0", only: :dev, runtime: false},
-      {:dialyxir, "~> 1.0", only: :test, runtime: false},
+      {:benchee, "~> 1.1", only: :bench, runtime: false},
+      {:credo, "~> 1.6", only: :dev, runtime: false},
+      {:dialyxir, "~> 1.2", only: :test, runtime: false},
       {:ex_doc, ">= 0.0.0", only: [:dev, :test], runtime: false},
       {:excoveralls, "~> 0.14.0", only: :test, runtime: false},
       {:hackney, "~> 1.1"},
