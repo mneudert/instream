@@ -166,20 +166,26 @@ defmodule Instream.Connection.QueryRunnerV1 do
   def write(points, opts, conn) do
     config = conn.config()
 
-    {query_time, result} =
+    {query_time, response} =
       :timer.tc(fn ->
-        points
-        |> config[:writer].write(opts, conn)
-        |> ResponseParserV1.maybe_parse(conn, opts)
+        config[:writer].write(points, opts, conn)
       end)
 
+    result = ResponseParserV1.maybe_parse(response, conn, opts)
+
     if false != opts[:log] do
+      status =
+        case response do
+          {:ok, status, _, _} -> status
+          _ -> 0
+        end
+
       log(config[:loggers], %WriteEntry{
         points: length(points),
         result: result,
         metadata: %Metadata{
           query_time: query_time,
-          response_status: 0
+          response_status: status
         }
       })
     end
