@@ -24,19 +24,26 @@ defmodule Instream.Connection.QueryRunnerV2 do
     body = JSON.encode(payload, conn)
     url = URL.delete(config, opts)
 
-    {query_time, result} =
+    {query_time, response} =
       :timer.tc(fn ->
         config[:http_client].request(:post, url, headers, body, http_opts)
-        |> ResponseParserV2.maybe_parse(conn, opts)
       end)
 
+    result = ResponseParserV2.maybe_parse(response, conn, opts)
+
     if false != opts[:log] do
+      status =
+        case response do
+          {:ok, status, _, _} -> status
+          _ -> 0
+        end
+
       log(config[:loggers], %DeleteEntry{
         payload: payload,
         result: result,
         metadata: %Metadata{
           query_time: query_time,
-          response_status: 0
+          response_status: status
         },
         conn: conn
       })
