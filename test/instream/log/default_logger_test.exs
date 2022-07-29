@@ -122,7 +122,7 @@ defmodule Instream.Log.DefaultLoggerTest do
     assert String.contains?(log, "#{length(points)} points")
 
     assert String.contains?(log, "query_time=")
-    assert String.contains?(log, "response_status=0")
+    assert String.contains?(log, "response_status=204")
   end
 
   @tag :"influxdb_include_2.x"
