@@ -178,5 +178,16 @@ defmodule Instream do
 
   The field `:timestamp` is optional. InfluxDB will use the receive time of
   the write request if it is missing.
+
+  ## Deleting Data (InfluxDB v2.x)
+
+  If you are connection to an InfluxDB v2.x instance you can use the
+  deletion API:
+
+      MyConnection.delete(%{
+        start: DateTime.to_iso(~U[2020-01-01T00:00:00Z]),
+        stop: DateTime.to_iso(~U[2020-01-02T00:00:00Z]),
+        predicate: ~s[_measurement="optional" AND foo="bar"]
+      })
   """
 end
