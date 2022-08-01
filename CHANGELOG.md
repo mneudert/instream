@@ -14,7 +14,7 @@
     - The HTTP client library can be replaced by providing a custom implementation of the `Instream.HTTPClient` behaviour
 
 - Backwards incompatible changes
-    - Minimum required elixir version is now `~> 1.9`
+    - Minimum required Elixir version is now `~> 1.9`
     - Passing a host to `ping/1,2`, `status/1,2`, `version/1,2` is now longer supported. Only the hostname configured in the connection module will be used.
     - Support for the InfluxDB versions earlier than `1.7.x` is no longer guaranteed
 
@@ -29,7 +29,7 @@
 
 - Backwards incompatible changes
     - All "administrative query modules" have been removed
-    - Minimum required elixir version is now `~> 1.7`
+    - Minimum required Elixir version is now `~> 1.7`
     - Support for accessing the system environment for configuration has been removed in favor of initializer functions/modules
     - Support for implementing `use Instream.Writer` has been removed in favor of `@behaviour Instream.Writer`
     - Support for plural time units (e.g. `:seconds` instead of `:second`) has been removed
@@ -79,7 +79,7 @@
 
 - Backwards incompatible changes
     - Default configuration has been extended with `host: "localhost"`
-    - Minimum required elixir version is now `~> 1.5`
+    - Minimum required Elixir version is now `~> 1.5`
     - Missing application configuration will no longer raise during compilation
     - Public access to the internal pool module name has been removed
 
@@ -89,7 +89,7 @@
     - Configuration can be done on connection (re-) start by setting a `{mod, fun}` tuple for the config key `:init`. This method will be called with the connection module name as the first (and only) parameter and is expected to return `:ok`
     - Experimental support to convert plain maps or query results into series structs has been added
     - Passwords are automatically redacted from logged queries when using the default logger
-    - Supporting rules for the elixir formatter are available
+    - Supporting rules for the Elixir formatter are available
 
 - Bug fixes
     - Special characters in url parameter values (like `&` or `?` in a query) are now properly escaped ([#43](https://github.com/mneudert/instream/pull/43))
@@ -105,7 +105,7 @@
 ## v0.17.0 (2017-12-10)
 
 - Backwards incompatible changes
-    - Minimum required elixir version is now `~> 1.3`
+    - Minimum required Elixir version is now `~> 1.3`
 
 ## v0.16.0 (2017-09-25)
 
@@ -137,8 +137,8 @@
     - Series definitions are now automatically associated with typespecs
 
 - Backwards incompatible changes
-    - Minimum required elixir version is now `~> 1.2`
-    - Minimum required erlang version is now `~> 18.0`
+    - Minimum required Elixir version is now `~> 1.2`
+    - Minimum required Erlang version is now `~> 18.0`
     - Query builder support for `IF NOT EXISTS` has been removed
     - Series definitions now require to contain at least one field
 
