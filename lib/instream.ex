@@ -181,7 +181,7 @@ defmodule Instream do
 
   ## Deleting Data (InfluxDB v2.x)
 
-  If you are connection to an InfluxDB v2.x instance you can use the
+  If you are connecting to an InfluxDB v2.x instance you can use the
   deletion API:
 
       MyConnection.delete(%{
