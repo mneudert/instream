@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.1.0-dev
+## 2.1.0 (2022-08-02)
 
 - Enhancements
     - Log entries for write requests (`%Instream.Log.WriteEntry{}`) now contain the actual HTTP response status returned from the writer
