@@ -1,12 +1,12 @@
 # Changelog
 
-## 2.1.0 (2022-08-02)
+## v2.1.0 (2022-08-02)
 
 - Enhancements
     - Log entries for write requests (`%Instream.Log.WriteEntry{}`) now contain the actual HTTP response status returned from the writer
     - Support for deleting points using the InfluxDB v2.x "delete" (predicate) API ([#75](https://github.com/mneudert/instream/pull/75))
 
-## 2.0.0 (2022-06-18)
+## v2.0.0 (2022-06-18)
 
 - Enhancements
     - Initial query/write support for InfluxDB `2.x` added
