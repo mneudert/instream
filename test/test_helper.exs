@@ -22,14 +22,14 @@ IO.puts("Running tests for InfluxDB version: #{version}")
 
 # configure InfluxDB connection
 if version in ["2.0", "2.1", "2.2", "2.3"] do
-  unless System.get_env("INFLUXDB_TOKEN") do
-    raise RuntimeError, "Required environment variable 'INFLUXDB_TOKEN' not set!"
+  unless System.get_env("INFLUXDB_V2_TOKEN") do
+    raise RuntimeError, "Required environment variable 'INFLUXDB_V2_TOKEN' not set!"
   end
 
   Application.put_env(
     :instream,
     TestConnection,
-    auth: [method: :token, token: System.get_env("INFLUXDB_TOKEN")],
+    auth: [method: :token, token: System.get_env("INFLUXDB_V2_TOKEN")],
     bucket: "test_bucket",
     database: "mapped_database",
     org: "instream_test",
@@ -52,8 +52,8 @@ end
 # configure unix socket connection tests
 config =
   if version in ["1.8"] do
-    unless System.get_env("INFLUXDB_SOCKET") do
-      raise RuntimeError, "Required environment variable 'INFLUXDB_SOCKET' not set!"
+    unless System.get_env("INFLUXDB_V1_SOCKET") do
+      raise RuntimeError, "Required environment variable 'INFLUXDB_V1_SOCKET' not set!"
     end
 
     config
@@ -64,8 +64,8 @@ config =
 # configure UDP writer tests
 config =
   if version in ["1.7", "1.8"] do
-    unless System.get_env("INFLUXDB_PORT_UDP") do
-      raise RuntimeError, "Required environment variable 'INFLUXDB_PORT_UDP' not set!"
+    unless System.get_env("INFLUXDB_V1_PORT_UDP") do
+      raise RuntimeError, "Required environment variable 'INFLUXDB_V1_PORT_UDP' not set!"
     end
 
     config

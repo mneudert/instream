@@ -9,7 +9,7 @@ defmodule Instream.InfluxDBv1.Connection.UnixSocketTest do
       config: [
         auth: [username: "instream_test", password: "instream_test"],
         database: "test_database",
-        host: URI.encode_www_form(System.get_env("INFLUXDB_SOCKET") || ""),
+        host: URI.encode_www_form(System.get_env("INFLUXDB_V1_SOCKET") || ""),
         loggers: [],
         port: 0,
         scheme: "http+unix"

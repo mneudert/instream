@@ -78,19 +78,19 @@ jobs:
                     }'
         )
 
-        export INFLUXDB_BUCKETID=$(jq -r '.bucket.id' <<< "${SETUP}")
-        export INFLUXDB_ORGID=$(jq -r '.org.id' <<< "${SETUP}")
-        export INFLUXDB_TOKEN=$(jq -r '.auth.token' <<< "${SETUP}")
+        export INFLUXDB_V2_BUCKETID=$(jq -r '.bucket.id' <<< "${SETUP}")
+        export INFLUXDB_V2_ORGID=$(jq -r '.org.id' <<< "${SETUP}")
+        export INFLUXDB_V2_TOKEN=$(jq -r '.auth.token' <<< "${SETUP}")
 
         curl -s -o /dev/null \
             -XPOST http://localhost:8086/api/v2/dbrps \
-            -H "Authorization: Token ${INFLUXDB_TOKEN}" \
+            -H "Authorization: Token ${INFLUXDB_V2_TOKEN}" \
             -H 'accept: application/json' \
             -d "{
-                  \"bucketID\": \"${INFLUXDB_BUCKETID}\",
+                  \"bucketID\": \"${INFLUXDB_V2_BUCKETID}\",
                   \"database\": \"mapped_database\",
                   \"default\": true,
-                  \"orgID\": \"${INFLUXDB_ORGID}\",
+                  \"orgID\": \"${INFLUXDB_V2_ORGID}\",
                   \"retention_policy\": \"mapped_retention\"
                 }"
 

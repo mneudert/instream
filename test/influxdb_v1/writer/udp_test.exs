@@ -31,7 +31,7 @@ defmodule Instream.InfluxDBv1.Writer.UDPTest do
       Application.put_env(
         :instream,
         __MODULE__,
-        port_udp: "INFLUXDB_PORT_UDP" |> System.get_env() |> String.to_integer()
+        port_udp: "INFLUXDB_V1_PORT_UDP" |> System.get_env() |> String.to_integer()
       )
     end
   end
