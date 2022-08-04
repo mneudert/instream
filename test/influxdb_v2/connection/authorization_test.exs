@@ -16,7 +16,7 @@ defmodule Instream.InfluxDBv2.Connection.AuthorizationTest do
 
     def fetch_influxdb_auth(_) do
       Application.put_env(:instream, __MODULE__,
-        auth: [method: :bearer, token: System.get_env("INFLUXDB_V2_TOKEN")]
+        auth: [method: :bearer, token: System.fetch_env!("INFLUXDB_V2_TOKEN")]
       )
     end
   end

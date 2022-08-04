@@ -3,7 +3,7 @@ alias Instream.TestHelpers.TestConnection
 config = ExUnit.configuration()
 
 # configure InfluxDB test version
-version = System.get_env("INFLUXDB_VERSION")
+version = System.fetch_env!("INFLUXDB_VERSION")
 
 version_excludes =
   case version do
@@ -13,7 +13,7 @@ version_excludes =
     "2.1" -> [:"influxdb_exclude_2.1", :"influxdb_exclude_2.x", :"influxdb_include_1.x"]
     "2.2" -> [:"influxdb_exclude_2.2", :"influxdb_exclude_2.x", :"influxdb_include_1.x"]
     "2.3" -> [:"influxdb_exclude_2.3", :"influxdb_exclude_2.x", :"influxdb_include_1.x"]
-    _ -> raise RuntimeError, "Required environment variable 'INFLUXDB_VERSION' not set!"
+    _ -> raise RuntimeError, "Unknown INFLUXDB_VERSION: #{inspect(version)}"
   end
 
 config = Keyword.put(config, :exclude, version_excludes ++ (config[:exclude] || []))
@@ -22,14 +22,10 @@ IO.puts("Running tests for InfluxDB version: #{version}")
 
 # configure InfluxDB connection
 if version in ["2.0", "2.1", "2.2", "2.3"] do
-  unless System.get_env("INFLUXDB_V2_TOKEN") do
-    raise RuntimeError, "Required environment variable 'INFLUXDB_V2_TOKEN' not set!"
-  end
-
   Application.put_env(
     :instream,
     TestConnection,
-    auth: [method: :token, token: System.get_env("INFLUXDB_V2_TOKEN")],
+    auth: [method: :token, token: System.fetch_env!("INFLUXDB_V2_TOKEN")],
     bucket: "test_bucket",
     database: "mapped_database",
     org: "instream_test",
@@ -52,9 +48,7 @@ end
 # configure unix socket connection tests
 config =
   if version in ["1.8"] do
-    unless System.get_env("INFLUXDB_V1_SOCKET") do
-      raise RuntimeError, "Required environment variable 'INFLUXDB_V1_SOCKET' not set!"
-    end
+    _ = System.fetch_env!("INFLUXDB_V1_SOCKET")
 
     config
   else
@@ -64,9 +58,7 @@ config =
 # configure UDP writer tests
 config =
   if version in ["1.7", "1.8"] do
-    unless System.get_env("INFLUXDB_V1_PORT_UDP") do
-      raise RuntimeError, "Required environment variable 'INFLUXDB_V1_PORT_UDP' not set!"
-    end
+    _ = System.fetch_env!("INFLUXDB_V1_PORT_UDP")
 
     config
   else

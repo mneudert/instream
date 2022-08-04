@@ -9,11 +9,19 @@ defmodule Instream.InfluxDBv1.Connection.UnixSocketTest do
       config: [
         auth: [username: "instream_test", password: "instream_test"],
         database: "test_database",
-        host: URI.encode_www_form(System.get_env("INFLUXDB_V1_SOCKET") || ""),
+        init: {__MODULE__, :fetch_socket},
         loggers: [],
         port: 0,
         scheme: "http+unix"
       ]
+
+    def fetch_socket(_) do
+      Application.put_env(
+        :instream,
+        __MODULE__,
+        host: "INFLUXDB_V1_SOCKET" |> System.fetch_env!() |> URI.encode_www_form()
+      )
+    end
   end
 
   test "unix socket: ping connection" do
