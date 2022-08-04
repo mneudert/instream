@@ -6,6 +6,7 @@ defmodule Instream.InfluxDBv1.Connection.UnixSocketTest do
 
   defmodule UnixSocketConnection do
     use Instream.Connection,
+      otp_app: :instream,
       config: [
         auth: [username: "instream_test", password: "instream_test"],
         database: "test_database",
