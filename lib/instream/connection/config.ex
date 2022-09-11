@@ -288,7 +288,7 @@ defmodule Instream.Connection.Config do
     with otp_app when not is_nil(otp_app) <- conn.config(:otp_app),
          nil <- Application.get_env(otp_app, conn) do
       _ =
-        Logger.warning("""
+        Logger.warn("""
         Instream connection #{inspect(conn)} is configured to fetch its
         configuration from the application #{inspect(otp_app)} but the
         configuration is empty.
