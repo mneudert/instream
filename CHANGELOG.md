@@ -4,6 +4,7 @@
 
 - Enhancements
     - Configuration access for a connection now returns the configured `:otp_app` used (`nil` if none)
+    - Starting a connection will now issue a warning if the configured `:otp_app` contains no configuration
 
 ## v2.1.0 (2022-08-02)
 

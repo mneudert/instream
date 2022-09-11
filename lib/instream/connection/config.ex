@@ -222,6 +222,8 @@ defmodule Instream.Connection.Config do
       MyConnection.query(query, log: false)
   """
 
+  require Logger
+
   @global_defaults [
     host: "localhost",
     loggers: [{Instream.Log.DefaultLogger, :log, []}],
@@ -270,6 +272,33 @@ defmodule Instream.Connection.Config do
     case key do
       nil -> config
       _ -> Keyword.get(config, key)
+    end
+  end
+
+  @doc """
+  Performs basic validation on the configuration of a connection.
+
+  Should only be called after any optional initializer functions have been
+  called.
+
+  Will issue a warning if potential misconfiguration is found.
+  """
+  @spec validate(conn :: module) :: boolean
+  def validate(conn) do
+    with otp_app when not is_nil(otp_app) <- conn.config(:otp_app),
+         nil <- Application.get_env(otp_app, conn) do
+      _ =
+        Logger.warning("""
+        Instream connection #{inspect(conn)} is configured to fetch its
+        configuration from the application #{inspect(otp_app)} but the
+        configuration is empty.
+
+        If this is intended please set any value (except "nil") explicitly.
+        """)
+
+      false
+    else
+      _ -> true
     end
   end
 end

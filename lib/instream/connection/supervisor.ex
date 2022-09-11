@@ -3,6 +3,8 @@ defmodule Instream.Connection.Supervisor do
 
   use Supervisor
 
+  alias Instream.Connection.Config
+
   @doc false
   def start_link(conn), do: Supervisor.start_link(__MODULE__, conn, name: conn)
 
@@ -14,6 +16,8 @@ defmodule Instream.Connection.Supervisor do
         {mod, fun} -> apply(mod, fun, [conn])
         {mod, fun, extra_args} -> apply(mod, fun, [conn | extra_args])
       end
+
+    Config.validate(conn)
 
     writer = conn.config(:writer)
 
