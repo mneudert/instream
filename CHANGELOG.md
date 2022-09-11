@@ -1,5 +1,10 @@
 # Changelog
 
+## v2.2.0-dev
+
+- Enhancements
+    - Configuration access for a connection now returns the configured `:otp_app` used (`nil` if none)
+
 ## v2.1.0 (2022-08-02)
 
 - Enhancements

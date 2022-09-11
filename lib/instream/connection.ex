@@ -82,7 +82,7 @@ defmodule Instream.Connection do
       @behaviour Connection
 
       @otp_app opts[:otp_app]
-      @config opts[:config] || []
+      @config Keyword.merge([otp_app: @otp_app], opts[:config] || [])
 
       @impl Connection
       def child_spec(_) do
