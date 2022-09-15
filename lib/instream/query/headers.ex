@@ -12,10 +12,13 @@ defmodule Instream.Query.Headers do
   end
 
   @doc """
-  Assembles headers for basic authentication.
+  Assembles headers for authentication.
 
-  Will return an empty list if query authentication is configured.
-  Will return an empty list if either username or password is missing.
+  Will return an empty list if:
+
+  - `:query` authentication is configured
+  - `:basic` authentication (default) is configured but either username
+    or password is missing
 
   ## Usage
 
