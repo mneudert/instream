@@ -59,7 +59,7 @@ defmodule Instream do
   `:bucket`/`:organization` to operate on.
 
   These values will be taken from your connection configuration by default.
-  By using the option argument of `MyConnection.query/2` you can pass different
+  By using the option argument of `MyConnection.query()` you can pass different
   values to use on a per-query basis:
 
       MyConnection.query(
