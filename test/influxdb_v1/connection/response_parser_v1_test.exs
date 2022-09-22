@@ -6,7 +6,7 @@ defmodule Instream.Connection.ResponseParserV1Test do
   alias Instream.Connection.ResponseParserV1
 
   test "raw json error response" do
-    error = ~s({"error":"type error"})
+    error = ~S({"error":"type error"})
     response = {:ok, 500, [{"Content-Type", "application/json"}], error}
     parse_opts = [result_as: :raw]
 
@@ -14,7 +14,7 @@ defmodule Instream.Connection.ResponseParserV1Test do
   end
 
   test "raw csv error response" do
-    error = ~s(error\n"type error")
+    error = ~S(error\n"type error")
     response = {:ok, 500, [{"Content-Type", "application/csv"}], error}
     parse_opts = [result_as: :raw]
 
@@ -30,7 +30,7 @@ defmodule Instream.Connection.ResponseParserV1Test do
   end
 
   test "raw json response" do
-    error = ~s({"some":"json"})
+    error = ~S({"some":"json"})
     response = {:ok, 200, [{"Content-Type", "application/json"}], error}
     parse_opts = [result_as: :raw]
 
@@ -38,7 +38,7 @@ defmodule Instream.Connection.ResponseParserV1Test do
   end
 
   test "raw csv response" do
-    error = ~s(some\ncsv)
+    error = ~S(some\ncsv)
     response = {:ok, 200, [{"Content-Type", "application/csv"}], error}
     parse_opts = [result_as: :raw]
 

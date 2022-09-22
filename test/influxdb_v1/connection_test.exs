@@ -59,8 +59,8 @@ defmodule Instream.InfluxDBv1.ConnectionTest do
   end
 
   test "read using params" do
-    test_field = ~S|string field value, only " need be quoted|
-    test_tag = ~S|tag,value,with"commas"|
+    test_field = ~S(string field value, only " need be quoted)
+    test_tag = ~S(tag,value,with"commas")
 
     :ok =
       TestConnection.write([

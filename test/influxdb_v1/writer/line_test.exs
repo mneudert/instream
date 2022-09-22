@@ -229,7 +229,7 @@ defmodule Instream.InfluxDBv1.Writer.LineTest do
 
     assert %{results: [%{series: [%{values: [[_, "ForRp", "Line"]]}]}]} =
              TestConnection.query(
-               ~s[SELECT * FROM "one_week"."writer_protocols" WHERE proto='ForRp'],
+               ~S(SELECT * FROM "one_week"."writer_protocols" WHERE proto='ForRp'),
                database: "test_database"
              )
 

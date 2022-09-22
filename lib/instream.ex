@@ -44,13 +44,13 @@ defmodule Instream do
   To read data from your InfluxDB server you should send a query:
 
       # Flux query
-      MyConnection.query(~s(
+      MyConnection.query(~s[
         from(bucket: "\#{MyConnection.config(:bucket)}")
         |> range(start: -5m)
         |> filter(fn: (r) =>
           r._measurement == "instream_examples"
         )
-      ))
+      ])
 
       # InfluxQL query
       MyConnection.query("SELECT * FROM instream_examples")
@@ -187,7 +187,7 @@ defmodule Instream do
       MyConnection.delete(%{
         start: DateTime.to_iso(~U[2020-01-01T00:00:00Z]),
         stop: DateTime.to_iso(~U[2020-01-02T00:00:00Z]),
-        predicate: ~s[_measurement="optional" AND foo="bar"]
+        predicate: ~S(_measurement="optional" AND foo="bar")
       })
   """
 end

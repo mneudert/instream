@@ -98,11 +98,11 @@ defmodule Instream.Series do
   field in your series you will need to "pivot" your query results to be able
   to fully hydrate your structs:
 
-      MyConnection.query(~s(
+      MyConnection.query(~s[
         from(bucket: "\#{MyConnection.config(:bucket)}")
         |> range(start: -5m)
         |> pivot(rowKey:["_time"], columnKey: ["_field"], valueColumn: "_value")
-      ))
+      ])
 
   Without using the `pivot()` function in your `:flux` query you will receive
   one result struct for each field (other fields containing default values)

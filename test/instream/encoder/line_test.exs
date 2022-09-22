@@ -103,7 +103,7 @@ defmodule Instream.Encoder.LineTest do
   end
 
   test "multiple fields" do
-    expected = ~S|disk_free disk_type="SSD",free_space=442221834240i 1435362189575692182|
+    expected = ~S(disk_free disk_type="SSD",free_space=442221834240i 1435362189575692182)
 
     point = %{
       measurement: "disk_free",
@@ -119,7 +119,7 @@ defmodule Instream.Encoder.LineTest do
 
   test "escaping commas and spaces" do
     expected =
-      ~S|total\ disk\ free,volumes=/net\,/home\,/ value=442221834240i 1435362189575692182|
+      ~S(total\ disk\ free,volumes=/net\,/home\,/ value=442221834240i 1435362189575692182)
 
     point = %{
       measurement: "total disk free",
@@ -136,7 +136,7 @@ defmodule Instream.Encoder.LineTest do
   end
 
   test "escaping equals signs" do
-    expected = ~S|disk_free,a\=b=y\=z value=442221834240i|
+    expected = ~S(disk_free,a\=b=y\=z value=442221834240i)
 
     point = %{
       measurement: "disk_free",
@@ -153,12 +153,12 @@ defmodule Instream.Encoder.LineTest do
   end
 
   test "with backslash in tag value" do
-    expected = ~S|disk_free,path=C:\Windows value=442221834240i|
+    expected = ~S(disk_free,path=C:\Windows value=442221834240i)
 
     point = %{
       measurement: "disk_free",
       tags: %{
-        path: ~S|C:\Windows|
+        path: ~S(C:\Windows)
       },
       fields: %{
         value: 442_221_834_240
@@ -171,13 +171,13 @@ defmodule Instream.Encoder.LineTest do
 
   test "escaping field key" do
     expected =
-      ~S|disk_free value=442221834240i,working\ directories="C:\My Documents\Stuff for examples,C:\My Documents"|
+      ~S(disk_free value=442221834240i,working\ directories="C:\My Documents\Stuff for examples,C:\My Documents")
 
     point = %{
       measurement: "disk_free",
       fields: %{
         "value" => 442_221_834_240,
-        "working directories" => ~S|C:\My Documents\Stuff for examples,C:\My Documents|
+        "working directories" => ~S(C:\My Documents\Stuff for examples,C:\My Documents)
       },
       timestamp: nil
     }
@@ -187,15 +187,15 @@ defmodule Instream.Encoder.LineTest do
 
   test "showing all escaping and quoting together" do
     expected =
-      ~S|"measurement\ with\ quotes",tag\ key\ with\ spaces=tag\,value\,with"commas" field_key\\\\="string field value, only \" need be quoted"|
+      ~S("measurement\ with\ quotes",tag\ key\ with\ spaces=tag\,value\,with"commas" field_key\\\\="string field value, only \" need be quoted")
 
     point = %{
-      measurement: ~S|"measurement with quotes"|,
+      measurement: ~S("measurement with quotes"),
       tags: %{
-        "tag key with spaces" => ~S|tag,value,with"commas"|
+        "tag key with spaces" => ~S(tag,value,with"commas")
       },
       fields: %{
-        ~S|field_key\\\\| => ~S|string field value, only " need be quoted|
+        ~S(field_key\\\\) => ~S(string field value, only " need be quoted)
       },
       timestamp: nil
     }
@@ -204,7 +204,7 @@ defmodule Instream.Encoder.LineTest do
   end
 
   test "multiple points" do
-    expected = ~s|multiline value="first"\nmultiline value="second"|
+    expected = ~s(multiline value="first"\nmultiline value="second")
 
     points = [
       %{

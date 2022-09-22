@@ -68,7 +68,7 @@ defmodule Instream.Log.DefaultLoggerTest do
 
   @tag :"influxdb_exclude_2.x"
   test "logging read request with redacted password" do
-    query = ~s(CREATE USER "instream_test" WITH PASSWORD "instream_test")
+    query = ~S(CREATE USER "instream_test" WITH PASSWORD "instream_test")
 
     log =
       capture_log(fn ->
@@ -78,7 +78,7 @@ defmodule Instream.Log.DefaultLoggerTest do
       end)
 
     assert String.contains?(log, "CREATE USER")
-    refute String.contains?(log, ~s(PASSWORD "instream_test"))
+    refute String.contains?(log, ~S(PASSWORD "instream_test"))
   end
 
   @tag :"influxdb_exclude_2.x"

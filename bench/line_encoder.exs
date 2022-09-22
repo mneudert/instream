@@ -12,12 +12,12 @@ point_complete = %{
 }
 
 point_escaping = %{
-  measurement: ~S|"measurement with quotes"|,
+  measurement: ~S("measurement with quotes"),
   tags: %{
-    "tag key with spaces" => ~S|tag,value,with"commas"|
+    "tag key with spaces" => ~S(tag,value,with"commas")
   },
   fields: %{
-    ~S|field_key\\\\| => ~S|string field value, only " need be quoted|
+    ~S(field_key\\\\) => ~S(string field value, only " need be quoted)
   },
   timestamp: nil
 }
