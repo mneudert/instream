@@ -16,18 +16,18 @@ defmodule Instream.Connection.TimeoutTest do
 
     def unquote(:do)(mod_data), do: serve_uri(mod(mod_data, :request_uri), mod_data)
 
-    defp serve_uri('/query?db=timeout', _mod_data) do
+    defp serve_uri(~C"/query?db=timeout", _mod_data) do
       :timer.sleep(100)
       serve_dummy()
     end
 
     defp serve_dummy do
-      body = '{"results": [{}]}'
+      body = ~C({"results": [{}]})
 
       head = [
         code: 200,
         content_length: body |> length() |> String.to_charlist(),
-        content_type: 'application/json'
+        content_type: ~C"application/json"
       ]
 
       {:proceed, [{:response, {:response, head, body}}]}
@@ -41,7 +41,7 @@ defmodule Instream.Connection.TimeoutTest do
       document_root: root,
       modules: [InetsHandler],
       port: 0,
-      server_name: 'instream_connection_timeout_test',
+      server_name: ~C"instream_connection_timeout_test",
       server_root: root
     ]
 
