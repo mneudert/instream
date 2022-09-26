@@ -36,7 +36,7 @@ defmodule Instream.InfluxDBv1.Writer.UDPTest do
     end
   end
 
-  test "writing no points alway succeeds" do
+  test "writing no points always succeeds" do
     start_supervised!(UDPConnection)
 
     assert :ok = UDPConnection.write([])

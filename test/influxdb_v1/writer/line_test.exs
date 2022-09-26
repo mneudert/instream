@@ -76,7 +76,7 @@ defmodule Instream.InfluxDBv1.Writer.LineTest do
     end
   end
 
-  test "writing no points alway succeeds" do
+  test "writing no points always succeeds" do
     assert :ok = TestConnection.write([])
   end
 
