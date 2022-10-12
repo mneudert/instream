@@ -6,6 +6,9 @@
     - Configuration access for a connection now returns the configured `:otp_app` used (`nil` if none)
     - Starting a connection will now issue a warning if the configured `:otp_app` contains no configuration
 
+- Bug fixes
+    - Read queries now send the proper `Content-Type: application/json` header for InfluxDB v2.x connections without having to explicitly pass `query_language: :flux` as an option ([#76](https://github.com/mneudert/instream/issues/76))
+
 ## v2.1.0 (2022-08-02)
 
 - Enhancements

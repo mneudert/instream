@@ -86,21 +86,27 @@ defmodule Instream.Query.Headers do
       iex> assemble_language(:v1, :flux)
       [{"Accept", "application/csv"}, {"Content-Type", "application/vnd.flux"}]
 
-      iex> assemble_language(:v2, :influxql)
-      [{"Accept", "application/json"}, {"Content-Type", "application/json"}]
+      iex> assemble_language(:v1, :influxql)
+      []
+
+      iex> assemble_language(:v2, nil)
+      [{"Accept", "application/csv"}, {"Content-Type", "application/json"}]
 
       iex> assemble_language(:v2, :flux)
       [{"Accept", "application/csv"}, {"Content-Type", "application/json"}]
+
+      iex> assemble_language(:v2, :influxql)
+      [{"Accept", "application/json"}, {"Content-Type", "application/json"}]
   """
   @spec assemble_language(:v1 | :v2, nil | :flux | :influxql) :: [{String.t(), String.t()}]
   def assemble_language(:v1, :flux),
     do: [{"Accept", "application/csv"}, {"Content-Type", "application/vnd.flux"}]
 
-  def assemble_language(:v2, :flux),
-    do: [{"Accept", "application/csv"}, {"Content-Type", "application/json"}]
-
   def assemble_language(:v2, :influxql),
     do: [{"Accept", "application/json"}, {"Content-Type", "application/json"}]
+
+  def assemble_language(:v2, _),
+    do: [{"Accept", "application/csv"}, {"Content-Type", "application/json"}]
 
   def assemble_language(_, _), do: []
 
