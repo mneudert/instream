@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-20.04
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: setup
       id: setup
@@ -17,7 +17,7 @@ jobs:
         otp-version: '25.0'
 
     - name: mix-cache
-      uses: actions/cache@v1
+      uses: actions/cache@v3
       id: mix-cache
       with:
         path: deps

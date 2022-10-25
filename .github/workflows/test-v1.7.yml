@@ -39,7 +39,7 @@ jobs:
       INFLUXDB_V1_PORT_UDP: 8089
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: setup
       uses: erlef/setup-beam@v1
@@ -48,7 +48,7 @@ jobs:
         otp-version: ${{ matrix.otp }}
 
     - name: mix-cache
-      uses: actions/cache@v1
+      uses: actions/cache@v3
       id: mix-cache
       with:
         path: deps
