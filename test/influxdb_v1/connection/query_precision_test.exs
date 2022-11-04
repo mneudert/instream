@@ -15,7 +15,7 @@ defmodule Instream.InfluxDBv1.Connection.QueryPrecisionTest do
   end
 
   test "integer precisions" do
-    [
+    precisions = [
       {:hour, 6},
       {:minute, 8},
       {:second, 10},
@@ -23,7 +23,8 @@ defmodule Instream.InfluxDBv1.Connection.QueryPrecisionTest do
       {:microsecond, 16},
       {:nanosecond, 19}
     ]
-    |> Enum.each(fn {precision, timelen} ->
+
+    for {precision, timelen} <- precisions do
       %{results: [%{series: [%{values: [[time, _]]}]}]} =
         TestConnection.query("SELECT * FROM precision_test", precision: precision)
 
@@ -31,7 +32,7 @@ defmodule Instream.InfluxDBv1.Connection.QueryPrecisionTest do
                time
                |> Kernel.to_string()
                |> String.length()
-    end)
+    end
   end
 
   test "rfc3339 precision" do
