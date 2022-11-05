@@ -37,6 +37,7 @@ defmodule Instream.InfluxDBv2.Connection.AuthorizationTest do
     @tag :"influxdb_exclude_2.2"
     @tag :"influxdb_exclude_2.3"
     @tag :"influxdb_exclude_2.4"
+    @tag :"influxdb_exclude_2.5"
     test "influxdb v2.0" do
       assert BearerAuthenticationConnection.query(~S[from(bucket: "ignored")]) == %{
                code: "unauthorized",
