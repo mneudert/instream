@@ -39,7 +39,9 @@ defmodule Instream.InfluxDBv2.Connection.AuthorizationTest do
     @tag :"influxdb_exclude_2.4"
     @tag :"influxdb_exclude_2.5"
     test "influxdb v2.0" do
-      assert BearerAuthenticationConnection.query(~S[from(bucket: "ignored")]) == %{
+      assert BearerAuthenticationConnection.query(
+               ~S[from(bucket: "ignored") |> range(start: -5m)]
+             ) == %{
                code: "unauthorized",
                message: "unauthorized access"
              }
@@ -49,7 +51,9 @@ defmodule Instream.InfluxDBv2.Connection.AuthorizationTest do
     test "influxdb >= v2.1" do
       start_supervised!(BearerAuthenticationConnection)
 
-      refute BearerAuthenticationConnection.query(~S[from(bucket: "ignored")]) == %{
+      refute BearerAuthenticationConnection.query(
+               ~S[from(bucket: "ignored") |> range(start: -5m)]
+             ) == %{
                code: "unauthorized",
                message: "unauthorized access"
              }
@@ -58,7 +62,7 @@ defmodule Instream.InfluxDBv2.Connection.AuthorizationTest do
 
   test "query without authorization" do
     assert %{code: "unauthorized", message: "unauthorized access"} =
-             UnauthorizedConnection.query(~S[from(bucket: "ignored")])
+             UnauthorizedConnection.query(~S[from(bucket: "ignored") |> range(start: -5m)])
   end
 
   test "write without authorization" do
