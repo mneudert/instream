@@ -168,6 +168,19 @@ defmodule Instream.Connection.Config do
   `:query` (InfluxDB v1). If nothing or an invalid value is given the connection
   will be made using `:basic` authentication.
 
+  ## Query Language
+
+  By default Instream uses the default query language based on the configured
+  connection version (`:influxql` for `:v1`, `:flux` for `:v2`).
+
+  You can change this default in your configuration:
+
+      config :my_app, MyConnection,
+        query_language: :influxql # or :flux
+
+  This configuration will then be used if you are not passing a specific
+  `:query_language` option for your query.
+
   ## Point Writer
 
   If you are using the regular line protocol writer `Instream.Writer.Line`

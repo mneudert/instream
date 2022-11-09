@@ -24,30 +24,12 @@ defmodule Instream.Query.URL do
   """
   @spec query(Keyword.t(), Keyword.t()) :: String.t()
   def query(config, opts) do
-    case {config[:version], opts[:query_language]} do
-      {:v2, :influxql} ->
-        config
-        |> url("query")
-        |> append_param("db", opts[:database] || config[:database])
-        |> append_param("epoch", encode_precision(opts[:precision]))
-
-      {:v2, _} ->
-        config
-        |> url("api/v2/query")
-        |> append_param("org", opts[:org] || config[:org])
-
-      {:v1, :flux} ->
-        config
-        |> url("api/v2/query")
-        |> append_param("db", opts[:database] || config[:database])
-        |> append_param("epoch", encode_precision(opts[:precision]))
-
-      {:v1, _} ->
-        config
-        |> url("query")
-        |> append_param("db", opts[:database] || config[:database])
-        |> append_param("epoch", encode_precision(opts[:precision]))
-    end
+    query_url(
+      config[:version],
+      opts[:query_language] || config[:query_language],
+      config,
+      opts
+    )
   end
 
   @doc """
@@ -112,6 +94,33 @@ defmodule Instream.Query.URL do
   defp encode_precision(:microsecond), do: "u"
   defp encode_precision(:nanosecond), do: "ns"
   defp encode_precision(_), do: ""
+
+  defp query_url(:v2, :influxql, config, opts) do
+    config
+    |> url("query")
+    |> append_param("db", opts[:database] || config[:database])
+    |> append_param("epoch", encode_precision(opts[:precision]))
+  end
+
+  defp query_url(:v2, _, config, opts) do
+    config
+    |> url("api/v2/query")
+    |> append_param("org", opts[:org] || config[:org])
+  end
+
+  defp query_url(:v1, :flux, config, opts) do
+    config
+    |> url("api/v2/query")
+    |> append_param("db", opts[:database] || config[:database])
+    |> append_param("epoch", encode_precision(opts[:precision]))
+  end
+
+  defp query_url(:v1, _, config, opts) do
+    config
+    |> url("query")
+    |> append_param("db", opts[:database] || config[:database])
+    |> append_param("epoch", encode_precision(opts[:precision]))
+  end
 
   defp url(config, endpoint) do
     url =

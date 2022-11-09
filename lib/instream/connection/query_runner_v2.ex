@@ -206,7 +206,9 @@ defmodule Instream.Connection.QueryRunnerV2 do
   defp log(_, _), do: :ok
 
   defp read_body(conn, query, opts) do
-    case opts[:query_language] do
+    config = conn.config()
+
+    case opts[:query_language] || config[:query_language] do
       :influxql ->
         ""
 
@@ -228,7 +230,7 @@ defmodule Instream.Connection.QueryRunnerV2 do
     config = conn.config()
     url = URL.query(config, opts)
 
-    case opts[:query_language] do
+    case opts[:query_language] || config[:query_language] do
       :influxql ->
         case opts[:params] do
           params when is_map(params) ->

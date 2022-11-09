@@ -19,6 +19,26 @@ defmodule Instream.InfluxDBv2.ConnectionTest do
       ]
   end
 
+  defmodule QueryLanguageConnection do
+    use Instream.Connection,
+      otp_app: :instream,
+      config: [
+        init: {__MODULE__.Initializer, :init}
+      ]
+
+    defmodule Initializer do
+      def init(conn) do
+        config =
+          Keyword.merge(
+            Application.get_env(:instream, TestConnection),
+            query_language: :influxql
+          )
+
+        Application.put_env(:instream, conn, config)
+      end
+    end
+  end
+
   defmodule TestSeries do
     use Instream.Series
 
@@ -166,5 +186,58 @@ defmodule Instream.InfluxDBv2.ConnectionTest do
 
     assert %{results: [%{series: [%{name: "params", values: [[_, ^test_field]]}]}]} =
              TestConnection.query(query, query_language: :influxql, params: params)
+  end
+
+  describe "query language from connection config" do
+    test "use default from config" do
+      start_supervised!(QueryLanguageConnection)
+
+      measurement = "default_query_language_config"
+
+      :ok =
+        QueryLanguageConnection.write([
+          %{
+            measurement: measurement,
+            fields: %{value: 42}
+          }
+        ])
+
+      assert %{results: [%{series: [%{name: ^measurement, values: [[_, 42]]}]}]} =
+               QueryLanguageConnection.query("SELECT LAST(value) FROM #{measurement}")
+    end
+
+    test "override default config" do
+      start_supervised!(QueryLanguageConnection)
+
+      measurement = "default_query_language_override"
+
+      :ok =
+        QueryLanguageConnection.write([
+          %{
+            measurement: measurement,
+            fields: %{value: 42}
+          }
+        ])
+
+      result =
+        QueryLanguageConnection.query(
+          """
+          from(bucket:"#{QueryLanguageConnection.config(:bucket)}")
+          |> range(start: -5m)
+          |> filter(fn: (r) => r._measurement == "#{measurement}")
+          |> last()
+          """,
+          query_language: :flux
+        )
+
+      assert [
+               %{
+                 "_field" => "value",
+                 "_measurement" => ^measurement,
+                 "_value" => 42,
+                 "result" => "_result"
+               }
+             ] = result
+    end
   end
 end

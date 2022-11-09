@@ -1,5 +1,10 @@
 # Changelog
 
+## v2.3.0-dev
+
+- Enhancements
+    - The default query language can be configured at the connection level. If no per-query option is given it will be used instead of the default for your `:version` configuration (defaults are `:flux` for `:v2` and `:influxql` for `:v1`)
+
 ## v2.2.0 (2022-10-16)
 
 - Enhancements

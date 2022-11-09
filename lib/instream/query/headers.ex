@@ -8,7 +8,7 @@ defmodule Instream.Query.Headers do
   def assemble(config, options \\ []) do
     assemble_auth(config[:auth]) ++
       assemble_encoding(options[:result_as]) ++
-      assemble_language(config[:version], options[:query_language])
+      assemble_language(config[:version], options[:query_language] || config[:query_language])
   end
 
   @doc """
