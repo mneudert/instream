@@ -63,8 +63,8 @@ defmodule Instream.Connection.QueryRunnerV1 do
     headers = Headers.assemble(config, opts)
     http_opts = http_opts(config, opts)
 
-    body = read_body(query, opts)
-    method = read_method(opts)
+    body = read_body(query, config, opts)
+    method = read_method(config, opts)
     url = read_url(conn, query, opts)
 
     {query_time, response} =
@@ -208,15 +208,15 @@ defmodule Instream.Connection.QueryRunnerV1 do
 
   defp log(_, _), do: :ok
 
-  defp read_body(query, opts) do
-    case opts[:query_language] do
+  defp read_body(query, config, opts) do
+    case opts[:query_language] || config[:query_language] do
       :flux -> query
       _ -> ""
     end
   end
 
-  defp read_method(opts) do
-    case opts[:query_language] do
+  defp read_method(config, opts) do
+    case opts[:query_language] || config[:query_language] do
       :flux -> :post
       _ -> opts[:method] || :get
     end
@@ -226,7 +226,7 @@ defmodule Instream.Connection.QueryRunnerV1 do
     config = conn.config()
     url = URL.query(config, opts)
 
-    case opts[:query_language] do
+    case opts[:query_language] || config[:query_language] do
       :flux ->
         url
 
