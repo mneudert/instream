@@ -41,6 +41,7 @@ defmodule Instream.Query.URL do
         |> url("api/v2/query")
         |> append_param("db", opts[:database] || config[:database])
         |> append_param("epoch", encode_precision(opts[:precision]))
+        |> append_param("org", opts[:org] || config[:org])
 
       {:v1, _} ->
         config
