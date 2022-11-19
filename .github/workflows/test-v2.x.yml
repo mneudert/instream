@@ -1,6 +1,11 @@
 name: Test InfluxDB v2.x
 
-on: [push, pull_request]
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
 
 jobs:
   test:
