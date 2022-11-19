@@ -28,7 +28,7 @@ defmodule Instream.Writer.Line do
     config = conn.config()
     headers = Headers.assemble(config, opts) ++ [{"Content-Type", "text/plain"}]
     body = Encoder.encode(points)
-    url = URL.write(config, opts)
+    url = URL.write(config[:version], config, opts)
 
     http_opts =
       Keyword.merge(

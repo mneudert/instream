@@ -59,23 +59,21 @@ defmodule Instream.Query.URL do
   @doc """
   Returns the proper URL for a `:write` request.
   """
-  @spec write(Keyword.t(), Keyword.t()) :: String.t()
-  def write(config, opts) do
-    case config[:version] do
-      :v2 ->
-        config
-        |> url("api/v2/write")
-        |> append_param("bucket", opts[:bucket] || config[:bucket])
-        |> append_param("org", opts[:org] || config[:org])
-        |> append_param("precision", encode_precision(opts[:precision]))
+  @spec write(:v2 | :v1, Keyword.t(), Keyword.t()) :: String.t()
+  def write(:v2, config, opts) do
+    config
+    |> url("api/v2/write")
+    |> append_param("bucket", opts[:bucket] || config[:bucket])
+    |> append_param("org", opts[:org] || config[:org])
+    |> append_param("precision", encode_precision(opts[:precision]))
+  end
 
-      _ ->
-        config
-        |> url("write")
-        |> append_param("db", opts[:database] || config[:database])
-        |> append_param("precision", encode_precision(opts[:precision]))
-        |> append_param("rp", opts[:retention_policy])
-    end
+  def write(:v1, config, opts) do
+    config
+    |> url("write")
+    |> append_param("db", opts[:database] || config[:database])
+    |> append_param("precision", encode_precision(opts[:precision]))
+    |> append_param("rp", opts[:retention_policy])
   end
 
   @doc """
