@@ -224,7 +224,7 @@ defmodule Instream.Connection.QueryRunnerV1 do
 
   defp read_url(conn, query, opts) do
     config = conn.config()
-    url = URL.query(config, opts)
+    url = URL.query(config[:version], config, opts)
 
     case opts[:query_language] do
       :flux ->
