@@ -22,7 +22,7 @@ defmodule Instream.Connection.QueryRunnerV2 do
     headers = Headers.assemble(config, opts) ++ [{"Content-Type", "application/json"}]
     http_opts = http_opts(config, opts)
     body = JSON.encode(payload, conn)
-    url = URL.delete(config, opts)
+    url = URL.delete(config[:version], config, opts)
 
     {query_time, response} =
       :timer.tc(fn ->
@@ -60,7 +60,7 @@ defmodule Instream.Connection.QueryRunnerV2 do
     config = conn.config()
     headers = Headers.assemble(config, opts)
     http_opts = http_opts(config, opts)
-    url = URL.ping(config)
+    url = URL.ping(config[:version], config)
 
     {query_time, response} =
       :timer.tc(fn ->
@@ -140,7 +140,7 @@ defmodule Instream.Connection.QueryRunnerV2 do
     config = conn.config()
     headers = Headers.assemble(config, opts)
     http_opts = http_opts(config, opts)
-    url = URL.ping(config)
+    url = URL.ping(config[:version], config)
 
     response = config[:http_client].request(:head, url, headers, "", http_opts)
 

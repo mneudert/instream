@@ -16,8 +16,8 @@ defmodule Instream.Query.URL do
   @doc """
   Returns the proper URL for a `:ping` request.
   """
-  @spec ping(Keyword.t()) :: String.t()
-  def ping(config), do: url(config, "ping")
+  @spec ping(:v2 | :v1, Keyword.t()) :: String.t()
+  def ping(_, config), do: url(config, "ping")
 
   @doc """
   Returns the proper URL for a `:query` request.
@@ -57,8 +57,8 @@ defmodule Instream.Query.URL do
   @doc """
   Returns the proper URL for a `:status` request.
   """
-  @spec status(Keyword.t()) :: String.t()
-  def status(config), do: url(config, "status")
+  @spec status(:v1, Keyword.t()) :: String.t()
+  def status(:v1, config), do: url(config, "status")
 
   @doc """
   Returns the proper URL for a `:write` request.
@@ -83,8 +83,8 @@ defmodule Instream.Query.URL do
   @doc """
   Returns the proper URL for a `:delete` request.
   """
-  @spec delete(Keyword.t(), Keyword.t()) :: String.t()
-  def delete(config, opts) do
+  @spec delete(:v2, Keyword.t(), Keyword.t()) :: String.t()
+  def delete(:v2, config, opts) do
     config
     |> url("api/v2/delete")
     |> append_param("bucket", opts[:bucket] || config[:bucket])

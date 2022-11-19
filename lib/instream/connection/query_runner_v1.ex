@@ -21,7 +21,7 @@ defmodule Instream.Connection.QueryRunnerV1 do
     config = conn.config()
     headers = Headers.assemble(config, opts)
     http_opts = http_opts(config, opts)
-    url = URL.ping(config)
+    url = URL.ping(config[:version], config)
 
     {query_time, response} =
       :timer.tc(fn ->
@@ -102,7 +102,7 @@ defmodule Instream.Connection.QueryRunnerV1 do
     config = conn.config()
     headers = Headers.assemble(config, opts)
     http_opts = http_opts(config, opts)
-    url = URL.status(config)
+    url = URL.status(config[:version], config)
 
     {query_time, response} =
       :timer.tc(fn ->
@@ -143,7 +143,7 @@ defmodule Instream.Connection.QueryRunnerV1 do
     config = conn.config()
     headers = Headers.assemble(config, opts)
     http_opts = http_opts(config, opts)
-    url = URL.ping(config)
+    url = URL.ping(config[:version], config)
 
     response = config[:http_client].request(:head, url, headers, "", http_opts)
 
