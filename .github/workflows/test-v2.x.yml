@@ -34,7 +34,7 @@ jobs:
             otp: '24.3'
             influxdb_image_version: '2.4.0'
             influxdb_test_version: '2.4'
-          - elixir: '1.14.1'
+          - elixir: '1.14.2'
             otp: '25.0'
             influxdb_image_version: '2.5.1'
             influxdb_test_version: '2.5'

@@ -24,7 +24,7 @@ jobs:
             otp: '23.3'
           - elixir: '1.13.4'
             otp: '24.3'
-          - elixir: '1.14.1'
+          - elixir: '1.14.2'
             otp: '25.0'
 
     services:
