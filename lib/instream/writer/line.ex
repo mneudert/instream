@@ -2,42 +2,22 @@ defmodule Instream.Writer.Line do
   @moduledoc """
   Point writer for the line protocol.
 
-  ## Write Options
+  Will use `Instream.Writer.LineV1` or `Instream.Writer.LineV2` depending
+  on the connection version.
 
-  - `precision`: write points with a precision other than `:nanosecond`
-
-  ### InfluxDB v2.x Options
-
-  - `bucket`: write data to a specific bucket
-  - `org`: write data to a specific organization
-
-  ### InfluxDB v1.x Options
-
-  - `database`: write data to a specific database
-  - `retention_policy`: write data with a specific retention policy
+  Please refer to the writer appropriate to your configuration and/or version.
   """
 
-  alias Instream.Encoder.Line, as: Encoder
-  alias Instream.Query.Headers
-  alias Instream.Query.URL
+  alias Instream.Writer.LineV1
+  alias Instream.Writer.LineV2
 
   @behaviour Instream.Writer
 
   @impl Instream.Writer
-  def write([_ | _] = points, opts, conn) do
-    config = conn.config()
-    headers = Headers.assemble(config, opts) ++ [{"Content-Type", "text/plain"}]
-    body = Encoder.encode(points)
-    url = URL.write(config[:version], config, opts)
-
-    http_opts =
-      Keyword.merge(
-        Keyword.get(config, :http_opts, []),
-        Keyword.get(opts, :http_opts, [])
-      )
-
-    config[:http_client].request(:post, url, headers, body, http_opts)
+  def write(points, opts, conn) do
+    case conn.config(:version) do
+      :v1 -> LineV1.write(points, opts, conn)
+      :v2 -> LineV2.write(points, opts, conn)
+    end
   end
-
-  def write(_, _, _), do: {:ok, 200, [], ""}
 end
