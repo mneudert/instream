@@ -52,6 +52,24 @@ defmodule Instream.Connection.Config do
         end
       end
 
+  The initializer can also be defined inside your connection module:
+
+      defmodule MyConnection do
+        use Instream.Connection,
+          config: [
+            init: {__MODULE__, :init}
+          ]
+
+        def init(conn) do
+          Application.put_env(
+            :my_app,
+            conn,
+            host: "my.influxdb.host",
+            port: 64219
+          )
+        end
+      end
+
   When the connection is started the function will be called with the
   connection module as the first argument.
 

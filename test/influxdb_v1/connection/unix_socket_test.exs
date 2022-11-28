@@ -10,16 +10,16 @@ defmodule Instream.InfluxDBv1.Connection.UnixSocketTest do
       config: [
         auth: [username: "instream_test", password: "instream_test"],
         database: "test_database",
-        init: {__MODULE__, :fetch_socket},
+        init: {__MODULE__, :init},
         loggers: [],
         port: 0,
         scheme: "http+unix"
       ]
 
-    def fetch_socket(_) do
+    def init(conn) do
       Application.put_env(
         :instream,
-        __MODULE__,
+        conn,
         host: "INFLUXDB_V1_SOCKET" |> System.fetch_env!() |> URI.encode_www_form()
       )
     end

@@ -9,19 +9,17 @@ defmodule Instream.InfluxDBv2.Writer.LineV1Test do
     use Instream.Connection,
       otp_app: :instream,
       config: [
-        init: {__MODULE__.Initializer, :init}
+        init: {__MODULE__, :init}
       ]
 
-    defmodule Initializer do
-      def init(conn) do
-        config =
-          Keyword.merge(
-            Application.get_env(:instream, TestConnection),
-            writer: Instream.Writer.LineV1
-          )
+    def init(conn) do
+      config =
+        Keyword.merge(
+          Application.get_env(:instream, TestConnection),
+          writer: Instream.Writer.LineV1
+        )
 
-        Application.put_env(:instream, conn, config)
-      end
+      Application.put_env(:instream, conn, config)
     end
   end
 
