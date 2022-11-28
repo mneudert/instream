@@ -40,6 +40,8 @@ jobs:
     env:
       MIX_ENV: test
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      INFLUXDB_HOST: localhost
+      INFLUXDB_PORT: 8086
       INFLUXDB_VERSION: '1.7'
       INFLUXDB_V1_PORT_UDP: 8089
 
@@ -68,7 +70,7 @@ jobs:
 
     - name: test
       run: |
-        until curl -s -o /dev/null 'http://localhost:8086' 2>/dev/null; do
+        until curl -s -o /dev/null "http://${INFLUXDB_HOST}:${INFLUXDB_PORT}" 2>/dev/null; do
           sleep 1
         done
         mix coveralls.github

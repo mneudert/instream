@@ -54,6 +54,8 @@ jobs:
     env:
       MIX_ENV: test
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      INFLUXDB_HOST: localhost
+      INFLUXDB_PORT: 8086
       INFLUXDB_VERSION: '1.8'
       INFLUXDB_V1_PORT_UDP: 8089
       INFLUXDB_V1_SOCKET: ${{ github.workspace }}/influxdb.sock

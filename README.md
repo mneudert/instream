@@ -35,6 +35,8 @@ To run the tests you need to have HTTP authentication enabled.
 
 The following environment variables are used to select some test suites and the InfluxDB version under test:
 
+- `INFLUXDB_HOST`: the hostname where the InfluxDB can be reached (e.g. `localhost`)
+- `INFLUXDB_PORT`: the port where InfluxDB receives queries on (e.g. `8086`)
 - `INFLUXDB_VERSION`: the tested InfluxDB version as `major.minor`, e.g. `"1.8"`, `"2.0"`, or `"2.4"`
 - `INFLUXDB_V1_PORT_UDP`: the UDP port used for writer testing _(InfluxDB 1.x only)_
 - `INFLUXDB_V1_SOCKET`: path to the InfluxDB unix socket _(InfluxDB 1.8 only)_

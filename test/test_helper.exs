@@ -28,6 +28,8 @@ if version in ["2.0", "2.1", "2.2", "2.3", "2.4", "2.5"] do
     :instream,
     TestConnection,
     auth: [method: :token, token: System.fetch_env!("INFLUXDB_V2_TOKEN")],
+    host: System.fetch_env!("INFLUXDB_HOST"),
+    port: System.fetch_env!("INFLUXDB_PORT"),
     bucket: "test_bucket",
     database: "mapped_database",
     org: "instream_test",
@@ -39,6 +41,8 @@ else
     :instream,
     TestConnection,
     auth: [username: "instream_test", password: "instream_test"],
+    host: System.fetch_env!("INFLUXDB_HOST"),
+    port: System.fetch_env!("INFLUXDB_PORT"),
     database: "test_database",
     loggers: []
   )

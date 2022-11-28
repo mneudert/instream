@@ -48,6 +48,8 @@ jobs:
     env:
       MIX_ENV: test
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      INFLUXDB_HOST: localhost
+      INFLUXDB_PORT: 8086
       INFLUXDB_VERSION: ${{ matrix.influxdb_test_version }}
 
     steps:
@@ -75,13 +77,13 @@ jobs:
 
     - name: test
       run: |
-        until curl -s -o /dev/null 'http://localhost:8086' 2>/dev/null; do
+        until curl -s -o /dev/null "http://${INFLUXDB_HOST}:${INFLUXDB_PORT}" 2>/dev/null; do
           sleep 1
         done
 
         SETUP=$(
             curl -s \
-                -XPOST http://localhost:8086/api/v2/setup \
+                -XPOST "http://${INFLUXDB_HOST}:${INFLUXDB_PORT}/api/v2/setup" \
                 -H 'accept: application/json' \
                 -d '{
                       "username": "instream_test",
@@ -96,7 +98,7 @@ jobs:
         export INFLUXDB_V2_TOKEN=$(jq -r '.auth.token' <<< "${SETUP}")
 
         curl -s -o /dev/null \
-            -XPOST http://localhost:8086/api/v2/dbrps \
+            -XPOST "http://${INFLUXDB_HOST}:${INFLUXDB_PORT}/api/v2/dbrps" \
             -H "Authorization: Token ${INFLUXDB_V2_TOKEN}" \
             -H 'accept: application/json' \
             -d "{
