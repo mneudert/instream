@@ -17,11 +17,9 @@ defmodule Instream.InfluxDBv1.Connection.UnixSocketTest do
       ]
 
     def init(conn) do
-      Application.put_env(
-        :instream,
-        conn,
-        host: "INFLUXDB_V1_SOCKET" |> System.fetch_env!() |> URI.encode_www_form()
-      )
+      config = [host: "INFLUXDB_V1_SOCKET" |> System.fetch_env!() |> URI.encode_www_form()]
+
+      Application.put_env(:instream, conn, config)
     end
   end
 

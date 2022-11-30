@@ -9,7 +9,17 @@ defmodule Instream.Log.DefaultLoggerTest do
   alias Instream.TestHelpers.TestConnection
 
   defmodule LogConnection do
-    use Instream.Connection, otp_app: :instream
+    use Instream.Connection,
+      otp_app: :instream,
+      config: [
+        init: {__MODULE__, :init}
+      ]
+
+    def init(conn) do
+      config = Keyword.drop(TestConnection.config(), [:loggers])
+
+      Application.put_env(:instream, conn, config)
+    end
   end
 
   defmodule TestSeries do
@@ -24,15 +34,9 @@ defmodule Instream.Log.DefaultLoggerTest do
     end
   end
 
-  setup_all do
-    Application.put_env(
-      :instream,
-      LogConnection,
-      Keyword.drop(TestConnection.config(), [:loggers])
-    )
-  end
-
   test "logging ping request" do
+    start_supervised!(LogConnection)
+
     log =
       capture_log(fn ->
         :pong = LogConnection.ping()
@@ -50,6 +54,8 @@ defmodule Instream.Log.DefaultLoggerTest do
   end
 
   test "logging read request" do
+    start_supervised!(LogConnection)
+
     query = "SELECT value FROM empty_measurement"
 
     log =
@@ -68,6 +74,8 @@ defmodule Instream.Log.DefaultLoggerTest do
 
   @tag :"influxdb_exclude_2.x"
   test "logging read request with redacted password" do
+    start_supervised!(LogConnection)
+
     query = ~S(CREATE USER "instream_test" WITH PASSWORD "instream_test")
 
     log =
@@ -83,6 +91,8 @@ defmodule Instream.Log.DefaultLoggerTest do
 
   @tag :"influxdb_exclude_2.x"
   test "logging status request" do
+    start_supervised!(LogConnection)
+
     log =
       capture_log(fn ->
         :ok = LogConnection.status()
@@ -100,6 +110,8 @@ defmodule Instream.Log.DefaultLoggerTest do
   end
 
   test "logging write request" do
+    start_supervised!(LogConnection)
+
     points = [
       %TestSeries{
         tags: %TestSeries.Tags{t: "foo"},
@@ -127,6 +139,8 @@ defmodule Instream.Log.DefaultLoggerTest do
 
   @tag :"influxdb_include_2.x"
   test "logging delete request" do
+    start_supervised!(LogConnection)
+
     predicate = %{
       predicate: "filled=\"filled_tag\"",
       start: DateTime.to_iso8601(~U[2021-01-01T00:00:00Z]),
@@ -150,6 +164,8 @@ defmodule Instream.Log.DefaultLoggerTest do
   describe "passing [log: false]" do
     @tag :"influxdb_exclude_2.x"
     test "ping request" do
+      start_supervised!(LogConnection)
+
       assert "" =
                capture_log(fn ->
                  :pong = LogConnection.ping(log: false)
@@ -159,6 +175,8 @@ defmodule Instream.Log.DefaultLoggerTest do
     end
 
     test "read request" do
+      start_supervised!(LogConnection)
+
       assert "" =
                capture_log(fn ->
                  query = "SELECT value FROM empty_measurement"

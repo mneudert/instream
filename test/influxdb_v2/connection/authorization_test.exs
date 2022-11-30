@@ -7,17 +7,17 @@ defmodule Instream.InfluxDBv2.Connection.AuthorizationTest do
     use Instream.Connection,
       otp_app: :instream,
       config: [
-        init: {__MODULE__, :fetch_influxdb_auth},
+        init: {__MODULE__, :init},
         bucket: "test_bucket",
         org: "instream_test",
         loggers: [],
         version: :v2
       ]
 
-    def fetch_influxdb_auth(_) do
-      Application.put_env(:instream, __MODULE__,
-        auth: [method: :bearer, token: System.fetch_env!("INFLUXDB_V2_TOKEN")]
-      )
+    def init(conn) do
+      config = [auth: [method: :bearer, token: System.fetch_env!("INFLUXDB_V2_TOKEN")]]
+
+      Application.put_env(:instream, conn, config)
     end
   end
 

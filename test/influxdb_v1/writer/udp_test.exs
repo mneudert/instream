@@ -22,17 +22,15 @@ defmodule Instream.InfluxDBv1.Writer.UDPTest do
     use Instream.Connection,
       otp_app: :instream,
       config: [
-        init: {__MODULE__, :fetch_port_udp},
+        init: {__MODULE__, :init},
         loggers: [],
         writer: Instream.Writer.UDP
       ]
 
-    def fetch_port_udp(_) do
-      Application.put_env(
-        :instream,
-        __MODULE__,
-        port_udp: "INFLUXDB_V1_PORT_UDP" |> System.fetch_env!() |> String.to_integer()
-      )
+    def init(conn) do
+      config = [port_udp: "INFLUXDB_V1_PORT_UDP" |> System.fetch_env!() |> String.to_integer()]
+
+      Application.put_env(:instream, conn, config)
     end
   end
 
