@@ -37,18 +37,20 @@ if version in ["2.0", "2.1", "2.2", "2.3", "2.4", "2.5"] do
     version: :v2
   )
 else
+  database = System.fetch_env!("INFLUXDB_V1_DATABASE")
+
   Application.put_env(
     :instream,
     TestConnection,
     auth: [username: "instream_test", password: "instream_test"],
     host: System.fetch_env!("INFLUXDB_HOST"),
     port: System.fetch_env!("INFLUXDB_PORT"),
-    database: "test_database",
+    database: database,
     loggers: []
   )
 
-  _ = TestConnection.query("DROP DATABASE test_database", method: :post)
-  _ = TestConnection.query("CREATE DATABASE test_database", method: :post)
+  _ = TestConnection.query("DROP DATABASE #{database}", method: :post)
+  _ = TestConnection.query("CREATE DATABASE #{database}", method: :post)
 end
 
 # configure unix socket connection tests
