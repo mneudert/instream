@@ -216,9 +216,11 @@ defmodule Instream.InfluxDBv1.Writer.LineTest do
   end
 
   test "writing with passed retention policy option" do
+    database = TestConnection.config(:database)
+
     _ =
       TestConnection.query(
-        "CREATE RETENTION POLICY one_week ON test_database DURATION 1w REPLICATION 1",
+        "CREATE RETENTION POLICY one_week ON #{database} DURATION 1w REPLICATION 1",
         method: :post
       )
 
@@ -230,7 +232,7 @@ defmodule Instream.InfluxDBv1.Writer.LineTest do
     assert %{results: [%{series: [%{values: [[_, "ForRp", "Line"]]}]}]} =
              TestConnection.query(
                ~S(SELECT * FROM "one_week"."writer_protocols" WHERE proto='ForRp'),
-               database: "test_database"
+               database: database
              )
 
     assert %{results: [should_not_be_in_default_rp]} =

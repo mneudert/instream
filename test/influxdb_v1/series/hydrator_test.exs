@@ -51,6 +51,8 @@ defmodule Instream.InfluxDBv1.Series.HydratorTest do
 
   @tag :"influxdb_include_1.8"
   test "Flux query" do
+    database = TestConnection.config(:database)
+
     :ok =
       %{hydrator: "flux"}
       |> TestSeries.from_map()
@@ -58,7 +60,7 @@ defmodule Instream.InfluxDBv1.Series.HydratorTest do
 
     result =
       """
-        from(bucket:"test_database/autogen")
+        from(bucket:"#{database}/autogen")
         |> range(start: -5m)
         |> filter(fn: (r) =>
           r._measurement == "#{TestSeries.__meta__(:measurement)}" and

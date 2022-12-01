@@ -4,12 +4,12 @@ defmodule Instream.InfluxDBv1.Connection.UnixSocketTest do
   @moduletag :"influxdb_exclude_2.x"
   @moduletag :unix_socket
 
+  alias Instream.TestHelpers.TestConnection
+
   defmodule UnixSocketConnection do
     use Instream.Connection,
       otp_app: :instream,
       config: [
-        auth: [username: "instream_test", password: "instream_test"],
-        database: "test_database",
         init: {__MODULE__, :init},
         loggers: [],
         port: 0,
@@ -17,7 +17,11 @@ defmodule Instream.InfluxDBv1.Connection.UnixSocketTest do
       ]
 
     def init(conn) do
-      config = [host: "INFLUXDB_V1_SOCKET" |> System.fetch_env!() |> URI.encode_www_form()]
+      config = [
+        auth: TestConnection.config(:auth),
+        database: TestConnection.config(:database),
+        host: "INFLUXDB_V1_SOCKET" |> System.fetch_env!() |> URI.encode_www_form()
+      ]
 
       Application.put_env(:instream, conn, config)
     end

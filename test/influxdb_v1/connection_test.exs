@@ -80,6 +80,7 @@ defmodule Instream.InfluxDBv1.ConnectionTest do
 
   @tag :"influxdb_include_1.8"
   test "read using flux query" do
+    database = TestConnection.config(:database)
     measurement = "flux"
 
     :ok =
@@ -94,7 +95,7 @@ defmodule Instream.InfluxDBv1.ConnectionTest do
     result =
       TestConnection.query(
         """
-        from(bucket:"test_database/autogen")
+        from(bucket:"#{database}/autogen")
         |> range(start: -1h)
         |> filter(fn: (r) => r._measurement == "#{measurement}")
         """,
