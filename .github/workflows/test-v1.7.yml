@@ -42,7 +42,9 @@ jobs:
       INFLUXDB_PORT: 8086
       INFLUXDB_VERSION: '1.7'
       INFLUXDB_V1_DATABASE: test_database
+      INFLUXDB_V1_PASSWORD: instream_test
       INFLUXDB_V1_PORT_UDP: 8089
+      INFLUXDB_V1_USERNAME: instream_test
 
     steps:
     - uses: actions/checkout@v3

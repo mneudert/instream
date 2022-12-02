@@ -39,8 +39,10 @@ The following environment variables are used to select some test suites and the 
 - `INFLUXDB_PORT`: the port where InfluxDB receives queries on (e.g. `8086`)
 - `INFLUXDB_VERSION`: the tested InfluxDB version as `major.minor`, e.g. `"1.8"`, `"2.0"`, or `"2.4"`
 - `INFLUXDB_V1_DATABASE`: the database used for InfluxDB v1.x tests _(will receive a `DROP` and `CREATE` during test start!)_
+- `INFLUXDB_V1_PASSWORD`: password for the `INFLUXDB_V1_USERNAME` account
 - `INFLUXDB_V1_PORT_UDP`: the UDP port used for writer testing _(InfluxDB 1.x only, should be configured to write to INFLUXDB\_V1\_DATABASE)_
 - `INFLUXDB_V1_SOCKET`: path to the InfluxDB unix socket _(InfluxDB 1.8 only)_
+- `INFLUXDB_V1_USERNAME`: username with admin privileges for the InfluxDB test instance _(InfluxDB 1.x only)_
 - `INFLUXDB_V2_TOKEN`: the authentication token used _(InfluxDB 2.x only)_
 
 ## Usage

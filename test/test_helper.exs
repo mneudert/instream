@@ -42,7 +42,10 @@ else
   Application.put_env(
     :instream,
     TestConnection,
-    auth: [username: "instream_test", password: "instream_test"],
+    auth: [
+      username: System.fetch_env!("INFLUXDB_V1_USERNAME"),
+      password: System.fetch_env!("INFLUXDB_V1_PASSWORD")
+    ],
     host: System.fetch_env!("INFLUXDB_HOST"),
     port: System.fetch_env!("INFLUXDB_PORT"),
     database: database,
