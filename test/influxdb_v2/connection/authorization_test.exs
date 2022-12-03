@@ -3,6 +3,8 @@ defmodule Instream.InfluxDBv2.Connection.AuthorizationTest do
 
   @moduletag :"influxdb_include_2.x"
 
+  alias Instream.TestHelpers.TestConnection
+
   defmodule BearerAuthenticationConnection do
     use Instream.Connection,
       otp_app: :instream,
@@ -15,7 +17,7 @@ defmodule Instream.InfluxDBv2.Connection.AuthorizationTest do
       ]
 
     def init(conn) do
-      config = [auth: [method: :bearer, token: System.fetch_env!("INFLUXDB_V2_TOKEN")]]
+      config = [auth: [method: :bearer, token: TestConnection.config(:auth)[:token]]]
 
       Application.put_env(:instream, conn, config)
     end
