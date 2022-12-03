@@ -52,6 +52,8 @@ jobs:
       INFLUXDB_HOST: localhost
       INFLUXDB_PORT: 8086
       INFLUXDB_VERSION: ${{ matrix.influxdb_test_version }}
+      INFLUXDB_V2_PASSWORD: instream_test
+      INFLUXDB_V2_USERNAME: instream_test
 
     steps:
     - uses: actions/checkout@v3
@@ -86,12 +88,12 @@ jobs:
             curl -s \
                 -XPOST "http://${INFLUXDB_HOST}:${INFLUXDB_PORT}/api/v2/setup" \
                 -H 'accept: application/json' \
-                -d '{
-                      "username": "instream_test",
-                      "password": "instream_test",
-                      "org": "instream_test",
-                      "bucket": "test_bucket"
-                    }'
+                -d "{
+                      \"username\": \"${INFLUXDB_V2_USERNAME}\",
+                      \"password\": \"${INFLUXDB_V2_PASSWORD}\",
+                      \"org\": \"instream_test\",
+                      \"bucket\": \"test_bucket\"
+                    }"
         )
 
         export INFLUXDB_V2_BUCKETID=$(jq -r '.bucket.id' <<< "${SETUP}")
