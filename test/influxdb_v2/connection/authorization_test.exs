@@ -10,14 +10,16 @@ defmodule Instream.InfluxDBv2.Connection.AuthorizationTest do
       otp_app: :instream,
       config: [
         init: {__MODULE__, :init},
-        bucket: "test_bucket",
-        org: "instream_test",
         loggers: [],
         version: :v2
       ]
 
     def init(conn) do
-      config = [auth: [method: :bearer, token: TestConnection.config(:auth)[:token]]]
+      config = [
+        auth: [method: :bearer, token: TestConnection.config(:auth)[:token]],
+        bucket: TestConnection.config(:bucket),
+        org: TestConnection.config(:org)
+      ]
 
       Application.put_env(:instream, conn, config)
     end
