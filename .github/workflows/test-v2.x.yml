@@ -52,6 +52,8 @@ jobs:
       INFLUXDB_HOST: localhost
       INFLUXDB_PORT: 8086
       INFLUXDB_VERSION: ${{ matrix.influxdb_test_version }}
+      INFLUXDB_V2_BUCKET: test_bucket
+      INFLUXDB_V2_ORG: instream_test
       INFLUXDB_V2_PASSWORD: instream_test
       INFLUXDB_V2_USERNAME: instream_test
 
@@ -91,8 +93,8 @@ jobs:
                 -d "{
                       \"username\": \"${INFLUXDB_V2_USERNAME}\",
                       \"password\": \"${INFLUXDB_V2_PASSWORD}\",
-                      \"org\": \"instream_test\",
-                      \"bucket\": \"test_bucket\"
+                      \"org\": \"${INFLUXDB_V2_ORG}\",
+                      \"bucket\": \"${INFLUXDB_V2_BUCKET}\"
                     }"
         )
 
