@@ -53,8 +53,10 @@ jobs:
       INFLUXDB_PORT: 8086
       INFLUXDB_VERSION: ${{ matrix.influxdb_test_version }}
       INFLUXDB_V2_BUCKET: test_bucket
+      INFLUXDB_V2_DATABASE: mapped_database
       INFLUXDB_V2_ORG: instream_test
       INFLUXDB_V2_PASSWORD: instream_test
+      INFLUXDB_V2_RETENTION: mapped_retention
       INFLUXDB_V2_USERNAME: instream_test
 
     steps:
@@ -108,10 +110,10 @@ jobs:
             -H 'accept: application/json' \
             -d "{
                   \"bucketID\": \"${INFLUXDB_V2_BUCKETID}\",
-                  \"database\": \"mapped_database\",
+                  \"database\": \"${INFLUXDB_V2_DATABASE}\",
                   \"default\": true,
                   \"orgID\": \"${INFLUXDB_V2_ORGID}\",
-                  \"retention_policy\": \"mapped_retention\"
+                  \"retention_policy\": \"${INFLUXDB_V2_RETENTION}\"
                 }"
 
         mix coveralls.github

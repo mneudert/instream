@@ -31,7 +31,7 @@ if version in ["2.0", "2.1", "2.2", "2.3", "2.4", "2.5"] do
     host: System.fetch_env!("INFLUXDB_HOST"),
     port: System.fetch_env!("INFLUXDB_PORT"),
     bucket: System.fetch_env!("INFLUXDB_V2_BUCKET"),
-    database: "mapped_database",
+    database: System.fetch_env!("INFLUXDB_V2_DATABASE"),
     org: System.fetch_env!("INFLUXDB_V2_ORG"),
     loggers: [],
     version: :v2
