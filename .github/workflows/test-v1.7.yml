@@ -41,6 +41,7 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       INFLUXDB_HOST: localhost
       INFLUXDB_PORT: 8086
+      INFLUXDB_SCHEME: http
       INFLUXDB_VERSION: '1.7'
       INFLUXDB_V1_DATABASE: test_database
       INFLUXDB_V1_PASSWORD: instream_test

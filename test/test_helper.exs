@@ -30,6 +30,7 @@ if version in ["2.0", "2.1", "2.2", "2.3", "2.4", "2.5"] do
     auth: [method: :token, token: System.fetch_env!("INFLUXDB_V2_TOKEN")],
     host: System.fetch_env!("INFLUXDB_HOST"),
     port: System.fetch_env!("INFLUXDB_PORT"),
+    scheme: System.fetch_env!("INFLUXDB_SCHEME"),
     bucket: System.fetch_env!("INFLUXDB_V2_BUCKET"),
     database: System.fetch_env!("INFLUXDB_V2_DATABASE"),
     org: System.fetch_env!("INFLUXDB_V2_ORG"),
@@ -48,6 +49,7 @@ else
     ],
     host: System.fetch_env!("INFLUXDB_HOST"),
     port: System.fetch_env!("INFLUXDB_PORT"),
+    scheme: System.fetch_env!("INFLUXDB_SCHEME"),
     database: database,
     loggers: []
   )
