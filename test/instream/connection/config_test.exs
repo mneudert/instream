@@ -12,7 +12,7 @@ defmodule Instream.Connection.ConfigTest do
 
   test "default value access", %{test: test} do
     assert "http" = Config.get(test, __MODULE__, :scheme, [])
-    assert "http" = TestConnection.config(:scheme)
+    assert "http" = MissingOTPConfiguration.config(:scheme)
   end
 
   test "inline configuration defaults" do
