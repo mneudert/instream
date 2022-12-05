@@ -35,9 +35,9 @@ defmodule Instream.SeriesTest do
   end
 
   test "series metadata" do
-    assert TestSeries.__meta__(:fields) == [:value]
-    assert TestSeries.__meta__(:measurement) == "cpu_load"
-    assert TestSeries.__meta__(:tags) == [:core, :host]
+    assert [:value] = TestSeries.__meta__(:fields)
+    assert "cpu_load" = TestSeries.__meta__(:measurement)
+    assert [:core, :host] = TestSeries.__meta__(:tags)
   end
 
   test "extended series definition" do

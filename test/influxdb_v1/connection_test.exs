@@ -54,7 +54,7 @@ defmodule Instream.InfluxDBv1.ConnectionTest do
     HTTPClientMock
     |> expect(:request, fn :head, _, _, _, _ -> {:ok, 204, []} end)
 
-    assert "unknown" == MockConnection.version()
+    assert "unknown" = MockConnection.version()
     refute "unknown" == TestConnection.version()
   end
 
@@ -141,7 +141,7 @@ defmodule Instream.InfluxDBv1.ConnectionTest do
     assert %{results: [%{series: [%{tags: values_tags, values: value_rows}]}]} =
              TestConnection.query("SELECT * FROM #{measurement} GROUP BY *")
 
-    assert @tags == values_tags
+    assert @tags = values_tags
     assert 0 < length(value_rows)
   end
 
@@ -158,7 +158,7 @@ defmodule Instream.InfluxDBv1.ConnectionTest do
     assert %{results: [%{series: [%{tags: values_tags, values: value_rows}]}]} =
              TestConnection.query("SELECT * FROM #{TestSeries.__meta__(:measurement)} GROUP BY *")
 
-    assert @tags == values_tags
+    assert @tags = values_tags
     assert 0 < length(value_rows)
   end
 end

@@ -51,7 +51,7 @@ defmodule Instream.InfluxDBv2.ConnectionTest do
     HTTPClientMock
     |> expect(:request, fn :head, _, _, _, _ -> {:ok, 204, []} end)
 
-    assert "unknown" == MockConnection.version()
+    assert "unknown" = MockConnection.version()
     refute "unknown" == TestConnection.version()
   end
 

@@ -113,6 +113,6 @@ defmodule Instream.InfluxDBv2.Deleter.PredicateTest do
         |> last()
       """)
 
-    assert [] == result
+    assert [] = result
   end
 end

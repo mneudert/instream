@@ -43,24 +43,26 @@ defmodule Instream.InfluxDBv2.Connection.AuthorizationTest do
     @tag :"influxdb_exclude_2.4"
     @tag :"influxdb_exclude_2.5"
     test "influxdb v2.0" do
-      assert BearerAuthenticationConnection.query(
-               ~S[from(bucket: "ignored") |> range(start: -5m)]
-             ) == %{
+      assert %{
                code: "unauthorized",
                message: "unauthorized access"
-             }
+             } =
+               BearerAuthenticationConnection.query(
+                 ~S[from(bucket: "ignored") |> range(start: -5m)]
+               )
     end
 
     @tag :"influxdb_exclude_2.0"
     test "influxdb >= v2.1" do
       start_supervised!(BearerAuthenticationConnection)
 
-      refute BearerAuthenticationConnection.query(
-               ~S[from(bucket: "ignored") |> range(start: -5m)]
-             ) == %{
+      refute %{
                code: "unauthorized",
                message: "unauthorized access"
-             }
+             } ==
+               BearerAuthenticationConnection.query(
+                 ~S[from(bucket: "ignored") |> range(start: -5m)]
+               )
     end
   end
 
