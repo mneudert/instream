@@ -74,6 +74,7 @@ defmodule Instream.InfluxDBv2.ConnectionTest do
         |> filter(fn: (r) =>
           r._measurement == "#{measurement}"
         )
+        |> sort(columns: ["_field"])
         |> last()
       """)
 
@@ -121,6 +122,7 @@ defmodule Instream.InfluxDBv2.ConnectionTest do
         |> filter(fn: (r) =>
           r._measurement == "#{measurement}"
         )
+        |> sort(columns: ["_field"])
         |> last()
       """)
 

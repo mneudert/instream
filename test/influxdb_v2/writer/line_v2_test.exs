@@ -138,6 +138,7 @@ defmodule Instream.InfluxDBv2.Writer.LineV2Test do
         |> filter(fn: (r) =>
           r._measurement == "#{LineEncodingSeries.__meta__(:measurement)}"
         )
+        |> sort(columns: ["_field"])
         |> last()
       """)
 
@@ -226,6 +227,7 @@ defmodule Instream.InfluxDBv2.Writer.LineV2Test do
         |> filter(fn: (r) =>
           r._measurement == "#{measurement}"
         )
+        |> sort(columns: ["_value"])
         |> last()
       """)
 
