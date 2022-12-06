@@ -15,6 +15,7 @@ version_excludes =
     "2.3" -> [:"influxdb_exclude_2.3", :"influxdb_exclude_2.x", :"influxdb_include_1.x"]
     "2.4" -> [:"influxdb_exclude_2.4", :"influxdb_exclude_2.x", :"influxdb_include_1.x"]
     "2.5" -> [:"influxdb_exclude_2.5", :"influxdb_exclude_2.x", :"influxdb_include_1.x"]
+    "cloud" -> [:influxdb_exclude_cloud, :"influxdb_exclude_2.x", :"influxdb_include_1.x"]
     _ -> raise RuntimeError, "Unknown INFLUXDB_VERSION: #{inspect(version)}"
   end
 
@@ -23,7 +24,7 @@ config = Keyword.put(config, :exclude, version_excludes ++ (config[:exclude] || 
 IO.puts("Running tests for InfluxDB version: #{version}")
 
 # configure InfluxDB connection
-if version in ["2.0", "2.1", "2.2", "2.3", "2.4", "2.5"] do
+if version in ["2.0", "2.1", "2.2", "2.3", "2.4", "2.5", "cloud"] do
   Application.put_env(
     :instream,
     TestConnection,
