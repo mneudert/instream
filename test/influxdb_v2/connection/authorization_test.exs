@@ -9,17 +9,16 @@ defmodule Instream.InfluxDBv2.Connection.AuthorizationTest do
     use Instream.Connection,
       otp_app: :instream,
       config: [
-        init: {__MODULE__, :init},
-        loggers: [],
-        version: :v2
+        init: {__MODULE__, :init}
       ]
 
     def init(conn) do
-      config = [
-        auth: [method: :bearer, token: TestConnection.config(:auth)[:token]],
-        bucket: TestConnection.config(:bucket),
-        org: TestConnection.config(:org)
-      ]
+      config =
+        Keyword.merge(
+          TestConnection.config(),
+          auth: [method: :bearer, token: TestConnection.config(:auth)[:token]],
+          loggers: []
+        )
 
       Application.put_env(:instream, conn, config)
     end
@@ -27,13 +26,23 @@ defmodule Instream.InfluxDBv2.Connection.AuthorizationTest do
 
   defmodule UnauthorizedConnection do
     use Instream.Connection,
+      otp_app: :instream,
       config: [
-        auth: [method: :token, token: "--invalid--"],
-        bucket: "ignored",
-        org: "ignored",
-        loggers: [],
-        version: :v2
+        init: {__MODULE__, :init}
       ]
+
+    def init(conn) do
+      config =
+        Keyword.merge(
+          TestConnection.config(),
+          auth: [method: :token, token: "--invalid--"],
+          bucket: "ignored",
+          org: "ignored",
+          loggers: []
+        )
+
+      Application.put_env(:instream, conn, config)
+    end
   end
 
   describe ":bearer authentication" do
@@ -43,6 +52,8 @@ defmodule Instream.InfluxDBv2.Connection.AuthorizationTest do
     @tag :"influxdb_exclude_2.4"
     @tag :"influxdb_exclude_2.5"
     test "influxdb v2.0" do
+      start_supervised!(BearerAuthenticationConnection)
+
       assert %{
                code: "unauthorized",
                message: "unauthorized access"
@@ -67,11 +78,15 @@ defmodule Instream.InfluxDBv2.Connection.AuthorizationTest do
   end
 
   test "query without authorization" do
+    start_supervised!(UnauthorizedConnection)
+
     assert %{code: "unauthorized", message: "unauthorized access"} =
              UnauthorizedConnection.query(~S[from(bucket: "ignored") |> range(start: -5m)])
   end
 
   test "write without authorization" do
+    start_supervised!(UnauthorizedConnection)
+
     data = [
       %{
         measurement: "write_data_privileges",
