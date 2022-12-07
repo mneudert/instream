@@ -41,13 +41,13 @@ The following environment variables are used to select some test suites and the 
 - `INFLUXDB_VERSION`: the tested InfluxDB version as `major.minor`, e.g. `"1.8"`, `"2.0"`, or `"2.4"`, use `"cloud"` for testing against an InfluxDB Cloud instance
 - `INFLUXDB_V1_DATABASE`: the database used for InfluxDB v1.x tests _(will receive a `DROP` and `CREATE` during test start!)_
 - `INFLUXDB_V1_PASSWORD`: password for the `INFLUXDB_V1_USERNAME` account
-- `INFLUXDB_V1_PORT_UDP`: the UDP port used for writer testing _(InfluxDB 1.x only, should be configured to write to INFLUXDB\_V1\_DATABASE)_
+- `INFLUXDB_V1_PORT_UDP`: the UDP port used for writer testing _(should be configured to write to INFLUXDB\_V1\_DATABASE)_
 - `INFLUXDB_V1_SOCKET`: path to the InfluxDB unix socket _(InfluxDB 1.8 only)_
-- `INFLUXDB_V1_USERNAME`: username with admin privileges for the InfluxDB test instance _(InfluxDB 1.x only)_
+- `INFLUXDB_V1_USERNAME`: username with admin privileges for the InfluxDB test instance
 - `INFLUXDB_V2_BUCKET`: the bucket used for InfluxDB v2.x tests
-- `INFLUXDB_V2_DATBASE`: the mapped database used for testing the legacy API _(InfluxDB 2.x only)_
+- `INFLUXDB_V2_DATBASE`: the mapped database used for testing the legacy API
 - `INFLUXDB_V2_ORG`: organization associated with the `INFLUXDB_V2_BUCKET`
-- `INFLUXDB_V2_TOKEN`: the authentication token used _(InfluxDB 2.x only)_
+- `INFLUXDB_V2_TOKEN`: the authentication token used
 
 ## Usage
 
