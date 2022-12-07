@@ -25,9 +25,7 @@ IO.puts("Running tests for InfluxDB version: #{version}")
 
 # configure InfluxDB connection
 if version in ["2.0", "2.1", "2.2", "2.3", "2.4", "2.5", "cloud"] do
-  Application.put_env(
-    :instream,
-    TestConnection,
+  config = [
     auth: [method: :token, token: System.fetch_env!("INFLUXDB_V2_TOKEN")],
     host: System.fetch_env!("INFLUXDB_HOST"),
     port: System.fetch_env!("INFLUXDB_PORT"),
@@ -37,7 +35,16 @@ if version in ["2.0", "2.1", "2.2", "2.3", "2.4", "2.5", "cloud"] do
     org: System.fetch_env!("INFLUXDB_V2_ORG"),
     loggers: [],
     version: :v2
-  )
+  ]
+
+  config =
+    if "cloud" == version do
+      Keyword.merge(config, http_opts: [recv_timeout: 10_000])
+    else
+      config
+    end
+
+  Application.put_env(:instream, TestConnection, config)
 else
   database = System.fetch_env!("INFLUXDB_V1_DATABASE")
 
