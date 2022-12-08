@@ -47,6 +47,7 @@ The following environment variables are used to select some test suites and the 
 - `INFLUXDB_V2_BUCKET`: the bucket used for InfluxDB v2.x tests
 - `INFLUXDB_V2_DATBASE`: the mapped database used for testing the legacy API
 - `INFLUXDB_V2_ORG`: organization associated with the `INFLUXDB_V2_BUCKET`
+- `INFLUXDB_V2_RETENTION`: the retention policy associated with the `INFLUXDB_V2_DATBASE`
 - `INFLUXDB_V2_TOKEN`: the authentication token used
 
 ## Usage

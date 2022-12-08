@@ -29,6 +29,7 @@ defmodule Instream.Query.URL do
         config
         |> url("query")
         |> append_param("db", opts[:database] || config[:database])
+        |> append_param("rp", opts[:retention_policy] || config[:retention_policy])
         |> append_param("epoch", encode_precision(opts[:precision]))
 
       _ ->
