@@ -91,9 +91,18 @@ defmodule Instream.InfluxDBv2.Writer.LineV1Test do
       |> CustomDatabaseSeries.from_map()
       |> LineV1Connection.write(database: database)
 
+    measurement = CustomDatabaseSeries.__meta__(:measurement)
+    retention_policy = LineV1Connection.config(:retention_policy)
+
     assert %{results: [%{series: [%{columns: ["time", "value"], values: [_ | _]}]}]} =
              LineV1Connection.query(
-               "SELECT * FROM #{CustomDatabaseSeries.__meta__(:measurement)}",
+               "SELECT * FROM #{measurement}",
+               query_language: :influxql
+             )
+
+    assert %{results: [%{series: [%{columns: ["time", "value"], values: [_ | _]}]}]} =
+             LineV1Connection.query(
+               "SELECT * FROM #{database}.#{retention_policy}.#{measurement}",
                query_language: :influxql
              )
   end

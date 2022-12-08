@@ -169,4 +169,13 @@ defmodule Instream.InfluxDBv2.ConnectionTest do
     assert %{results: [%{series: [%{name: "params", values: [[_, ^test_field]]}]}]} =
              TestConnection.query(query, query_language: :influxql, params: params)
   end
+
+  test "read using InfluxQL with custom retention policy" do
+    assert %{results: [%{error: "retention policy not found: invalid-retention-policy"}]} =
+             TestConnection.query(
+               "SELECT * FROM some_measurement",
+               query_language: :influxql,
+               retention_policy: "invalid-retention-policy"
+             )
+  end
 end
