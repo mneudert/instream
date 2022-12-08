@@ -91,12 +91,10 @@ defmodule Instream.InfluxDBv2.Writer.LineV1Test do
       |> CustomDatabaseSeries.from_map()
       |> LineV1Connection.write(database: database)
 
-    assert %{results: [%{series: [%{columns: columns}]}]} =
+    assert %{results: [%{series: [%{columns: ["time", "value"], values: [_ | _]}]}]} =
              LineV1Connection.query(
                "SELECT * FROM #{CustomDatabaseSeries.__meta__(:measurement)}",
                query_language: :influxql
              )
-
-    assert Enum.member?(columns, "value")
   end
 end

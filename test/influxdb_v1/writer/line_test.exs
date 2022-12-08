@@ -192,7 +192,7 @@ defmodule Instream.InfluxDBv1.Writer.LineTest do
       |> EmptyTagSeries.from_map()
       |> TestConnection.write()
 
-    assert %{results: [%{series: [%{columns: columns}]}]} =
+    assert %{results: [%{series: [%{columns: columns, values: [_ | _]}]}]} =
              TestConnection.query("SELECT * FROM #{EmptyTagSeries.__meta__(:measurement)}")
 
     assert Enum.member?(columns, "filled")
@@ -209,10 +209,8 @@ defmodule Instream.InfluxDBv1.Writer.LineTest do
       |> CustomDatabaseSeries.from_map()
       |> TestConnection.write(database: database)
 
-    assert %{results: [%{series: [%{columns: columns}]}]} =
+    assert %{results: [%{series: [%{columns: ["time", "value"], values: [_ | _]}]}]} =
              TestConnection.query("SELECT * FROM #{CustomDatabaseSeries.__meta__(:measurement)}")
-
-    assert Enum.member?(columns, "value")
   end
 
   test "writing with passed retention policy option" do

@@ -138,11 +138,8 @@ defmodule Instream.InfluxDBv1.ConnectionTest do
         }
       ])
 
-    assert %{results: [%{series: [%{tags: values_tags, values: value_rows}]}]} =
+    assert %{results: [%{series: [%{tags: @tags, values: [_ | _]}]}]} =
              TestConnection.query("SELECT * FROM #{measurement} GROUP BY *")
-
-    assert @tags = values_tags
-    assert 0 < length(value_rows)
   end
 
   test "writing series struct" do
@@ -155,10 +152,7 @@ defmodule Instream.InfluxDBv1.ConnectionTest do
       |> TestSeries.from_map()
       |> TestConnection.write()
 
-    assert %{results: [%{series: [%{tags: values_tags, values: value_rows}]}]} =
+    assert %{results: [%{series: [%{tags: @tags, values: [_ | _]}]}]} =
              TestConnection.query("SELECT * FROM #{TestSeries.__meta__(:measurement)} GROUP BY *")
-
-    assert @tags = values_tags
-    assert 0 < length(value_rows)
   end
 end
