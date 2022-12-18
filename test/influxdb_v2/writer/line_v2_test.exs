@@ -182,6 +182,7 @@ defmodule Instream.InfluxDBv2.Writer.LineV2Test do
     ] = result
   end
 
+  @tag :influxdb_exclude_cloud
   test "protocol error decoding" do
     :ok =
       %{binary: "binary"}
