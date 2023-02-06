@@ -16,7 +16,7 @@ jobs:
       matrix:
         include:
           - elixir: '1.14.2'
-            otp: '25.0'
+            otp: '25.2'
 
     services:
       influxdb:
