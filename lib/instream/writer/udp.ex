@@ -58,7 +58,7 @@ defmodule Instream.Writer.UDP do
     pool_name = Module.concat(conn, UDPWriterPool)
     pool_timeout = opts[:pool_timeout] || default_pool_timeout
 
-    worker = :poolboy.checkout(pool_name, pool_timeout)
+    worker = :poolboy.checkout(pool_name, true, pool_timeout)
 
     :ok =
       if opts[:async] do
