@@ -1,6 +1,6 @@
 # Changelog
 
-## v2.2.1-dev
+## v2.2.1 (2023-04-22)
 
 - Bug fixes
     - The configurable UDP writer pool timeout is now working as expected/intended ([#81](https://github.com/mneudert/instream/pull/81))
