@@ -52,6 +52,11 @@ jobs:
             runs-on: ubuntu-22.04
             influxdb_image_version: '2.6.1'
             influxdb_test_version: '2.6'
+          - elixir: '1.14.4'
+            otp: '25.3'
+            runs-on: ubuntu-22.04
+            influxdb_image_version: '2.7.0'
+            influxdb_test_version: '2.7'
 
     services:
       influxdb:

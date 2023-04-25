@@ -16,6 +16,7 @@ version_excludes =
     "2.4" -> [:"influxdb_exclude_2.4", :"influxdb_exclude_2.x", :"influxdb_include_1.x"]
     "2.5" -> [:"influxdb_exclude_2.5", :"influxdb_exclude_2.x", :"influxdb_include_1.x"]
     "2.6" -> [:"influxdb_exclude_2.6", :"influxdb_exclude_2.x", :"influxdb_include_1.x"]
+    "2.7" -> [:"influxdb_exclude_2.7", :"influxdb_exclude_2.x", :"influxdb_include_1.x"]
     "cloud" -> [:influxdb_exclude_cloud, :"influxdb_exclude_2.x", :"influxdb_include_1.x"]
     _ -> raise RuntimeError, "Unknown INFLUXDB_VERSION: #{inspect(version)}"
   end
@@ -25,7 +26,7 @@ config = Keyword.put(config, :exclude, version_excludes ++ (config[:exclude] || 
 IO.puts("Running tests for InfluxDB version: #{version}")
 
 # configure InfluxDB connection
-if version in ["2.0", "2.1", "2.2", "2.3", "2.4", "2.5", "2.6", "cloud"] do
+if version in ["2.0", "2.1", "2.2", "2.3", "2.4", "2.5", "2.6", "2.7", "cloud"] do
   config = [
     auth: [method: :token, token: System.fetch_env!("INFLUXDB_V2_TOKEN")],
     host: System.fetch_env!("INFLUXDB_HOST"),

@@ -52,6 +52,7 @@ defmodule Instream.InfluxDBv2.Connection.AuthorizationTest do
     @tag :"influxdb_exclude_2.4"
     @tag :"influxdb_exclude_2.5"
     @tag :"influxdb_exclude_2.6"
+    @tag :"influxdb_exclude_2.7"
     test "influxdb v2.0" do
       start_supervised!(BearerAuthenticationConnection)
 
