@@ -79,60 +79,60 @@ jobs:
       INFLUXDB_V2_USERNAME: instream_test
 
     steps:
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-    - name: setup
-      uses: erlef/setup-beam@v1
-      with:
-        elixir-version: ${{ matrix.elixir }}
-        otp-version: ${{ matrix.otp }}
+      - name: setup
+        uses: erlef/setup-beam@v1
+        with:
+          elixir-version: ${{ matrix.elixir }}
+          otp-version: ${{ matrix.otp }}
 
-    - name: mix-cache
-      uses: actions/cache@v3
-      id: mix-cache
-      with:
-        path: deps
-        key: ${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}-mix-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
+      - name: mix-cache
+        uses: actions/cache@v3
+        id: mix-cache
+        with:
+          path: deps
+          key: ${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}-mix-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
 
-    - name: mix-deps
-      if: steps.mix-cache.outputs.cache-hit != 'true'
-      run: |
-        mix local.rebar --force
-        mix local.hex --force
-        mix deps.get
+      - name: mix-deps
+        if: steps.mix-cache.outputs.cache-hit != 'true'
+        run: |
+          mix local.rebar --force
+          mix local.hex --force
+          mix deps.get
 
-    - name: test
-      run: |
-        until curl -s -o /dev/null "http://${INFLUXDB_HOST}:${INFLUXDB_PORT}" 2>/dev/null; do
-          sleep 1
-        done
+      - name: test
+        run: |
+          until curl -s -o /dev/null "http://${INFLUXDB_HOST}:${INFLUXDB_PORT}" 2>/dev/null; do
+            sleep 1
+          done
 
-        SETUP=$(
-            curl -s \
-                -XPOST "http://${INFLUXDB_HOST}:${INFLUXDB_PORT}/api/v2/setup" \
-                -H 'accept: application/json' \
-                -d "{
-                      \"username\": \"${INFLUXDB_V2_USERNAME}\",
-                      \"password\": \"${INFLUXDB_V2_PASSWORD}\",
-                      \"org\": \"${INFLUXDB_V2_ORG}\",
-                      \"bucket\": \"${INFLUXDB_V2_BUCKET}\"
-                    }"
-        )
+          SETUP=$(
+              curl -s \
+                  -XPOST "http://${INFLUXDB_HOST}:${INFLUXDB_PORT}/api/v2/setup" \
+                  -H 'accept: application/json' \
+                  -d "{
+                        \"username\": \"${INFLUXDB_V2_USERNAME}\",
+                        \"password\": \"${INFLUXDB_V2_PASSWORD}\",
+                        \"org\": \"${INFLUXDB_V2_ORG}\",
+                        \"bucket\": \"${INFLUXDB_V2_BUCKET}\"
+                      }"
+          )
 
-        export INFLUXDB_V2_BUCKETID=$(jq -r '.bucket.id' <<< "${SETUP}")
-        export INFLUXDB_V2_ORGID=$(jq -r '.org.id' <<< "${SETUP}")
-        export INFLUXDB_V2_TOKEN=$(jq -r '.auth.token' <<< "${SETUP}")
+          export INFLUXDB_V2_BUCKETID=$(jq -r '.bucket.id' <<< "${SETUP}")
+          export INFLUXDB_V2_ORGID=$(jq -r '.org.id' <<< "${SETUP}")
+          export INFLUXDB_V2_TOKEN=$(jq -r '.auth.token' <<< "${SETUP}")
 
-        curl -s -o /dev/null \
-            -XPOST "http://${INFLUXDB_HOST}:${INFLUXDB_PORT}/api/v2/dbrps" \
-            -H "Authorization: Token ${INFLUXDB_V2_TOKEN}" \
-            -H 'accept: application/json' \
-            -d "{
-                  \"bucketID\": \"${INFLUXDB_V2_BUCKETID}\",
-                  \"database\": \"${INFLUXDB_V2_DATABASE}\",
-                  \"default\": true,
-                  \"orgID\": \"${INFLUXDB_V2_ORGID}\",
-                  \"retention_policy\": \"${INFLUXDB_V2_RETENTION}\"
-                }"
+          curl -s -o /dev/null \
+              -XPOST "http://${INFLUXDB_HOST}:${INFLUXDB_PORT}/api/v2/dbrps" \
+              -H "Authorization: Token ${INFLUXDB_V2_TOKEN}" \
+              -H 'accept: application/json' \
+              -d "{
+                    \"bucketID\": \"${INFLUXDB_V2_BUCKETID}\",
+                    \"database\": \"${INFLUXDB_V2_DATABASE}\",
+                    \"default\": true,
+                    \"orgID\": \"${INFLUXDB_V2_ORGID}\",
+                    \"retention_policy\": \"${INFLUXDB_V2_RETENTION}\"
+                  }"
 
-        mix coveralls.github
+          mix coveralls.github
