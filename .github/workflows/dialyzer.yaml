@@ -29,6 +29,7 @@ jobs:
         id: mix-cache
         with:
           path: deps
+          # yamllint disable-line rule:line-length
           key: ${{ runner.os }}-${{ steps.setup.outputs.otp-version }}-${{ steps.setup.outputs.elixir-version }}-mix-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
 
       - name: mix-deps
