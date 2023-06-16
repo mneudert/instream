@@ -30,7 +30,7 @@ defmodule Instream.MixProject do
 
   def application do
     [
-      extra_applications: [:logger]
+      extra_applications: extra_applications(Mix.env()) ++ [:logger]
     ]
   end
 
@@ -87,6 +87,9 @@ defmodule Instream.MixProject do
 
   defp elixirc_paths(:test), do: ["lib", "test/helpers"]
   defp elixirc_paths(_), do: ["lib"]
+
+  defp extra_applications(:test), do: [:inets]
+  defp extra_applications(_), do: []
 
   defp package do
     [
