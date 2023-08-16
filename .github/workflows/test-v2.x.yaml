@@ -42,17 +42,17 @@ jobs:
             runs-on: ubuntu-22.04
             influxdb_image_version: '2.4.0'
             influxdb_test_version: '2.4'
-          - elixir: '1.14.4'
+          - elixir: '1.14.5'
             otp: '25.3'
             runs-on: ubuntu-22.04
             influxdb_image_version: '2.5.1'
             influxdb_test_version: '2.5'
-          - elixir: '1.14.4'
+          - elixir: '1.14.5'
             otp: '25.3'
             runs-on: ubuntu-22.04
             influxdb_image_version: '2.6.1'
             influxdb_test_version: '2.6'
-          - elixir: '1.14.4'
+          - elixir: '1.14.5'
             otp: '25.3'
             runs-on: ubuntu-22.04
             influxdb_image_version: '2.7.1'
