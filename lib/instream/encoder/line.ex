@@ -42,6 +42,7 @@ defmodule Instream.Encoder.Line do
   defp append_fields(line, %{fields: fields}) do
     content =
       fields
+      |> Enum.sort()
       |> Enum.reduce([], fn
         {_, nil}, acc -> acc
         {field, value}, acc -> [[encode_property(field), "=", encode_value(value)], "," | acc]
@@ -57,6 +58,7 @@ defmodule Instream.Encoder.Line do
   defp append_tags(line, %{tags: tags}) do
     content =
       tags
+      |> Enum.sort()
       |> Enum.reduce([], fn
         {_, nil}, acc -> acc
         {tag, value}, acc -> [[encode_property(tag), "=", encode_property(value)], "," | acc]

@@ -1,5 +1,10 @@
 # Changelog
 
+## v2.3.0-dev
+
+- Enhancements
+    - Line protocol encoder sorts fields/tags before generating the payload
+
 ## v2.2.1 (2023-04-22)
 
 - Bug fixes
