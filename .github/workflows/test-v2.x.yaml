@@ -136,4 +136,4 @@ jobs:
                     \"retention_policy\": \"${INFLUXDB_V2_RETENTION}\"
                   }"
 
-          mix coveralls.github
+          mix coveralls

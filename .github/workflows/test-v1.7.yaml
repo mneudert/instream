@@ -79,4 +79,5 @@ jobs:
           until curl -s -o /dev/null "http://${INFLUXDB_HOST}:${INFLUXDB_PORT}" 2>/dev/null; do
             sleep 1
           done
-          mix coveralls.github
+
+          mix coveralls
