@@ -39,8 +39,6 @@ jobs:
           - 8089:8089/udp
 
     env:
-      MIX_ENV: test
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       INFLUXDB_HOST: localhost
       INFLUXDB_PORT: 8086
       INFLUXDB_SCHEME: http

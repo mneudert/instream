@@ -62,8 +62,6 @@ jobs:
           - ${{ github.workspace }}:/github/workspace
 
     env:
-      MIX_ENV: test
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       INFLUXDB_HOST: localhost
       INFLUXDB_PORT: 8086
       INFLUXDB_SCHEME: http
