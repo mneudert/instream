@@ -302,21 +302,42 @@ defmodule Instream.Connection.Config do
   Will issue a warning if potential misconfiguration is found.
   """
   @spec validate(conn :: module) :: boolean
-  def validate(conn) do
-    with otp_app when not is_nil(otp_app) <- conn.config(:otp_app),
-         nil <- Application.get_env(otp_app, conn) do
-      _ =
-        Logger.warn("""
-        Instream connection #{inspect(conn)} is configured to fetch its
-        configuration from the application #{inspect(otp_app)} but the
-        configuration is empty.
 
-        If this is intended please set any value (except "nil") explicitly.
-        """)
+  if macro_exported?(Logger, :warning, 1) do
+    def validate(conn) do
+      with otp_app when not is_nil(otp_app) <- conn.config(:otp_app),
+           nil <- Application.get_env(otp_app, conn) do
+        _ =
+          Logger.warning("""
+          Instream connection #{inspect(conn)} is configured to fetch its
+          configuration from the application #{inspect(otp_app)} but the
+          configuration is empty.
 
-      false
-    else
-      _ -> true
+          If this is intended please set any value (except "nil") explicitly.
+          """)
+
+        false
+      else
+        _ -> true
+      end
+    end
+  else
+    def validate(conn) do
+      with otp_app when not is_nil(otp_app) <- conn.config(:otp_app),
+           nil <- Application.get_env(otp_app, conn) do
+        _ =
+          Logger.warn("""
+          Instream connection #{inspect(conn)} is configured to fetch its
+          configuration from the application #{inspect(otp_app)} but the
+          configuration is empty.
+
+          If this is intended please set any value (except "nil") explicitly.
+          """)
+
+        false
+      else
+        _ -> true
+      end
     end
   end
 end
