@@ -49,7 +49,7 @@ jobs:
       INFLUXDB_V1_USERNAME: instream_test
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: setup
         uses: erlef/setup-beam@v1
