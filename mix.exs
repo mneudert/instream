@@ -21,8 +21,7 @@ defmodule Instream.MixProject do
       preferred_cli_env: [
         "bench.line_encoder": :bench,
         coveralls: :test,
-        "coveralls.detail": :test,
-        dialyzer: :test
+        "coveralls.detail": :test
       ],
       test_coverage: [tool: ExCoveralls]
     ]
