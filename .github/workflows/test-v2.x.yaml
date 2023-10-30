@@ -48,12 +48,12 @@ jobs:
             influxdb_image_version: '2.5.1'
             influxdb_test_version: '2.5'
           - elixir: '1.15.6'
-            otp: '26.0'
+            otp: '26.1'
             runs-on: ubuntu-22.04
             influxdb_image_version: '2.6.1'
             influxdb_test_version: '2.6'
           - elixir: '1.15.6'
-            otp: '26.0'
+            otp: '26.1'
             runs-on: ubuntu-22.04
             influxdb_image_version: '2.7.3'
             influxdb_test_version: '2.7'

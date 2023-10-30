@@ -36,7 +36,7 @@ jobs:
             otp: '25.3'
             runs-on: ubuntu-22.04
           - elixir: '1.15.6'
-            otp: '26.0'
+            otp: '26.1'
             runs-on: ubuntu-22.04
 
     services:
