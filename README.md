@@ -15,7 +15,7 @@ Tested InfluxDB versions:
 - `2.4.0`
 - `2.5.1`
 - `2.6.1`
-- `2.7.3`
+- `2.7.4`
 
 ## Package Setup
 
