@@ -37,10 +37,10 @@ jobs:
             otp: '25.3'
             runs-on: ubuntu-22.04
           - elixir: '1.15.7'
-            otp: '26.1'
+            otp: '26.2'
             runs-on: ubuntu-22.04
           - elixir: '1.16.0'
-            otp: '26.1'
+            otp: '26.2'
             runs-on: ubuntu-22.04
 
     services:
