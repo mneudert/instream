@@ -39,7 +39,7 @@ jobs:
           - elixir: '1.15.7'
             otp: '26.2'
             runs-on: ubuntu-22.04
-          - elixir: '1.16.1'
+          - elixir: '1.16.2'
             otp: '26.2'
             runs-on: ubuntu-22.04
 
