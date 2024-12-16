@@ -103,7 +103,7 @@ defmodule Instream.Connection.QueryRunnerV2 do
     http_opts = http_opts(config, opts)
 
     body = read_body(conn, query, opts)
-    url = read_url(conn, query, opts)
+    url = read_url(conn, opts)
 
     {query_time, response} =
       :timer.tc(fn ->
@@ -208,7 +208,7 @@ defmodule Instream.Connection.QueryRunnerV2 do
   defp read_body(conn, query, opts) do
     case opts[:query_language] do
       :influxql ->
-        ""
+        JSON.encode(%{q: query}, conn)
 
       _ ->
         JSON.encode(
@@ -224,7 +224,7 @@ defmodule Instream.Connection.QueryRunnerV2 do
     end
   end
 
-  defp read_url(conn, query, opts) do
+  defp read_url(conn, opts) do
     config = conn.config()
     url = URL.query(config[:version], config, opts)
 
@@ -239,7 +239,6 @@ defmodule Instream.Connection.QueryRunnerV2 do
           _ ->
             url
         end
-        |> URL.append_query(query)
 
       _ ->
         url
