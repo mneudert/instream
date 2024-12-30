@@ -72,7 +72,7 @@ defmodule Instream.Connection do
         }
 
   defmacro __using__(opts) do
-    quote bind_quoted: [opts: opts], location: :keep do
+    quote bind_quoted: [opts: opts], location: :keep, generated: true do
       alias Instream.Connection
       alias Instream.Connection.Config
       alias Instream.Connection.QueryRunnerV1
