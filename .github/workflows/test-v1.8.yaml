@@ -72,7 +72,9 @@ jobs:
       INFLUXDB_V1_USERNAME: instream_test
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
 
       - name: setup
         uses: erlef/setup-beam@v1
