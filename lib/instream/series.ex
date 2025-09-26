@@ -158,7 +158,7 @@ defmodule Instream.Series do
   alias Instream.Series.Validator
 
   defmacro __using__(opts) do
-    quote location: :keep do
+    quote location: :keep, generated: true do
       unless unquote(opts[:skip_validation]) do
         @after_compile unquote(__MODULE__)
       end
@@ -175,7 +175,7 @@ defmodule Instream.Series do
   Defines the series.
   """
   defmacro series(do: block) do
-    quote location: :keep do
+    quote location: :keep, generated: true do
       @behaviour unquote(__MODULE__)
 
       @measurement nil
@@ -199,14 +199,22 @@ defmodule Instream.Series do
       def __meta__(:measurement), do: @measurement
       def __meta__(:tags), do: Keyword.keys(@tags_struct)
 
-      Module.eval_quoted(__ENV__, [
-        unquote(__MODULE__).__struct_fields__(@fields_struct),
-        unquote(__MODULE__).__struct_tags__(@tags_struct)
-      ])
+      Code.eval_quoted(
+        [
+          unquote(__MODULE__).__struct_fields__(@fields_struct),
+          unquote(__MODULE__).__struct_tags__(@tags_struct)
+        ],
+        [],
+        __ENV__
+      )
 
-      Module.eval_quoted(__ENV__, [
-        unquote(__MODULE__).__struct__(__MODULE__)
-      ])
+      Code.eval_quoted(
+        [
+          unquote(__MODULE__).__struct__(__MODULE__)
+        ],
+        [],
+        __ENV__
+      )
 
       @impl unquote(__MODULE__)
       def from_map(data), do: Hydrator.from_map(__MODULE__, data)
