@@ -1,0 +1,394 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+      - test
+    tags:
+      - '*'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  dialyzer:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      - name: setup
+        id: setup
+        uses: erlef/setup-beam@v1
+        with:
+          elixir-version: '1.18.4'
+          otp-version: '28.0'
+
+      - name: mix-cache
+        uses: actions/cache@v4
+        id: mix-cache
+        with:
+          path: deps
+          # yamllint disable-line rule:line-length
+          key: ${{ runner.os }}-${{ steps.setup.outputs.otp-version }}-${{ steps.setup.outputs.elixir-version }}-mix-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
+
+      - name: mix-deps
+        if: steps.mix-cache.outputs.cache-hit != 'true'
+        run: |
+          mix local.rebar --force
+          mix local.hex --force
+          mix deps.get
+
+      - name: plt-cache
+        uses: actions/cache@v4
+        id: plt-cache
+        with:
+          path: plts
+          key: ${{ runner.os }}-${{ steps.setup.outputs.otp-version }}-${{ steps.setup.outputs.elixir-version }}-plts
+
+      - name: plt-create
+        if: steps.plt-cache.outputs.cache-hit != 'true'
+        run: |
+          mkdir -p plts
+          mix dialyzer --plt
+
+      - name: dialyzer
+        run: mix dialyzer
+
+  quality_actions:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      - run: yamllint .
+        working-directory: .github
+
+  quality_elixir:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      - name: setup
+        id: setup
+        uses: erlef/setup-beam@v1
+        with:
+          elixir-version: '1.18.4'
+          otp-version: '28.0'
+
+      - name: mix-cache
+        uses: actions/cache@v4
+        id: mix-cache
+        with:
+          path: deps
+          # yamllint disable-line rule:line-length
+          key: ${{ runner.os }}-${{ steps.setup.outputs.otp-version }}-${{ steps.setup.outputs.elixir-version }}-mix-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
+
+      - name: mix-deps
+        if: steps.mix-cache.outputs.cache-hit != 'true'
+        run: |
+          mix local.rebar --force
+          mix local.hex --force
+          mix deps.get
+
+      - name: check unused deps
+        run: mix deps.unlock --check-unused
+
+      - name: check for compiler warnings
+        run: |
+          mix deps.compile
+          mix compile --warnings-as-errors
+
+      - name: format
+        run: mix format --check-formatted
+
+      - name: credo
+        run: mix credo --strict
+
+  test_v_1_7:
+    runs-on: ubuntu-24.04
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - elixir: '1.18.4'
+            otp: '28.0'
+
+    services:
+      influxdb:
+        image: influxdb:1.7.11
+        env:
+          INFLUXDB_HTTP_AUTH_ENABLED: true
+          INFLUXDB_HTTP_FLUX_ENABLED: true
+          INFLUXDB_ADMIN_USER: instream_test
+          INFLUXDB_ADMIN_PASSWORD: instream_test
+          INFLUXDB_UDP_ENABLED: true
+          INFLUXDB_UDP_BIND_ADDRESS: ':8089'
+          INFLUXDB_UDP_DATABASE: test_database
+          INFLUXDB_UDP_BATCH_SIZE: 1000
+          INFLUXDB_UDP_BATCH_TIMEOUT: '1s'
+          INFLUXDB_UDP_BATCH_PENDING: 5
+        ports:
+          - 8086:8086
+          - 8089:8089/udp
+
+    env:
+      INFLUXDB_HOST: localhost
+      INFLUXDB_PORT: 8086
+      INFLUXDB_SCHEME: http
+      INFLUXDB_VERSION: '1.7'
+      INFLUXDB_V1_DATABASE: test_database
+      INFLUXDB_V1_PASSWORD: instream_test
+      INFLUXDB_V1_PORT_UDP: 8089
+      INFLUXDB_V1_USERNAME: instream_test
+
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      - name: setup
+        uses: erlef/setup-beam@v1
+        with:
+          elixir-version: ${{ matrix.elixir }}
+          otp-version: ${{ matrix.otp }}
+
+      - name: mix-cache
+        uses: actions/cache@v4
+        id: mix-cache
+        with:
+          path: deps
+          # yamllint disable-line rule:line-length
+          key: ${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}-mix-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
+
+      - name: mix-deps
+        if: steps.mix-cache.outputs.cache-hit != 'true'
+        run: |
+          mix local.rebar --force
+          mix local.hex --force
+          mix deps.get
+
+      - name: test
+        run: |
+          until curl -s -o /dev/null "http://${INFLUXDB_HOST}:${INFLUXDB_PORT}" 2>/dev/null; do
+            sleep 1
+          done
+
+          mix coveralls
+
+  test_v_1_8:
+    runs-on: ubuntu-24.04
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - elixir: '1.11.4'
+            otp: '24.3'
+          - elixir: '1.12.3'
+            otp: '24.3'
+          - elixir: '1.13.4'
+            otp: '24.3'
+          - elixir: '1.14.5'
+            otp: '25.3'
+          - elixir: '1.15.7'
+            otp: '26.2'
+          - elixir: '1.16.3'
+            otp: '26.2'
+          - elixir: '1.17.3'
+            otp: '27.3'
+          - elixir: '1.18.4'
+            otp: '28.0'
+
+    services:
+      influxdb:
+        image: influxdb:1.8.10
+        env:
+          INFLUXDB_HTTP_AUTH_ENABLED: true
+          INFLUXDB_HTTP_FLUX_ENABLED: true
+          INFLUXDB_HTTP_UNIX_SOCKET_ENABLED: true
+          INFLUXDB_HTTP_BIND_SOCKET: /github/workspace/influxdb.sock
+          INFLUXDB_ADMIN_USER: instream_test
+          INFLUXDB_ADMIN_PASSWORD: instream_test
+          INFLUXDB_UDP_ENABLED: true
+          INFLUXDB_UDP_BIND_ADDRESS: ':8089'
+          INFLUXDB_UDP_DATABASE: test_database
+          INFLUXDB_UDP_BATCH_SIZE: 1000
+          INFLUXDB_UDP_BATCH_TIMEOUT: '1s'
+          INFLUXDB_UDP_BATCH_PENDING: 5
+        ports:
+          - 8086:8086
+          - 8089:8089/udp
+        volumes:
+          - ${{ github.workspace }}:/github/workspace
+
+    env:
+      INFLUXDB_HOST: localhost
+      INFLUXDB_PORT: 8086
+      INFLUXDB_SCHEME: http
+      INFLUXDB_VERSION: '1.8'
+      INFLUXDB_V1_DATABASE: test_database
+      INFLUXDB_V1_PASSWORD: instream_test
+      INFLUXDB_V1_PORT_UDP: 8089
+      INFLUXDB_V1_SOCKET: ${{ github.workspace }}/influxdb.sock
+      INFLUXDB_V1_USERNAME: instream_test
+
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      - name: setup
+        uses: erlef/setup-beam@v1
+        with:
+          elixir-version: ${{ matrix.elixir }}
+          otp-version: ${{ matrix.otp }}
+
+      - name: mix-cache
+        uses: actions/cache@v4
+        id: mix-cache
+        with:
+          path: deps
+          # yamllint disable-line rule:line-length
+          key: ${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}-mix-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
+
+      - name: mix-deps
+        if: steps.mix-cache.outputs.cache-hit != 'true'
+        run: |
+          mix local.rebar --force
+          mix local.hex --force
+          mix deps.get
+
+      - name: test
+        run: mix coveralls
+
+  test_v_2_x:
+    runs-on: ubuntu-24.04
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - elixir: '1.11.4'
+            otp: '24.3'
+            influxdb_image_version: '2.0.9'
+            influxdb_test_version: '2.0'
+          - elixir: '1.12.3'
+            otp: '24.3'
+            influxdb_image_version: '2.1.1'
+            influxdb_test_version: '2.1'
+          - elixir: '1.13.4'
+            otp: '24.3'
+            influxdb_image_version: '2.2.0'
+            influxdb_test_version: '2.2'
+          - elixir: '1.14.5'
+            otp: '25.3'
+            influxdb_image_version: '2.3.0'
+            influxdb_test_version: '2.3'
+          - elixir: '1.15.7'
+            otp: '26.2'
+            influxdb_image_version: '2.4.0'
+            influxdb_test_version: '2.4'
+          - elixir: '1.16.3'
+            otp: '26.2'
+            influxdb_image_version: '2.5.1'
+            influxdb_test_version: '2.5'
+          - elixir: '1.17.3'
+            otp: '27.3'
+            influxdb_image_version: '2.6.1'
+            influxdb_test_version: '2.6'
+          - elixir: '1.18.4'
+            otp: '28.0'
+            influxdb_image_version: '2.7.6'
+            influxdb_test_version: '2.7'
+
+    services:
+      influxdb:
+        image: influxdb:${{ matrix.influxdb_image_version }}
+        ports:
+          - 8086:8086
+
+    env:
+      INFLUXDB_HOST: localhost
+      INFLUXDB_PORT: 8086
+      INFLUXDB_SCHEME: http
+      INFLUXDB_VERSION: ${{ matrix.influxdb_test_version }}
+      INFLUXDB_V2_BUCKET: test_bucket
+      INFLUXDB_V2_DATABASE: mapped_database
+      INFLUXDB_V2_ORG: instream_test
+      INFLUXDB_V2_PASSWORD: instream_test
+      INFLUXDB_V2_RETENTION: mapped_retention
+      INFLUXDB_V2_USERNAME: instream_test
+
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      - name: setup
+        uses: erlef/setup-beam@v1
+        with:
+          elixir-version: ${{ matrix.elixir }}
+          otp-version: ${{ matrix.otp }}
+
+      - name: mix-cache
+        uses: actions/cache@v4
+        id: mix-cache
+        with:
+          path: deps
+          # yamllint disable-line rule:line-length
+          key: ${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}-mix-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
+
+      - name: mix-deps
+        if: steps.mix-cache.outputs.cache-hit != 'true'
+        run: |
+          mix local.rebar --force
+          mix local.hex --force
+          mix deps.get
+
+      - name: test
+        run: |
+          until curl -s -o /dev/null "http://${INFLUXDB_HOST}:${INFLUXDB_PORT}" 2>/dev/null; do
+            sleep 1
+          done
+
+          SETUP=$(
+              curl -s \
+                  -XPOST "http://${INFLUXDB_HOST}:${INFLUXDB_PORT}/api/v2/setup" \
+                  -H 'accept: application/json' \
+                  -d "{
+                        \"username\": \"${INFLUXDB_V2_USERNAME}\",
+                        \"password\": \"${INFLUXDB_V2_PASSWORD}\",
+                        \"org\": \"${INFLUXDB_V2_ORG}\",
+                        \"bucket\": \"${INFLUXDB_V2_BUCKET}\"
+                      }"
+          )
+
+          export INFLUXDB_V2_BUCKETID=$(jq -r '.bucket.id' <<< "${SETUP}")
+          export INFLUXDB_V2_ORGID=$(jq -r '.org.id' <<< "${SETUP}")
+          export INFLUXDB_V2_TOKEN=$(jq -r '.auth.token' <<< "${SETUP}")
+
+          curl -s -o /dev/null \
+              -XPOST "http://${INFLUXDB_HOST}:${INFLUXDB_PORT}/api/v2/dbrps" \
+              -H "Authorization: Token ${INFLUXDB_V2_TOKEN}" \
+              -H 'accept: application/json' \
+              -d "{
+                    \"bucketID\": \"${INFLUXDB_V2_BUCKETID}\",
+                    \"database\": \"${INFLUXDB_V2_DATABASE}\",
+                    \"default\": true,
+                    \"orgID\": \"${INFLUXDB_V2_ORGID}\",
+                    \"retention_policy\": \"${INFLUXDB_V2_RETENTION}\"
+                  }"
+
+          mix coveralls
