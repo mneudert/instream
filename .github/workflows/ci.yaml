@@ -216,7 +216,7 @@ jobs:
           INFLUXDB_HTTP_AUTH_ENABLED: true
           INFLUXDB_HTTP_FLUX_ENABLED: true
           INFLUXDB_HTTP_UNIX_SOCKET_ENABLED: true
-          INFLUXDB_HTTP_BIND_SOCKET: /github/workspace/influxdb.sock
+          INFLUXDB_HTTP_BIND_SOCKET: /tmp/influxdb/influxdb.sock
           INFLUXDB_ADMIN_USER: instream_test
           INFLUXDB_ADMIN_PASSWORD: instream_test
           INFLUXDB_UDP_ENABLED: true
@@ -229,7 +229,7 @@ jobs:
           - 8086:8086
           - 8089:8089/udp
         volumes:
-          - ${{ github.workspace }}:/github/workspace
+          - /tmp/influxdb:/tmp/influxdb
 
     env:
       INFLUXDB_HOST: localhost
@@ -239,7 +239,7 @@ jobs:
       INFLUXDB_V1_DATABASE: test_database
       INFLUXDB_V1_PASSWORD: instream_test
       INFLUXDB_V1_PORT_UDP: 8089
-      INFLUXDB_V1_SOCKET: ${{ github.workspace }}/influxdb.sock
+      INFLUXDB_V1_SOCKET: /tmp/influxdb/influxdb.sock
       INFLUXDB_V1_USERNAME: instream_test
 
     steps:
